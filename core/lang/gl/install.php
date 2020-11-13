@@ -18,7 +18,6 @@ const L_ERR_MISSING_LOGIN			= 'Indica o nome do usuario!';
 const L_ERR_MISSING_PASSWORD		= 'Indica un contrasinal!';
 const L_ERR_PASSWORD_CONFIRMATION	= 'O contrasinal non é correcto!';
 const L_PLUXML_INSTALLATION			= 'Instalación de PluXml';
-const L_SITE_DESCRIPTION			= 'Blog ou CMS con XML!';
 const L_VERSION						= 'versión';
 const L_USERNAME					= 'Nome do administrador';
 const L_INPUT_INSTALL				= 'Instalar';
@@ -26,8 +25,4 @@ const L_PWD_VERY_WEAK				= 'Contrasinal moi feble';
 const L_PWD_WEAK					= 'Contrasinal feble';
 const L_PWD_GOOD					= 'Bo contrasinal';
 const L_PWD_STRONG					= 'Contrasinal seguro';
-const L_LOGIN						= 'Nome de usuario do administrador';
-const L_EMAIL						= 'Dirección de correo-e';
-const L_WRONG_PHP_VERSION			= 'PluXml necesita PHP 5 ou superior';
-const L_INPUT_CHANGE				= 'Cambiar';
 ?>

@@ -7,14 +7,24 @@ const L_DATE_UPDATE					= 'Data de actualización';
 
 # common
 const L_PLUXML_VERSION				= 'Versión de PluXml';
+const L_WRONG_PHP_VERSION			= 'PluXml necesita PHP 5 ou superior';
 const L_HOMEPAGE					= 'Inicio';
 const L_BACK_HOMEPAGE_TITLE			= 'Volver á páxina de inicio';
 const L_UNCLASSIFIED				= 'Sen categoría';
 const L_INFO_PHP_VERSION			= 'Versión de PHP';
 const L_INFO_CHARSET				= 'codificación';
-const L_SELECT_LANG                 = 'Seleciona teu idioma';
+const L_NONE1						= 'sen';
+const L_NONE2						= 'sen';
 const L_PASSWORD					= 'Contrasinal';
-const L_CONFIRM_PASSWORD		= 'Confirmar contrasinal';
+const L_TIMEZONE					= 'Fuso horario';
+const L_SELECT_LANG					= 'Seleciona teu idioma';
+const L_CONFIRM_PASSWORD			= 'Confirmar contrasinal';
+const L_PROFIL_LOGIN				= 'Nome de usuario do administrador';
+const L_INPUT_CHANGE				= 'Cambiar';
+const L_COMMENTS_CLOSED				= 'Os comentarios están pechados';
+const L_SITE_DESCRIPTION			= 'Blog ou CMS con XML!';
+const L_SAVE_SUCCESSFUL				= 'Gardáronse os datos correctamente';
+const L_ARTICLE_SAVE_SUCCESSFUL		= 'Artígo creado correctamente';
 
 # index.php
 const L_ERR_THEME_NOTFOUND			= 'Non se atopou o tema principal de PluXml';
@@ -94,11 +104,13 @@ const L_NEWCOMMENT_ERR				= 'Produciuse un erro ó publicar este comentario';
 const L_NEWCOMMENT_FIELDS_REQUIRED	= 'Ingrese tódolos campos obrigatorios';
 const L_NEWCOMMENT_ERR_ANTISPAM		= 'Fallóu a comprobación anti-spam';
 
-# class.plx.show.php
+# class.plx.plugins.php
+const L_BAD_PLUGIN_FOLDER			= 'imposible cambiar o nome do cartafol do complemento %s';
 
+# class.plx.show.php
 const L_HTTPENCODING				= 'Compresión %s activada';
-const L_PAGETITLE_ARCHIVES			= 'Arquivos';
-const L_PAGETITLE_TAG				= 'Etiqueta';
+const L_ARCHIVES					= 'Arquivos';
+const L_TAG							= 'Etiqueta';
 const L_NO_CATEGORY					= 'ningunha categoría';
 const L_CATEGORY					= 'categoría';
 const L_CATEGORIES					= 'categorías';
@@ -106,7 +118,6 @@ const L_NO_ARTICLE					= 'ningún artigo';
 const L_ARTICLE						= 'artigo';
 const L_ARTICLES					= 'artigos';
 const L_ARTAUTHOR_UNKNOWN			= 'descoñecido';
-const L_ARTTAGS_NONE				= 'ningunha';
 const L_ARTCHAPO					= 'Ler máis #art_title';
 const L_ARTFEED_RSS_CATEGORY		= 'Sindicación RSS dos artigos desta categoría';
 const L_ARTFEED_RSS_TAG				= 'Sindicación RSS dos artigos desta etiqueta';
@@ -128,18 +139,21 @@ const L_PAGINATION_NEXT				= 'seguinte';
 const L_PAGINATION_LAST_TITLE		= 'Ir á última paxina';
 const L_PAGINATION_LAST				= '»';
 const L_PAGINATION					= 'paxina %s de %s';
-
-const L_PAGEBLOG_TITLE				= 'Caderno';
-
-const L_YEAR					    = 'ano';
-const L_TOTAL					    = 'total';
+const L_BLOG						= 'Caderno';
+const L_YEAR						= 'ano';
+const L_TOTAL						= 'total';
 
 # class.plx.feed.php
 const L_FEED_NO_PRIVATE_URL			= 'As URLs privadas non foron inicializadas nos seus parámetros de administración!';
-const L_FEED_COMMENTS				= 'Comentarios';
 const L_FEED_ONLINE_COMMENTS		= 'Comentarios de usuarios';
 const L_FEED_OFFLINE_COMMENTS		= 'Comentarios sen conexión';
-const L_WRITTEN_BY				= 'Escrito por';
+const L_WRITTEN_BY					= 'Escrito por';
+ 
+# plxShow::artNavigation
+const L_ART_FIRST					= 'Primeira';
+const L_ART_PREV					= 'Anterior';
+const L_ART_NEXT					= 'seguinte';
+const L_ART_LAST					= 'Ultima';
+const L_ART_UP						= 'Subir';
 
-const L_TIMEZONE					= 'Fuso horario';
 ?>
