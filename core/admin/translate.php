@@ -133,7 +133,8 @@ foreach(array('principale', 'secondaire') as $caption) {
 
 	<aside>
 		<pre style="margin: 0.25rem auto; width: 48rem; background-color: #fff; padding: 0.25rem 1rem;"><code>Pour vérifier si la clé L_KEY est utilisée, se placer à la racine du site et faire :
-grep L_KEY *.php update/*.php core/{lib,admin}/*.php</code></pre>
+grep L_KEY *.php update/*.php core/{lib,admin}/*.php
+Rechercher toutes les clés utilisées : grep -E '\bL_\w+' *.php core/{admin,lib}/*.php | sed -E 's/^.*(\bL_\w+).*$/\1/' | sort | uniq</code></pre>
 	</aside>
 	<!-- formulaire pour les traductions -->
 	<section id="main">
