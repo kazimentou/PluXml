@@ -66,7 +66,9 @@ eval($plxAdmin->plxPlugins->callHook('AdminCategoryTop'))
 ?>
     <fieldset>
 		<div class="label-expanded">
-			<label for="id_homepage"><?= L_EDITCAT_DISPLAY_HOMEPAGE ?></label>
+			<label>
+				<span><?= L_EDITCAT_DISPLAY_HOMEPAGE ?></span>
+			</label>
 			<input  type="checkbox" name="homepage" value="1" class="switch" <?= !empty($plxAdmin->aCats[$id]['homepage']) ? ' checked' : '' ?> />
 		</div>
 		<div class="label-expanded">
@@ -80,18 +82,7 @@ eval($plxAdmin->plxPlugins->callHook('AdminCategoryTop'))
 		<div>
 <?php plxUtils::printThumbnail($plxAdmin->aCats[$id]); ?>
 		</div>
-		<div>
-			<label for="id_title_htmltag"><?= L_TITLE_HTMLTAG ?></label>
-			<?php plxUtils::printInput('title_htmltag', plxUtils::strCheck($plxAdmin->aCats[$id]['title_htmltag']), 'text', '50-255'); ?>
-		</div>
-		<div>
-			<label for="id_meta_description"><?= L_META_DESCRIPTION ?></label>
-			<?php plxUtils::printInput('meta_description', plxUtils::strCheck($plxAdmin->aCats[$id]['meta_description']), 'text', '50-255') ?>
-		</div>
-		<div>
-			<label for="id_meta_keywords"><?= L_META_KEYWORDS ?></label>
-			<?php plxUtils::printInput('meta_keywords', plxUtils::strCheck($plxAdmin->aCats[$id]['meta_keywords']), 'text', '50-255') ?>
-		</div>
+<?php plxUtils::printInputs_Metas_Title($plxAdmin->aCats[$id]); ?>
     </fieldset>
 <?php
 # Hook Plugins

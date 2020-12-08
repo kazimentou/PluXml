@@ -5,7 +5,7 @@ const L_CONFIRM_DELETE = 'Confirmer la suppression de 999 éléments ?';
 const L_CONFIRM_ACTIVATE = 'Confirmer l\'activation de 999 éléments ?';
 const L_CONFIRM_DEACTIVATE = 'Confirmer la désactivation de 999 éléments ?';
 const L_CONFIRM_OFFLINE = 'Confirmer la mise hors-ligne de 999 commentaires ?';
-const L_CONFIRM_ONLINE = 'Confirmer la mise en ligne de 999 commentaires ?';
+const L_CONFIRM_ONLINE = 'Confirmer la publication de 999 commentaires ?';
 const L_SAVE_FILE = 'Sauvegarder le fichier';
 const L_SAVE_FILE_SUCCESSFULLY = 'Fichier enregistré avec succès';
 const L_SAVE_FILE_ERROR = 'Erreur pendant l\'enregistrement du fichier';
@@ -102,7 +102,7 @@ const L_ARTICLE_TAGS_FIELD_TITLE = 'Séparer les mots clés par une virgule';
 const L_ARTICLE_TOGGLER_TITLE = 'Liste des mots clés';
 const L_NO_TAG = 'Aucun tag';
 const L_ALLOW_COMMENTS = 'Autoriser les commentaires';
-const L_ARTICLE_URL_FIELD_TITLE = 'l\'URL se remplit automatiquement à la création';
+const L_ARTICLE_URL_FIELD_TITLE = 'Ce champ se remplira tout seul s\'il est laissé vide';
 const L_ARTICLE_MANAGE_COMMENTS = 'Gérer les commentaires';
 const L_ARTICLE_MANAGE_COMMENTS_TITLE = 'Gérer les commentaires de cet article';
 const L_ARTICLE_NEW_COMMENT_TITLE = 'Rédiger un commentaire sur cet article';
@@ -114,8 +114,8 @@ const L_ARTICLE_MODERATE_BUTTON = 'A valider';
 const L_SET_OFFLINE = 'Mettre hors ligne';
 const L_SAVE = 'Enregistrer';
 const L_ADD = "Ajouter";
-const L_META_DESCRIPTION = 'Contenu balise meta "description" (option)';
-const L_META_KEYWORDS = 'Contenu balise meta "keywords" (option)';
+const L_META_DESCRIPTION = 'Balise meta "description"';
+const L_META_KEYWORDS = 'Balise meta "keywords"';
 const L_ARTICLE_CHAPO_HIDE = 'masquer';
 const L_ARTICLE_CHAPO_DISPLAY = 'afficher';
 
@@ -177,8 +177,8 @@ const L_EDITCAT_UPDATE = 'Mettre à jour cette catégorie';
 
 const L_COMMENT_ORPHAN_STATUS = 'non visible (nous vous conseillons de supprimer ce commentaire)';
 const L_COMMENT_ARTICLE_LINKED_TITLE = 'Article attaché à ce commentaire';
-const L_COMMENT_OFFLINE = 'Hors ligne';
-const L_COMMENT_ONLINE = 'En ligne';
+const L_COMMENT_OFFLINE = '%d commentaires à valider';
+const L_COMMENT_ONLINE = '%d commentaires publiés';
 const L_COMMENT_ONLINE_TITLE = 'Visualiser ce commentaire en ligne';
 const L_BACK_TO_ARTICLE_COMMENTS = 'Retour à la liste des commentaires de cet article';
 const L_BACK_TO_COMMENTS = 'Retour à la liste des commentaires';
@@ -219,7 +219,7 @@ const L_ERR_ANSWER_OFFLINE_COMMENT = 'Le commentaire est hors ligne, impossible 
 const L_ERR_COMMENT_UNKNOWN_ARTICLE = 'L\'article demandé n\'existe pas ou n\'existe plus, impossible d\'écrire un commentaire !';
 const L_ERR_CREATING_COMMENT = 'Une erreur est survenue au cours de la création du commentaire';
 const L_CREATING_COMMENT_SUCCESSFUL = 'Le commentaire a été crée avec succès';
-const L_CREATE_NEW_COMMENT = 'Rédiger un commentaire';
+const L_CREATE_NEW_COMMENT = 'Ajouter un commentaire';
 const L_ARTICLE_COMMENTS_LIST = 'Commentaires de cet article';
 const L_COMMENT_ANSWER = 'Répondre';
 
@@ -381,8 +381,8 @@ const L_CONFIG_BASE_DEFAULT_LANG = 'Langue par défaut du site';
 const L_CONFIG_BASE_MODERATE_COMMENTS = 'Modérer les commentaires à la création';
 const L_CONFIG_BASE_MODERATE_ARTICLES = 'Modérer les articles pour les profils Rédacteur et Éditeur';
 const L_CONFIG_BASE_UPDATE = 'Modifier la configuration de base';
-const L_CONFIG_META_DESCRIPTION = 'Contenu de la balise meta "description" du site (optionnel)';
-const L_CONFIG_META_KEYWORDS = 'Contenu de la balise meta "keywords" du site (optionnel)';
+const L_CONFIG_META_DESCRIPTION = 'Balise meta "description" du site';
+const L_CONFIG_META_KEYWORDS = 'Balise meta "keywords" du site';
 const L_CONFIG_BASE_ENABLE_RSS = 'Afficher les flux RSS';
 
 // parametres_edittpl.php
@@ -467,7 +467,7 @@ const L_STATIC_TITLE = 'Édition du code source de la page statique';
 const L_STATIC_VIEW_PAGE = 'Visualiser la page';
 const L_STATIC_ON_SITE = 'sur le site';
 const L_STATIC_UPDATE = 'Enregistrer cette page statique';
-const L_TITLE_HTMLTAG = 'Contenu balise title (option)';
+const L_TITLE_HTMLTAG = 'Balise &lt;title&gt;';
 
 // statiques.php
 

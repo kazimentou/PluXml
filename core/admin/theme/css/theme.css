@@ -672,6 +672,7 @@ fieldset input[type="radio"] + label::after,
 	content: none;
 	padding: 0;
 }
+
 label > input[type="checkbox"] {
 	margin-right: 1rem;
 }
@@ -687,10 +688,6 @@ button [class^="icon-"] {
 
 form .icon-picture {
 	cursor: pointer;
-}
-
-tbody select {
-	width: 100%;
 }
 
 tbody .select-like {
@@ -754,40 +751,57 @@ fieldset > div {
 
 /* toggle */
 .drop {
-    cursor: pointer;
     display: block;
-}
-
-.drop-inline {
-    cursor: pointer;
 }
 
 input[type="checkbox"].toggle {
     display: none;
 }
 
-input[type="checkbox"] + .drop::after,
-input[type="checkbox"] + .drop-inline::after {
-    content: '▼';
-    margin-left: 1rem;
+input[type="checkbox"] + label.drop,
+input[type="checkbox"] + .drop .drop-inline {
+	display: flex !important;
+	gap: 1rem;
+	align-items: center;
 }
 
-input[type="checkbox"]:checked + .drop::after,
-input[type="checkbox"]:checked + .drop-inline::after {
+input[type="checkbox"] + label.drop::after,
+input[type="checkbox"] + .drop .drop-inline::after {
+    content: '▼';
+    margin-left: auto;
+    cursor: pointer;
+}
+input[type="checkbox"]:checked + label.drop::after,
+input[type="checkbox"]:checked + .drop .drop-inline::after {
     content: '▲';
 }
 
 input + .drop + div,
-input + .drop-inline + div {
-    overflow: hidden;
+input + .drop + .drop-box {
+    /* overflow: hidden; */
     transition-property: opacity, left, top, max-height;
     transition-duration: 1.5s, 2s;
 }
 
 input:not(:checked) + .drop + div,
-input:not(:checked) + .drop-inline + div {
-    opacity: 0;
+input:not(:checked) + .drop + .drop-box {
+    opacity: 0.1;
     max-height: 0;
+    overflow-y: hidden;
+}
+
+input:not(:checked) + .drop + textarea.drop-box {
+	display: none;
+}
+
+/* balises meta et title */
+input[name="title_htmltag"],
+input[name="meta_keywords"],
+input[name="url"] {
+	max-width: 52rem !important;
+}
+input[name="meta_description"] {
+	max-width: none !important;
 }
 
 /* Tooltips
@@ -798,6 +812,7 @@ input:not(:checked) + .drop-inline + div {
 .tooltip {
     position: relative;
     display: inline-block;
+	cursor: pointer;
 }
 
 /* Tooltip text */
@@ -964,6 +979,10 @@ a.overlay {
 	text-align: end;
 }
 
+#form_articles tbody select {
+	width: 100%;
+}
+
 /* ----------- article.php ------------- */
 
 #form_article .thumbnail-container {
@@ -976,15 +995,75 @@ a.overlay {
 
 #aside-art select {
 	width: 100%;
+	max-width: 25rem;
 }
 
-#aside-art label {
+#aside-art label:not(.caption-inside) {
 	display: inline;
+}
+
+#aside-art input[name="allow_com"] {
+	margin: 0 0 0 auto;
 }
 
 #aside-art fieldset > div > div:not(.expander) {
 	margin-bottom: 1rem;
 }
+
+#cats-art {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	padding-top: 1rem;
+}
+
+#new-categorie {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	gap: 1rem;
+	margin-bottom: 1rem;
+}
+
+#tags-list {
+	margin: 0 0 1rem;
+	padding: 0;
+	/* font-size: 90%; */
+}
+
+#tags-list li {
+	display: inline-block;
+	padding: 0.3rem 1rem;
+	white-space: nowrap;
+	cursor: pointer;
+}
+
+#tags-list span:hover {
+	background-color: #ccc;
+}
+
+.comments-art {
+	list-style: none;
+	max-width: 20rem;
+	border: 1px solid #aaa;
+	padding: 0.3rem;
+	margin-left: 1.5rem;
+}
+
+label[for="toggle_tagslist"] {
+	margin-right: 1rem;
+}
+
+.comments-art li {
+	padding: 0.1rem 1rem;
+}
+
+.comments-art li.offline {
+	background-color: tomato;
+}
+
+.comments-art .offline a {
+	color: #fff;
+}
+
 
 /* ------------ medias.php ----------- */
 
@@ -1482,6 +1561,7 @@ input:checked ~ .modal__overlay {
 }
 
 /* ======== responsive design ========== */
+
 /*
 	// Warning: you should use your own values, regardless of the devices
 	// Best practice is Mobile First: (min-width: $breakpoint)
@@ -1587,6 +1667,11 @@ input:checked ~ .modal__overlay {
 	#form_advanced_settings input[type="email"] {
 		max-width: 25rem;
 	}
+
+	#calendar {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+	}
 }
 
 /* $medium */
@@ -1605,8 +1690,22 @@ input:checked ~ .modal__overlay {
 	}
 }
 
+@media screen and (min-width: 768px) {
+	#calendar {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+
 /* $large = 992px - 1024px avec knacss-reborn */
 @media screen and (max-width: 991px) {
+}
+
+@media screen and (max-width: 991px) {
+	/* article.php */
+	#cats-art {
+		grid-template-columns: repeat(4, 1fr);
+	}
 }
 
 @media screen and (min-width: 992px) {
@@ -1676,6 +1775,10 @@ input:checked ~ .modal__overlay {
 		display: grid;
 		grid-template-columns: 1fr 26rem;
 	}
+
+	#aside-art #calendar {
+		display: block;
+	}
 }
 
 /* $extra-large = 1200px - 1330px avec knacss-reborn */
@@ -1739,6 +1842,7 @@ input:checked ~ .modal__overlay {
 	#form_comment fieldset #calendar {
 		white-space: nowrap;
 	}
+
 }
 
 /* ------------- mode landscape --------------- */

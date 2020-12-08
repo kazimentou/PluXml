@@ -15,9 +15,11 @@ plxToken::validateFormToken($_POST);
 # Hook Plugins
 eval($plxAdmin->plxPlugins->callHook('AdminIndexPrepend'));
 
-# Suppression des articles selectionnes
-if (isset($_POST['selection']) and !empty($_POST['sel']) and ($_POST['selection'] == 'delete') and isset($_POST['idArt'])) {
-    foreach ($_POST['idArt'] as $k => $v) $plxAdmin->delArticle($v);
+# Suppression des articles sélectionnés
+if (isset($_POST['delete']) and !empty($_POST['idArt'])) {
+    foreach ($_POST['idArt'] as $v) {
+		$plxAdmin->delArticle($v);
+	}
     header('Location: index.php');
     exit;
 }

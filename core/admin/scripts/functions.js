@@ -258,15 +258,48 @@ function addText(where, open, close) {
 	}
 })();
 
-function insTag(where, tag) {
-	var formfield = document.getElementsByName(where)['0'];
-	var tags = formfield.value.split(', ');
-	if (tags.indexOf(tag) != -1) return;
-	if(formfield.value=='')
-		formfield.value=tag;
-	else
-		formfield.value = formfield.value+', '+tag;
-}
+// ---- article.php -------
+
+// ajoute un mot-clé pour l'article en cours d'édition. Remplace insTag()
+(function() {
+	const tagsList = document.getElementById('tags-list');
+	if(tagsList != null) {
+		var inputTags = null;
+		for(var i=0, iMax=document.forms.length; i<iMax; i++) {
+			if('tags' in document.forms[i].elements) {
+				inputTags = document.forms[i].tags;
+				break;
+			}
+		}
+
+		if(inputTags != null) {
+			tagsList.addEventListener('click', function(event) {
+				if(event.target.tagName == 'SPAN') {
+					event.preventDefault();
+					const textContent = event.target.textContent.trim();
+					if(inputTags.value.trim().length == 0) {
+						inputTags.value = textContent;
+					} else {
+						const pattern = new RegExp('\\b' + textContent + '\\b', 'iu');
+						if(!pattern.test(inputTags.value)) {
+							inputTags.value += ', ' + textContent;
+						} else {
+							return;
+						}
+					}
+
+					inputTags.focus();
+					if(typeof inputTags.setSelectionRange != 'undefiend') {
+						const atEnd = inputTags.value.length;
+						inputTags.setSelectionRange(atEnd, atEnd);
+					}
+				}
+			});
+		} else {
+			console.error('Document has no <input name="tags" /> in a form');
+		}
+	}
+})();
 
 (function() {
 	// animation du burger par Knacss. Récupérer le CSS et supprimer

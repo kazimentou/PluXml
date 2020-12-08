@@ -1153,7 +1153,7 @@ EOT;
 	 * @param	content	données saisies de l'article
 	 * @param	&id		retourne le numero de l'article
 	 * @return	string
-	 * @author	Stephane F., Florent MONTHEL
+	 * @author	Stephane F., Florent MONTHEL, Jean-Pierre Pourrez "bazooka07"
 	 **/
 	public function editArticle($content, &$id) {
 
@@ -1228,7 +1228,7 @@ EOT;
 ?>
 <document>
 		<title><?= plxUtils::cdataCheck(trim($content['title'])) ?></title>
-		<allow_com><?= $content['allow_com'] ?></allow_com>
+		<allow_com><?= isset($content['allow_com']) ? 1 : 0 ?></allow_com>
 		<template><?= basename($content['template']) ?></template>
 		<chapo><?= plxUtils::cdataCheck(trim($content['chapo'])) ?></chapo>
 		<content><?= plxUtils::cdataCheck(trim($content['content'])) ?></content>

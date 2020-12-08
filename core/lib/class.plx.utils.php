@@ -493,6 +493,27 @@ class plxUtils
 <?php
 	}
 
+	public static function printInputs_Metas_Title($datas) {
+		if(!is_array($datas)) {
+			return;
+		}
+
+		foreach(array(
+		    'title_htmltag'		=> L_TITLE_HTMLTAG,
+		    'meta_description'	=> L_META_DESCRIPTION,
+		    'meta_keywords'		=> L_META_KEYWORDS,
+		) as $field=>$caption) {
+			if(isset($datas[$field])) {
+?>
+				<label class="fullwidth caption-inside">
+					<span><?= $caption ?></span>
+					<input type="text" name="<?= $field ?>" value="<?= plxUtils::strCheck($datas[$field]) ?>" />
+				</label>
+<?php
+			}
+		}
+	}
+
     /**
      * Méthode qui teste si un fichier est accessible en écriture
      *

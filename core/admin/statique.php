@@ -97,21 +97,7 @@ eval($plxAdmin->plxPlugins->callHook('AdminStaticTop'))
 					<span><?= L_TEMPLATE . PHP_EOL ?></span>
 <?php plxUtils::printSelect('template', $aTemplates, $plxAdmin->aStats[$id]['template']) ?>
 				</label>
-<?php
-foreach(array(
-
-    'title_htmltag'		=> L_TITLE_HTMLTAG,
-    'meta_description'	=> L_META_DESCRIPTION,
-    'meta_keywords'		=> L_META_KEYWORDS,
-) as $field=>$caption) {
-?>
-				<label class="fullwidth caption-inside">
-					<span><?= $caption ?></span>
-					<input type="text" name="<?= $field ?>" value="<?= plxUtils::strCheck($plxAdmin->aStats[$id][$field]) ?>" />
-				</label>
-<?php
-}
-?>
+<?php plxUtils::printInputs_Metas_Title($plxAdmin->aStats[$id]); ?>
 			</div>
 <?php
 
