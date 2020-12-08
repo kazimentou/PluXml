@@ -145,19 +145,17 @@ if ($plxAdmin->plxRecord_coms->f('type') != 'admin') {
             <?php endif; ?>
         </div>
         <div>
-			<div>
 <?php if ($com['comStatus'] == '') : ?>
-	                <input class="btn--primary" type="submit" name="offline" value="<?= L_SET_OFFLINE ?>"/>
-	                <input class="btn--primary" type="submit" name="answer" value="<?= L_COMMENT_ANSWER_BUTTON ?>"/>
+                <input class="btn--primary" type="submit" name="offline" value="<?= L_SET_OFFLINE ?>"/>
+                <input class="btn--primary" type="submit" name="answer" value="<?= L_COMMENT_ANSWER_BUTTON ?>"/>
 <?php else : ?>
-	                <input class="btn--primary" type="submit" name="online" value="<?= L_COMMENT_PUBLISH_BUTTON ?>"/>
+                <input class="btn--primary" type="submit" name="online" value="<?= L_COMMENT_PUBLISH_BUTTON ?>"/>
 <?php endif; ?>
-	            <input class="btn--primary" type="submit" name="update" value="<?= L_COMMENT_UPDATE_BUTTON ?>"/>
-	            <input class="btn--warning" type="submit" name="delete"
-	                   value="<?= L_DELETE ?>"
-	                   onclick="Check=confirm('<?= L_COMMENT_DELETE_CONFIRM ?>');if(Check==false) return false;"/>
-			</div>
-        </div>
+            <input class="btn--primary" type="submit" name="update" value="<?= L_COMMENT_UPDATE_BUTTON ?>"/>
+            <input class="btn--warning" type="submit" name="delete"
+                   value="<?= L_DELETE ?>"
+                   onclick="Check=confirm('<?= L_COMMENT_DELETE_CONFIRM ?>');if(Check==false) return false;"/>
+		</div>
     </div>
     <div class="admin">
 <?php

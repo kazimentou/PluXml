@@ -74,10 +74,8 @@ $url = $plxAdmin->urlRewrite("?static" . intval($id) . "/" . $plxAdmin->aStats[$
             <p><a class="back icon-left-big" href="statiques.php"><?= L_STATIC_BACK_TO_PAGE ?></a></p>
         </div>
         <div>
+            <button type="submit" class="btn--primary"><?= L_SAVE ?></button>
             <p><a href="<?= $url ?>"><?= L_STATIC_VIEW_PAGE . ' ' . L_STATIC_ON_SITE ?></a></p>
-            <div>
-	            <button type="submit" class="btn--primary"><?= L_SAVE ?></button>
-            </div>
         </div>
     </div>
     <div class="admin">

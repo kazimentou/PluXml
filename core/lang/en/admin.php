@@ -171,7 +171,7 @@ const L_EDITCAT_PAGE_TITLE = 'Edit category options';
 const L_EDITCAT_DESCRIPTION = 'Description';
 const L_EDITCAT_DISPLAY_HOMEPAGE = 'Show articles on the homepage';
 const L_TEMPLATE = 'Template';
-const L_EDITCAT_BACK_TO_PAGE = 'Back to categories';
+const L_BACK_TO_CATEGORIES = 'Back to categories';
 const L_EDITCAT_UPDATE = 'Update this category';
 
 // commentaire.php

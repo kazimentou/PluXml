@@ -38,9 +38,7 @@ $_profil = $plxAdmin->aUsers[$_SESSION['user']];
 			<h2 class="h3-like"><?= L_PROFIL_EDIT_TITLE ?></h2>
 		</div>
 		<div>
-			<div>
-				<input class="btn--primary" type="submit" name="profil" role="button" value="<?= L_SAVE ?>"/>
-			</div>
+			<input class="btn--primary" type="submit" name="profil" role="button" value="<?= L_SAVE ?>"/>
 		</div>
 	</div>
 	<div class="admin>">

@@ -558,8 +558,8 @@ if(!empty($plxAdmin->aConf['allow_com'])) {
 		$href = 'comments.php?sel=%s&a=' . $artId . '&page=1';
 		$suffix = '\..*\.xml$@';
 		foreach(array(
-			'@^_'	=> array(L_COMMENT_OFFLINE, 'offline', L_NEW_COMMENTS_TITLE),
-			'@^'	=> array(L_COMMENT_ONLINE, 'online', L_VALIDATED_COMMENTS_TITLE),
+			'@^_'	=> array(L_COMMENT_OFFLINE_COUNT, 'offline', L_NEW_COMMENTS_TITLE),
+			'@^'	=> array(L_COMMENT_ONLINE_COUNT, 'online', L_VALIDATED_COMMENTS_TITLE),
 		) as $prefix=>$infos) {
 			$nbComs = $plxAdmin->getNbCommentaires($prefix . $artId . $suffix, 'all');
 			if( $nbComs > 0) {

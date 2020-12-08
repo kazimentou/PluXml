@@ -126,15 +126,18 @@ include 'top.php';
 ?>
 
 <form action="comment_new.php?<?= plxUtils::strCheck($get) ?>" method="post" id="form_comment_new">
-	<?php plxUtils::printInput('parent', $parent, 'hidden'); ?>
+    <?= plxToken::getTokenPostMethod() ?>
+	<input type="hidden" name="parent" value="<?= $parent ?>" />
     <div class="adminheader">
-        <div class="mbm">
+        <div>
             <h2 class="h3-like"><?= L_CREATE_NEW_COMMENT; ?></h2>
 <?php if (!empty($_GET['a'])) : ?>
-                <p><a class="back" href="comments.php?a=<?= $_GET['a']; ?>"><?= L_BACK_TO_ARTICLE_COMMENTS ?></a></p>
+			<p><a class="icon-left-big" href="comments.php?a=<?= $_GET['a']; ?>"><?= L_BACK_TO_ARTICLE_COMMENTS ?></a></p>
 <?php else : ?>
-                <p><a class="back" href="comments.php"><?= L_BACK_TO_COMMENTS ?></a></p>
+			<p><a class="icon-left-big" href="comments.php"><?= L_BACK_TO_COMMENTS ?></a></p>
 <?php endif; ?>
+        </div>
+        <div>
             <input class="btn--primary" type="submit" name="create" value="<?= L_SAVE ?>"/>
         </div>
     </div>

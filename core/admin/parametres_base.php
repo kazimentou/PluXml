@@ -33,9 +33,7 @@ include 'top.php';
             <h2 class="h3-like"><?= L_CONFIG_BASE ?></h2>
         </div>
         <div>
-			<div>
-				<input class="btn--primary" type="submit" name="config-base" role="button" value="<?= L_SAVE ?>" />
-			</div>
+			<input class="btn--primary" type="submit" name="config-base" role="button" value="<?= L_SAVE ?>" />
         </div>
     </div>
 <?php

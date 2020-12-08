@@ -137,15 +137,21 @@ $selector = selector($comSel, 'id_selection');
 ?>
 
 <div class="adminheader">
-    <h2 class="h3-like"><?= L_COMMENTS_ALL_LIST ?></h2>
+	<div>
+	    <h2 class="h3-like"><?= L_COMMENTS_ALL_LIST ?></h2>
 <?php
 if (!empty($aArt)) {
 ?>
-	<h3><?= ucfirst(L_ARTICLE) ?> &laquo;<?= $aArt['title'] ?>&raquo;</h3>
+		<h3><?= ucfirst(L_ARTICLE) ?> &laquo;<?= $aArt['title'] ?>&raquo;</h3>
+<?php
+}
+
+if (!empty($_GET['a'])) {
+?>
+	    <a href="article.php?a=<?= $_GET['a'] ?>" class="icon-left-big"><?= L_BACK_TO_ARTICLE ?></a>
 <?php
 }
 ?>
-    <div>
 	    <ul>
 <?php
 # breadcrumb
@@ -171,10 +177,12 @@ foreach(array(
 }
 ?>
 	    </ul>
+    </div>
+    <div>
 <?php
 if (!empty($_GET['a'])) {
 ?>
-	    <a href="comment_new.php?a=<?= $_GET['a'] ?>" title="<?= L_COMMENT_NEW_COMMENT_TITLE ?>"><?= L_COMMENT_NEW_COMMENT ?></a>
+	    <a href="comment_new.php?a=<?= $_GET['a'] ?>" class="btn" title="<?= L_COMMENT_NEW_COMMENT_TITLE ?>"><?= L_CREATE_NEW_COMMENT ?></a>
 <?php
 }
 ?>

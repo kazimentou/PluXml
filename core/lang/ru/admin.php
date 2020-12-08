@@ -177,7 +177,7 @@ const L_EDITCAT_PAGE_TITLE = 'Редактирование категории';
 const L_EDITCAT_DESCRIPTION = 'Описание';
 const L_EDITCAT_DISPLAY_HOMEPAGE = 'Показать в этой категории на главной странице';
 const L_TEMPLATE = 'Тема';
-const L_EDITCAT_BACK_TO_PAGE = 'Вернуться к категориям';
+const L_BACK_TO_CATEGORIES = 'Вернуться к категориям';
 const L_EDITCAT_UPDATE = 'Обновление этой категории';
 
 // commentaire.php

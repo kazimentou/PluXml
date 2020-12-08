@@ -159,7 +159,7 @@ const L_EDITCAT_PAGE_TITLE = 'Categorie-opties aanpassen';
 const L_EDITCAT_DESCRIPTION = 'Beschrijving';
 const L_EDITCAT_DISPLAY_HOMEPAGE = 'Toon items in deze categorie op de home page';
 const L_TEMPLATE = 'Template';
-const L_EDITCAT_BACK_TO_PAGE = 'Terug naar categorielijst';
+const L_BACK_TO_CATEGORIES = 'Terug naar categorielijst';
 const L_EDITCAT_UPDATE = 'De wijzigingen voor deze categorie doorveoeren';
 
 // commentaire.php

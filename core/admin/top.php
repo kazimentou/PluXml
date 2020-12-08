@@ -32,10 +32,10 @@ eval($plxAdmin->plxPlugins->callHook('AdminTopEndHead'));
 # pour tablettes
 $currentScript = basename($_SERVER['SCRIPT_NAME'], ".php");
 $fullwide = in_array($currentScript, array('article', 'statique'/* , 'medias' */, 'parametres_users', 'parametres_themes', 'parametres_edittpl')) ? ' fullwide' : '';
-$detail = in_array($currentScript, array(
+$hideMenu = in_array($currentScript, array(
 	'article', 'categorie', 'comment', 'profil', 'user', 'parametres_base',
 	'parametres_affichage', 'parametres_themes', 'parametres_avances', 'statique')
-) ? 'detail' : '';
+) ? ' hide-menu' : '';
 
 if($currentScript == 'medias') {
 	# on active le medias manager
@@ -88,22 +88,27 @@ else # nouvel article
 $menus[] = plxUtils::formatMenu('<i class="icon-picture"></i>' . L_MENU_MEDIAS, 'medias.php', L_MENU_MEDIAS_TITLE);
 
 if ($_SESSION['profil'] <= PROFIL_MANAGER)
+	# Peut gérer les pages statiques ( script PHP )
 	$menus[] = plxUtils::formatMenu('<i class="icon-doc-text-inv"></i>' . L_MENU_STATICS, 'statiques.php', L_MENU_STATICS_TITLE);
 
 if (!empty($plxAdmin->aConf['allow_com']) and $_SESSION['profil'] <= PROFIL_MODERATOR) {
+	# Peut gérer les commentaires
 	$nbcoms = $plxAdmin->nbComments('offline');
 	$coms_offline = $nbcoms > 0 ? '<span class="badge" onclick="window.location=\'' . 'comments.php?sel=offline&amp;page=1\';return false;">' . $plxAdmin->nbComments('offline') . '</span>' : '';
 	$menus[] = plxUtils::formatMenu('<i class="icon-comment-inv-alt2"></i>' . L_COMMENTS, 'comments.php?page=1', L_MENU_COMMENTS_TITLE, false, false, $coms_offline);
 }
 
 if ($_SESSION['profil'] <= PROFIL_EDITOR)
+	# Peut gérer les catégories et son profil
 	$menus[] = plxUtils::formatMenu('<i class="icon-list"></i>' . L_CATEGORIES, 'categories.php', L_MENU_CATEGORIES_TITLE);
 
 $menus[] = plxUtils::formatMenu('<i class="icon-user"></i>' . L_PROFIL, 'profil.php', L_MENU_PROFIL_TITLE);
 
 if ($_SESSION['profil'] == PROFIL_ADMIN) {
+	# Cet utilisateur a les super-pouvoirs
 	$menus[] = plxUtils::formatMenu('<i class="icon-cog-1"></i>' . L_MENU_CONFIG, 'parametres_base.php', L_MENU_CONFIG_TITLE, false, false, '', false);
-	if (preg_match('/parametres/', basename($_SERVER['SCRIPT_NAME']))) {
+	$isSetup = preg_match('@^parametres_@', basename($_SERVER['SCRIPT_NAME']));
+	if ($isSetup) {
 		$menus[] = plxUtils::formatMenu(L_CONFIG_BASE, 'parametres_base.php', L_MENU_CONFIG_BASE_TITLE, 'menu-config');
 		$menus[] = plxUtils::formatMenu(L_MENU_CONFIG_VIEW, 'parametres_affichage.php', L_MENU_CONFIG_VIEW_TITLE, 'menu-config');
 		$menus[] = plxUtils::formatMenu(L_MENU_CONFIG_USERS, 'parametres_users.php', L_MENU_CONFIG_USERS_TITLE, 'menu-config');
@@ -143,7 +148,7 @@ echo implode(PHP_EOL, $menus) . PHP_EOL;
         </div>
     </aside>
 
-    <section class="section <?= $detail ?>">
+    <section class="section<?= !empty($isSetup) ? ' setup' : '' ?><?= $hideMenu ?>">
         <header class="header">
             <div>
                 <label for="toggle-menu" class="nav-button" type="button" role="button" aria-label="open/close navigation" title="<?= L_MENU ?>"><i></i></label>

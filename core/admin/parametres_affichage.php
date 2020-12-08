@@ -61,9 +61,7 @@ include 'top.php';
             <h2 class="h3-like"><?= L_CONFIG_VIEW ?></h2>
         </div>
         <div>
-			<div>
-	            <input class="inbl btn--primary" type="submit" name="config-display" role="button" value="<?= L_SAVE ?>"/>
-			</div>
+            <input class="inbl btn--primary" type="submit" name="config-display" role="button" value="<?= L_SAVE ?>"/>
         </div>
     </div>
 <?php

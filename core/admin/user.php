@@ -38,45 +38,41 @@ if (!empty($_POST) and isset($plxAdmin->aUsers[$_POST['id']])) {
 # On inclut le header
 include 'top.php';
 ?>
-
-<div class="admin">
-    <form method="post" id="form_user" class="first-level">
-	    <?= plxToken::getTokenPostMethod() ?>
-		<?php plxUtils::printInput('id', $id, 'hidden'); ?>
-        <div class="adminheader">
-			<div>
-	            <h2><?= L_USER_PAGE_TITLE ?> "<?= plxUtils::strCheck($plxAdmin->aUsers[$id]['name']); ?>"</h2>
-	            <p><a class="back icon-left-big" href="parametres_users.php"><?= L_USER_BACK_TO_PAGE ?></a></p>
-			</div>
-			<div>
-	            <input type="submit" class="button--primary" value="<?= L_SAVE ?>"/>
-			</div>
-        </div>
+<form method="post" id="form_user" class="first-level">
+    <?= plxToken::getTokenPostMethod() ?>
+    <input type="hidden" name="id" value="<?= $id ?>" />
+	<div class="adminheader">
+		<div>
+            <h2><?= L_USER_PAGE_TITLE ?> "<?= plxUtils::strCheck($plxAdmin->aUsers[$id]['name']); ?>"</h2>
+            <p><a class="back icon-left-big" href="parametres_users.php"><?= L_USER_BACK_TO_PAGE ?></a></p>
+		</div>
+		<div>
+            <input type="submit" class="button--primary" value="<?= L_SAVE ?>"/>
+		</div>
+	</div>
 <?php
 # Hook Plugins
 eval($plxAdmin->plxPlugins->callHook('AdminUserTop')) ;
 ?>
-        <fieldset>
-			<div class="label-expanded">
-				<label for="id_lang"><?= L_USER_LANG ?></label>
+	<fieldset>
+		<div class="label-expanded">
+			<label for="id_lang"><?= L_USER_LANG ?></label>
 <?php plxUtils::printSelect('lang', plxUtils::getLangs(), $plxAdmin->aUsers[$id]['lang']) ?>
-			</div>
-			<div class="label-expanded">
-				<label for="id_email"><?= L_MAIL_ADDRESS ?></label>
-				<input type="email" name="email" value="<?= plxUtils::strCheck($plxAdmin->aUsers[$id]['email']) ?>" id="id_email" />
-			</div>
-			<div>
-	            <label for="id_content"><?= L_INFOS ?></label>
-	            <textarea name="content" rows="8" id="id_content"><?= plxUtils::strCheck($plxAdmin->aUsers[$id]['infos']) ?></textarea>
-			</div>
-        </fieldset>
+		</div>
+		<div class="label-expanded">
+			<label for="id_email"><?= L_MAIL_ADDRESS ?></label>
+			<input type="email" name="email" value="<?= plxUtils::strCheck($plxAdmin->aUsers[$id]['email']) ?>" id="id_email" />
+		</div>
+		<div>
+            <label for="id_content"><?= L_INFOS ?></label>
+            <textarea name="content" rows="8" id="id_content"><?= plxUtils::strCheck($plxAdmin->aUsers[$id]['infos']) ?></textarea>
+		</div>
+	</fieldset>
 <?php
 # Hook Plugins
 eval($plxAdmin->plxPlugins->callHook('AdminUser'))
 ?>
-    </form>
-</div>
-
+</form>
 <?php
 
 # Hook Plugins

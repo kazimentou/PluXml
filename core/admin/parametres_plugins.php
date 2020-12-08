@@ -154,48 +154,48 @@ $data_rows_num = ($sel == '1') ? 'data-rows-num=\'name^="plugOrdre"\'' : false;
 include 'top.php';
 
 ?>
-
-<div class="adminheader">
-    <h2 class="h3-like"><?= L_PLUGINS_TITLE ?></h2>
-<?php /* fil d'ariane  */ ?>
-    <ul>
-		<li <?= ($_SESSION['selPlugins'] == '1') ? 'class="selected" ' : ''?>><a href="parametres_plugins.php?sel=1"><?= L_PLUGINS_ACTIVE_LIST ?></a>&nbsp;<span class="tag"><?= $nbActivePlugins ?></span></li>
-		<li <?= ($_SESSION['selPlugins'] == '0') ? 'class="selected" ' : '' ?>><a href="parametres_plugins.php?sel=0"><?= L_PLUGINS_INACTIVE_LIST ?></a>&nbsp;<span class="tag"><?= $nbInactivePlugins ?></span></li>
-    </ul>
-</div>
-
-<div class="admin">
-    <form action="parametres_plugins.php" method="post" id="form_plugins" data-chk="chkAction[]">
-<?php eval($plxAdmin->plxPlugins->callHook('AdminSettingsPluginsTop')) # Hook Plugins ?>
-		<div class="tableheader">
-			<?= PlxToken::getTokenPostMethod() ?>
-			<input class="btn--primary" type="submit" name="update" value="<?= L_SAVE ?>"/>
-			<input type="text" id="plugins-search" placeholder="<?= L_SEARCH ?>..." />
+<form action="parametres_plugins.php" method="post" id="form_plugins" data-chk="chkAction[]">
+	<?= PlxToken::getTokenPostMethod() ?>
+	<div class="adminheader">
+		<div>
+		    <h2 class="h3-like"><?= L_PLUGINS_TITLE ?></h2>
+	<?php /* fil d'ariane  */ ?>
+		    <ul>
+				<li <?= ($_SESSION['selPlugins'] == '1') ? 'class="selected" ' : ''?>><a href="parametres_plugins.php?sel=1"><?= L_PLUGINS_ACTIVE_LIST ?></a>&nbsp;<span class="tag"><?= $nbActivePlugins ?></span></li>
+				<li <?= ($_SESSION['selPlugins'] == '0') ? 'class="selected" ' : '' ?>><a href="parametres_plugins.php?sel=0"><?= L_PLUGINS_INACTIVE_LIST ?></a>&nbsp;<span class="tag"><?= $nbInactivePlugins ?></span></li>
+		    </ul>
 		</div>
-        <div class="scrollable-table">
-            <table id="plugins-table" class="table mb0" <?= !empty($data_rows_num) ? $data_rows_num : '' ?>>
-                <thead>
-	                <tr>
-	                    <th><?php if($nbPlugins > 0) { ?><input type="checkbox" /><?php } else { ?>&nbsp;<?php } ?></th>
-	                    <th>&nbsp;</th>
-	                    <th><?= !empty($sel) ? L_PLUGINS_ACTIVE_LIST : L_PLUGINS_INACTIVE_LIST ?></th>
+		<div>
+			<input class="btn--primary" type="submit" name="update" value="<?= L_SAVE ?>"/>
+		</div>
+	</div>
+<?php eval($plxAdmin->plxPlugins->callHook('AdminSettingsPluginsTop')) # Hook Plugins ?>
+	<div class="tableheader">
+		<input type="text" id="plugins-search" placeholder="<?= L_SEARCH ?>..." />
+	</div>
+	<div class="scrollable-table">
+		<table id="plugins-table" class="table mb0" <?= !empty($data_rows_num) ? $data_rows_num : '' ?>>
+			<thead>
+                <tr>
+                    <th><?php if($nbPlugins > 0) { ?><input type="checkbox" /><?php } else { ?>&nbsp;<?php } ?></th>
+                    <th>&nbsp;</th>
+                    <th><?= !empty($sel) ? L_PLUGINS_ACTIVE_LIST : L_PLUGINS_INACTIVE_LIST ?></th>
 <?php if ($_SESSION['selPlugins'] == '1') : ?>
 						<th><?= L_PLUGINS_LOADING_SORT ?></th>
 <?php endif; ?>
-	                    <th><?= L_ACTION ?></th>
-	                </tr>
-                </thead>
-                <tbody>
+                    <th><?= L_ACTION ?></th>
+                </tr>
+			</thead>
+			<tbody>
 <?= $plugins ?>
-                </tbody>
-            </table>
-        </div>
-		<div class="tableheader">
-			<button class="submit btn--warning" name="delete" disabled data-lang="<?= L_CONFIRM_DELETE ?>"><i class="icon-trash"></i><?= L_DELETE ?></button>
-			<button class="submit btn--primary" name="<?= ($_SESSION['selPlugins'] == '1') ? 'deactivate' : 'activate' ?>" disabled data-lang="<?= ($_SESSION['selPlugins'] == '1') ? L_CONFIRM_DEACTIVATE : L_CONFIRM_ACTIVATE ?>"><i class="<?= ($_SESSION['selPlugins'] == '1') ? 'icon-lock' : 'icon-unlock' ?>"></i><?= ($_SESSION['selPlugins'] == '1')  ? L_PLUGINS_DEACTIVATE : L_PLUGINS_ACTIVATE ?></button>
-		</div>
-    </form>
-</div>
+			</tbody>
+		</table>
+	</div>
+	<div class="tableheader">
+		<button class="submit btn--warning" name="delete" disabled data-lang="<?= L_CONFIRM_DELETE ?>"><i class="icon-trash"></i><?= L_DELETE ?></button>
+		<button class="submit btn--primary" name="<?= ($_SESSION['selPlugins'] == '1') ? 'deactivate' : 'activate' ?>" disabled data-lang="<?= ($_SESSION['selPlugins'] == '1') ? L_CONFIRM_DEACTIVATE : L_CONFIRM_ACTIVATE ?>"><i class="<?= ($_SESSION['selPlugins'] == '1') ? 'icon-lock' : 'icon-unlock' ?>"></i><?= ($_SESSION['selPlugins'] == '1')  ? L_PLUGINS_DEACTIVATE : L_PLUGINS_ACTIVATE ?></button>
+	</div>
+</form>
 <?php
 
 # Hook Plugins

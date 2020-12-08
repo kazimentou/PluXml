@@ -51,12 +51,10 @@ include 'top.php';
     <div class="adminheader">
         <div>
             <h2 class="h3-like"><?= L_EDITCAT_PAGE_TITLE; ?> "<?= plxUtils::strCheck(trim($plxAdmin->aCats[$id]['name'])); ?>"</h2>
-            <p><a class="icon-left-big" href="categorie.php"><?= L_EDITCAT_BACK_TO_PAGE ?></a></p>
+            <p><a class="icon-left-big" href="categorie.php"><?= L_BACK_TO_CATEGORIES ?></a></p>
         </div>
         <div>
-			<div>
-	            <input class="btn--primary" type="submit" value="<?= L_SAVE ?>"/>
-			</div>
+            <input class="btn--primary" type="submit" value="<?= L_SAVE ?>"/>
         </div>
     </div>
 

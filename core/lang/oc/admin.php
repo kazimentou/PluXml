@@ -179,7 +179,7 @@ const L_EDITCAT_PAGE_TITLE = 'Edicion de las opcions de la categoria';
 const L_EDITCAT_DESCRIPTION = 'Descripcion';
 const L_EDITCAT_DISPLAY_HOMEPAGE = 'Afichar los articles d\'aquesta categoria sus la pagina d\'acuèlh';
 const L_TEMPLATE = 'Modèl';
-const L_EDITCAT_BACK_TO_PAGE = 'Tornar a la lista de las categorias';
+const L_BACK_TO_CATEGORIES = 'Tornar a la lista de las categorias';
 const L_EDITCAT_UPDATE = 'Metre a jorn aquesta categoria';
 
 // commentaire.php

@@ -376,9 +376,13 @@ i.icon-calendar {
 }
 
 .section .adminheader {
-    padding: 0 1rem;
+    padding: 0.5rem 1rem;
     background-color: var(--backheader);
     border-bottom: 1px solid var(--backheaderborder);
+}
+
+.section .adminheader h2 {
+	margin: 0;
 }
 
 .section .adminheader ul {
@@ -405,7 +409,7 @@ i.icon-calendar {
 }
 
 /* Buttons */
-.section.detail .adminheader > div:last-of-type div {
+.section.hide-menu .adminheader > div:last-of-type div {
 	/* padding-bottom: 1rem; */
 	padding: 1rem 0;
 	white-space: nowrap;
@@ -960,6 +964,13 @@ a.overlay {
     cursor: pointer;
 }
 
+section.setup .adminheader h2 {
+	display: inline-block;
+	background-color: firebrick;
+	color: #fff;
+	padding: 0 1rem;
+}
+
 /* ---------- hack against knacss --------- */
 .pagination .btn {
 	padding: 1rem 0.25rem;
@@ -1409,10 +1420,6 @@ fieldset div:not(.label-expanded) input[type="email"] {
 
 /* ------ parametres_affichage.php -------- */
 
-#form_display .adminheader > div {
-	margin-top: 1rem;
-}
-
 #form_display fieldset > div:not(.large):not(.thumbnail-container) {
 	display: flex;
 }
@@ -1593,12 +1600,11 @@ input:checked ~ .modal__overlay {
 		grid-template-columns: auto 1fr;
 	}
 
-	.section.detail .adminheader {
+	.section .adminheader {
 	    display: flex;
 	}
 
-	.section.detail .adminheader > div:last-of-type {
-		align-self: self-end;
+	.section .adminheader > div:not(:first-of-type) {
 	    margin-left: auto;
 	    text-align: end;
 	}

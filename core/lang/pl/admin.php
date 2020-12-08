@@ -177,7 +177,7 @@ const L_EDITCAT_PAGE_TITLE = 'Edycja opcji kategorii';
 const L_EDITCAT_DESCRIPTION = 'Opis';
 const L_EDITCAT_DISPLAY_HOMEPAGE = 'Pokaż artykuły z tej kategorii na stronie głównej';
 const L_TEMPLATE = 'Szablon';
-const L_EDITCAT_BACK_TO_PAGE = 'Przejdż do listy kategorii';
+const L_BACK_TO_CATEGORIES = 'Przejdż do listy kategorii';
 const L_EDITCAT_UPDATE = 'Zapisz zmiany';
 
 // commentaire.php

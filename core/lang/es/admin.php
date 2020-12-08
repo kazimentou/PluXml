@@ -177,7 +177,7 @@ const L_EDITCAT_PAGE_TITLE = 'Editar opciones de categoría';
 const L_EDITCAT_DESCRIPTION = 'Descripción';
 const L_EDITCAT_DISPLAY_HOMEPAGE = 'Mostrar artículos en la página principal';
 const L_TEMPLATE = 'Plantilla';
-const L_EDITCAT_BACK_TO_PAGE = 'Volver a la lista de categorías';
+const L_BACK_TO_CATEGORIES = 'Volver a la lista de categorías';
 const L_EDITCAT_UPDATE = 'Actualizar esta categoría';
 
 // commentaire.php

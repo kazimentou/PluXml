@@ -170,15 +170,17 @@ const L_EDITCAT_PAGE_TITLE = 'Édition des options de la catégorie';
 const L_EDITCAT_DESCRIPTION = 'Description';
 const L_EDITCAT_DISPLAY_HOMEPAGE = 'Afficher les articles de cette catégorie sur la page d\'accueil';
 const L_TEMPLATE = 'Modèle';
-const L_EDITCAT_BACK_TO_PAGE = 'Retour à la liste des catégories';
+const L_BACK_TO_CATEGORIES = 'Retour à la liste des catégories';
 const L_EDITCAT_UPDATE = 'Mettre à jour cette catégorie';
 
 // comment.php
 
 const L_COMMENT_ORPHAN_STATUS = 'non visible (nous vous conseillons de supprimer ce commentaire)';
 const L_COMMENT_ARTICLE_LINKED_TITLE = 'Article attaché à ce commentaire';
-const L_COMMENT_OFFLINE = '%d commentaires à valider';
-const L_COMMENT_ONLINE = '%d commentaires publiés';
+const L_COMMENT_OFFLINE = 'Hors ligne';
+const L_COMMENT_ONLINE = 'En ligne';
+const L_COMMENT_OFFLINE_COUNT = '%d commentaires à valider';
+const L_COMMENT_ONLINE_COUNT = '%d commentaires publiés';
 const L_COMMENT_ONLINE_TITLE = 'Visualiser ce commentaire en ligne';
 const L_BACK_TO_ARTICLE_COMMENTS = 'Retour à la liste des commentaires de cet article';
 const L_BACK_TO_COMMENTS = 'Retour à la liste des commentaires';
@@ -237,6 +239,7 @@ const L_COMMENTS_ONLINE_LIST = 'Liste des commentaires publiés';
 const L_COMMENTS_OFFLINE_LIST = 'Liste des commentaires en attente de validation';
 const L_COMMENTS_ALL_LIST = 'Liste des commentaires';
 const L_COMMENT_SET_ONLINE = 'Mettre en ligne';
+const L_BACK_TO_ARTICLE = 'Retour à l\'article';
 
 // index.php
 

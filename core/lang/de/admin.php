@@ -173,7 +173,7 @@ const L_EDITCAT_PAGE_TITLE = 'Kategorieoptionen ändern';
 const L_EDITCAT_DISPLAY_HOMEPAGE = 'Zeige Artikel in dieser Kategorie auf der Startseite';
 const L_EDITCAT_DESCRIPTION = 'Beschreibung';
 const L_TEMPLATE = 'Vorlage';
-const L_EDITCAT_BACK_TO_PAGE = 'Zurück zur Liste der Kategorien';
+const L_BACK_TO_CATEGORIES = 'Zurück zur Liste der Kategorien';
 const L_EDITCAT_UPDATE = 'Kategorie aktualisieren';
 
 // commentaire.php
