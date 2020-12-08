@@ -172,11 +172,11 @@ if($curFolders) {
         <?= plxToken::getTokenPostMethod() ?>
 		<input type="hidden" name="sort" value="<?= $sort ?>" />
         <!-- New Folder Dialog -->
-        <input type="checkbox" id="toggle-newfolder" class="toggle" />
+        <input type="checkbox" id="toggle-newfolder" class="toggle" onchange="if(this.checked) { this.form.elements.newfolder.focus(); }" />
         <div id="dlgNewFolder" class="dialog">
             <div class="dialog-content">
                 <?= L_MEDIAS_NEW_FOLDER ?>&nbsp;:&nbsp;
-                <input id="id_newfolder" type="text" name="newfolder" value="" maxlength="50" size="15"/>
+                <input id="id_newfolder" type="text" name="newfolder" value="" maxlength="50" size="15" />
                 <input type="submit" name="btn_newfolder" value="<?= L_MEDIAS_CREATE_FOLDER ?>"/>
                 <label for="toggle-newfolder" class="dialog-close">&times;</label>
             </div>
