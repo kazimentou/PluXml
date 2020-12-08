@@ -366,7 +366,8 @@ const L_CONFIG_ADVANCED_SMTP_SERVER_HELP = 'Nombre del servidor SMTP (ejemplo: s
 const L_CONFIG_ADVANCED_SMTP_USERNAME_HELP = 'Nombre de usuario en el host SMTP (ejemplo : pluxml@monserveursmtp.com)';
 const L_CONFIG_ADVANCED_SMTP_PASSWORD_HELP = 'Contraseña de usuario en el host SMTP';
 const L_CONFIG_ADVANCED_SMTP_PORT_HELP = 'Número de puerto del host SMTP (predeterminado : 465)';
-const L_CONFIG_ADVANCED_SMTPOAUTH_TITLE_HELP = 'PluXml permite generar tokens solo para el servicio GOOGLE.' . PHP_EOL . 'Necesita ayuda para generar el nombre de usuario y la clave secreta : WIKI.';
+const L_CONFIG_ADVANCED_SMTPOAUTH_TITLE_HELP = 'PluXml permite generar tokens solo para el servicio GOOGLE.
+Necesita ayuda para generar el nombre de usuario y la clave secreta : WIKI.';
 const L_CONFIG_ADVANCED_SMTPOAUTH_CLIENTID_HELP = 'ID de cliente en el servicio OAUTH2 (ejemplo : 664335625964-uha1vop20qPluXml81ubjkkgfabbbj6d.apps.googleusercontent.com)';
 const L_CONFIG_ADVANCED_SMTPOAUTH_SECRETKEY_HELP = 'La clave del cliente en el servicio OAUTH2 (ejemplo : PrsvKp6aprKpoP8snnCoC8-x)';
 const L_CONFIG_ADVANCED_SMTPOAUTH_TOKEN_HELP = 'Guarde la identificación del cliente y el código secreto del cliente para que pueda generar el token.';
@@ -503,7 +504,8 @@ const L_MENU_CATEGORIES_TITLE = 'Crear, gestionar y editar categorías';
 const L_MENU_CONFIG_TITLE = 'Configurar PluXml';
 const L_MENU_CONFIG = 'Parámetros';
 const L_MENU_PROFIL_TITLE = 'Gestionar sus perfiles de usuario';
-const L_WARNING_INSTALLATION_FILE = 'Todavía existe el archivo «install.php» en la raíz de PluXml.' . PHP_EOL .'Por razones de seguridad, le sugerimos que lo <a class="lnkdelete" href="?del=install">elimine</a>.';
+const L_WARNING_INSTALLATION_FILE = 'Todavía existe el archivo «install.php» en la raíz de PluXml.
+Por razones de seguridad, le sugerimos que lo <a class="lnkdelete" href="?del=install">elimine</a>.';
 
 // user.php
 const L_USER_UNKNOWN = 'Usuario desconocido';

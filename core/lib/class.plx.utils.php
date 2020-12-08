@@ -1828,7 +1828,7 @@ EOT;
      * @author Jean-Pierre Pourrez "bazooka07"
      * */
     public static function nl2p($content) {
-		$lines = explode(PHP_EOL, $content);
+		$lines = explode('\n', $content);
 		return '<p>' . implode('</p>' . PHP_EOL . '<p>', $lines) . '</p>';
 	}
 

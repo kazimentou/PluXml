@@ -370,7 +370,8 @@ const L_CONFIG_ADVANCED_SMTP_SERVER_HELP = 'Имя SMTP-сервера (прим
 const L_CONFIG_ADVANCED_SMTP_USERNAME_HELP = 'Имя пользователя на узле SMTP (пример : pluxml@monserveursmtp.com)';
 const L_CONFIG_ADVANCED_SMTP_PASSWORD_HELP = 'Пароль пользователя на хосте SMTP';
 const L_CONFIG_ADVANCED_SMTP_PORT_HELP = 'Номер порта хоста SMTP (по умолчанию : 465)';
-const L_CONFIG_ADVANCED_SMTPOAUTH_TITLE_HELP = 'PluXml позволяет генерировать токены только для сервиса GOOGLE.' . PHP_EOL . 'Нужна помощь в создании имени пользователя и секретного ключа : WIKI.';
+const L_CONFIG_ADVANCED_SMTPOAUTH_TITLE_HELP = 'PluXml позволяет генерировать токены только для сервиса GOOGLE.
+Нужна помощь в создании имени пользователя и секретного ключа : WIKI.';
 const L_CONFIG_ADVANCED_SMTPOAUTH_CLIENTID_HELP = 'Идентификатор клиента в сервисе OAUTH2 (пример: 664335625964-uha1vop20qPluXml81ubjkkgfabbbj6d.apps.googleusercontent.com)';
 const L_CONFIG_ADVANCED_SMTPOAUTH_SECRETKEY_HELP = 'Ключ клиента на сервисе OAUTH2 (пример: PrsvKp6aprKpoP8snnCoC8-x)';
 const L_CONFIG_ADVANCED_SMTPOAUTH_TOKEN_HELP = 'Сохраните идентификатор клиента и секретный код клиента, чтобы вы могли сгенерировать токен.';
@@ -507,7 +508,8 @@ const L_MENU_CATEGORIES_TITLE = 'Создание, управление и ре�
 const L_MENU_CONFIG_TITLE = 'Конфигурация PluXml';
 const L_MENU_CONFIG = 'Настройки';
 const L_MENU_PROFIL_TITLE = 'Управление профилем пользователя';
-const L_WARNING_INSTALLATION_FILE = 'Внимание! Файл install.php все еще находится в корневой папке PluXml.' . PHP_EOL .'Из соображений безопасности настоятельно рекомендуем <a class="lnkdelete" href="?del=install">удалить</a> его.';
+const L_WARNING_INSTALLATION_FILE = 'Внимание! Файл install.php все еще находится в корневой папке PluXml.
+Из соображений безопасности настоятельно рекомендуем <a class="lnkdelete" href="?del=install">удалить</a> его.';
 
 // user.php
 const L_USER_UNKNOWN = 'Неизвестный пользователь';

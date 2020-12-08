@@ -369,7 +369,8 @@ const L_CONFIG_ADVANCED_SMTP_SERVER_HELP = 'Nom del servidor SMTP (exemple : s
 const L_CONFIG_ADVANCED_SMTP_USERNAME_HELP = 'Nom d’utilizaire de l\'òste SMTP (exemple : pluxml@monserveursmtp.com)';
 const L_CONFIG_ADVANCED_SMTP_PASSWORD_HELP = 'Senhal de l’utilizaire sus l’òste ';
 const L_CONFIG_ADVANCED_SMTP_PORT_HELP = 'Numèro de pòrt de l’òste SMTP (predeterminat : 465)';
-const L_CONFIG_ADVANCED_SMTPOAUTH_TITLE_HELP = 'PluXml permet de generar de fichièrs solament pel servici GOOGLE.' . PHP_EOL . 'Se vos cal d’ajuda per generar lo nom d’utilizaire e la clau secreta : WIKI.';
+const L_CONFIG_ADVANCED_SMTPOAUTH_TITLE_HELP = 'PluXml permet de generar de fichièrs solament pel servici GOOGLE.
+Se vos cal d’ajuda per generar lo nom d’utilizaire e la clau secreta : WIKI.';
 const L_CONFIG_ADVANCED_SMTPOAUTH_CLIENTID_HELP = 'Identificant de client al servici OAUTH2 (exemple : 664335625964-uha1vop20qPluXml81ubjkkgfabbbj6d.apps.googleusercontent.com)';
 const L_CONFIG_ADVANCED_SMTPOAUTH_SECRETKEY_HELP = 'La clau de client del servici OAUTH2 (exemple : PrsvKp6aprKpoP8snnCoC8-x)';
 const L_CONFIG_ADVANCED_SMTPOAUTH_TOKEN_HELP = 'Enregistrar l’ID client e lo còdi secrèt per poder generar lo geton.';
@@ -506,7 +507,8 @@ const L_MENU_CATEGORIES_TITLE = 'Crear, gerir, editar las categorias';
 const L_MENU_CONFIG_TITLE = 'Configurar PluXml';
 const L_MENU_CONFIG = 'Paramètres';
 const L_MENU_PROFIL_TITLE = 'Gerir vòstre perfil utilizaire';
-const L_WARNING_INSTALLATION_FILE = 'Lo fichièr install.php es present a la raiç de vòstre PluXml.' . PHP_EOL .'Per de rasons de seguretat, es fòrtament conselhat d\'o <a class="lnkdelete" href="?del=install">suprimir</a>.';
+const L_WARNING_INSTALLATION_FILE = 'Lo fichièr install.php es present a la raiç de vòstre PluXml.
+Per de rasons de seguretat, es fòrtament conselhat d\'o <a class="lnkdelete" href="?del=install">suprimir</a>.';
 
 // user.php
 const L_USER_UNKNOWN = 'Utilizaire desconegut';

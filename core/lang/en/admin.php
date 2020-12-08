@@ -369,7 +369,8 @@ const L_CONFIG_ADVANCED_SMTP_SERVER_HELP = 'SMTP server name (example: ssl0.ovh.
 const L_CONFIG_ADVANCED_SMTP_USERNAME_HELP = 'User name on the SMTP host (example: pluxml@monserveursmtp.com)';
 const L_CONFIG_ADVANCED_SMTP_PASSWORD_HELP = 'User password on the SMTP host';
 const L_CONFIG_ADVANCED_SMTP_PORT_HELP = 'SMTP host port number (default: 465)';
-const L_CONFIG_ADVANCED_SMTPOAUTH_TITLE_HELP = 'PluXml allows to generate tokens only for the service GOOGLE.' . PHP_EOL . 'Need help to generate the username and secret key: WIKI.';
+const L_CONFIG_ADVANCED_SMTPOAUTH_TITLE_HELP = 'PluXml allows to generate tokens only for the service GOOGLE.
+Need help to generate the username and secret key: WIKI.';
 const L_CONFIG_ADVANCED_SMTPOAUTH_CLIENTID_HELP = 'Customer ID on the OAUTH2 service (example: 664335625964-uha1vop20qPluXml81ubjkkgfabbbj6d.apps.googleusercontent.com)';
 const L_CONFIG_ADVANCED_SMTPOAUTH_SECRETKEY_HELP = 'The client key on the OAUTH2 service (example: PrsvKp6aprKpoP8snnCoC8-x)';
 
@@ -506,7 +507,8 @@ const L_MENU_CATEGORIES_TITLE = 'Create, manage, edit categories';
 const L_MENU_CONFIG_TITLE = 'Configure PluXml';
 const L_MENU_CONFIG = 'Parameters';
 const L_MENU_PROFIL_TITLE = 'Manage your user profiles';
-const L_WARNING_INSTALLATION_FILE = 'install.php file can still be found at the root of your website.' . PHP_EOL .'Please <a class="lnkdelete" href="?del=install">drop it</a> for security reason.';
+const L_WARNING_INSTALLATION_FILE = 'install.php file can still be found at the root of your website.
+Please <a class="lnkdelete" href="?del=install">drop it</a> for security reason.';
 
 // user.php
 

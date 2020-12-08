@@ -328,7 +328,7 @@ const L_CONFIG_HOMETEMPLATE = 'Template de la page d\'accueil';
 
 const L_CONFIG_ADVANCED = 'Configuration avancée';
 const L_CONFIG_ADVANCED_URL_REWRITE = 'Activer la réécriture d\'Url';
-const L_CONFIG_ADVANCED_URL_REWRITE_ALERT = 'Attention un fichier .htaccess est déjà présent à la racine de votre PluXml. En activant la réécriture d\'url ce fichier sera modifié';
+const L_CONFIG_ADVANCED_URL_REWRITE_ALERT = 'Attention un fichier .htaccess est déjà présent à la racine de votre PluXml.\nEn activant la réécriture d\'url ce fichier sera modifié.';
 const L_CONFIG_CLEAN_URLS = 'Supprimer les mots courts dans les URLs';
 const L_CONFIG_CLEAN_URLS_HELP = 'Permet de générer des URLs plus courtes pour les articles et les pages';
 const L_CONFIG_ADVANCED_GZIP = 'Activer la compression GZIP';
@@ -368,7 +368,7 @@ const L_CONFIG_ADVANCED_SMTP_SERVER_HELP = 'Nom du serveur SMTP (exemple : ssl0.
 const L_CONFIG_ADVANCED_SMTP_USERNAME_HELP = 'Nom de l\'utilisateur sur l\'hôte SMTP (exemple : pluxml@monserveursmtp.com)';
 const L_CONFIG_ADVANCED_SMTP_PASSWORD_HELP = 'Mot de passe de l\'utilisateur sur l\'hôte SMTP';
 const L_CONFIG_ADVANCED_SMTP_PORT_HELP = 'Numéro du port de l\'hôte SMTP (par défaut : 465)';
-const L_CONFIG_ADVANCED_SMTPOAUTH_TITLE_HELP = 'PluXml permet de générer des tokens uniquement pour le service  GOOGLE.' . PHP_EOL . 'Pour de l\'aide sur la clé secrète : WIKI.';
+const L_CONFIG_ADVANCED_SMTPOAUTH_TITLE_HELP = 'PluXml permet de générer des tokens uniquement pour le service  GOOGLE.\nPour de l\'aide sur la clé secrète : WIKI.';
 const L_CONFIG_ADVANCED_SMTPOAUTH_CLIENTID_HELP = 'Identifiant client sur le service OAUTH2 (exemple : 664335625964-uha1vop20qPluXml81ubjkkgfabbbj6d.apps.googleusercontent.com)';
 const L_CONFIG_ADVANCED_SMTPOAUTH_SECRETKEY_HELP = 'La clé du client sur le service OAUTH2 (exemple : PrsvKp6aprKpoP8snnCoC8-x)';
 const L_CONFIG_ADVANCED_SMTPOAUTH_TOKEN_HELP = 'Enregistrer l\'ID client et le code secret du client afin de pouvoir générer le token.';
@@ -506,7 +506,7 @@ const L_MENU_CATEGORIES_TITLE = 'Créer, gérer, éditer les catégories';
 const L_MENU_CONFIG_TITLE = 'Configurer PluXml';
 const L_MENU_CONFIG = 'Paramètres';
 const L_MENU_PROFIL_TITLE = 'Gérer votre profil utilisateur';
-const L_WARNING_INSTALLATION_FILE = 'Le fichier install.php est présent à la racine de votre PluXml.' . PHP_EOL . 'Pour des raisons de sécurité, il est fortement conseillé de le <a class="lnkdelete" href="?del=install">supprimer</a>.';
+const L_WARNING_INSTALLATION_FILE = 'Le fichier install.php est présent à la racine de votre PluXml.\nPour des raisons de sécurité, il est fortement conseillé de le <a class="lnkdelete" href="?del=install">supprimer</a>.';
 
 // user.php
 

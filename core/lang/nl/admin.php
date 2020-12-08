@@ -353,7 +353,8 @@ const L_CONFIG_ADVANCED_SMTP_SERVER_HELP = 'SMTP-servernaam (voorbeeld : ssl0.ov
 const L_CONFIG_ADVANCED_SMTP_USERNAME_HELP = 'Gebruikersnaam op de SMTP-host (voorbeeld : pluxml@monserveursmtp.com)';
 const L_CONFIG_ADVANCED_SMTP_PASSWORD_HELP = 'Gebruikerswachtwoord op de SMTP-host';
 const L_CONFIG_ADVANCED_SMTP_PORT_HELP = 'SMTP-hostpoortnummer (standaard : 465)';
-const L_CONFIG_ADVANCED_SMTPOAUTH_TITLE_HELP = 'Met PluXml kunnen alleen tokens voor de service worden gegenereerd GOOGLE.' . PHP_EOL . 'Hulp nodig bij het genereren van de gebruikersnaam en de geheime sleutel : WIKI.';
+const L_CONFIG_ADVANCED_SMTPOAUTH_TITLE_HELP = 'Met PluXml kunnen alleen tokens voor de service worden gegenereerd GOOGLE.
+Hulp nodig bij het genereren van de gebruikersnaam en de geheime sleutel : WIKI.';
 const L_CONFIG_ADVANCED_SMTPOAUTH_CLIENTID_HELP = 'Klant-ID voor de OAUTH2-service (voorbeeld : 664335625964-uha1vop20qPluXml81ubjkkgfabbbj6d.apps.googleusercontent.com)';
 const L_CONFIG_ADVANCED_SMTPOAUTH_SECRETKEY_HELP = 'De clientsleutel op de OAUTH2-service (voorbeeld : PrsvKp6aprKpoP8snnCoC8-x)';
 const L_CONFIG_ADVANCED_SMTPOAUTH_TOKEN_HELP = 'Sla de klant-ID en klantgeheime code op zodat u het token kunt genereren.';
@@ -462,7 +463,8 @@ const L_MENU_CATEGORIES_TITLE = 'Categorie?n aanmaken, beheren, verwijderen';
 const L_MENU_CONFIG_TITLE = 'PluXml configureren';
 const L_MENU_CONFIG = 'Parameters';
 const L_MENU_PROFIL_TITLE = 'Uw gebruikersprofiel beheren';
-const L_WARNING_INSTALLATION_FILE = 'het bestand install.php is nog aanwezig in de basismap van uw PluXml.' . PHP_EOL .'Om veiligheidsredenen raden wij u aan dit bestand te <a class="lnkdelete" href="?del=install">verwijderen</a> of te hernoemen.';
+const L_WARNING_INSTALLATION_FILE = 'het bestand install.php is nog aanwezig in de basismap van uw PluXml.
+Om veiligheidsredenen raden wij u aan dit bestand te <a class="lnkdelete" href="?del=install">verwijderen</a> of te hernoemen.';
 const L_USER_UNKNOWN = 'Onbekende gebruiker';
 const L_USER_LANG = 'Gebruikte taal in adminstratief gedeelte';
 const L_USER_UPDATE = 'Deze gebruiker aanpassen';

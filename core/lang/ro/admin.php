@@ -319,7 +319,8 @@ const L_CONFIG_ADVANCED_SMTP_SERVER_HELP = 'Nume server SMTP (exemplu : ssl0.ovh
 const L_CONFIG_ADVANCED_SMTP_USERNAME_HELP = 'Numele de utilizator pe gazda SMTP (exemplu : pluxml@monserveursmtp.com)';
 const L_CONFIG_ADVANCED_SMTP_PASSWORD_HELP = 'Parolă de utilizator pe gazda SMTP';
 const L_CONFIG_ADVANCED_SMTP_PORT_HELP = 'Numărul portului gazdă SMTP (implicit: 465)';
-const L_CONFIG_ADVANCED_SMTPOAUTH_TITLE_HELP = 'PluXml permite generarea de jetoane numai pentru serviciu GOOGLE.' . PHP_EOL . 'Aveți nevoie de ajutor pentru a genera numele de utilizator și cheia secretă : WIKI.';
+const L_CONFIG_ADVANCED_SMTPOAUTH_TITLE_HELP = 'PluXml permite generarea de jetoane numai pentru serviciu GOOGLE.
+Aveți nevoie de ajutor pentru a genera numele de utilizator și cheia secretă : WIKI.';
 const L_CONFIG_ADVANCED_SMTPOAUTH_CLIENTID_HELP = 'ID client la serviciul OAUTH2 (exemplu : 664335625964-uha1vop20qPluXml81ubjkkgfabbbj6d.apps.googleusercontent.com)';
 const L_CONFIG_ADVANCED_SMTPOAUTH_SECRETKEY_HELP = 'Cheia de client a serviciului OAUTH2 (exemplu : PrsvKp6aprKpoP8snnCoC8-x)';
 const L_CONFIG_ADVANCED_SMTPOAUTH_TOKEN_HELP = 'Salvați codul de identificare și codul secret al clientului, astfel încât să puteți genera jetonul.';
@@ -428,7 +429,8 @@ const L_MENU_CATEGORIES_TITLE = 'Crează,gestionează,editează categoriile';
 const L_MENU_CONFIG_TITLE = 'Configurarează PluXml';
 const L_MENU_CONFIG = 'Setări';
 const L_MENU_PROFIL_TITLE = 'Gestionează profilul';
-const L_WARNING_INSTALLATION_FILE = 'Fişierul install.php încă se află în rădăcina sit-ului ' . PHP_EOL .' PluXml. Din motive de securitate, se recomandă să-l <a class="lnkdelete" href="?del=install">ştergeţi</a>.';
+const L_WARNING_INSTALLATION_FILE = 'Fişierul install.php încă se află în rădăcina sit-ului 
+ PluXml. Din motive de securitate, se recomandă să-l <a class="lnkdelete" href="?del=install">ştergeţi</a>.';
 const L_USER_UNKNOWN = 'Utilizator necunoscut';
 const L_USER_LANG = 'Limba utilizată ';
 const L_USER_UPDATE = 'Actualizează acest utilizator';

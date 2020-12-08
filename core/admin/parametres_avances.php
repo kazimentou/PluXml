@@ -108,8 +108,8 @@ foreach(array(
 <?php
 		if($k == 'urlrewriting' and is_file(PLX_ROOT . '.htaccess')) {
 ?>
-		<p class="<?= $checked ? 'active' : '' ?>">
-			<?= L_CONFIG_ADVANCED_URL_REWRITE_ALERT ?>
+		<p class=" alert--info <?= $checked ? 'active' : '' ?>">
+			<?= str_replace('\n', '<br />' . PHP_EOL, L_CONFIG_ADVANCED_URL_REWRITE_ALERT) ?>
 		</p>
 <?php
 		}
@@ -123,7 +123,7 @@ foreach(array(
 const GOOGLE = '<a href="https://cloud.google.com" target="_blank">GMAIL (Google)</a>';
 const WIKI = '<a href="'. PLX_URL_WIKI .'/personnaliser/personnalisation/#envoi-de-mails" target="_blank">' . L_HELP_TITLE . '</a>';
 ?>
-        <div id="email-config">
+        <div id="email-config" class=".email-config">
             <div>
 				<label>
 	                <span><?= L_CONFIG_ADVANCED_EMAIL_METHOD ?></span>
@@ -168,6 +168,7 @@ foreach(array(
 			<p><?= strtr(L_CONFIG_ADVANCED_SMTPOAUTH_TITLE_HELP, array(
 				'GOOGLE'	=> GOOGLE,
 				'WIKI'		=> WIKI,
+				'\n'		=> '<br />' . PHP_EOL,
 			)) ?></p>
 <?php
 		}

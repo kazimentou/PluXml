@@ -1243,6 +1243,11 @@ fieldset div:not(.label-expanded) input[type="email"] {
 	margin-right: auto;
 }
 
+#form_advanced_settings fieldset > div:not(:last-of-type):hover,
+#form_advanced_settings .tabs > div:hover {
+	background-color: #ddd;
+}
+
 #email-config {
 	position: relative;
 }
@@ -1265,14 +1270,13 @@ fieldset div:not(.label-expanded) input[type="email"] {
 
 #email-config .tabs {
 	position: absolute;
-	top: 4.5rem;
+	top: 3.5rem;
 	left: 0;
 	width: 100%;
-	margin-top: 1rem;
 	text-align: initial;
 }
 
-#email-by-sendmail:checked	{ margin-bottom : 4rem; }
+#email-by-sendmail:checked	{ margin-bottom :  4rem; }
 #email-by-smtp:checked		{ margin-bottom : 22rem; }
 #email-by-smtpOauth:checked	{ margin-bottom : 24rem; }
 
@@ -1655,6 +1659,15 @@ input:checked ~ .modal__overlay {
 	#form_advanced_settings fieldset > div,
 	#form_advanced_settings .tabs > div {
 		display: flex;
+		align-items: center;
+	}
+
+	#form_advanced_settings #email-config {
+		align-items: start;
+	}
+
+	#form_advanced_settings fieldset > div:not(:last-of-type):hover {
+		background-color: #ddd;
 	}
 
 	#form_advanced_settings fieldset > div > div:first-of-type,
