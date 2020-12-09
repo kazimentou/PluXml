@@ -184,7 +184,8 @@ form .admin {
     margin: auto;
 }
 
-.auth .form {
+.auth .form
+ {
 	margin: 1rem 0;
     background-color: var(--backsection);
     box-shadow: 0px 0px 0px 4px rgba(0, 0, 0, 0.15);
@@ -213,6 +214,10 @@ form .admin {
 
 .auth a.back:hover {
     text-decoration: underline;
+}
+
+#install > main {
+    background-color: var(--backsection);
 }
 
 i.icon-calendar {
@@ -339,6 +344,19 @@ i.icon-calendar {
 	margin: 0;
 	text-align: justify;
 	text-indent: 1.5rem;
+}
+
+#install-warning a {
+	font-weight: bold;
+	letter-spacing: 0.15rem;
+	padding: 0 1rem;
+	color: #000;
+	background-color: moccasin;
+}
+
+#install-warning a:hover {
+	text-decoration: none;
+	background-color: orange;
 }
 
 .section a:not(.button) {
@@ -1706,6 +1724,10 @@ input:checked ~ .modal__overlay {
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
 		gap: 1rem;
+	}
+
+	#install {
+	    background-color: var(--backaside);
 	}
 }
 

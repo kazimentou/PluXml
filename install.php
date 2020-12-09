@@ -73,22 +73,25 @@ if (!array_key_exists($timezone, plxTimezones::timezones())) {
     $timezone = date_default_timezone_get();
 }
 
-// Check plugins directory
-$pluginsDir = PLX_ROOT . 'plugins/';
-if (!is_dir($pluginsDir)) {
-	@mkdir($pluginsDir, 0755, true);
-}
-$filename = $pluginsDir . '.htaccess';
-if(!file_exists($filename)) {
-	file_put_contents($filename, HTACCESS2);
-}
-
 function install($content, $config)
 {
+
+	// Check plugins directory
+	$pluginsDir = PLX_ROOT . 'plugins/';
+	if (!is_dir($pluginsDir)) {
+		@mkdir($pluginsDir, 0755, true);
+	}
+
+	// Check .htaccess at root
+	$filename = $pluginsDir . '.htaccess';
+	if(!file_exists($filename)) {
+		file_put_contents($filename, HTACCESS2);
+	}
 
     // Checks folders to store datas
     $datasDir = dirname(PLX_CONFIG_PATH) . '/';
     if(!is_dir($datasDir) and !mkdir($datasDir)) {
+		plxMsg::Error(L_DATAS_FOLDER_MISSING);
 		return;
 	}
 
@@ -168,7 +171,7 @@ function install($content, $config)
 
     if (empty($content['data'])) {
         # No files
-        return;
+        return false;
     }
 
     // Categories creation
@@ -218,6 +221,8 @@ function install($content, $config)
         'parent'	=> '',
         'filename'	=> '0001.' . date('U') . '-1.xml',
     ));
+
+    return true;
 }
 
 // Errors messages
@@ -234,13 +239,15 @@ if (!empty($_POST['install'])) {
     } elseif (trim($_POST['email'] == '')) {
         $msg = L_ERR_MISSING_EMAIL;
     } else {
-        install($_POST, array(
+        if(install($_POST, array(
             'timezone' => $timezone,
             'default_lang' => $lang,
-        ));
-        header('Location: ' . plxUtils::getRacine());
-        exit();
+        ))) {
+	        header('Location: ' . plxUtils::getRacine());
+	        exit();
+		}
     }
+
     $name = $_POST['name'];
     $login = $_POST['login'];
     $email = $_POST['email'];
@@ -267,10 +274,10 @@ $logoSize = getimagesize(PLX_LOGO);
     <link rel="icon" href="<?= PLX_ADMIN_PATH ?>theme/images/favicon.png"/>
     <style>
 		body {
+			margin-right: 1rem;
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
-			height: 100vh;
 			align-items: center;
 		}
 		main {
@@ -285,9 +292,16 @@ $logoSize = getimagesize(PLX_LOGO);
 			grid-template-columns: repeat(2, 1fr);
 		}
 		.center { text-align: center; }
+		@media screen and (min-height: 768px) {
+			body { padding: 1rem 0; margin-right: 0; }
+			main { border-radius: 1rem; }
+		}
+		@media screen and (min-height: 860px) {
+			body { height: 100vh; }
+		}
     </style>
 </head>
-<body>
+<body id="install">
 <main>
     <section>
 

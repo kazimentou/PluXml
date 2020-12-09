@@ -480,14 +480,15 @@ class plxMotor {
 			}
 		}
 
-		if(function_exists('simplexml_load_file')) {
-			$doc = simplexml_load_file($filename);
-			foreach($doc->parametre as $item) {
-				$this->aConf[(string) $item->attributes()['name']] = (string) $item;
-			}
-		} else {
-			# Mise en place du parseur XML
-			if(!empty($filename) and file_exists($filename)) {
+		# Si $filename n'existe pas : installation en cours !
+		if(!empty($filename) and file_exists($filename)) {
+			if(function_exists('simplexml_load_file')) {
+				$doc = simplexml_load_file($filename);
+				foreach($doc->parametre as $item) {
+					$this->aConf[(string) $item->attributes()['name']] = (string) $item;
+				}
+			} else {
+				# Mise en place du parseur XML
 				$data = implode('',file($filename));
 				$parser = xml_parser_create(PLX_CHARSET);
 				xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
@@ -773,7 +774,8 @@ class plxMotor {
 				$attributes = $item->attributes();
 				$itemId = (string) $attributes['number'];
 				$this->aUsers[$itemId] = array(
-					'profil'				=> !empty($attributes['profil']) ? intval($attributes['profil']) : PROFIL_WRITER,
+					# $attributes['profil'] may be equals to 0. Don't use empty() !
+					'profil'				=> isset($attributes['profil']) ? intval($attributes['profil']) : PROFIL_WRITER,
 					'name'					=> (string) $item->name,
 					'login'					=> (string) $item->login,
 					'password'				=> (string) $item->password,
