@@ -456,7 +456,7 @@ const L_PLUGINS_INACTIVE_LIST = 'Неактивные плагины';
 
 const L_PROFIL_EDIT_TITLE = 'Редактирование профиля';
 const L_PROFIL = 'Профиль';
-const L_PROFIL_USER = 'Имя, Фамилия';
+const L_PROFIL_USER = 'фамилия и имя';
 const L_INFOS = 'Информация о Вас (отображается под текстом статей)';
 const L_PROFIL_UPDATE = 'Изменить Ваш профиль';
 const L_PROFIL_CHANGE_PASSWORD = 'Изменение пароля';
@@ -515,7 +515,7 @@ const L_WARNING_INSTALLATION_FILE = 'Внимание! Файл install.php вс
 const L_USER_UNKNOWN = 'Неизвестный пользователь';
 const L_USER_LANG = 'Язык, используемый в Администрировании';
 const L_USER_UPDATE = 'Обновление этого пользователя';
-const L_USER_PAGE_TITLE = 'Редактирование параметров пользователя';
+const L_USER_PAGE_TITLE = 'Редактирование профиля %s';
 const L_USER_BACK_TO_PAGE = 'Вернуться к списку пользователей';
 
 //

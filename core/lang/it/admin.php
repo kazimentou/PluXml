@@ -434,7 +434,7 @@ Per motivi di sicurezza, è fortemente consigliata la <a class="lnkdelete" href=
 const L_USER_UNKNOWN = 'Utente sconosciuto';
 const L_USER_LANG = 'Lingua usata nel pannello di amministrazione';
 const L_USER_UPDATE = 'Aggiorna utente';
-const L_USER_PAGE_TITLE = 'Modifica le opzioni dell\'utente';
+const L_USER_PAGE_TITLE = 'Modifica del profilo di %s';
 const L_USER_BACK_TO_PAGE = 'Ritorna alla lista degli utenti';
 const L_MENU_CONFIG_BASE_TITLE = 'Configurazione di base';
 const L_CONFIG_BASE = 'Configurazione base';

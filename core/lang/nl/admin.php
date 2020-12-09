@@ -420,7 +420,7 @@ const L_PLUGINS_ACTIVE_LIST = 'Actieve plugins';
 const L_PLUGINS_INACTIVE_LIST = 'Inactief plugins';
 const L_PROFIL_EDIT_TITLE = 'Uw profiel aanpassen';
 const L_PROFIL = 'Profiel';
-const L_PROFIL_USER = 'Kies uw gebruikersnaam';
+const L_PROFIL_USER = 'Achternaam en voornaam';
 const L_INFOS = 'Informatie';
 const L_PROFIL_UPDATE = 'Uw profiel aanpassen';
 const L_PROFIL_CHANGE_PASSWORD = 'Wachtwoord veranderen';
@@ -468,7 +468,7 @@ Om veiligheidsredenen raden wij u aan dit bestand te <a class="lnkdelete" href="
 const L_USER_UNKNOWN = 'Onbekende gebruiker';
 const L_USER_LANG = 'Gebruikte taal in adminstratief gedeelte';
 const L_USER_UPDATE = 'Deze gebruiker aanpassen';
-const L_USER_PAGE_TITLE = 'Gebruikersopties aanpassen';
+const L_USER_PAGE_TITLE = '%s-profiel bewerken';
 const L_USER_BACK_TO_PAGE = 'Terug naar gebruikerslijst';
 const L_MENU_CONFIG_BASE_TITLE = 'Uw PluXml basisconfiguratie bewerken';
 const L_CONFIG_BASE = 'Basisconfiguratie';

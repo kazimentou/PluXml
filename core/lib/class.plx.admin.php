@@ -389,33 +389,35 @@ EOT;
 	 * @author	Stéphane F, PEdro "P3ter" CADETE
 	 **/
 	public function editPassword($content) {
+		$save = false;
 
-		$token = '';
-		$action = false;
-
-		if(trim($content['password1'])=='' OR trim($content['password1'])!=trim($content['password2'])) {
+		if(trim($content['password1']) == '' OR trim($content['password1']) != trim($content['password2'])) {
 			return plxMsg::Error(L_ERR_PASSWORD_EMPTY_CONFIRMATION);
 		}
 
-		if(!empty($token = $content['lostPasswordToken'])) {
+		if(isset($content['lostPasswordToken'])) {
+			$token = $content['lostPasswordToken'];
+			if(empty($token)) { return; }
 			foreach($this->aUsers as $user_id => $user) {
 				if ($user['password_token'] == $token) {
 					$salt = $this->aUsers[$user_id]['salt'];
 					$this->aUsers[$user_id]['password'] = sha1($salt.md5($content['password1']));
 					$this->aUsers[$user_id]['password_token'] = '';
 					$this->aUsers[$user_id]['password_token_expiry'] = '';
-					$action = true;
+					$save = true;
 					break;
 				}
 			}
+			# Echec !
+			if(!$save) { return; }
 		}
 		else {
 			$salt = $this->aUsers[$_SESSION['user']]['salt'];
 			$this->aUsers[$_SESSION['user']]['password'] = sha1($salt.md5($content['password1']));
-			$action = true;
+			$save = true;
 		}
 
-		return $this->editUsers(null, $action);
+		return $this->editUsers(null, $save);
 
 	}
 

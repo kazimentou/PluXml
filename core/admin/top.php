@@ -102,7 +102,7 @@ if ($_SESSION['profil'] <= PROFIL_EDITOR)
 	# Peut gérer les catégories et son profil
 	$menus[] = plxUtils::formatMenu('<i class="icon-list"></i>' . L_CATEGORIES, 'categories.php', L_MENU_CATEGORIES_TITLE);
 
-$menus[] = plxUtils::formatMenu('<i class="icon-user"></i>' . L_PROFIL, 'profil.php', L_MENU_PROFIL_TITLE);
+$menus[] = plxUtils::formatMenu('<i class="icon-user"></i>' . L_PROFIL, 'user.php', L_MENU_PROFIL_TITLE);
 
 if ($_SESSION['profil'] == PROFIL_ADMIN) {
 	# Cet utilisateur a les super-pouvoirs

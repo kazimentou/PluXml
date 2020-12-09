@@ -511,7 +511,7 @@ Por razones de seguridad, le sugerimos que lo <a class="lnkdelete" href="?del=in
 const L_USER_UNKNOWN = 'Usuario desconocido';
 const L_USER_LANG = 'Idioma utilizado en la administración';
 const L_USER_UPDATE = 'Actualizar este usuario';
-const L_USER_PAGE_TITLE = 'Editar opciones de usuario';
+const L_USER_PAGE_TITLE = 'Editar el perfil de %s';
 const L_USER_BACK_TO_PAGE = 'Volver a la lista de usuarios';
 
 //

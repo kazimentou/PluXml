@@ -515,7 +515,7 @@ Please <a class="lnkdelete" href="?del=install">drop it</a> for security reason.
 const L_USER_UNKNOWN = 'Unknown user';
 const L_USER_LANG = 'User\'s language in back-office';
 const L_USER_UPDATE = 'Update this user';
-const L_USER_PAGE_TITLE = 'Edit user options';
+const L_USER_PAGE_TITLE = 'Editing %s Profile';
 const L_USER_BACK_TO_PAGE = 'Back to users\' list';
 
 //

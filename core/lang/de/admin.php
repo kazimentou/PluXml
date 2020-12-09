@@ -517,7 +517,7 @@ Sie sollten diese aus Sicherheitsgründen <a class="lnkdelete" href="?del=instal
 const L_USER_UNKNOWN = 'Unbekannter Benutzer';
 const L_USER_LANG = 'Spracher des Admins';
 const L_USER_UPDATE = 'Benutzer aktualisieren';
-const L_USER_PAGE_TITLE = 'Benutzeroptionen bearbeiten';
+const L_USER_PAGE_TITLE = 'Bearbeiten des %s Profils';
 const L_USER_BACK_TO_PAGE = 'Zurück zur Benutzerliste';
 
 //

@@ -437,7 +437,7 @@ Por razões de segurança apague (<a class="lnkdelete" href="?del=install">delet
 const L_USER_UNKNOWN = 'Utilizador desconhecido';
 const L_USER_LANG = 'Idioma utilizado na administração';
 const L_USER_UPDATE = 'Actualizar este utilizador';
-const L_USER_PAGE_TITLE = 'Edição das opções	do utilizador';
+const L_USER_PAGE_TITLE = 'Editando Perfil de %s';
 const L_USER_BACK_TO_PAGE = 'Voltar á lista dos utilizadores';
 const L_MENU_CONFIG_BASE_TITLE = 'Alterar a configuração de base de PluXml';
 const L_CONFIG_BASE = 'Configuração de base';
