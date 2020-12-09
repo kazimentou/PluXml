@@ -480,24 +480,31 @@ class plxMotor {
 			}
 		}
 
-		# Mise en place du parseur XML
-		if(!empty($filename) and file_exists($filename)) {
-			$data = implode('',file($filename));
-			$parser = xml_parser_create(PLX_CHARSET);
-			xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
-			xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,0);
-			xml_parse_into_struct($parser,$data,$values,$iTags);
-			xml_parser_free($parser);
-			# On verifie qu'il existe des tags "parametre"
-			if(isset($iTags['parametre'])) {
-				# On compte le nombre de tags "parametre"
-				$nb = sizeof($iTags['parametre']);
-				# On boucle sur $nb
-				for($i = 0; $i < $nb; $i++) {
-					if(isset($values[ $iTags['parametre'][$i] ]['value'])) # On a une valeur pour ce parametre
-						$this->aConf[ $values[ $iTags['parametre'][$i] ]['attributes']['name'] ] = $values[ $iTags['parametre'][$i] ]['value'];
-					else # On n'a pas de valeur
-						$this->aConf[ $values[ $iTags['parametre'][$i] ]['attributes']['name'] ] = '';
+		if(function_exists('simplexml_load_file')) {
+			$doc = simplexml_load_file($filename);
+			foreach($doc->parametre as $item) {
+				$this->aConf[(string) $item->attributes()['name']] = (string) $item;
+			}
+		} else {
+			# Mise en place du parseur XML
+			if(!empty($filename) and file_exists($filename)) {
+				$data = implode('',file($filename));
+				$parser = xml_parser_create(PLX_CHARSET);
+				xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
+				xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,0);
+				xml_parse_into_struct($parser,$data,$values,$iTags);
+				xml_parser_free($parser);
+				# On verifie qu'il existe des tags "parametre"
+				if(isset($iTags['parametre'])) {
+					# On compte le nombre de tags "parametre"
+					$nb = sizeof($iTags['parametre']);
+					# On boucle sur $nb
+					for($i = 0; $i < $nb; $i++) {
+						if(isset($values[ $iTags['parametre'][$i] ]['value'])) # On a une valeur pour ce parametre
+							$this->aConf[ $values[ $iTags['parametre'][$i] ]['attributes']['name'] ] = $values[ $iTags['parametre'][$i] ]['value'];
+						else # On n'a pas de valeur
+							$this->aConf[ $values[ $iTags['parametre'][$i] ]['attributes']['name'] ] = '';
+					}
 				}
 			}
 		}
@@ -526,73 +533,116 @@ class plxMotor {
 
 		if(!is_file($filename)) return;
 
-		# Mise en place du parseur XML
-		$data = implode('',file($filename));
-		$parser = xml_parser_create(PLX_CHARSET);
-		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
-		xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,0);
-		xml_parse_into_struct($parser,$data,$values,$iTags);
-		xml_parser_free($parser);
-
 		$activeCats = array('000'); # on rajoute la catégorie 'Non classée'
 		$homepageCats = array('000'); # on rajoute la catégorie 'Non classée'
 
-		if(isset($iTags['categorie']) AND isset($iTags['name'])) {
-			$nb = sizeof($iTags['name']);
-			$size=ceil(sizeof($iTags['categorie'])/$nb);
-			for($i=0;$i<$nb;$i++) {
-				$attributes = $values[$iTags['categorie'][$i*$size]]['attributes'];
-				$number = $attributes['number'];
+		if(function_exists('simplexml_load_file')) {
+			$doc = simplexml_load_file($filename);
+			foreach($doc->categorie as $item) {
+				$attributes = $item->attributes();
+				$itemId = (string) $attributes['number'];
 
-				$title_htmltag = plxUtils::getValue($iTags['title_htmltag'][$i]);
-				$meta_description = plxUtils::getValue($iTags['meta_description'][$i]);
-				$meta_keywords = plxUtils::getValue($iTags['meta_keywords'][$i]);
+				# Récuperation du nombre d'articles de la catégorie
+				$motif = "#^\d{4}\.(?:draft,|home,|\d{3},)*$itemId(?:,\d{3})*\.\d{3}\.\d{12}\.[\w-]+\.xml$#";
+				$arts = $this->plxGlob_arts->query($motif, 'art', '', 0, false, 'before');
 
-				$homepage = isset($attributes['homepage']) ? $attributes['homepage'] : '1';
-				if($homepage == '1') { $homepageCats[] = $number; }
-
-				$active = isset($attributes['active']) ? $attributes['active'] : 1;
-				if($active == '1') { $activeCats[] = $number; }
-
-				# non regression for PluXml < 5.3.1
-				$thumbnail = plxUtils::getValue($iTags['thumbnail'][$i]);
-				$thumbnail_title = plxUtils::getValue($iTags['thumbnail_title'][$i]);
-				$thumbnail_alt = plxUtils::getValue($iTags['thumbnail_alt'][$i]);
-
-				# non regression for PluXml < 6.0.0
-				$menu = isset($attributes['menu']) ? $attributes['menu'] : 1;
-				if(array_key_exists($menu, self::OUI_NON)) {
-					$menu = self::OUI_NON[$menu];
-				}
-
-				$this->aCats[$number] = array(
-					'name'				=> plxUtils::getValue($values[$iTags['name'][$i]]['value'], 'cat-' . $number), # nom de la catégorie
-					'description'		=> plxUtils::getValue($values[$iTags['description'][$i]]['value']), # nom de la description
-					'title_htmltag'		=> plxUtils::getValue($values[$title_htmltag]['value']),  # balise title
-					'meta_description'	=> plxUtils::getValue($values[$meta_description]['value']), #meta description
-					'meta_keywords'		=> plxUtils::getValue($values[$meta_keywords]['value']), # meta keywords
-					'url'				=> strtolower($attributes['url']), # url de la categorie
-					'tri'				=> isset($attributes['tri']) ? $attributes['tri'] : $this->aConf['tri'], # tri de la categorie si besoin est
-					'bypage'			=> isset($attributes['bypage']) ? $attributes['bypage'] : $this->bypage, # nb d'articles par page de la categorie si besoin est
-					'template'			=> isset($attributes['template']) ? $attributes['template'] : 'categorie.php', # fichier template
-					'menu'				=> $menu, # état affichage de la catégorie dans le menu
-					'active'			=> $active, # activation de la catégorie dans le menu
-					'homepage'			=> $homepage, # affichage en page d'accueil
-					'articles'			=> 0,
-					# Non-régression pour PluXml < 5.8.1 - informations de l'image représentant la catégorie.
-					'thumbnail'			=> plxUtils::getValue($values[$thumbnail]['value']),
-					'thumbnail_title'	=> plxUtils::getValue($values[$thumbnail_title]['value']),
-					'thumbnail_alt'		=> plxUtils::getValue($values[$thumbnail_alt]['value']),
+				$this->aCats[$itemId] = array(
+					'name'				=> !empty($item->name) ? (string) $item->name : 'cat-' . $itemId, # nom de la catégorie
+					'description'		=> !empty($item->description) ? (string) $item->description : '', # nom de la description
+					'title_htmltag'		=> !empty($item->title_htmltag) ? (string) $item->title_htmltag : '',  # balise title
+					'meta_description'	=> !empty($item->meta_description) ? (string) $item->meta_description : '', #meta description
+					'meta_keywords'		=> !empty($item->meta_keywords) ? (string) $item->meta_keywords : '', # meta keywords
+					'url'				=> isset($attributes['url']) ? (string) $attributes['url'] : '', # url de la categorie
+					'tri'				=> isset($attributes['tri']) ? (string) $attributes['tri'] : $this->aConf['tri'], # tri de la categorie si besoin est
+					'bypage'			=> isset($attributes['bypage']) ? intval((string) $attributes['bypage']) : $this->bypage, # nb d'articles par page de la categorie si besoin est
+					'template'			=> !empty($attributes['template']) ? (string) $attributes['number'] : 'categorie.php', # fichier template
+					'menu'				=> !empty($attributes['menu']), # état affichage de la catégorie dans le menu
+					'active'			=> !empty($attributes['active']), # activation de la catégorie dans le menu
+					'homepage'			=> !empty($attributes['homepage']), # affichage en page d'accueil
+					'articles'			=> !empty($arts) ? count($arts) : 0,
+					'thumbnail'			=> !empty($item->thumbnail) ? (string) $item->thumbnail : '',
+					'thumbnail_title'	=> !empty($item->thumbnail_title) ? (string) $item->thumbnail_title : '',
+					'thumbnail_alt'		=> !empty($item->thumbnail_alt) ? (string) $item->thumbnail_alt : '',
 				);
 
-				# Recuperation du nombre d'article de la categorie
-				$motif = "#^\d{4}\.(?:home,|\d{3},)*$number(?:,\d{3})*\.\d{3}\.\d{12}\.[\w-]+\.xml$#";
-				$arts = $this->plxGlob_arts->query($motif,'art','',0,false,'before');
-				if(!empty($arts)) { $this->aCats[$number]['articles'] = sizeof($arts); }
+				if($this->aCats[$itemId]['active']) {
+					$activeCats[] = $itemId;
+				}
+				if($this->aCats[$itemId]['homepage']) {
+					$homepageCats[] = $itemId;
+				}
 
 				# Hook plugins
 				eval($this->plxPlugins->callHook('plxMotorGetCategories'));
 			}
+		} else {
+			# Mise en place du parseur XML
+			$data = implode('',file($filename));
+			$parser = xml_parser_create(PLX_CHARSET);
+			xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
+			xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,0);
+			xml_parse_into_struct($parser,$data,$values,$iTags);
+			xml_parser_free($parser);
+
+			if(isset($iTags['categorie']) AND isset($iTags['name'])) {
+				$nb = sizeof($iTags['name']);
+				$size=ceil(sizeof($iTags['categorie'])/$nb);
+				for($i=0;$i<$nb;$i++) {
+					$attributes = $values[$iTags['categorie'][$i*$size]]['attributes'];
+					$number = $attributes['number'];
+
+					$title_htmltag = plxUtils::getValue($iTags['title_htmltag'][$i]);
+					$meta_description = plxUtils::getValue($iTags['meta_description'][$i]);
+					$meta_keywords = plxUtils::getValue($iTags['meta_keywords'][$i]);
+
+					$homepage = isset($attributes['homepage']) ? $attributes['homepage'] : '1';
+					if($homepage == '1') { $homepageCats[] = $number; }
+
+					$active = isset($attributes['active']) ? $attributes['active'] : 1;
+					if($active == '1') { $activeCats[] = $number; }
+
+					# non regression for PluXml < 5.3.1
+					$thumbnail = plxUtils::getValue($iTags['thumbnail'][$i]);
+					$thumbnail_title = plxUtils::getValue($iTags['thumbnail_title'][$i]);
+					$thumbnail_alt = plxUtils::getValue($iTags['thumbnail_alt'][$i]);
+
+					# non regression for PluXml < 6.0.0
+					$menu = isset($attributes['menu']) ? $attributes['menu'] : 1;
+					if(array_key_exists($menu, self::OUI_NON)) {
+						$menu = self::OUI_NON[$menu];
+					}
+
+					$this->aCats[$number] = array(
+						'name'				=> plxUtils::getValue($values[$iTags['name'][$i]]['value'], 'cat-' . $number), # nom de la catégorie
+						'description'		=> plxUtils::getValue($values[$iTags['description'][$i]]['value']), # nom de la description
+						'title_htmltag'		=> plxUtils::getValue($values[$title_htmltag]['value']),  # balise title
+						'meta_description'	=> plxUtils::getValue($values[$meta_description]['value']), #meta description
+						'meta_keywords'		=> plxUtils::getValue($values[$meta_keywords]['value']), # meta keywords
+						'url'				=> strtolower($attributes['url']), # url de la categorie
+						'tri'				=> isset($attributes['tri']) ? $attributes['tri'] : $this->aConf['tri'], # tri de la categorie si besoin est
+						'bypage'			=> isset($attributes['bypage']) ? $attributes['bypage'] : $this->bypage, # nb d'articles par page de la categorie si besoin est
+						'template'			=> isset($attributes['template']) ? $attributes['template'] : 'categorie.php', # fichier template
+						'menu'				=> $menu, # état affichage de la catégorie dans le menu
+						'active'			=> $active, # activation de la catégorie dans le menu
+						'homepage'			=> $homepage, # affichage en page d'accueil
+						'articles'			=> 0,
+						# Non-régression pour PluXml < 5.8.1 - informations de l'image représentant la catégorie.
+						'thumbnail'			=> plxUtils::getValue($values[$thumbnail]['value']),
+						'thumbnail_title'	=> plxUtils::getValue($values[$thumbnail_title]['value']),
+						'thumbnail_alt'		=> plxUtils::getValue($values[$thumbnail_alt]['value']),
+					);
+
+					# Recuperation du nombre d'article de la categorie
+					$motif = "#^\d{4}\.(?:home,|\d{3},)*$number(?:,\d{3})*\.\d{3}\.\d{12}\.[\w-]+\.xml$#";
+					$arts = $this->plxGlob_arts->query($motif,'art','',0,false,'before');
+					if(!empty($arts)) { $this->aCats[$number]['articles'] = sizeof($arts); }
+
+				# Hook plugins
+				eval($this->plxPlugins->callHook('plxMotorGetCategories'));
+				}
+			}
+
+
 		}
 
 		$this->homepageCats = implode('|', $homepageCats);
@@ -611,60 +661,99 @@ class plxMotor {
 
 		if(!is_file($filename)) return;
 
-		# Mise en place du parseur XML
-		$data = implode('',file($filename));
-		$parser = xml_parser_create(PLX_CHARSET);
-		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
-		xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,0);
-		xml_parse_into_struct($parser,$data,$values,$iTags);
-		xml_parser_free($parser);
-		if(isset($iTags['statique']) AND isset($iTags['name'])) {
-			$nb = sizeof($iTags['name']);
-			$size=ceil(sizeof($iTags['statique'])/$nb);
+		if(function_exists('simplexml_load_file')) {
+			$doc = simplexml_load_file($filename);
+			foreach($doc->statique as $item) {
+				$attributes = $item->attributes();
+				$itemId = (string) $attributes['number'];
 
-			for($i=0;$i<$nb;$i++) {
-				$attributes = $values[$iTags['statique'][$i*$size]]['attributes'];
-				$number = $attributes['number'];
-				# Récupération du nom de la page statique
-				$this->aStats[$number]['name']=plxUtils::getValue($values[$iTags['name'][$i]]['value']);
-				# Récupération de la balise title
-				$title_htmltag = plxUtils::getValue($iTags['title_htmltag'][$i]);
-				$this->aStats[$number]['title_htmltag']=plxUtils::getValue($values[$title_htmltag]['value']);
-				# Récupération du meta description
-				$meta_description = plxUtils::getValue($iTags['meta_description'][$i]);
-				$this->aStats[$number]['meta_description']=plxUtils::getValue($values[$meta_description]['value']);
-				# Récupération du meta keywords
-				$meta_keywords = plxUtils::getValue($iTags['meta_keywords'][$i]);
-				$this->aStats[$number]['meta_keywords']=plxUtils::getValue($values[$meta_keywords]['value']);
-				# Récupération du groupe de la page statique
-				$this->aStats[$number]['group']=plxUtils::getValue($values[$iTags['group'][$i]]['value']);
-				# Récupération de l'url de la page statique
-				$this->aStats[$number]['url']=strtolower($attributes['url']);
-				# Récupération de l'etat de la page
-				$this->aStats[$number]['active']=intval($attributes['active']);
-				# On affiche la page statique dans le menu ?
+				# rétro-compatibilité
 				# replace "oui" or "non" values from previous versions of PluXml. Drop it in the next versions.
-				$menu = isset($attributes['menu'])?$attributes['menu'] : 1;
-				if(array_key_exists($menu, self::OUI_NON)) {
-					$menu = self::OUI_NON[$menu];
+				$menu = (isset($attributes['menu']) and in_array((string) $attributes['menu'], array('oui', '1')));
+
+				# On vérifie que la page statique existe bien et que le fichier est lisible
+				if(isset($attributes['url'])) {
+					$readable = is_readable(PLX_ROOT . $this->aConf['racine_statiques'] . $itemId . '.' . $attributes['url'] . '.php');
+				} else {
+					$readable = false;
 				}
-				$this->aStats[$number]['menu']=$menu;
-				# Récupération du fichier template
-				$this->aStats[$number]['template']=isset($attributes['template'])?$attributes['template']:'static.php';
-				# Récupération de la date de création
-				$date_creation = plxUtils::getValue($iTags['date_creation'][$i]);
-				$this->aStats[$number]['date_creation']=plxUtils::getValue($values[$date_creation]['value']);
-				# Récupération de la date de mise à jour
-				$date_update = plxUtils::getValue($iTags['date_update'][$i]);
-				$this->aStats[$number]['date_update']=plxUtils::getValue($values[$date_update]['value']);
-				# On verifie que la page statique existe bien
-				$file = PLX_ROOT.$this->aConf['racine_statiques'].$number.'.'.$attributes['url'].'.php';
-				# On test si le fichier est lisible
-				$this->aStats[$number]['readable'] = (is_readable($file) ? 1 : 0);
+
+				$this->aStats[$itemId] =array(
+					'name'				=> !empty($item->name) ? (string) $item->name : 'static-' . $itemId,
+					'title_htmltag'		=> !empty($item->title_htmltag) ? (string) $item->title_htmltag : '', # balise title
+					'meta_description'	=> !empty($item->meta_description) ? (string) $item->meta_description : '', # balise meta description
+					'meta_keywords'		=> !empty($item->meta_keywords) ? (string) $item->meta_keywords : '', # balise meta keywords
+					'group'				=> !empty($item->group) ? (string) $item->group : '', # groupe de la page statique
+					'url'				=> isset($attributes['url']) ? (string) $item->attributes()['url'] : '',
+					'active'			=> !empty($attributes['active']), # Récupération de l'état de la page
+					'menu'				=> $menu, # On affiche la page statique dans le menu ?
+					'template'			=> !empty($attributes['template']) ? (string) $item->attributes()['template'] : 'static.php', # Récupération du fichier template
+					'date_creation'		=> !empty($item->date_creation) ? (string) $item->date_creation : '', # Récupération de la date de création
+					'date_update'		=> !empty($item->date_update) ? (string) $item->date_update : '', # Récupération de la date de mise à jour
+					'readable'			=> $readable,
+				);
+
 				# Hook plugins
 				eval($this->plxPlugins->callHook('plxMotorGetStatiques'));
 			}
+		} else {
+			# Mise en place du parseur XML
+			$data = implode('',file($filename));
+			$parser = xml_parser_create(PLX_CHARSET);
+			xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
+			xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,0);
+			xml_parse_into_struct($parser,$data,$values,$iTags);
+			xml_parser_free($parser);
+			if(isset($iTags['statique']) AND isset($iTags['name'])) {
+				$nb = sizeof($iTags['name']);
+				$size=ceil(sizeof($iTags['statique'])/$nb);
+
+				for($i=0;$i<$nb;$i++) {
+					$attributes = $values[$iTags['statique'][$i*$size]]['attributes'];
+					$number = $attributes['number'];
+					# Récupération du nom de la page statique
+					$this->aStats[$number]['name']=plxUtils::getValue($values[$iTags['name'][$i]]['value']);
+					# Récupération de la balise title
+					$title_htmltag = plxUtils::getValue($iTags['title_htmltag'][$i]);
+					$this->aStats[$number]['title_htmltag']=plxUtils::getValue($values[$title_htmltag]['value']);
+					# Récupération du meta description
+					$meta_description = plxUtils::getValue($iTags['meta_description'][$i]);
+					$this->aStats[$number]['meta_description']=plxUtils::getValue($values[$meta_description]['value']);
+					# Récupération du meta keywords
+					$meta_keywords = plxUtils::getValue($iTags['meta_keywords'][$i]);
+					$this->aStats[$number]['meta_keywords']=plxUtils::getValue($values[$meta_keywords]['value']);
+					# Récupération du groupe de la page statique
+					$this->aStats[$number]['group']=plxUtils::getValue($values[$iTags['group'][$i]]['value']);
+					# Récupération de l'url de la page statique
+					$this->aStats[$number]['url']=strtolower($attributes['url']);
+					# Récupération de l'etat de la page
+					$this->aStats[$number]['active']=intval($attributes['active']);
+					# On affiche la page statique dans le menu ?
+					# replace "oui" or "non" values from previous versions of PluXml. Drop it in the next versions.
+					$menu = isset($attributes['menu'])?$attributes['menu'] : 1;
+					if(array_key_exists($menu, self::OUI_NON)) {
+						$menu = self::OUI_NON[$menu];
+					}
+					$this->aStats[$number]['menu']=$menu;
+					# Récupération du fichier template
+					$this->aStats[$number]['template']=isset($attributes['template'])?$attributes['template']:'static.php';
+					# Récupération de la date de création
+					$date_creation = plxUtils::getValue($iTags['date_creation'][$i]);
+					$this->aStats[$number]['date_creation']=plxUtils::getValue($values[$date_creation]['value']);
+					# Récupération de la date de mise à jour
+					$date_update = plxUtils::getValue($iTags['date_update'][$i]);
+					$this->aStats[$number]['date_update']=plxUtils::getValue($values[$date_update]['value']);
+					# On verifie que la page statique existe bien
+					$file = PLX_ROOT.$this->aConf['racine_statiques'].$number.'.'.$attributes['url'].'.php';
+					# On test si le fichier est lisible
+					$this->aStats[$number]['readable'] = (is_readable($file) ? 1 : 0);
+
+					# Hook plugins
+					eval($this->plxPlugins->callHook('plxMotorGetStatiques'));
+				}
+			}
 		}
+
 	}
 
 	/**
@@ -678,44 +767,69 @@ class plxMotor {
 
 		if(!is_file($filename)) return;
 
-		# Mise en place du parseur XML
-		$data = implode('',file($filename));
-		$parser = xml_parser_create(PLX_CHARSET);
-		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
-		xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,0);
-		xml_parse_into_struct($parser,$data,$values,$iTags);
-		xml_parser_free($parser);
-
-		if(isset($iTags['user']) AND isset($iTags['login'])) {
-			$nb = sizeof($iTags['login']);
-			$size=ceil(sizeof($iTags['user'])/$nb);
-			# On boucle sur $nb
-			for($i = 0; $i < $nb; $i++) {
-				$attributes = $values[$iTags['user'][$i*$size]]['attributes'];
-				$number = $attributes['number'];
-
-				$salt = plxUtils::getValue($iTags['salt'][$i]);
-				$email = plxUtils::getValue($iTags['email'][$i]);
-				$password_token = plxUtils::getValue($iTags['password_token'][$i]);
-				$password_token_expiry = plxUtils::getValue($iTags['password_token_expiry'][$i]);
-
-				$this->aUsers[$number] = array(
-					'active'			=> $attributes['active'],
-					'delete'			=> $attributes['delete'],
-					'profil'			=> $attributes['profil'],
-					'login'				=> plxUtils::getValue($values[$iTags['login'][$i]]['value']),
-					'name'				=> plxUtils::getValue($values[$iTags['name'][$i]]['value']),
-					'password'			=> plxUtils::getValue($values[$iTags['password'][$i]]['value']),
-					'salt'				=> plxUtils::getValue($values[$salt]['value']),
-					'infos'				=> plxUtils::getValue($values[$iTags['infos'][$i]]['value']),
-					'email'				=> plxUtils::getValue($values[$email]['value']),
-					'lang'				=> isset($iTags['lang'][$i]) ? $values[$iTags['lang'][$i]]['value'] : $this->aConf['default_lang'],
-					'password_token'	=> plxUtils::getValue($values[$password_token]['value']),
-					'password_token_expiry'	=> plxUtils::getValue($values[$password_token_expiry]['value']),
+		if(function_exists('simplexml_load_file')) {
+			$doc = simplexml_load_file($filename);
+			foreach($doc->user as $item) {
+				$attributes = $item->attributes();
+				$itemId = (string) $attributes['number'];
+				$this->aUsers[$itemId] = array(
+					'profil'				=> !empty($attributes['profil']) ? intval($attributes['profil']) : PROFIL_WRITER,
+					'name'					=> (string) $item->name,
+					'login'					=> (string) $item->login,
+					'password'				=> (string) $item->password,
+					'salt'					=> (string) $item->salt,
+					'email'					=> !empty($item->email) ? (string) $item->email : '',
+					'infos'					=> !empty($item->infos) ? (string) $item->infos : '',
+					'lang'					=> !empty($item->lang) ? (string) $item->lang : $this->aConf['default_lang'],
+					'active'				=> !empty($attributes['active']),
+					'delete'				=> !empty($attributes['delete']),
+					'password_token'		=> !empty($item->infos) ? (string) $item->Infos : '',
+					'password_token_expiry'	=> !empty($item->infos) ? (string) $item->Infos : '',
 				);
 
 				# Hook plugins
 				eval($this->plxPlugins->callHook('plxMotorGetUsers'));
+			}
+		} else {
+			# Mise en place du parseur XML
+			$data = implode('',file($filename));
+			$parser = xml_parser_create(PLX_CHARSET);
+			xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
+			xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,0);
+			xml_parse_into_struct($parser,$data,$values,$iTags);
+			xml_parser_free($parser);
+
+			if(isset($iTags['user']) AND isset($iTags['login'])) {
+				$nb = sizeof($iTags['login']);
+				$size=ceil(sizeof($iTags['user'])/$nb);
+				# On boucle sur $nb
+				for($i = 0; $i < $nb; $i++) {
+					$attributes = $values[$iTags['user'][$i*$size]]['attributes'];
+					$number = $attributes['number'];
+
+					$salt = plxUtils::getValue($iTags['salt'][$i]);
+					$email = plxUtils::getValue($iTags['email'][$i]);
+					$password_token = plxUtils::getValue($iTags['password_token'][$i]);
+					$password_token_expiry = plxUtils::getValue($iTags['password_token_expiry'][$i]);
+
+					$this->aUsers[$number] = array(
+						'active'			=> $attributes['active'],
+						'delete'			=> $attributes['delete'],
+						'profil'			=> $attributes['profil'],
+						'login'				=> plxUtils::getValue($values[$iTags['login'][$i]]['value']),
+						'name'				=> plxUtils::getValue($values[$iTags['name'][$i]]['value']),
+						'password'			=> plxUtils::getValue($values[$iTags['password'][$i]]['value']),
+						'salt'				=> plxUtils::getValue($values[$salt]['value']),
+						'infos'				=> plxUtils::getValue($values[$iTags['infos'][$i]]['value']),
+						'email'				=> plxUtils::getValue($values[$email]['value']),
+						'lang'				=> isset($iTags['lang'][$i]) ? $values[$iTags['lang'][$i]]['value'] : $this->aConf['default_lang'],
+						'password_token'	=> plxUtils::getValue($values[$password_token]['value']),
+						'password_token_expiry'	=> plxUtils::getValue($values[$password_token_expiry]['value']),
+					);
+
+					# Hook plugins
+					eval($this->plxPlugins->callHook('plxMotorGetUsers'));
+				}
 			}
 		}
 	}
@@ -823,41 +937,70 @@ class plxMotor {
         # Informations obtenues en analysant le nom du fichier
         $tmp = $this->artInfoFromFilename($filename);
         if(!empty($tmp)) {
-            # Mise en place du parseur XML
-            $data = implode('',file($filename));
-            $parser = xml_parser_create(PLX_CHARSET);
-            xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
-            xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,0);
-            xml_parse_into_struct($parser,$data,$values,$iTags);
-            xml_parser_free($parser);
+			if(function_exists('simplexml_load_file')) {
+				$doc = simplexml_load_file($filename);
+				$art = array(
+	                'filename'			=> $filename,
+	                # Recuperation des valeurs de nos champs XML
+	                'title'				=> !empty($doc->title) ? (string) $doc->title : '',
+	                'allow_com'			=> (!empty($doc->allow_com) and in_array((string) $doc->allow_com, array('oui', '1'))),
+	                'template'			=> !empty($doc->template) ? (string) $doc->template  : 'article.php',
+	                'chapo'				=> !empty($doc->chapo) ? (string) $doc->chapo : '',
+	                'content'			=> !empty($doc->content) ? (string) $doc->content : '',
+	                'tags'				=> !empty($doc->tags) ? (string) $doc->tags : '',
+	                'meta_description'	=> !empty($doc->meta_description) ? (string) $doc->meta_description : '',
+	                'meta_keywords'		=> !empty($doc->meta_keywords) ? (string) $doc->meta_keywords : '',
+	                'title_htmltag'		=> !empty($doc->title_htmltag) ? (string) $doc->title_htmltag : '',
+	                'thumbnail'			=> !empty($doc->thumbnail) ? (string) $doc->thumbnail : '',
+	                'thumbnail_title'	=> !empty($doc->thumbnail_title) ? (string) $doc->thumbnail_title : '',
+	                'thumbnail_alt'		=> !empty($doc->thumbnail_alt) ? (string) $doc->thumbnail_alt : '',
+	                'date_creation'		=> !empty($doc->date_creation) ? (string) $doc->date_creation : $tmp['artDate'],
+	                'date_update'		=> !empty($doc->date_update) ? (string) $doc->date_update : $tmp['artDate'],
+	                'numero'			=> $tmp['artId'],
+	                'author'			=> $tmp['usrId'],
+	                'categorie'			=> $tmp['catId'],
+	                'url'				=> $tmp['artUrl'],
+	                'date'				=> $tmp['artDate'], # For retro-compatibility. Must de deprecated.
+	                'date_publication'	=> $tmp['artDate'],
+	                'nb_com'			=> $this->getNbCommentaires('#^' . $tmp['artId'] . '.\d{10}\.\d+.xml$#'),
+				);
+			} else {
+	            # Mise en place du parseur XML
+	            $data = implode('',file($filename));
+	            $parser = xml_parser_create(PLX_CHARSET);
+	            xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
+	            xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,0);
+	            xml_parse_into_struct($parser,$data,$values,$iTags);
+	            xml_parser_free($parser);
 
-            $meta_description = plxUtils::getValue($iTags['meta_description'][0]);
-            $meta_keywords = plxUtils::getValue($iTags['meta_keywords'][0]);
-            $art = array(
-                'filename'		=> $filename,
-                # Recuperation des valeurs de nos champs XML
-                'title'				=> plxUtils::getValue($values[$iTags['title'][0]]['value']),
-                'allow_com'			=> plxUtils::getValue($values[$iTags['allow_com'][0]]['value']),
-                'template'			=> plxUtils::getValue($values[$iTags['template'][0]]['value'], 'article.php'),
-                'chapo'				=> plxUtils::getValue($values[$iTags['chapo'][0]]['value']),
-                'content'			=> plxUtils::getValue($values[$iTags['content'][0]]['value']),
-                'tags'				=> plxUtils::getValue($values[$iTags['tags'][0] ]['value']),
-                'meta_description'	=> plxUtils::getValue($values[$meta_description]['value']),
-                'meta_keywords'		=> plxUtils::getValue($values[$meta_keywords]['value']),
-                'title_htmltag'		=> plxUtils::getValue($values[$iTags['title_htmltag'][0]]['value']),
-                'thumbnail'			=> isset($iTags['thumbnail']) ? plxUtils::getValue($values[$iTags['thumbnail'][0]]['value']) : '',
-                'thumbnail_title'	=> isset($iTags['thumbnail_title']) ? plxUtils::getValue($values[$iTags['thumbnail_title'][0]]['value']) : '',
-                'thumbnail_alt'		=> isset($iTags['thumbnail_alt']) ? plxUtils::getValue($values[$iTags['thumbnail_alt'][0]]['value']) : '',
-                'numero'			=> $tmp['artId'],
-                'author'			=> $tmp['usrId'],
-                'categorie'			=> $tmp['catId'],
-                'url'				=> $tmp['artUrl'],
-                'date'				=> $tmp['artDate'], # For retro-compatibility. Must de deprecated.
-                'nb_com'			=> $this->getNbCommentaires('#^' . $tmp['artId'] . '.\d{10}.\d+.xml$#'),
-                'date_creation'		=> plxUtils::getValue($values[$iTags['date_creation'][0]]['value'], $tmp['artDate']),
-                'date_update'		=> plxUtils::getValue($values[$iTags['date_update'][0]]['value'], $tmp['artDate']),
-                'date_publication'	=> $tmp['artDate'],
-            );
+	            $meta_description = plxUtils::getValue($iTags['meta_description'][0]);
+	            $meta_keywords = plxUtils::getValue($iTags['meta_keywords'][0]);
+	            $art = array(
+	                'filename'			=> $filename,
+	                # Recuperation des valeurs de nos champs XML
+	                'title'				=> plxUtils::getValue($values[$iTags['title'][0]]['value']),
+	                'allow_com'			=> plxUtils::getValue($values[$iTags['allow_com'][0]]['value']),
+	                'template'			=> plxUtils::getValue($values[$iTags['template'][0]]['value'], 'article.php'),
+	                'chapo'				=> plxUtils::getValue($values[$iTags['chapo'][0]]['value']),
+	                'content'			=> plxUtils::getValue($values[$iTags['content'][0]]['value']),
+	                'tags'				=> plxUtils::getValue($values[$iTags['tags'][0] ]['value']),
+	                'meta_description'	=> plxUtils::getValue($values[$meta_description]['value']),
+	                'meta_keywords'		=> plxUtils::getValue($values[$meta_keywords]['value']),
+	                'title_htmltag'		=> plxUtils::getValue($values[$iTags['title_htmltag'][0]]['value']),
+	                'thumbnail'			=> isset($iTags['thumbnail']) ? plxUtils::getValue($values[$iTags['thumbnail'][0]]['value']) : '',
+	                'thumbnail_title'	=> isset($iTags['thumbnail_title']) ? plxUtils::getValue($values[$iTags['thumbnail_title'][0]]['value']) : '',
+	                'thumbnail_alt'		=> isset($iTags['thumbnail_alt']) ? plxUtils::getValue($values[$iTags['thumbnail_alt'][0]]['value']) : '',
+	                'numero'			=> $tmp['artId'],
+	                'author'			=> $tmp['usrId'],
+	                'categorie'			=> $tmp['catId'],
+	                'url'				=> $tmp['artUrl'],
+	                'date'				=> $tmp['artDate'], # For retro-compatibility. Must de deprecated.
+	                'nb_com'			=> $this->getNbCommentaires('#^' . $tmp['artId'] . '.\d{10}.\d+.xml$#'),
+	                'date_creation'		=> plxUtils::getValue($values[$iTags['date_creation'][0]]['value'], $tmp['artDate']),
+	                'date_update'		=> plxUtils::getValue($values[$iTags['date_update'][0]]['value'], $tmp['artDate']),
+	                'date_publication'	=> $tmp['artDate'],
+	            );
+			}
 
             # Hook plugins
             eval($this->plxPlugins->callHook('plxMotorParseArticle'));
@@ -918,33 +1061,57 @@ class plxMotor {
 	 **/
 	public function parseCommentaire($filename) {
 
-		# Mise en place du parseur XML
-		$data = implode('',file($filename));
-		$parser = xml_parser_create(PLX_CHARSET);
-		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
-		xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,0);
-		xml_parse_into_struct($parser,$data,$values,$iTags);
-		xml_parser_free($parser);
-		# Recuperation des valeurs de nos champs XML
-		$com['author'] = plxUtils::getValue($values[ $iTags['author'][0]]['value']);
-		if(isset($iTags['type']))
-			$com['type'] = plxUtils::getValue($values[ $iTags['type'][0]]['value'],'normal');
-		else
-			$com['type'] = 'normal';
-		$com['ip'] = plxUtils::getValue($values[$iTags['ip'][0]]['value']);
-		$com['mail'] = plxUtils::getValue($values[$iTags['mail'][0]]['value']);
-		$com['site'] = plxUtils::getValue($values[$iTags['site'][0]]['value']);
-		$com['content'] = trim($values[ $iTags['content'][0] ]['value']);
-		$com['parent'] = isset($iTags['parent'])?plxUtils::getValue($values[$iTags['parent'][0]]['value']):'';
-		# Informations obtenues en analysant le nom du fichier
-		$tmp = $this->comInfoFromFilename(basename($filename));
-		$com['status'] = $tmp['comStatus'];
-		$com['numero'] = $tmp['comId'];
-		$com['article'] = $tmp['artId'];
-		$com['date'] = $tmp['comDate'];
-		$com['index'] = $tmp['comIdx'];
+		if(function_exists('simplexml_load_file')) {
+			# Informations obtenues en analysant le nom du fichier
+			$tmp = $this->comInfoFromFilename(basename($filename));
+
+			$doc = simplexml_load_file($filename);
+			$com = array(
+				'author'	=> !empty($doc->author) ? (string) $doc->author : '',
+				'type'		=> !empty($doc->type) ? (string) $doc->type : 'normal',
+				'ip'		=> !empty($doc->ip) ? (string) $doc->ip : '',
+				'mail'		=> !empty($doc->mail) ? (string) $doc->mail : '',
+				'site'		=> !empty($doc->site) ? (string) $doc->site : '',
+				'content'	=> (string) $doc->content,
+				'parent'	=> !empty($doc->parent) ? (string) $doc->parent : '',
+				# Informations obtenues en analysant le nom du fichier
+				'status'	=> $tmp['comStatus'],
+				'numero'	=> $tmp['comId'],
+				'article'	=> $tmp['artId'],
+				'date'		=> $tmp['comDate'],
+				'index'		=> $tmp['comIdx'],
+			);
+		} else {
+			# Mise en place du parseur XML
+			$data = implode('',file($filename));
+			$parser = xml_parser_create(PLX_CHARSET);
+			xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
+			xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,0);
+			xml_parse_into_struct($parser,$data,$values,$iTags);
+			xml_parser_free($parser);
+			# Recuperation des valeurs de nos champs XML
+			$com['author'] = plxUtils::getValue($values[ $iTags['author'][0]]['value']);
+			if(isset($iTags['type']))
+				$com['type'] = plxUtils::getValue($values[ $iTags['type'][0]]['value'],'normal');
+			else
+				$com['type'] = 'normal';
+			$com['ip'] = plxUtils::getValue($values[$iTags['ip'][0]]['value']);
+			$com['mail'] = plxUtils::getValue($values[$iTags['mail'][0]]['value']);
+			$com['site'] = plxUtils::getValue($values[$iTags['site'][0]]['value']);
+			$com['content'] = trim($values[ $iTags['content'][0] ]['value']);
+			$com['parent'] = isset($iTags['parent'])?plxUtils::getValue($values[$iTags['parent'][0]]['value']):'';
+			# Informations obtenues en analysant le nom du fichier
+			$tmp = $this->comInfoFromFilename(basename($filename));
+			$com['status'] = $tmp['comStatus'];
+			$com['numero'] = $tmp['comId'];
+			$com['article'] = $tmp['artId'];
+			$com['date'] = $tmp['comDate'];
+			$com['index'] = $tmp['comIdx'];
+		}
+
 		# Hook plugins
 		eval($this->plxPlugins->callHook('plxMotorParseCommentaire'));
+
 		# On retourne le tableau
 		return $com;
 	}
@@ -1149,29 +1316,43 @@ class plxMotor {
 
 		if(!is_file($filename)) return;
 
-		# Mise en place du parseur XML
-		$data = implode('',file($filename));
-		$parser = xml_parser_create(PLX_CHARSET);
-		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
-		xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,0);
-		xml_parse_into_struct($parser,$data,$values,$iTags);
-		xml_parser_free($parser);
-		$array = array();
-		# On verifie qu'il existe des tags "file"
-		if(isset($iTags['article'])) {
-			# On compte le nombre de tags "file"
-			foreach($iTags['article'] as $k) {
-				$datas = $values[$k];
-				$idArt = $datas['attributes']['number'];
-				$array[$idArt] = array(
-					'tags'		=> (!empty($datas['value'])) ? trim($datas['value']) : '',
-					'date'		=> $datas['attributes']['date'],
-					'active'	=> $datas['attributes']['active'],
+		if(function_exists('xmlsimple_load_fiie')) {
+			$doc = xmlsimple_load_fiie($filename);
+			foreach($doc->article as $item) {
+				$attributes = $item->attributes();
+				$itemId = (string) $attributes['number'];
+				$this->aTags[$itemId] = array(
+					'tags'		=> (string) $item,
+					'date'		=> (string) $attributes,
+					'active'	=> !empty($attributes['active']),
 				);
 			}
+		} else {
+			# Mise en place du parseur XML
+			$data = implode('',file($filename));
+			$parser = xml_parser_create(PLX_CHARSET);
+			xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
+			xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,0);
+			xml_parse_into_struct($parser,$data,$values,$iTags);
+			xml_parser_free($parser);
+			$array = array();
+			# On verifie qu'il existe des tags "file"
+			if(isset($iTags['article'])) {
+				# On compte le nombre de tags "file"
+				foreach($iTags['article'] as $k) {
+					$datas = $values[$k];
+					$idArt = $datas['attributes']['number'];
+					$array[$idArt] = array(
+						'tags'		=> (!empty($datas['value'])) ? trim($datas['value']) : '',
+						'date'		=> $datas['attributes']['date'],
+						'active'	=> $datas['attributes']['active'],
+					);
+				}
+			}
+
+			# Mémorisation de la liste des tags
+			$this->aTags = $array;
 		}
-		# Mémorisation de la liste des tags
-		$this->aTags = $array;
 	}
 
 	/**

@@ -55,54 +55,96 @@ class plxPlugins {
 	 **/
 	public function loadPlugins() {
 
-		if(!is_file(path('XMLFILE_PLUGINS'))) return;
+		$filename = path('XMLFILE_PLUGINS');
+		if(!is_readable($filename)) return;
 
 		$updAction = false;
-
-		# Mise en place du parseur XML
-		$data = implode('',file(path('XMLFILE_PLUGINS')));
-		$parser = xml_parser_create(PLX_CHARSET);
-		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
-		xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,0);
-		xml_parse_into_struct($parser,$data,$values,$iTags);
-		xml_parser_free($parser);
-		# On verifie qu'il existe des tags "plugin"
-		if(isset($iTags['plugin'])) {
-			# On compte le nombre de tags "plugin"
-			$nb = sizeof($iTags['plugin']);
-			# On boucle sur $nb
-			for($i = 0; $i < $nb; $i++) {
-				$attributes = $values[ $iTags['plugin'][$i] ]['attributes'];
-				$name = $attributes['name'];
-				$scope = (!empty($attributes['scope'])) ? $attributes['scope'] : '';
-				if(
-					defined('PLX_ADMIN') or
-					empty($scope) or # retro-compatibilité pour plugin sans balise <scope>
-					($scope == 'site')
-				) {
+		if(function_exists('simplexml_load_file')) {
+			$doc = simplexml_load_file($filename);
+			foreach($doc->children() as $item) {
+				$attributes = $item->attributes();
+				if(!empty($attributes['name']) and !empty(trim($attributes['name']))) {
+					$name = (string) $attributes['name'];
+					$scope = !empty($attributes['scope']) ? (string) $attributes['scope'] : '';
 					if(
-						empty($scope) or
-						(defined('PLX_ADMIN') and $scope == 'admin') or
-						(!defined('PLX_ADMIN') and $scope == 'site')
+						defined('PLX_ADMIN') or
+						empty($scope) or # retro-compatibilité pour plugin sans balise <scope>
+						($scope == 'site')
 					) {
-						if($instance = $this->getInstance($name)) {
-							$this->aPlugins[$name] = $instance;
-							$this->aHooks = array_merge_recursive($this->aHooks, $instance->getHooks());
-							# Si le plugin a une méthode pour des actions de mises à jour
-							if(method_exists($instance, 'onUpdate')) {
-								if(is_file(PLX_PLUGINS.$name.'/update')) {
-									# on supprime le fichier update pour eviter d'appeler la methode onUpdate
-									# à chaque chargement du plugin
-									chmod(PLX_PLUGINS.$name.'/update', 0644);
-									unlink(PLX_PLUGINS.$name.'/update');
-									$updAction = $instance->onUpdate();
+						if(
+							empty($scope) or
+							(defined('PLX_ADMIN') and $scope == 'admin') or
+							(!defined('PLX_ADMIN') and $scope == 'site')
+						) {
+							if($instance = $this->getInstance($name)) {
+								$this->aPlugins[$name] = $instance;
+								$this->aHooks = array_merge_recursive($this->aHooks, $instance->getHooks());
+								# Si le plugin a une méthode pour des actions de mises à jour
+								if(method_exists($instance, 'onUpdate')) {
+									if(is_file(PLX_PLUGINS.$name.'/update')) {
+										# on supprime le fichier update pour eviter d'appeler la methode onUpdate
+										# à chaque chargement du plugin
+										chmod(PLX_PLUGINS.$name.'/update', 0644);
+										unlink(PLX_PLUGINS.$name.'/update');
+										$updAction = $instance->onUpdate();
+									}
 								}
 							}
+						} else {
+							# Si PLX_ADMIN, on vérifie que le plugin existe et on le recense pour les styles CSS, sans charger sa class.
+							if(is_file(PLX_PLUGINS."$name/$name.php")) {
+								$this->aPlugins[$name] = false;
+							}
 						}
-					} else {
-						# Si PLX_ADMIN, on vérifie que le plugin existe et on le recense pour les styles CSS, sans charger sa class.
-						if(is_file(PLX_PLUGINS."$name/$name.php")) {
-							$this->aPlugins[$name] = false;
+					}
+				}
+			}
+		} else {
+			# Mise en place du parseur XML
+			$data = implode('',$filename);
+			$parser = xml_parser_create(PLX_CHARSET);
+			xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
+			xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,0);
+			xml_parse_into_struct($parser,$data,$values,$iTags);
+			xml_parser_free($parser);
+			# On verifie qu'il existe des tags "plugin"
+			if(isset($iTags['plugin'])) {
+				# On compte le nombre de tags "plugin"
+				$nb = sizeof($iTags['plugin']);
+				# On boucle sur $nb
+				for($i = 0; $i < $nb; $i++) {
+					$attributes = $values[ $iTags['plugin'][$i] ]['attributes'];
+					$name = $attributes['name'];
+					$scope = (!empty($attributes['scope'])) ? $attributes['scope'] : '';
+					if(
+						defined('PLX_ADMIN') or
+						empty($scope) or # retro-compatibilité pour plugin sans balise <scope>
+						($scope == 'site')
+					) {
+						if(
+							empty($scope) or
+							(defined('PLX_ADMIN') and $scope == 'admin') or
+							(!defined('PLX_ADMIN') and $scope == 'site')
+						) {
+							if($instance = $this->getInstance($name)) {
+								$this->aPlugins[$name] = $instance;
+								$this->aHooks = array_merge_recursive($this->aHooks, $instance->getHooks());
+								# Si le plugin a une méthode pour des actions de mises à jour
+								if(method_exists($instance, 'onUpdate')) {
+									if(is_file(PLX_PLUGINS.$name.'/update')) {
+										# on supprime le fichier update pour eviter d'appeler la methode onUpdate
+										# à chaque chargement du plugin
+										chmod(PLX_PLUGINS.$name.'/update', 0644);
+										unlink(PLX_PLUGINS.$name.'/update');
+										$updAction = $instance->onUpdate();
+									}
+								}
+							}
+						} else {
+							# Si PLX_ADMIN, on vérifie que le plugin existe et on le recense pour les styles CSS, sans charger sa class.
+							if(is_file(PLX_PLUGINS."$name/$name.php")) {
+								$this->aPlugins[$name] = false;
+							}
 						}
 					}
 				}
@@ -549,27 +591,39 @@ class plxPlugin {
 
 		if(!is_file($this->plug['parameters.xml'])) return;
 
-		# Mise en place du parseur XML
-		$data = implode('',file($this->plug['parameters.xml']));
-		$parser = xml_parser_create(PLX_CHARSET);
-		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
-		xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,0);
-		xml_parse_into_struct($parser,$data,$values,$iTags);
-		xml_parser_free($parser);
-		# On verifie qu'il existe des tags "parameter"
-		if(isset($iTags['parameter'])) {
-			# On compte le nombre de tags "parameter"
-			$nb = sizeof($iTags['parameter']);
-			# On boucle sur $nb
-			for($i = 0; $i < $nb; $i++) {
-				if(isset($values[$iTags['parameter'][$i]]['attributes']['name'])) {
-					$name=$values[$iTags['parameter'][$i]]['attributes']['name'];
-					$type=isset($values[$iTags['parameter'][$i]]['attributes']['type'])?$values[$iTags['parameter'][$i]]['attributes']['type']:'numeric';
-					$value=isset($values[$iTags['parameter'][$i]]['value'])?$value=$values[$iTags['parameter'][$i]]['value']:'';
-					$this->aParams[$name] = array(
-						'type'	=> $type,
-						'value'	=> $value
-					);
+		$filename = $this->plug['parameters.xml'];
+		if(function_exists('simplexml_load_file')) {
+			$doc = simplexml_load_file($filename);
+			foreach($doc->parameter as $item) {
+				$attributes = $item->attributes();
+				$this->aParams[(string) $attributes['name']] = array(
+					'type'	=> !empty($attributes['type']) ? (string) $attributes['type'] : 'cdata',
+					'value'	=> (string) $item,
+				);
+			}
+		} else {
+			# Mise en place du parseur XML
+			$data = implode('', file($filename));
+			$parser = xml_parser_create(PLX_CHARSET);
+			xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
+			xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,0);
+			xml_parse_into_struct($parser,$data,$values,$iTags);
+			xml_parser_free($parser);
+			# On verifie qu'il existe des tags "parameter"
+			if(isset($iTags['parameter'])) {
+				# On compte le nombre de tags "parameter"
+				$nb = sizeof($iTags['parameter']);
+				# On boucle sur $nb
+				for($i = 0; $i < $nb; $i++) {
+					if(isset($values[$iTags['parameter'][$i]]['attributes']['name'])) {
+						$name=$values[$iTags['parameter'][$i]]['attributes']['name'];
+						$type=isset($values[$iTags['parameter'][$i]]['attributes']['type'])?$values[$iTags['parameter'][$i]]['attributes']['type']:'numeric';
+						$value=isset($values[$iTags['parameter'][$i]]['value'])?$value=$values[$iTags['parameter'][$i]]['value']:'';
+						$this->aParams[$name] = array(
+							'type'	=> $type,
+							'value'	=> $value
+						);
+					}
 				}
 			}
 		}
