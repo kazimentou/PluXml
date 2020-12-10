@@ -916,6 +916,10 @@ input[name="meta_description"] {
  * from PluXml 5.8.4
  */
 
+#clipboard {
+	display: none;
+}
+
 #medias div.ico {
     display: inline-block;
     margin-left: 0.5rem;
