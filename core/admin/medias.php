@@ -130,9 +130,11 @@ $curFolder = '/' . plxUtils::strCheck(basename($_SESSION['medias']) . '/' . $_SE
 ?>
 
 <div class="adminheader">
-    <h2 class="h3-like"><?= L_MEDIAS_TITLE ?></h2>
-    <span><?= L_MEDIAS_DIRECTORY ?> : </span>
-    <ul id="medias-breadcrumb">
+	<div>
+	    <h2 class="h3-like"><?= L_MEDIAS_TITLE ?></h2>
+	    <div>
+		    <span><?= L_MEDIAS_DIRECTORY ?> : </span>
+		    <ul id="medias-breadcrumb">
 <?php
 $curFolders = explode('/', trim($curFolder, '/'));
 if($curFolders) {
@@ -142,12 +144,18 @@ if($curFolders) {
 			$path .= $folder . '/';
 		}
 ?>
-		<li data-path="<?= ($id > 0) ? $path : '/' ?>"><?= ($id > 0) ? $folder : L_PLXMEDIAS_ROOT ?></li>
+				<li data-path="<?= ($id > 0) ? $path : '/' ?>"><?= ($id > 0) ? $folder : L_PLXMEDIAS_ROOT ?></li>
 <?php
 	}
 }
 ?>
-    </ul>
+		    </ul>
+		    <div class="ico" data-copy="<?= $_SESSION['medias'] . $_SESSION['folder'] ?>" title="<?= L_MEDIAS_LINK_COPYCLP ?>">
+				&#128203;
+				<div><?= L_MEDIAS_LINK_COPYCLP_DONE ?></div>
+			</div>
+		</div>
+    </div>
 </div>
 
 <?php eval($plxAdmin->plxPlugins->callHook('AdminMediasTop')) # Hook Plugins ?>

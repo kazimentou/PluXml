@@ -916,36 +916,37 @@ input[name="meta_description"] {
  * from PluXml 5.8.4
  */
 
-div.ico {
-    font-size: 16px;
-    color: #ccc;
+#medias div.ico {
     display: inline-block;
-    margin-left: 5px;
-    position: relative;
+    margin-left: 0.5rem;
+    color: #444;
+    cursor: pointer;
 }
 
-div.ico:hover {
-    cursor: pointer;
+#medias div.ico:hover {
     color: #555;
 }
 
-div.ico div {
-    font-size: 11px;
-    display: none;
-    background-color: #666;
-    color: #eee;
-    display: none;
-    padding: 1px 3px 1px 3px;
-    margin-left: 5px;
-    border-radius: 2px;
-    border: 1px solid #888;
+div[data-copy] {
+    position: relative;
 }
 
-#medias-table div.ico {
-    color: #000;
-    font-size: 16pt;
-    margin: 0 0.3rem;
+div[data-copy] > div {
+	position: absolute;
+	bottom: 100%;
+	padding: 0 0.5rem;
+	background-color: #666;
+	color: #eee;
+	white-space: nowrap;
+	border-radius: 0.5rem;
+	border: 1px solid #888;
+	transform: translateX(-50%);
 }
+
+div[data-copy] > div:not(.active) {
+	display: none;
+}
+
 
 a.overlay {
     display: block;
@@ -1158,6 +1159,10 @@ body.mediasManager #app {
 .treeview ul {
 	padding-left: 3rem;
 	list-style: none;
+}
+
+.treeview p {
+	padding: 1rem;
 }
 
 .treeview > ul {
