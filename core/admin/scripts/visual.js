@@ -67,16 +67,6 @@ function dialogBox(dlg) {
 	this.open();
 }
 
-(function() {
-	const el = document.getElementById('msg');
-	if(el != null) {
-		setTimeout(function () {
-			el.classList.remove('active');
-			el.offsetWidth = el.offsetWidth;
-		}, 3000)
-	}
-})()
-
 var DragDrop = {
 	isbefore: function(a, b) {
 		if (a.parentNode == b.parentNode) {

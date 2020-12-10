@@ -730,23 +730,42 @@ fieldset > div {
 
 /* -------------- notification --------- */
 
-.notification {
-    position: fixed;
-    bottom: -10rem;
-    left: 4rem;
-    margin: 0;
-    padding: 0.5rem 0;
-    line-height: 1.6;
-    z-index: 999999;
-    transition: left 1s ease;
-    line-height: 2rem;
-    background-color: #fff;
-    border-radius: 4px;
-    box-shadow: 0px 0px 6px 4px rgba(200, 200, 200, 0.2);
+@keyframes notification {
+	25% {
+		bottom: 15rem;
+		animation-timing-function: cubic-bezier(.175,.885,.32,1);
+	}
+	75% {
+		bottom: 15rem;
+		animation-timing-function: cubic-bezier(.55,.055,.675,.19);
+	}
 }
 
-.notification.active {
-    bottom: 5rem;
+#app .notification {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    padding: 0.5rem 0;
+    background-color: transparent;
+    line-height: 1.6;
+    line-height: 2rem;
+    text-align: center;
+    z-index: 999999;
+    transform: translateY(100%);
+    animation-name: notification;
+    animation-delay: 250ms;
+    animation-duration: 3s;
+    animation-direction: alternate;
+}
+
+.notification > div {
+	display: inline-block;
+	margin: 0;
+    border-radius: 1rem;
+    box-shadow: 0px 0px 6px 4px rgba(200, 200, 200, 0.2);
+    background-color: #fff;
 }
 
 .notification i {
@@ -754,12 +773,15 @@ fieldset > div {
     margin: 0rem 1rem;
 }
 
-.notification.error {
-    border-left: solid 4px indianred;
+.notification.error > div {
+    /* border-left: solid 4px indianred; */
+    background-color: indianred;
 }
 
-.notification.success {
-    border-left: solid 4px limegreen;
+.notification.success > div {
+    /* border-left: solid 4px limegreen; */
+    background-color: forestgreen;
+    color: #fff;
 }
 
 .warning {
@@ -1343,6 +1365,24 @@ fieldset div:not(.label-expanded) input[type="email"] {
 	color: var(--primary);
 	white-space: nowrap;
 }
+
+/* -------------- user.php ---------------- */
+
+#form_user label.caption-inside {
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+	align-items: center;
+}
+
+#form_password label {
+	width: 100%;
+}
+
+#form_password label input {
+	width: 100%;
+}
+
 /* ------------ parametres_plugins.php ----- */
 
 #parametres_plugins th:nth-of-type(3) { min-width: 36rem; } /* description */
@@ -1714,6 +1754,18 @@ input:checked ~ .modal__overlay {
 	#calendar {
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
+	}
+
+	#form_password label {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	#form_user label input,
+	#form_password label input {
+		width: 30rem;
 	}
 }
 

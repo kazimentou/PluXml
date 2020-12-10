@@ -51,11 +51,11 @@ class plxMsg {
 	        $icon = "icon-info-circled";
             $message = $_SESSION['info'];
         } else {
-			$class = $icon = $message = '';
+			$message = '';
 		}
 	    if (!empty(trim($message))) {
 ?>
-                <section id="msg" class="notification <?= $class ?> active flex-container">
+                <section class="notification <?= $class ?>">
                     <div class="ptm prm pbm">
 						<i class="<?= $icon ?>"></i><strong><?= $message ?></strong>
 					</div>
