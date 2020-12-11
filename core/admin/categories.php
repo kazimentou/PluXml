@@ -42,7 +42,6 @@ include 'top.php';
 	<div class="adminheader">
 		<div>
 		    <h2 class="h3-like"><?= L_CAT_TITLE ?></h2>
-			<p><a class="back icon-left-big" href="articles.php"><?= L_BACK_TO_ARTICLES ?></a></p>
 		</div>
 		<div>
 			<button class="btn--primary" name="update"><?= L_SAVE ?></button>
