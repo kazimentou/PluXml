@@ -1041,10 +1041,6 @@ section.setup .adminheader h2 {
 
 /* ----------- article.php ------------- */
 
-#form_article .thumbnail-container {
-	display: block;
-}
-
 #aside-art {
 	padding: 0.5rem;
 }
@@ -1806,8 +1802,6 @@ input:checked ~ .modal__overlay {
 }
 
 /* $large = 992px - 1024px avec knacss-reborn */
-@media screen and (max-width: 991px) {
-}
 
 @media screen and (max-width: 991px) {
 	/* article.php */
@@ -1885,6 +1879,10 @@ input:checked ~ .modal__overlay {
 	}
 
 	#aside-art #calendar {
+		display: block;
+	}
+
+	#form_article .thumbnail-container {
 		display: block;
 	}
 }

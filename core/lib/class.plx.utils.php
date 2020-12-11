@@ -429,9 +429,9 @@ class plxUtils
 <?php
 		} else {
 ?>
-					<svg viewport="0 0 100 100">
-						<line x1="0" y1="0" x2="100" y2="100" stroke-width=2 />
-						<line x1="0" y1="100" x2="100" y2="0" />
+					<svg width="100" height="100">
+					    <line x2="100%" y2="100%" stroke="#aaa" stroke-width="5" />
+					    <line y1="100%" x2="100%" stroke="#aaa" stroke-width="5" />
 					</svg>
 <?php
 		}
@@ -445,15 +445,14 @@ class plxUtils
 					</div>
 <?php
 		foreach(array(
-			'_alt'		=> L_THUMBNAIL_ALT,
 			'_title'	=> L_THUMBNAIL_TITLE,
+			'_alt'		=> L_THUMBNAIL_ALT,
 		) as $k=>$caption) {
 			if(empty($datas) or isset($datas[$name . $k])) {
 				$fieldname = $name . $k;
 ?>
 					<div>
-						<label for="id_<?= $fieldname ?>"><?= $caption ?></label>
-						<input type="text" name="<?= $fieldname ?>" value="<?= self::strCheck(self::getValue($datas[$fieldname], '')) ?>" id="id_<?= $fieldname ?>" />
+						<input type="text" name="<?= $fieldname ?>" value="<?= self::strCheck(self::getValue($datas[$fieldname], '')) ?>" title="<?= $caption ?>" id="id_<?= $fieldname ?>" placeholder="<?= $caption ?>" />
 					</div>
 <?php
 			}

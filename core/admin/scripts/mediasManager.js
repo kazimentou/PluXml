@@ -11,6 +11,10 @@
 			cible.focus();
 			if (replace) {
 				cible.value = txt;
+				const altText = window.opener.document.getElementById('id_' + name + '_alt');
+				if(altText != null) {
+					altText.value = txt.replace(/^.*\/(.*)\.(?:jpe?g|png|gif)/, '$1').toLowerCase();
+				}
 			} else {
 				if (window.opener.document.selection && window.opener.document.selection.createRange) {
 					sel = window.opener.document.selection.createRange();
