@@ -101,7 +101,7 @@ class plxPlugins {
 			}
 		} else {
 			# Mise en place du parseur XML
-			$data = implode('',$filename);
+			$data = implode('', file($filename));
 			$parser = xml_parser_create(PLX_CHARSET);
 			xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
 			xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,0);
