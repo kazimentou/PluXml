@@ -364,8 +364,8 @@ class plxUtils
 			$artTitle = !empty($_GET['artTitle']) ? '&artTitle=' . urlencode($_GET['artTitle']) : '';
 			// Display pagination links
 ?>
-				<a href="<?php printf($urlTemplate, 1) ?>" title="<?= L_PAGINATION_FIRST_TITLE ?>"<?= ($currentPage > 2) ? '' : ' disabled' ?>><span class="btn"><i class="icon-angle-double-left"></i></span></a>
-				<a href="<?php printf($urlTemplate, ($currentPage > 1) ? $currentPage - 1 : 1) ?>" title="<?= L_PAGINATION_PREVIOUS_TITLE ?>"<?= ($currentPage > 1) ? '' : ' disabled' ?>><span class="btn"><i class="icon-angle-left"></i></span></a>
+				<a href="<?php printf($urlTemplate, 1) ?>" title="<?= L_PAGINATION_FIRST_TITLE ?>"<?= ($currentPage > 2) ? '' : ' disabled' ?> class="btn"><i class="icon-angle-double-left"></i></a>
+				<a href="<?php printf($urlTemplate, ($currentPage > 1) ? $currentPage - 1 : 1) ?>" title="<?= L_PAGINATION_PREVIOUS_TITLE ?>"<?= ($currentPage > 1) ? '' : ' disabled' ?> class="btn"><i class="icon-angle-left"></i></a>
 <?php
 			# On boucle sur les pages
 			if($last_page <= 2 * self::DELTA_PAGINATION  + 1) {
@@ -381,7 +381,7 @@ class plxUtils
 			for ($i = $iMin; $i <= $iMax; $i++) {
 				if($i != $currentPage) {
 ?>
-				<a href="<?php printf($urlTemplate, $i); ?>"><span class="btn"><?= $i ?></span></a>
+				<a href="<?php printf($urlTemplate, $i); ?>" class="btn"><?= $i ?></a>
 <?php
 				} else {
 ?>
@@ -1385,6 +1385,9 @@ class plxUtils
         $classList = array(
             'menu'
         );
+        if(strpos($href, 'plugin.php') === 0) {
+			$classList[] = 'plugin';
+		}
         if ($highlight) {
             switch ($script) {
                 case 'article' :

@@ -180,7 +180,7 @@ class plxMedias
     public function displayTreeView()
     {
         $tree = $this->getTree(new DirectoryIterator($this->path));
-        return $this->getTreeView($tree);
+        return $this->_getTreeView($tree);
     }
 
     /**
@@ -207,7 +207,7 @@ class plxMedias
      * @param array $array
      * @return string
      */
-    private function getTreeView(Array $array) {
+    private function _getTreeView(Array $array) {
 		$entries = array();
         foreach($array as $key => $items) {
             $path = substr($key, $this->pathLength) . '/';
@@ -226,7 +226,7 @@ class plxMedias
 			$className = !empty($classList) ? ' class="' . implode(' ', $classList) . '"' : '';
             $entry = '<a href="?path=' . $path . '">' . basename($key) . '</a>';
             if ($hasChildren) {
-				$entry .= PHP_EOL . $this->getTreeView($items);
+				$entry .= PHP_EOL . $this->_getTreeView($items);
             }
             $entries[] = '<li' . $className . '>' . $entry . '</li>';
         }

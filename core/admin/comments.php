@@ -152,7 +152,7 @@ if (!empty($_GET['a'])) {
 <?php
 }
 ?>
-	    <ul>
+	    <ul class="unstyled">
 <?php
 # breadcrumb
 $commentCnts = array();
@@ -218,7 +218,7 @@ if (!empty($_GET['a'])) {
             <table id="comments-table" class="table mb0">
                 <thead>
 	                <tr>
-	                    <th class="checkbox"><input type="checkbox" /></th>
+	                    <th><input type="checkbox" /></th>
 	                    <th><?= L_DATE ?></th>
 <?php
 $all = ($_SESSION['selCom'] == 'all');

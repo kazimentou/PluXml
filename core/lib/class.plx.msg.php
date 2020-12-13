@@ -55,11 +55,11 @@ class plxMsg {
 		}
 	    if (!empty(trim($message))) {
 ?>
-                <section class="notification <?= $class ?>">
-                    <div class="ptm prm pbm">
-						<i class="<?= $icon ?>"></i><strong><?= $message ?></strong>
-					</div>
-                </section>
+<section class="notification <?= $class ?>">
+	<div>
+		<i class="<?= $icon ?>"></i><strong><?= $message ?></strong>
+	</div>
+</section>
 <?php
 		}
 		unset($_SESSION['error']);

@@ -238,7 +238,7 @@ if (!empty($_SESSION['folder'])) {
                 <table id="medias-table" class="table sort">
                     <thead>
 	                    <tr>
-	                        <th class="checkbox"><?php if($plxMedias->aFiles) { ?><input type="checkbox" /><?php } else { ?>&nbsp;<?php } ?></th>
+	                        <th><?php if($plxMedias->aFiles) { ?><input type="checkbox" /><?php } else { ?>&nbsp;<?php } ?></th>
 	                        <th></th>
 	                        <th class="sort" data-sortname="title"><?= L_MEDIAS_FILENAME ?></th>
 	                        <th class="sort"data-sortname="ext"><?= L_MEDIAS_EXTENSION ?></th>

@@ -41,7 +41,7 @@ include 'top.php';
             <table id="users-table" class="table mb0">
                 <thead>
                 <tr>
-                    <th class="checkbox"><input type="checkbox" /></th>
+                    <th><input type="checkbox" /></th>
                     <th>#</th>
                     <th><?= L_PROFIL_USER ?></th>
                     <th><?= L_PROFIL_LOGIN ?></th>

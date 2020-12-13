@@ -49,10 +49,10 @@ if ($_SESSION['profil'] <= PROFIL_MODERATOR) {
 ?>
         </div>
         <div class="scrollable-table">
-            <table class="table mb0" data-rows-num='name^="order"'>
+            <table class="table" data-rows-num='name^="order"'>
                 <thead>
 	                <tr>
-	                    <th class="checkbox"><input type="checkbox" /></th>
+	                    <th><input type="checkbox" /></th>
 	                    <th>#</th>
 	                    <th><i class="icon-home-1" title="<?= L_HOMEPAGE ?>"></i></th>
 	                    <th><?= L_STATICS_GROUP ?></th>

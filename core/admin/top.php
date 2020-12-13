@@ -19,8 +19,6 @@ if (isset($_GET["del"]) and $_GET["del"] == "install") {
 	<meta charset="<?= strtolower(PLX_CHARSET) ?>">
     <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1.0">
     <title><?= plxUtils::strCheck($plxAdmin->aConf['title']) ?> <?= L_ADMIN ?></title>
-    <link rel="stylesheet" href="theme/css/knacss.css?v=<?= PLX_VERSION ?>" media="screen"/>
-    <link rel="stylesheet" href="theme/fontello/css/fontello.css" media="screen"/>
     <link rel="stylesheet" href="theme/css/theme.css?v=<?= PLX_VERSION ?>" media="screen"/>
 <?php
 plxUtils::printLinkCss($plxAdmin->aConf['custom_admincss_file'], true);
@@ -52,27 +50,18 @@ if($_SESSION ['profil'] > PROFIL_WRITER) {
     <meta name="robots" content="noindex, nofollow" />
 </head>
 <body id="<?= $currentScript ?>" class="profil-<?= $_SESSION['profil'] ?><?= $fullwide ?>" <?= !empty($extras) ? implode(' ', $extras) : '' ?>>
-<main id="app" class="main">
-<?php plxMsg::Display(); ?>
-	<input type="checkbox" id="toggle-menu" />
-    <aside id="aside" class="aside">
-        <header class="asideheader">
-            <h1 class="h4-like txtcenter"><?= PlxUtils::strCheck($plxAdmin->aConf['title']) ?></h1>
-            <ul class="unstyled">
-<?php if (isset($plxAdmin->aConf['homestatic']) and !empty($plxAdmin->aConf['homestatic'])) : ?>
-                    <li>
-                        <a class="back-blog" href="<?= $plxAdmin->urlRewrite('?blog'); ?>"
-                           title="<?= L_BACK_TO_BLOG_TITLE ?>"><i class="icon-left-open"></i><?= L_BACK_TO_BLOG; ?></a>
-                    </li>
-<?php endif; ?>
-                <li>
-                    <a class="back-site" href="<?= PLX_ROOT ?>" title="<?= L_BACK_HOMEPAGE_TITLE ?>"><i
-                                class="icon-left-open"></i><?= L_HOMEPAGE; ?></a>
-                </li>
-            </ul>
-        </header>
-        <nav class="responsive-menu">
-            <div id="responsive-menu" class="menu vertical expanded">
+	<header id="main-header">
+		<div class="banner">
+			<ul class="unstyled">
+				<!-- li class="badge"><a href="user.php"><img src="theme/images/pluxml.png"/></a></li -->
+				<li class="user">
+					<a href="user.php"><?= PlxUtils::strCheck($plxAdmin->aUsers[$_SESSION['user']]['name']) ?></a>
+					<small><em><?= PROFIL_NAMES[$_SESSION ['profil']] ?></em></small>
+				</li>
+				<li><a href="auth.php?d=1" title="<?= L_ADMIN_LOGOUT_TITLE ?>"><i class="icon-logout"></i></a></li>
+			</ul>
+		</div>
+		<nav>
 <?php
 $menus = array();
 $userId = ($_SESSION['profil'] < PROFIL_WRITER) ? '\d{3}' : $_SESSION['user'];
@@ -138,44 +127,28 @@ foreach ($plxAdmin->plxPlugins->aPlugins as $plugName => $plugInstance) {
 
 # Plugin hook
 eval($plxAdmin->plxPlugins->callHook('AdminTopMenus'));
-
-echo implode(PHP_EOL, $menus) . PHP_EOL;
 ?>
-            </div>
+        <nav class="responsive-menu">
+			<h1 class="h4-like txtcenter"><?= PlxUtils::strCheck($plxAdmin->aConf['title']) ?></h1>
+			<button class="nav-button" type="button" role="button" aria-label="open/close navigation"><i></i></button>
+            <ul>
+<?php if (isset($plxAdmin->aConf['homestatic']) and !empty($plxAdmin->aConf['homestatic'])) : ?>
+				<li><a class="back-blog" href="<?= $plxAdmin->urlRewrite('?blog'); ?>" title="<?= L_BACK_TO_BLOG_TITLE ?>"><i class="icon-left-open"></i><?= L_BACK_TO_BLOG; ?></a></li>
+<?php endif; ?>
+                <li><?= plxUtils::formatMenu('<i class="icon-home-1"></i>' . L_HOMEPAGE, PLX_ROOT, L_BACK_HOMEPAGE_TITLE) ?></li>
+<?php
+/*
+					<a class="back-site" href="<?= PLX_ROOT ?>" title="<?= L_BACK_HOMEPAGE_TITLE ?>"><i class="icon-left-open"></i><?= L_HOMEPAGE; ?></a></li>
+ * */
+?>
+<li><?= implode('</li>' . PHP_EOL . '<li>', $menus) ?></li>
+<li class="plxversion"><a title="PluXml" href="<?= PLX_URL_REPO ?>" target="_blank">PluXml <?= $plxAdmin->aConf['version'] ?></a></li>
+            </ul>
         </nav>
-        <div class="plxversion">
-			<a title="PluXml" href="<?= PLX_URL_REPO ?>" target="_blank"><small>PluXml <?= $plxAdmin->aConf['version'] ?></small></a>
-        </div>
-    </aside>
-
-    <section class="section<?= !empty($isSetup) ? ' setup' : '' ?><?= $hideMenu ?>">
-        <header class="header">
-            <div>
-                <label for="toggle-menu" class="nav-button" type="button" role="button" aria-label="open/close navigation" title="<?= L_MENU ?>"><i></i></label>
-            </div>
-            <div class="txtright">
-                <ul class="unstyled">
-                    <li class="badge"><a href="user.php"><img src="theme/images/pluxml.png"/></a></li>
-                    <li>
-                        <a href="user.php"><?= PlxUtils::strCheck($plxAdmin->aUsers[$_SESSION['user']]['name']) ?></a>&nbsp;
-                        <small><em><?= PROFIL_NAMES[$_SESSION ['profil']] ?></em></small>
-                        <small><?= date('Y-m-d H:i', $plxAdmin->aUsers[$_SESSION['user']]['timestamp']) ?></small>
-                    </li>
-                    <li><a href="auth.php?d=1" title="<?= L_ADMIN_LOGOUT_TITLE ?>"><i class="icon-logout"></i></a></li>
-                </ul>
-            </div>
-        </header>
-
+	</header>
+	<section id="main-section" class="main section<?= !empty($isSetup) ? ' setup' : '' ?><?= $hideMenu ?>">
 <?php
-if ($_SESSION['profil'] <= PROFIL_MODERATOR and $currentScript == 'index' and is_file(PLX_SCRIPT_INSTALL)):
-?>
-		<div id="install-warning" class="alert--danger">
-			<?= plxUtils::nl2p(L_WARNING_INSTALLATION_FILE) ?>
-		</div>
-<?php
-endif;
-
+# Hook Plugins
 eval($plxAdmin->plxPlugins->callHook('AdminTopBottom'));
-
 ?>
 <!------ End of top.php ----->

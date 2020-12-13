@@ -58,7 +58,7 @@ eval($plxAdmin->plxPlugins->callHook('AdminCategoriesTop'))
         <table id="categories-table" class="table mb0" data-rows-num='name^="order"'>
             <thead>
 	            <tr>
-	                <th class="checkbox"><input type="checkbox" /></th>
+	                <th><input type="checkbox" /></th>
 	                <th>#</th>
 	                <th><?= L_CAT_LIST_NAME ?></th>
 	                <th><?= L_URL ?></th>

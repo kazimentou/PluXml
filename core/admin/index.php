@@ -116,9 +116,9 @@ include 'top.php';
 
 <?php eval($plxAdmin->plxPlugins->callHook('AdminIndexTop')) # Hook Plugins ?>
 
-<div class="adminheader">
+<header class="adminheader">
     <h2 class="h3-like"><?= L_ARTICLES_LIST ?></h2>
-    <ul>
+    <ul class="unstyled">
 <?php
 # On compte les articles pour chaque status
 foreach(array(
@@ -129,38 +129,39 @@ foreach(array(
 ) as $mode=>$infos) {
 	list($caption, $moderation) = $infos;
 	$nbArticles = $plxAdmin->nbArticles(($mode != 'mod') ? $mode : 'all', $userId, $moderation);
-	$className = '';
-	if($mode == $_SESSION['sel_get']) {
-		$className = 'class="selected"';
-		if(empty($artTitle)) {
-			# Pas de recherche particulière
-			$nbArtPagination = $nbArticles;
+	if($nbArticles > 0) {
+		$className = '';
+		if($mode == $_SESSION['sel_get']) {
+			$className = 'class="selected"';
+			if(empty($artTitle)) {
+				# Pas de recherche particulière
+				$nbArtPagination = $nbArticles;
+			}
 		}
-	}
-	switch($mode) {
-		case 'mod': $tag = 'tag--warning'; break;
-		case 'draft': $tag = 'tag--info'; break;
-		default: $tag = 'tag';
-	}
-	$countArts = ($nbArticles > 0) ? '<span class="' . $tag . '">' . $nbArticles . '</span>' : '';
-	$disabled = ($_SESSION['sel_get'] == $mode) ? 'disabled' : '';
-?>
+		switch($mode) {
+			case 'mod': $tag = 'tag--warning'; break;
+			case 'draft': $tag = 'tag--info'; break;
+			default: $tag = 'tag';
+		}
+		$countArts = ($nbArticles > 0) ? '<span class="' . $tag . '">' . $nbArticles . '</span>' : '';
+		$disabled = ($_SESSION['sel_get'] == $mode) ? 'disabled' : '';
+	?>
         <li <?= $className ?>>
 			<a href="index.php?sel=<?= $mode ?>" <?= $disabled ?>><?= $caption ?></a><?= $countArts ?>
 		</li>
-<?php
+	<?php
+	}
 }
 ?>
     </ul>
-</div>
-
-<div class="admin">
+</header>
 <?php
 # Hook Plugins
 eval($plxAdmin->plxPlugins->callHook('AdminTopBottom'));
 ?>
     <form action="index.php" method="post" id="form_articles" data-chk="idArt[]">
         <?= PlxToken::getTokenPostMethod(); ?>
+		<input type="hidden" name="page" value="1" />
         <div class="tableheader">
 			<a href="<?= PLX_CORE ?>admin/article.php"><span class="btn btn--primary"><i class="icon-plus"></i><?= L_NEW_ARTICLE ?></span></a>
 			<div>
@@ -173,10 +174,10 @@ eval($plxAdmin->plxPlugins->callHook('AdminTopBottom'));
             </div>
         </div>
         <div class="scrollable-table">
-			<table class="table mb0">
+			<table class="table">
 				<thead>
 					<tr>
-						<th class="checkbox"><?php if($arts) { ?><input type="checkbox" /><?php } else { ?>&nbsp;<?php } ?></th>
+						<th><?php if($arts) { ?><input type="checkbox" /><?php } else { ?>&nbsp;<?php } ?></th>
 						<th>#</th>
 						<th><?= L_DATE ?></th>
 						<th><?= L_TITLE ?></th>
@@ -271,23 +272,17 @@ if ($arts) { # On a des articles
 				</tbody>
 			</table>
 		</div>
-        <div class="mts tablefooter has-pagination">
+        <div class="tablefooter has-pagination">
 <?php
 if ($_SESSION['profil'] <= PROFIL_MODERATOR) {
 ?>
 			<div>
 				<button class="submit btn--warning" name="delete" disabled data-lang="<?= L_CONFIRM_DELETE ?>"><i class="icon-trash"></i><?= L_DELETE ?></button>
-				<?php PlxUtils::printInput('page', 1, 'hidden'); ?>
 			</div>
-<?php
-} else {
-	# bourrage pour aligner la pagination à droite
-?>
-			<span>&nbsp;</span>
 <?php
 }
 ?>
-			<div class="pagination">
+		<div class="pagination">
 <?php
 # Hook Plugins
 eval($plxAdmin->plxPlugins->callHook('AdminIndexPagination'));
@@ -296,8 +291,7 @@ if($arts) {
 	plxUtils::printPagination($nbArtPagination, $plxAdmin->bypage, $plxAdmin->page, 'index.php?page=%d' . $artTitle);
 }
 ?>
-			</div>
-        </div>
+		</div>
     </form>
 <?php
 # Hook Plugins

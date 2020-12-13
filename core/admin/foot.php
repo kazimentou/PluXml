@@ -2,10 +2,20 @@
 <?php if(!defined('PLX_ROOT')) exit; ?>
 
 		</section>
+<?php
+# Hook Plugins
+eval($plxAdmin->plxPlugins->callHook('AdminFootEndBody'));
 
-</main>
+if ($_SESSION['profil'] <= PROFIL_MODERATOR and $currentScript == 'index' and is_file(PLX_SCRIPT_INSTALL)) {
+?>
+<section id="install-warning" class="alert--danger">
+		<?= plxUtils::nl2p(L_WARNING_INSTALLATION_FILE) ?>
+</section>
+<?php
+}
 
-<?php eval($plxAdmin->plxPlugins->callHook('AdminFootEndBody')) # Hook Plugins ?>
+plxMsg::Display();
+?>
 
 <script src="scripts/functions.js?v=<?= PLX_VERSION ?>"></script>
 <script src="scripts/visual.js?v=<?= PLX_VERSION ?>"></script>
