@@ -1654,11 +1654,11 @@ EOT;
      * @param integer $level niveau de profondeur dans l'arborescence des dossiers
      * @param string $prefixParent prefixe pour l'affichage de la valeur de l'option
      * @param string $choice1 sélection initiale de l'utilisateur. Utilisé seulement au niveau 0
-     * @param boolean $modeDir1 mode pour afficher uniquement les dossiers
+     * @param boolean $onlyDir mode pour afficher uniquement les dossiers
      * @return    void                    on envoie directemenr le code HTML en sortie
      * @author    J.P. Pourrez alias bazooka07
      * */
-    private static function _printSelectDir($root, $level, $prefixParent, $choice1 = '', $modeDir1 = true, $textOnly = true)
+    private static function _printSelectDir($root, $level, $prefixParent, $choice1 = '', $onlyDir = true, $textOnly = true)
     {
 
         static $firstRootLength = 0;
@@ -1669,8 +1669,8 @@ EOT;
         # initialisation des variables statiques
         if ($level == 0) {
             $firstRootLength = strlen($root);
-            $modeDir = $modeDir1;
-            if (!$modeDir1 and $textOnly) {
+            $modeDir = $onlyDir;
+            if (!$onlyDir and $textOnly) {
                 $extsText = 'php css html htm xml js json txt me md';
                 # self::debugJS($extsText, 'extsText');
             }
@@ -1720,19 +1720,19 @@ EOT;
 
                 if ($dirOk) { # pour un dossier
                     if ($modeDir) {
-                        echo <<<EOT
-                            <option value="$value/"$classAttr data-level="$dataLevel" $selected>$prefix$caption/</option>
-EOT;
+?>
+						<option value="<?= $value ?>/"<?= $classAttr ?> data-level="<?= $dataLevel ?>" $selected><?= $prefix . $caption?>/</option>
+<?php
                     } else {
-                        echo <<<EOT
-                            <option disabled value=""$classAttr data-level="$dataLevel">$prefix${caption}/</option>
-EOT;
+?>
+						<option disabled value=""<?= $classAttr ?> data-level="<?= $dataLevel ?>"><?= $prefix . $caption ?>/</option>
+<?php
                     }
                     self::_printSelectDir($root . $child . '/', $level, $prefixParent . $next);
                 } else { # pour un fichier
-                    echo <<<EOT
-                        <option value="$value"$classAttr data-level="$dataLevel"$selected>$prefix$caption</option>
-EOT;
+?>
+                        <option value="<?= $value ?>"<?= $classAttr ?> data-level="<?= $dataLevel ?>" <?= $selected ?>><?= $prefix. $caption ?></option>
+<?php
                 }
             }
         }
@@ -1745,36 +1745,36 @@ EOT;
      * @param string $currentValue sélection initiale de l'utilisateur
      * @param string $root dossier initial dans l'arborescence
      * @param string $class Classe css a appliquer au sélecteur #sudwebdesign
-     * @param boolean $modeDir évite l'affichage des fichiers (dans la gestion des médias, par Ex., à la différence d'un thème)
+     * @param boolean $onlyDir évite l'affichage des fichiers (dans la gestion des médias, par Ex., à la différence d'un thème)
      * @param bool $id
      * @return    void
      * @author    J.P. Pourrez alias bazooka07, T. Ingles @sudwebdesign
-     * $modeDir=true    pour ne choisir que les dossiers : voir plxMedias contentFolder()
-     * $modeDir=false    pour ne choisir que les fichiers du thème
+     * $onlyDir=true    pour ne choisir que les dossiers : voir plxMedias contentFolder()
+     * $onlyDir=false    pour ne choisir que les fichiers du thème
      */
-    public static function printSelectDir($name, $currentValue, $root, $class = '', $modeDir = true, $id = true)
+    public static function printSelectDir($name, $currentValue, $root, $class = '', $onlyDir = true, $id = true)
     {
         if (is_bool($id))
             $id = ($id ? ' id="id_' . $name . '"' : '');
         else
             $id = ($id != '' ? ' id="' . $id . '"' : '');
-
-        if (substr($root, -1) != '/')
+        if (substr($root, -1) != '/') {
             $root .= '/';
-        $value = ($modeDir) ? '.' : '';
+		}
+        $value = ($onlyDir) ? '.' : '';
         $selected = ($value == $currentValue) ? ' selected' : '';
         $caption = L_PLXMEDIAS_ROOT;
-        $data_files = (!$modeDir) ? ' data-files' : '';
-        $disabled = (!$modeDir) ? ' disabled' : '';
+        $data_files = (!$onlyDir) ? ' data-files' : '';
+        $disabled = (!$onlyDir) ? 'disabled' : '';
         $class = ($class ? $class . ' ' : '') . 'scan-folders fold' . $data_files;
-        echo <<< EOT
-        <select $id name="$name" class="$class">
-            <option$disabled value="$value"$selected>$caption/</option>
-EOT;
-        self::_printSelectDir($root, 0, str_repeat(' ', 3), $currentValue, $modeDir);
-        echo <<< EOT
+?>
+        <select $id name="<?= $name ?>" class="<?= $class ?>">
+            <option <?= $disabled ?> value="<?= $value ?>"<?= $selected ?>><?= $caption ?>/</option>
+<?php
+        self::_printSelectDir($root, 0, str_repeat(' ', 3), $currentValue, $onlyDir);
+?>
         </select>
-EOT;
+<?php
     }
 
     /**
