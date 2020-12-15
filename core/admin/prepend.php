@@ -17,14 +17,14 @@ if(version_compare(phpversion(), '7.3.1', '>=')) {
 	session_set_cookie_params(array(
 		'lifetime'	=> SESSION_LIFETIME,
 		'path'		=> $path1,
-		'domain'	=> $_SERVER['HTTP_POST'],
+		'domain'	=> $_SERVER['HTTP_HOST'],
 		'secure'	=> isset($_SERVER['HTTPS']),
 		'httponly'	=> true,
 		'samesite'	=> 'Strict',
 	));
 } else {
 	# No support for samesite option
-	session_set_cookie_params(SESSION_LIFETIME, $path1, $_SERVER['HTTP_POST'], isset($_SERVER["HTTPS"]), true);
+	session_set_cookie_params(SESSION_LIFETIME, $path1, $_SERVER['HTTP_HOST'], isset($_SERVER["HTTPS"]), true);
 }
 # On démarre la session
 session_start();
