@@ -15,13 +15,13 @@ plxToken::validateFormToken($_POST);
 # Hook Plugins
 eval($plxAdmin->plxPlugins->callHook('AdminUserPrepend'));
 
-if (!empty($_POST) and isset($plxAdmin->aUsers[$_POST['id']])) {
+if (!empty($_POST['id']) and isset($plxAdmin->aUsers[$_POST['id']])) {
     $plxAdmin->editUser($_POST);
     header('Location: user.php?p=' . $_POST['id']);
     exit;
 }
 
-if(!empty($_POST['password'])) {
+if(!empty($_POST['password1'])) {
 	$plxAdmin->editPassword($_POST);
     header('Location: user.php');
     exit;
