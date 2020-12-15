@@ -640,7 +640,7 @@ class plxUtils
      **/
     public static function testLibXml($format = self::TEMPLATE_MSG)
     {
-        if (function_exists('imagecreatetruecolor')) {
+        if (function_exists('xml_parser_create')) {
 			if(is_string($format)) {
 				echo strtr($format, array(
 					'#color'	=> 'green',
