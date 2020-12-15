@@ -98,7 +98,7 @@ $output = XML_HEADER . ob_get_clean();
 eval($plxMotor->plxPlugins->callHook('SitemapEnd'));
 
 // Charset is forced
-header('Content-Type: text/xml; charset=' . PLX_CHARSET);
+header('Content-Type: application/xml; charset=' . PLX_CHARSET);
 
 // Display
 echo $output;

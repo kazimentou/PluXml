@@ -17,21 +17,21 @@ if(version_compare(phpversion(), '7.3.1', '>=')) {
 	session_set_cookie_params(array(
 		'lifetime'	=> SESSION_LIFETIME,
 		'path'		=> $path1,
-		'domain'	=> $_SERVER['SERVER_NAME'],
-		'secure'	=> isset($_SERVER["HTTPS"]),
+		'domain'	=> $_SERVER['HTTP_POST'],
+		'secure'	=> isset($_SERVER['HTTPS']),
 		'httponly'	=> true,
 		'samesite'	=> 'Strict',
 	));
 } else {
 	# No support for samesite option
-	session_set_cookie_params(SESSION_LIFETIME, $path1, $_SERVER['SERVER_NAME'], isset($_SERVER["HTTPS"]), true);
+	session_set_cookie_params(SESSION_LIFETIME, $path1, $_SERVER['HTTP_POST'], isset($_SERVER["HTTPS"]), true);
 }
 # On démarre la session
 session_start();
 
-$session_domain = __DIR__ ;
+$session_domain = PLX_ADMIN_PATH;
 
-if(!defined('PLX_AUTHPAGE') OR PLX_AUTHPAGE !== true){ # si on n'est pas sur la page de login
+if(!defined('PLX_AUTHPAGE')){ # si on n'est pas sur la page de login
 	# Test sur le domaine et sur l'identification
 	if(empty($_SESSION['domain']) OR $_SESSION['domain'] != $session_domain OR empty($_SESSION['user'])) {
 		header('Location: auth.php?p='.htmlentities($_SERVER['REQUEST_URI']));
