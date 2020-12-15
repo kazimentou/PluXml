@@ -132,9 +132,9 @@ const L_SUBMIT_BUTTON = 'Verzenden';
 const L_ERR_WRONG_PASSWORD = 'Login en/of wachtwoord ongeldig';
 const L_POWERED_BY = 'Gegenereerd door <a href="https://www.%s">PluXml</a>';
 const L_ERR_MAXLOGIN = 'Te veel mislukte login<br />Probeer het over% s minuten';
-const L_LOST_PASSWORD = 'Wachtwoord vergeten?';
+const L_NEW_PASSWORD = 'Nieuw paswoord';
 const L_LOST_PASSWORD_LOGIN = 'Aanmelden';
-const L_LOST_PASSWORD_SUCCESS = 'Er is een e-mail verzonden naar de gebruiker';
+const L_NEW_PASSWORD_SUCCESS = 'Er is een nieuw wachtwoord naar u gestuurd op %s'; 
 const L_LOST_PASSWORD_ERROR = 'De link is verlopen';
 
 //

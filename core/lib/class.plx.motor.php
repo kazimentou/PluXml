@@ -768,6 +768,7 @@ class plxMotor {
 
 		if(!is_file($filename)) return;
 
+		$timestamp = time();
 		if(function_exists('simplexml_load_file')) {
 			$doc = simplexml_load_file($filename);
 			foreach($doc->user as $item) {
@@ -779,14 +780,14 @@ class plxMotor {
 					'name'					=> (string) $item->name,
 					'login'					=> (string) $item->login,
 					'password'				=> (string) $item->password,
+					'old_password'			=> !empty($item->old_password) ? (string) $item->old_password : '',
+					'timestamp'				=> !empty($item->timestamp) ? (string) $item->timestamp : $timestamp,
 					'salt'					=> (string) $item->salt,
 					'email'					=> !empty($item->email) ? (string) $item->email : '',
 					'infos'					=> !empty($item->infos) ? (string) $item->infos : '',
 					'lang'					=> !empty($item->lang) ? (string) $item->lang : $this->aConf['default_lang'],
 					'active'				=> !empty($attributes['active']),
 					'delete'				=> !empty($attributes['delete']),
-					'password_token'		=> !empty($item->infos) ? (string) $item->Infos : '',
-					'password_token_expiry'	=> !empty($item->infos) ? (string) $item->Infos : '',
 				);
 
 				# Hook plugins
@@ -821,12 +822,12 @@ class plxMotor {
 						'login'				=> plxUtils::getValue($values[$iTags['login'][$i]]['value']),
 						'name'				=> plxUtils::getValue($values[$iTags['name'][$i]]['value']),
 						'password'			=> plxUtils::getValue($values[$iTags['password'][$i]]['value']),
+						'old_password'		=> isset($iTags['old_password'][$i]) ?plxUtils::getValue($values[$iTags['old_password'][$i]]['value']) : '',
+						'timestamp'			=> isset($iTags['timestamp'][$i]) ?plxUtils::getValue($values[$iTags['timestamp'][$i]]['value']) : $timestamp,
 						'salt'				=> plxUtils::getValue($values[$salt]['value']),
 						'infos'				=> plxUtils::getValue($values[$iTags['infos'][$i]]['value']),
 						'email'				=> plxUtils::getValue($values[$email]['value']),
 						'lang'				=> isset($iTags['lang'][$i]) ? $values[$iTags['lang'][$i]]['value'] : $this->aConf['default_lang'],
-						'password_token'	=> plxUtils::getValue($values[$password_token]['value']),
-						'password_token_expiry'	=> plxUtils::getValue($values[$password_token_expiry]['value']),
 					);
 
 					# Hook plugins

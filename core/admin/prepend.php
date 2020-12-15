@@ -69,8 +69,8 @@ if(defined('PLX_AUTHPAGE')) {
 eval($plxAdmin->plxPlugins->callHook('AdminPrepend'));
 
 # Chargement des fichiers de langue en fonction du profil de l'utilisateur connecté
-loadLang(PLX_CORE.'lang/'.$lang.'/admin.php');
-loadLang(PLX_CORE.'lang/'.$lang.'/core.php');
+loadLang(PLX_CORE . 'lang/'. $lang . '/admin.php');
+loadLang(PLX_CORE . 'lang/' . $lang . '/core.php');
 
 # Tableau des profils
 const PROFIL_NAMES = array(

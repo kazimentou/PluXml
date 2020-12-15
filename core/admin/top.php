@@ -159,6 +159,7 @@ echo implode(PHP_EOL, $menus) . PHP_EOL;
                     <li>
                         <a href="user.php"><?= PlxUtils::strCheck($plxAdmin->aUsers[$_SESSION['user']]['name']) ?></a>&nbsp;
                         <small><em><?= PROFIL_NAMES[$_SESSION ['profil']] ?></em></small>
+                        <small><?= date('Y-m-d H:i', $plxAdmin->aUsers[$_SESSION['user']]['timestamp']) ?></small>
                     </li>
                     <li><a href="auth.php?d=1" title="<?= L_ADMIN_LOGOUT_TITLE ?>"><i class="icon-logout"></i></a></li>
                 </ul>

@@ -386,39 +386,44 @@ EOT;
 	 *
 	 * @param	content	tableau contenant le nouveau mot de passe de l'utilisateur
 	 * @return	string
-	 * @author	Stéphane F, PEdro "P3ter" CADETE
+	 * @author	Stéphane F, PEdro "P3ter" CADETE, Jean-Pierre Pourrez "bazooka07"
 	 **/
 	public function editPassword($content) {
-		$save = false;
+		if(!empty($content['auth']) and $content['auth'] == $this->aConf['clef']) {
+			# l'utilisateur vient de se connecter
+			if(!empty($content['restore'])) {
+				# on restaure l'ancien mot de passe
+				$this->aUsers[$_SESSION['user']]['password'] = $this->aUsers[$_SESSION['user']]['old_password'];
+			}
+			# on écrase l'ancien mot de passe pour les prochaines demandes
+			$this->aUsers[$_SESSION['user']]['old_password'] = '';
 
-		if(trim($content['password1']) == '' OR trim($content['password1']) != trim($content['password2'])) {
+			# on note l'heure de connection
+			$this->aUsers[$_SESSION['user']]['timestamp'] = time();
+
+			$this->editUsers(null, true);
+			return;
+		}
+
+		if(
+			empty($content['password1']) or
+			empty($content['password2']) or
+			strlen(trim($content['password1'])) == 0 or
+			trim($content['password1']) != trim($content['password2'])
+		) {
 			return plxMsg::Error(L_ERR_PASSWORD_EMPTY_CONFIRMATION);
 		}
 
-		if(isset($content['lostPasswordToken'])) {
-			$token = $content['lostPasswordToken'];
-			if(empty($token)) { return; }
-			foreach($this->aUsers as $user_id => $user) {
-				if ($user['password_token'] == $token) {
-					$salt = $this->aUsers[$user_id]['salt'];
-					$this->aUsers[$user_id]['password'] = sha1($salt.md5($content['password1']));
-					$this->aUsers[$user_id]['password_token'] = '';
-					$this->aUsers[$user_id]['password_token_expiry'] = '';
-					$save = true;
-					break;
-				}
-			}
-			# Echec !
-			if(!$save) { return; }
-		}
-		else {
-			$salt = $this->aUsers[$_SESSION['user']]['salt'];
-			$this->aUsers[$_SESSION['user']]['password'] = sha1($salt.md5($content['password1']));
-			$save = true;
+		if(!empty($content['save_password']) and strlen(trim($this->aUsers[$_SESSION['user']]['old_password'])) == 0) {
+			# Overwrite old_password if empty
+			# password is encrypted !
+			$this->aUsers[$_SESSION['user']]['old_password'] = $this->aUsers[$_SESSION['user']]['password'];
 		}
 
-		return $this->editUsers(null, $save);
+		$salt = $this->aUsers[$_SESSION['user']]['salt'];
+		$this->aUsers[$_SESSION['user']]['password'] = sha1($salt . md5($content['password1']));
 
+		return $this->editUsers(null, true);
 	}
 
 	/**
@@ -641,13 +646,13 @@ EOT;
 	<user number="<?= $user_id ?>" active="<?= $user['active'] ?>" profil="<?= $user['profil'] ?>" delete="<?= $user['delete'] ?>">
 		<login><?= plxUtils::cdataCheck($user['login']) ?></login>
 		<name><?= plxUtils::cdataCheck($user['name']) ?></name>
+		<email><?= plxUtils::cdataCheck($user['email']) ?></email>
+		<timestamp><?= $user['timestamp'] ?></timestamp>
+		<lang><?= $user['lang'] ?></lang>
 		<infos><?= plxUtils::cdataCheck($user['infos']) ?></infos>
 		<password><?= $user['password'] ?></password>
+		<old_password><?= $user['old_password'] ?></old_password>
 		<salt><?= $user['salt'] ?></salt>
-		<email><?= plxUtils::cdataCheck($user['email']) ?></email>
-		<lang><?= $user['lang'] ?></lang>
-		<password_token><?= plxUtils::cdataCheck($user['password_token']) ?></password_token>
-		<password_token_expiry><?= plxUtils::cdataCheck($user['password_token_expiry']) ?></password_token_expiry>
 <?php
 			if(!empty($this->plxPlugins)) {
 				# Hook plugins

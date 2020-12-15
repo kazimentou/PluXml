@@ -4,131 +4,147 @@
  * PluXml backoffice authentication page
  *
  * @package PLX
- * <<<<<<< HEAD
  * @author Stephane F, Florent MONTHEL, Pedro "P3ter" CADETE
- * =======
- * @author    Stephane F, Florent MONTHEL, Pedro "P3ter" CADETE
- * >>>>>>> master
  **/
 
 const PLX_AUTHPAGE = true;
+// Brut force protection
+const MAX_LOGIN_COUNTER = 3; // max tries
+const MAX_LOGIN_TIMER = 3; // Wait time in minutes until the next attempt if counter resets
 
 include 'prepend.php';
 
-// CSRF token validation
+# CSRF token validation
 plxToken::validateFormToken($_POST);
 
-// Brut force protection
-// connexion maximum attempt number in the time limit
-$maxlogin['counter'] = 99;
-// Wait time (ine minutes) until the next attempt if maximum is exceeded
-$maxlogin['timer'] = 3 * 60;
-
-// Alert message initialisation
-$msg = '';
-$css = '';
-
-// Plugins hook
+# Plugins hook
 eval($plxAdmin->plxPlugins->callHook('AdminAuthPrepend'));
 
-// Identifying connexion error
-if (isset($_SESSION['maxtry'])) {
-    if (intval($_SESSION['maxtry']['counter']) >= $maxlogin['counter'] and (time() < $_SESSION['maxtry']['timer'] + $maxlogin['timer'])) {
-        // write in the logs if thee unsucessfull connexion attempts
-        @error_log('PluXml: Max login failed. IP : ' . plxUtils::getIp());
-        // alert to display
-        $msg = sprintf(L_ERR_MAXLOGIN, ($maxlogin['timer'] / 60));
-        $css = 'alert--danger';
-    }
-    if (time() > ($_SESSION['maxtry']['timer'] + $maxlogin['timer'])) {
-        // reset brut force control if wait time is passed
-        $_SESSION['maxtry']['counter'] = 0;
-        $_SESSION['maxtry']['timer'] = time();
-    }
-} else {
-    // attempt count initialisation
-    $_SESSION['maxtry']['counter'] = 0;
-    $_SESSION['maxtry']['timer'] = time();
-}
-
-// Attempt number incrementation
-$redirect = 'index.php';
-if (!empty($_GET['p']) and $css == '') {
-    $_SESSION['maxtry']['counter']++;
-    $racine = parse_url($plxAdmin->aConf['racine']);
-    $get_p = parse_url(urldecode($_GET['p']));
-    $css = (!$get_p or (isset($get_p['host']) and $racine['host'] != $get_p['host']));
-    if (!$css and !empty($get_p['path']) and file_exists(PLX_ADMIN_PATH . basename($get_p['path']))) {
-        // URL parameters filter
-        $query = '';
-        if (isset($get_p['query'])) {
-            $query = strtok($get_p['query'], '=');
-            $query = ($query[0] != 'd' ? '?' . $get_p['query'] : '');
-        }
-        // redirect RUL
-        $redirect = $get_p['path'] . $query;
-    }
-}
-
-// Disconnection (URL parameter is "?d=1")
+# Disconnection if query == "d=1"
 if (!empty($_GET['d']) and $_GET['d'] == 1) {
     $_SESSION = array();
     session_destroy();
-    header('Location: auth.php');
+    header('Location: ' . PLX_ROOT . 'index.php');
     exit;
 }
 
-// Authentication
-if (!empty($_POST['login']) and !empty($_POST['password']) and $css == '') {
-    $connected = false;
-    foreach ($plxAdmin->aUsers as $userid => $user) {
-        if ($_POST['login'] == $user['login'] and sha1($user['salt'] . md5($_POST['password'])) === $user['password'] and $user['active'] and !$user['delete']) {
-            $_SESSION['user'] = $userid;
-            $_SESSION['hash'] = plxUtils::charAleatoire(10);
-            $_SESSION['domain'] = $session_domain;
-            $_SESSION['profil'] = $user['profil'];
-            $_SESSION['admin_lang'] = $user['lang'];
-            $connected = true;
-            break;
-        }
-    }
-    if ($connected) {
-        unset($_SESSION['maxtry']);
-        header('Location: ' . htmlentities($redirect));
-        exit;
-    } else {
-        $msg = L_ERR_WRONG_PASSWORD;
-        $css = 'alert--danger';
-    }
+# Set the counter and timer for authenticaton if not
+if(
+	!isset($_SESSION['login_timer']) or
+	$_SESSION['login_timer'] < time() or
+	!isset($_SESSION['login_counter'])
+) {
+    // count preset
+	$_SESSION['login_counter'] = MAX_LOGIN_COUNTER;
+	$_SESSION['login_timer'] = time() + MAX_LOGIN_TIMER * 60;
 }
 
-if ($plxAdmin->aConf['lostpassword']) {
-// Send lost password e-mail
-    if (!empty($_POST['lostpassword_id'])) {
-        if (!empty($plxAdmin->sendLostPasswordEmail($_POST['lostpassword_id']))) {
-            $msg = L_LOST_PASSWORD_SUCCESS;
-            $css = 'alert--success';
-        } else {
-            @error_log("Lost password error. ID : " . $_POST['lostpassword_id'] . " IP : " . plxUtils::getIp());
-            $msg = L_UNKNOWN_ERROR;
-            $css = 'alert--danger';
-        }
-    }
-// Change password
-    if (!empty($_POST['editpassword'])) {
-        unset($_SESSION['error']);
-        unset($_SESSION['info']);
-        $plxAdmin->editPassword($_POST);
-        if (!empty($msg = isset($_SESSION['error']) ? $_SESSION['error'] : '')) {
-            $css = 'alert--danger';
-        } else {
-            if (!empty($msg = isset($_SESSION['info']) ? $_SESSION['info'] : '')) {
-                $css = 'alert--success';
-            }
-        }
-        unset($_SESSION['error']);
-        unset($_SESSION['info']);
-    }
+if(!empty($_POST['login'])) {
+	if(
+		!empty($plxAdmin->aConf['lostpassword']) and
+		!empty($_POST['new_password']) and
+		!empty($_POST['email'])
+	) {
+		# New password requested
+		$unknown = true;
+		foreach ($plxAdmin->aUsers as $userid => $user) {
+			if($user['login'] == $_POST['login'] and $user['email'] == $_POST['email']) {
+				$new_password = plxUtils::charAleatoire();
+				$_SESSION['user'] = $userid;
+				if($plxAdmin->editPassword(array(
+					'password1'		=> $new_password,
+					'password2'		=> $new_password,
+					'save_password'	=> true,
+				))) {
+					# Send $new_password by e-mail
+					foreach(array($user['lang'], $plxAdmin->aConf['default_lang'], 'en', 'fr', 'de', 'es') as $lang) {
+						$filename = PLX_CORE . 'lang/'. $lang . '/new_password.txt';
+						if(is_readable($filename)) {
+							break;
+						}
+					}
+					list($subject, $body) = explode(
+						'-----',
+						strtr(
+							file_get_contents($filename),
+							array(
+								'990'	=> $plxAdmin->aConf['title'],
+								'991'	=> $user['name'],
+								'992'	=> $user['login'],
+								'993'	=> $new_password,
+								'994'	=> L_PROFIL,
+								'995'	=> $_SERVER['REMOTE_ADDR'],
+								'996'	=> $_SERVER['HTTP_USER_AGENT'],
+								'997'	=> $_SERVER['HTTP_ACCEPT_LANGUAGE'],
+								'998'	=> $plxAdmin->aConf['racine'],
+							)
+						)
+					);
+
+					if(plxUtils::sendMail('', '', $user['email'], $subject, $body)) {
+						$msg = sprintf(L_MAIL_TEST_SENT_TO, $_POST['email']);
+					} else {
+						$msg = L_SENT_MAIL_FAILURE;
+					}
+				};
+
+				unset($_SESSION['user']);
+				$unknown = false;
+				break;
+			}
+		}
+		if($unknown) {
+			$msg = L_UNKNOWN_USER;
+			$alert = true;
+		}
+	} elseif($_SESSION['login_counter'] > 0) {
+		if(!empty($_POST['password'])) {
+			# Checks authentication
+		    foreach ($plxAdmin->aUsers as $userid => $user) {
+				if(!empty($user['active']) and empty($user['delete']) and $user['login'] == $_POST['login']) {
+					$hash = sha1($user['salt'] . md5($_POST['password']));
+					foreach(array('password', 'old_password') as $pwd) {
+				        if (!empty($user[$pwd]) and $hash === $user[$pwd]) {
+							# Authentication success !
+				            $_SESSION = array(
+					            'user'			=> $userid,
+					            'hash'			=> plxUtils::charAleatoire(10),
+					            'domain'		=> $session_domain,
+					            'profil'		=> $user['profil'],
+					            'admin_lang'	=> $user['lang'],
+					            'auth_time'		=> $user['timestamp'],
+				            );
+
+				            $plxAdmin->editPassword(array(
+								# move old password to password
+								'restore'	=> ($pwd == 'old_password') ? 1 : 0,
+								# clear old_password if not empty
+								'auth' 		=> $plxAdmin->aConf['clef'],
+				            ));
+
+							header('Location: index.php');
+							exit;
+				        }
+					}
+				}
+		    }
+		}
+
+		# Echec à l'authentification
+		$_SESSION['login_counter']--;
+		$msg = L_ERR_WRONG_PASSWORD;
+		$alert = true;
+
+		if (intval($_SESSION['login_counter']) == 0) {
+			// write in the logs if the unsucessfull connexion attempts
+			@error_log('PluXml: Max login failed. IP : ' . plxUtils::getIp());
+			$_SESSION['login_timer'] = time() + MAX_LOGIN_TIMER * 60;
+		}
+	} else {
+		// alert to display
+		$msg = sprintf(L_ERR_MAXLOGIN,  MAX_LOGIN['timer']);
+		$alert = true;
+	}
 }
 
 // View construction
@@ -146,123 +162,75 @@ plxUtils::cleanHeaders();
     <link rel="stylesheet" type="text/css" href="theme/fontello/css/fontello.css?v=<?= PLX_VERSION ?>" media="screen"/>
     <link rel="icon" href="theme/images/favicon.png"/>
 <?php
-    PlxUtils::printLinkCss($plxAdmin->aConf['custom_admincss_file'], true);
-    PlxUtils::printLinkCss($plxAdmin->aConf['racine_plugins'] . 'admin.css', true);
+PlxUtils::printLinkCss($plxAdmin->aConf['custom_admincss_file'], true);
+PlxUtils::printLinkCss($plxAdmin->aConf['racine_plugins'] . 'admin.css', true);
 
-    eval($plxAdmin->plxPlugins->callHook('AdminAuthEndHead'));
+eval($plxAdmin->plxPlugins->callHook('AdminAuthEndHead'));
 
-    $logo = (!empty($plxAdmin->aConf['thumbnail']) and file_exists(PLX_ROOT . $plxAdmin->aConf['thumbnail'])) ? PLX_ROOT . $plxAdmin->aConf['thumbnail'] : 'theme/images/pluxml.png';
-    $logoSize = getimagesize($logo);
+$logo = (!empty($plxAdmin->aConf['thumbnail']) and file_exists(PLX_ROOT . $plxAdmin->aConf['thumbnail'])) ? PLX_ROOT . $plxAdmin->aConf['thumbnail'] : 'theme/images/pluxml.png';
+$logoSize = getimagesize($logo);
 ?>
 </head>
 <body id="auth">
-<main id="app" class="auth">
-    <section>
-		<a class="logo" href="<?= PLX_ROOT ?>"><img src="<?= $logo ?>" alt="Logo" <?= $logoSize[3] ?> /></a>
+	<div class="auth">
+	    <header>
+			<a class="logo" href="<?= PLX_ROOT ?>"><img src="<?= $logo ?>" alt="Logo" <?= $logoSize[3] ?> /></a>
+		</header>
+		<section>
 <?php
-
 eval($plxAdmin->plxPlugins->callHook('AdminAuthBegin'));
-
-if (isset($_GET['action']) && $_GET['action'] == 'lostpassword') {
 ?>
-		<div class="form">
-			<?php eval($plxAdmin->plxPlugins->callHook('AdminAuthTopLostPassword')); ?>
-			<form action="auth.php<?= !empty($redirect) ? '?p=' . plxUtils::strCheck(urlencode($redirect)) : '' ?>"
-				  method="post" id="form_auth">
-				<fieldset class="man pan">
-					<div class="flex-container--column">
-						<?= PlxToken::getTokenPostMethod() ?>
-						<h1 class="h3-like txtcenter mam"><?= L_LOST_PASSWORD ?></h1>
-						<?php PlxUtils::printInput('lostpassword_id', (!empty($_POST['lostpassword_id'])) ? PlxUtils::strCheck($_POST['lostpassword_id']) : '', 'text', '-64', false, 'txt', L_AUTH_LOST_FIELD, 'autofocus required'); ?>
-						<input class="btn--primary" role="button" type="submit" value="<?= L_SUBMIT_BUTTON ?>" />
-						<?php eval ($plxAdmin->plxPlugins->callHook('AdminAuthLostPassword')); ?>
-						<a href="?p=/core/admin"><span class="w100 mts btn--info"><?= L_LOST_PASSWORD_LOGIN ?></span></a>
-					</div>
-				</fieldset>
-			</form>
-		</div>
+			<form method="post">
+				<?= PlxToken::getTokenPostMethod() ?>
+				<h1 class="h3-like txtcenter mam"><?= L_LOGIN_PAGE ?></h1>
 <?php
-} elseif (isset($_GET['action']) && $_GET['action'] == 'changepassword') {
-?>
-		<div class="form">
-<?php
-	eval($plxAdmin->plxPlugins->callHook('AdminAuthTopChangePassword'));
-
-	if ($plxAdmin->verifyLostPasswordToken(isset($_GET['token']))) {
-?>
-			<div>
-				<form action="auth.php<?= !empty($redirect) ? '?p=' . PlxUtils::strCheck(urlencode($redirect)) : '' ?>"
-					  method="post" id="form_auth">
-					<fieldset class="man pan">
-						<div class="flex-container--column">
-							<?= PlxToken::getTokenPostMethod() ?>
-							<input name="lostPasswordToken" value="<?= $_GET['token']; ?>" type="hidden"/>
-							<h1 class="h3-like txtcenter ma"><?= L_PROFIL_CHANGE_PASSWORD ?></h1>
-							<?php PlxUtils::printInput('password1', '', 'password', '-64', false, 'txt', L_PASSWORD, 'onkeyup="pwdStrength(this.id)" required') ?>
-							<?php PlxUtils::printInput('password2', '', 'password', '-64', false, 'txt', L_CONFIRM_PASSWORD, 'required') ?>
-							<?php eval($plxAdmin->plxPlugins->callHook('AdminAuthChangePassword')); ?>
-							<input class="btn--primary" role="button" type="submit" name="editpassword"
-								   value="<?= L_PROFIL_UPDATE_PASSWORD ?>"/>
-							<a href="?p=/core/admin"><span
-										class="w100 mts btn--info"><?= L_LOST_PASSWORD_LOGIN ?></span></a>
-						</div>
-					</fieldset>
-				</form>
-			</div>
-<?php
-	} else {
-?>
-			<div class="flex-container--column">
-				<?php eval($plxAdmin->plxPlugins->callHook('AdminAuthTopChangePasswordError')); ?>
-				<h1 class="h3-like txtcenter mam"><?= L_PROFIL_CHANGE_PASSWORD ?></h1>
-				<div class="alert--danger"><?= L_LOST_PASSWORD_ERROR ?></div>
-				<span class="btn--primary"><a href="?p=/core/admin"><?= L_LOST_PASSWORD_LOGIN ?></a></span>
-				<?php eval($plxAdmin->plxPlugins->callHook('AdminAuthChangePasswordError')) ?>
-			</div>
-<?php
-	}
-?>
-		</div>
-<?php
-} else {
-?>
-		<div class="form">
-			<?php eval($plxAdmin->plxPlugins->callHook('AdminAuthTop')) ?>
-			<form action="auth.php<?= !empty($redirect) ? '?p=' . PlxUtils::strCheck(urlencode($redirect)) : '' ?>"
-				  method="post" id="form_auth">
-				<fieldset class="man pan">
-					<div class="flex-container--column">
-						<?= PlxToken::getTokenPostMethod() ?>
-						<h1 class="h3-like txtcenter mam"><?= L_LOGIN_PAGE ?></h1>
-						<?php (!empty($msg)) ? PlxUtils::showMsg($msg, $css) : ''; ?>
-						<?php PlxUtils::printInput('login', (!empty($_POST['login'])) ? PlxUtils::strCheck($_POST['login']) : '', 'text', '-64', false, 'txt', L_AUTH_LOGIN_FIELD, 'autofocus required'); ?>
-						<?php PlxUtils::printInput('password', '', 'password', '-64', false, 'txt', L_PASSWORD, 'required'); ?>
-						<?php eval($plxAdmin->plxPlugins->callHook('AdminAuth')); ?>
-						<input class="btn--primary" role="button" type="submit" value="<?= L_SUBMIT_BUTTON ?>"/>
-<?php
-	if ($plxAdmin->aConf['lostpassword']) {
-?>
-                                <a href="?action=lostpassword">
-									<span class="w100 mts btn--warning"><?= L_LOST_PASSWORD ?></span>
-								</a>
-<?php
-	}
-?>
-					</div>
-				</fieldset>
-			</form>
-		</div>
-<?php
+if(!empty($msg)) {
+	PlxUtils::showMsg($msg, !empty($alert) ? 'alert--danger' : '');
 }
 ?>
-        <p><small><a class="back" href="<?= PLX_ROOT; ?>"><?= L_HOMEPAGE ?></a></small></p>
-    </section>
-</main>
+				<fieldset>
+					<p>
+						<input type="text" name="login" value="<?= !empty($_POST['login']) ? PlxUtils::strCheck($_POST['login']) : '' ?>" placeholder="<?= L_AUTH_LOGIN_FIELD ?>" required />
+					</p>
+					<p>
+						<input type="password" name="password" value="" maxlength="64" placeholder="<?= L_PASSWORD ?>" required />
+					</p>
 <?php
-
-eval($plxAdmin->plxPlugins->callHook('AdminAuthEndBody'))
-
+	if(!empty($plxAdmin->aConf['lostpassword'])) {
 ?>
-<script src="scripts/visual.js?v=<?= PLX_VERSION ?>"></script>
+					<input type="checkbox" name="new_password" value="1" id="toggle-email" class="toggle" />
+					<p>
+						<input type="email" name="email" value="" placeholder="<?= L_EMAIL ?>" />
+					</p>
+					<p>
+						<label for="toggle-email" class="btn--warning"><span><?= L_NEW_PASSWORD ?></span><span><?= L_CANCEL ?></span></label>
+					</p>
+<?php
+	}
+?>
+					<p>
+						<input class="btn--primary" role="button" type="submit" value="<?= L_SUBMIT_BUTTON ?>"/>
+					</p>
+					<?php eval($plxAdmin->plxPlugins->callHook('AdminAuth')); ?>
+				</fieldset>
+			</form>
+		</section>
+		<footer>
+			<a href="<?= PLX_ROOT ?>index.php" ><i class="icon-home-1"></i><?= L_HOMEPAGE ?></a>
+		</footer>
+	</div>
+<script>
+	'use strict;'
+	document.forms[0].elements.new_password.onchange = function(event) {
+		const pwd = document.forms[0].elements.password;
+		const email = document.forms[0].elements.email;
+		email.required = event.target.checked;
+		pwd.required = !email.required;
+		pwd.style.display = email.required ? 'none' : '';
+		if(event.target.checked) {
+			email.focus();
+		}
+	}
+</script>
 </body>
 </html>

@@ -130,9 +130,9 @@ const L_SUBMIT_BUTTON = 'Valider';
 const L_ERR_WRONG_PASSWORD = 'Login et/ou mot de passe incorrect';
 const L_POWERED_BY = 'Généré par <a href="https://www.%s">PluXml</a>';
 const L_ERR_MAXLOGIN = 'Nombre de tentative atteint<br />Réessayez dans %s minutes';
-const L_LOST_PASSWORD = 'Mot de passe oublié&nbsp;?';
+const L_NEW_PASSWORD = 'Nouveau mot de passe';
 const L_LOST_PASSWORD_LOGIN = 'Se connecter';
-const L_LOST_PASSWORD_SUCCESS = 'Un courriel a été envoyé à l\'utilisateur';
+const L_NEW_PASSWORD_SUCCESS = 'Un nouveau mot de passe vous a été envoyé par courriel à %s';
 const L_LOST_PASSWORD_ERROR = 'Le lien est expiré';
 
 //

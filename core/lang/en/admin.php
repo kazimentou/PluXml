@@ -131,9 +131,9 @@ const L_SUBMIT_BUTTON = 'Submit';
 const L_ERR_WRONG_PASSWORD = 'Incorrect login or password';
 const L_POWERED_BY = 'Powered by <a href="https://www.%s">PluXml</a>';
 const L_ERR_MAXLOGIN = 'Too many failed login<br />Retry in % s minutes';
-const L_LOST_PASSWORD = 'Lost your password&nbsp;?';
+const L_NEW_PASSWORD = 'New Password';
 const L_LOST_PASSWORD_LOGIN = 'Log in';
-const L_LOST_PASSWORD_SUCCESS = 'An email has been sent to the user';
+const L_NEW_PASSWORD_SUCCESS = 'A new password has been sent to you at %s';
 const L_LOST_PASSWORD_ERROR = 'The link has expired';
 
 //

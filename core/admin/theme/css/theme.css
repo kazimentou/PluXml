@@ -165,18 +165,20 @@ form .admin {
 /* ==== AUTHENTIFICATION ==== */
 
 #auth {
-    background-color: var(--backaside);
+	background-color: var(--backaside);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	height: 100vh;
+	align-items: center;
+	text-align: center;
 }
 
-#auth #app {
-	display: initial;
-}
-
-#auth .auth section {
-	max-width: 36rem;
-	margin: 10% auto 0;
+#auth .auth {
+	max-width: 32rem;
 	padding: 1rem;
 	text-align: center;
+	background-color: var(--backsection);
 }
 
 .auth .logo {
@@ -184,37 +186,49 @@ form .admin {
     margin: auto;
 }
 
-.auth .form
- {
+#auth form {
+	box-shadow: 0px 0px 0px 4px rgba(0, 0,0,0.15);
 	margin: 1rem 0;
-    background-color: var(--backsection);
-    box-shadow: 0px 0px 0px 4px rgba(0, 0, 0, 0.15);
 }
 
-.auth input.txt {
-    -webkit-box-shadow: none;
-    box-shadow: none;
-    background-color: #fbf8ef;
-    padding: 10px 10px;
-    border-bottom: 2px solid #ddd;
-    margin-bottom: 2rem;
+#auth input:not([type="checkbox"]),
+#auth label {
+	width: 100%;
 }
 
-.auth .btn--margin-top {
-    margin-top: 30px;
+#toggle-email:not(:checked) + p {
+	display: none;
 }
 
-.auth span a {
-    text-decoration: none;
+/* flip-flop */
+#auth input[type="checkbox"]:checked + p + p label span:first-of-type,
+#auth input[type="checkbox"]:not(:checked) + p + p label span:last-of-type {
+	display: none;
+}
+#auth a {
+	border-bottom: .3rem solid transparent;
+	text-decoration: none;
+	transition: all ease 1s;
 }
 
-.auth a.back {
-    text-decoration: none;
+#auth a:hover {
+	border-color: #444;
 }
 
-.auth a.back:hover {
-    text-decoration: underline;
+#auth .icon-home-1 {
+	margin-right: 1rem;
 }
+
+#auth label::after {
+	content: none;
+	padding: 0;
+}
+
+#auth p:last-of-type {
+	margin-bottom: 0;
+}
+
+/* ------------- */
 
 #install > main {
     background-color: var(--backsection);
@@ -1954,16 +1968,11 @@ input:checked ~ .modal__overlay {
 /* ------------- mode landscape --------------- */
 
 @media screen and (max-height: 400px) {
-	#auth .auth section {
+	#auth .auth {
 		max-width: none;
 		margin: 1rem 10% 0;
-	}
-
-	#auth .logo {
-		display: none;
-	}
-
-	.auth input.txt {
-		margin-bottom: 1rem;
+		display: flex;
+		align-items: center;
+		gap: 2rem;
 	}
 }

@@ -134,9 +134,9 @@ const L_SUBMIT_BUTTON = 'Anmelden';
 const L_ERR_WRONG_PASSWORD = 'Benutzername und/oder Passwort sind falsch';
 const L_POWERED_BY = 'Generiert von <a href="https://www.%s">PluXml</a>';
 const L_ERR_MAXLOGIN = 'Zu viele fehlgeschlagene Anmeldung <br /> Wiederholen Sie in% s Minuten';
-const L_LOST_PASSWORD = 'Passwort vergessen?';
+const L_NEW_PASSWORD = 'Neues Passwort';
 const L_LOST_PASSWORD_LOGIN = 'Anmeldung';
-const L_LOST_PASSWORD_SUCCESS = 'Eine E-Mail wurde an den Benutzer gesendet';
+const L_NEW_PASSWORD_SUCCESS = 'Ein neues Passwort wurde Ihnen um %s gesendet';
 const L_LOST_PASSWORD_ERROR = 'Der Link ist abgelaufen';
 
 //

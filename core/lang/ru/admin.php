@@ -138,9 +138,9 @@ const L_SUBMIT_BUTTON = 'Войти';
 const L_ERR_WRONG_PASSWORD = 'Неправильный логин или пароль';
 const L_POWERED_BY = 'Powered by <a href="https://www.%s">PluXml</a>';
 const L_ERR_MAXLOGIN = 'Слишком много неудачных Войти<br />Повторите попытку через% S минут';
-const L_LOST_PASSWORD = 'Забыли пароль?';
+const L_NEW_PASSWORD = 'Новый пароль';
 const L_LOST_PASSWORD_LOGIN = 'Aвторизоваться';
-const L_LOST_PASSWORD_SUCCESS = 'Письмо было отправлено пользователю';
+const L_NEW_PASSWORD_SUCCESS = 'Новый пароль был отправлен вам на номер %s';
 const L_LOST_PASSWORD_ERROR = 'Срок действия ссылки истек';
 
 //

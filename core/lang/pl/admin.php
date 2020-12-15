@@ -138,9 +138,9 @@ const L_SUBMIT_BUTTON = 'Zaloguj';
 const L_ERR_WRONG_PASSWORD = 'Login i / lub hasło niepoprawne';
 const L_POWERED_BY = 'Silnik <a href="https://www.%s">PluXml</a>';
 const L_ERR_MAXLOGIN = 'Zbyt wielu nieudanych<br />ponownych prób logowania w% s minut';
-const L_LOST_PASSWORD = 'Zapomniałeś hasła?';
+const L_NEW_PASSWORD = 'Nowe hasło';
 const L_LOST_PASSWORD_LOGIN = 'Zaloguj Się';
-const L_LOST_PASSWORD_SUCCESS = 'E-mail został wysłany do użytkownika';
+const L_NEW_PASSWORD_SUCCESS = 'Nowe hasło zostało wysłane pod numer %s';
 const L_LOST_PASSWORD_ERROR = 'Link wygasł';
 
 //
