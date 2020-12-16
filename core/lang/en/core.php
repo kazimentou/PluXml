@@ -85,10 +85,8 @@ const L_WRITE_ACCESS				= '%s has write access';
 const L_WRITE_NOT_ACCESS			= '%s has no writing access or is missing';
 const L_MODREWRITE_AVAILABLE		= 'Apache URL Rewriting module mod_rewrite available';
 const L_MODREWRITE_NOT_AVAILABLE	= 'Apache URL Rewriting module mod_rewrite unavailable';
-const L_LIBGD_INSTALLED				= 'GD library installed';
-const L_LIBGD_NOT_INSTALLED			= 'GD library not installed';
-const L_LIBXML_INSTALLED			= 'XML library installed';
-const L_LIBXML_NOT_INSTALLED		= 'XML library not installed';
+const L_LIB_INSTALLED				= 'GD library installed';
+const L_LIB_NOT_INSTALLED			= 'GD library not installed';
 const L_MAIL_AVAILABLE				= 'Mail sending function available';
 const L_MAIL_NOT_AVAILABLE			= 'Mail sending function unavailable';
 

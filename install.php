@@ -401,8 +401,7 @@ EOT;
             <?php plxUtils::testWrite(PLX_ROOT . 'plugins') ?>
             <?php plxUtils::testWrite(PLX_ROOT . 'themes') ?>
             <?php plxUtils::testModReWrite() ?>
-            <?php plxUtils::testLibGD() ?>
-            <?php plxUtils::testLibXml() ?>
+            <?php plxUtils::testLib(); ?>
             <?php plxUtils::testMail() ?>
         </ul>
 

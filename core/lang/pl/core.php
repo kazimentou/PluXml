@@ -85,10 +85,8 @@ const L_WRITE_ACCESS				= '%s jest zapisywalny';
 const L_WRITE_NOT_ACCESS			= '%s nie posiada prawa do zapisu lub nie istnieje';
 const L_MODREWRITE_AVAILABLE		= 'Moduł apache mod_rewrite jest dostępny';
 const L_MODREWRITE_NOT_AVAILABLE	= 'Moduł apache mod_rewrite nie jest dostępny';
-const L_LIBGD_INSTALLED				= 'Zainstalowane biblioteki GD';
-const L_LIBGD_NOT_INSTALLED			= 'Nie zainstalowane biblioteki GD';
-const L_LIBXML_INSTALLED			= 'Zainstalowane biblioteki XML';
-const L_LIBXML_NOT_INSTALLED		= 'Nie zainstalowane biblioteki XML';
+const L_LIB_INSTALLED				= 'Zainstalowane biblioteki GD';
+const L_LIB_NOT_INSTALLED			= 'Nie zainstalowane biblioteki GD';
 const L_MAIL_AVAILABLE				= 'Funkcja wysyłania poczty dostępna';
 const L_MAIL_NOT_AVAILABLE			= 'Funkcja wysyłania poczty nie jest dostępna';
 

@@ -85,10 +85,8 @@ const L_WRITE_ACCESS				= '%s are acces de scriere';
 const L_WRITE_NOT_ACCESS			= '%s nu are acces de scriere sau nu există';
 const L_MODREWRITE_AVAILABLE		= 'Apache URL Rewriting module mod_rewrite este disponibil';
 const L_MODREWRITE_NOT_AVAILABLE	= 'Apache URL Rewriting module mod_rewrite nu este disponibil';
-const L_LIBGD_INSTALLED				= 'Biblioteca GD este instalată';
-const L_LIBGD_NOT_INSTALLED			= 'Biblioteca GD nu este instalată';
-const L_LIBXML_INSTALLED			= 'Biblioteca XML este instalată';
-const L_LIBXML_NOT_INSTALLED		= 'Biblioteca XML nu este instalată';
+const L_LIB_INSTALLED				= 'Biblioteca %s este instalată';
+const L_LIB_NOT_INSTALLED			= 'Biblioteca %s nu este instalată';
 const L_MAIL_AVAILABLE				= 'Functia  de a trimite e-mail disponibilă';
 const L_MAIL_NOT_AVAILABLE			= 'Functia  de a trimite e-mail nu este disponibilă';
 

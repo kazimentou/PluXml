@@ -85,10 +85,8 @@ const L_WRITE_ACCESS				= '%s est accessible en écriture';
 const L_WRITE_NOT_ACCESS			= '%s n\'est pas accessible en écriture ou n\'existe pas';
 const L_MODREWRITE_AVAILABLE		= 'Module apache de réécriture d\'url mod_rewrite disponible';
 const L_MODREWRITE_NOT_AVAILABLE	= 'Module apache de réécriture d\'url mod_rewrite non disponible';
-const L_LIBGD_INSTALLED				= 'Bibliothèque GD installée';
-const L_LIBGD_NOT_INSTALLED			= 'Bibliothèque GD non installée';
-const L_LIBXML_INSTALLED			= 'Bibliothèque XML installée';
-const L_LIBXML_NOT_INSTALLED		= 'Bibliothèque XML non installée';
+const L_LIB_INSTALLED				= 'Bibliothèque %s installée';
+const L_LIB_NOT_INSTALLED			= 'Bibliothèque %s non installée';
 const L_MAIL_AVAILABLE				= 'Fonction d\'envoi de mail disponible';
 const L_MAIL_NOT_AVAILABLE			= 'Fonction d\'envoi de mail non disponible';
 

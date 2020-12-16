@@ -25,7 +25,16 @@ class plxUtils
         'fr' => 'a|de?|des|du|e?n|la|le|une?|vers'
     );
     const DELTA_PAGINATION = 3;
-    const TEMPLATE_MSG = '<li><span style="color:#color">#symbol #message</span></li>' . PHP_EOL;
+    const TEMPLATE_MSG = '<li><span class="#color">#symbol #message</span></li>' . PHP_EOL;
+	const TEST_FUNCTIONS = array(
+		'mail'					=> array(L_MAIL_NOT_AVAILABLE, L_MAIL_AVAILABLE),
+		'imagecreatetruecolor'	=> 'GD',
+		'xml_parser_create'		=> 'XML',
+		'curl_exec'				=> 'CURL',
+		'simplexml_load_file'	=> 'SIMPLEXML',
+	);
+	const CLASSNAMES = array('warning' ,'success');
+	const SYMBOLS = array('&#10007;', '&#10004;');
 
     /**
      * Méthode qui vérifie si une variable est définie.
@@ -516,23 +525,18 @@ class plxUtils
     /**
      * Méthode qui teste si un fichier est accessible en écriture
      *
-     * @param file        emplacement et nom du fichier à tester
+     * @param filename      emplacement et nom du fichier à tester
      * @param format        format d'affichage
      **/
-    public static function testWrite($file, $format = self::TEMPLATE_MSG)
+    public static function testWrite($filename, $format = self::TEMPLATE_MSG)
     {
 
-        if (is_writable($file)) {
-            $output = str_replace('#color', 'green', $format);
-            $output = str_replace('#symbol', '&#10004;', $output);
-            $output = str_replace('#message', sprintf(L_WRITE_ACCESS, $file), $output);
-            echo $output;
-        } else {
-            $output = str_replace('#color', 'red', $format);
-            $output = str_replace('#symbol', '&#10007;', $output);
-            $output = str_replace('#message', sprintf(L_WRITE_NOT_ACCESS, $file), $output);
-            echo $output;
-        }
+        $i = is_writable($filename) ? 1 : 0;
+		echo strtr($format, array(
+            '#color'	=> self::CLASSNAMES[$i],
+            '#symbol'	=> self::SYMBOLS[$i],
+            '#message'	=> sprintf(($i == 1) ? L_WRITE_ACCESS : L_WRITE_NOT_ACCESS, $filename),
+		));
     }
 
     /**
@@ -548,22 +552,39 @@ class plxUtils
 
         if (function_exists('apache_get_modules')) {
             $test = in_array("mod_rewrite", apache_get_modules());
-            if ($io == true) {
-                if ($test) {
-                    $output = str_replace('#color', 'green', $format);
-                    $output = str_replace('#symbol', '&#10004;', $output);
-                    $output = str_replace('#message', L_MODREWRITE_AVAILABLE, $output);
-                    echo $output;
-                } else {
-                    $output = str_replace('#color', 'red', $format);
-                    $output = str_replace('#symbol', '&#10007;', $output);
-                    $output = str_replace('#message', L_MODREWRITE_NOT_AVAILABLE, $output);
-                    echo $output;
-                }
+            if ($io) {
+				echo strtr($format, array(
+		            '#color'	=> self::CLASSNAMES[$test ? 1 : 0],
+		            '#symbol'	=> self::SYMBOLS[$test ? 1 : 0],
+		            '#message'	=> $test ? L_MODREWRITE_AVAILABLE : L_MODREWRITE_NOT_AVAILABLE,
+				));
             }
             return $test;
-        } else return true;
+        }
+
+        return true;
     }
+
+	public static function testLib($my_function='', $format=self::TEMPLATE_MSG) {
+		$i = 0;
+		$functions = !empty($my_function) ? array($my_function) : array_keys(self::TEST_FUNCTIONS);
+		foreach($functions as $f) {
+			if($f == 'mail') { continue; }
+
+			$i = function_exists($f) ? 1 : 0;
+			if(is_array(self::TEST_FUNCTIONS[$f])) {
+				$message = self::TEST_FUNCTIONS[$f][$i];
+			} else {
+				$message = sprintf(($i == 1) ? L_LIB_INSTALLED : L_LIB_NOT_INSTALLED, self::TEST_FUNCTIONS[$f]);
+			}
+			echo strtr($format, array(
+	            '#color'	=> self::CLASSNAMES[$i],
+	            '#symbol'	=> self::SYMBOLS[$i],
+	            '#message'	=> $message,
+			));
+		}
+		return ($i == 1);
+	}
 
     /**
      * Méthode qui teste si la fonction php mail est disponible
@@ -576,28 +597,16 @@ class plxUtils
     public static function testMail($io = true, $format = self::TEMPLATE_MSG)
     {
 
-        if ($return = function_exists('mail')) {
-            if (!empty($io)) {
-                echo strtr(
-                    $format, array(
-                        '#color' => 'green',
-                        '#symbol' => '&#10004;',
-                        '#message' => L_MAIL_AVAILABLE
-                    )
-                );
-            }
-        } else {
-            if (!empty($io)) {
-                echo strtr(
-                    $format, array(
-                        '#color' => 'red',
-                        '#symbol' => '&#10007;',
-                        '#message' => L_MAIL_NOT_AVAILABLE
-                    )
-                );
-            }
-        }
-
+        $return = function_exists('mail');
+		if (!empty($io)) {
+			echo strtr(
+				$format, array(
+					'#color' => self::CLASSNAMES[$return ? 1 : 0],
+					'#symbol' => self::SYMBOLS[$return ? 1 : 0],
+					'#message' => self::TEST_FUNCTIONS['mail'][$return ? 1 : 0],
+				)
+			);
+		}
         return $return;
     }
 

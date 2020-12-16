@@ -85,10 +85,8 @@ const L_WRITE_ACCESS			= '%s ist schreibbar';
 const L_WRITE_NOT_ACCESS		= '%s ist nicht schreibbar';
 const L_MODREWRITE_AVAILABLE	= 'mod_rewrite APACHE-modul ist verfügbar';
 const L_MODREWRITE_NOT_AVAILABLE= 'mod_rewrite APACHE-Modul ist nicht verfügbar';
-const L_LIBGD_INSTALLED			= 'GD Grafikbibliothek ist verfügbar';
-const L_LIBGD_NOT_INSTALLED		= 'GD Grafikbibliothek ist nicht verfügbar';
-const L_LIBXML_INSTALLED		= 'XML Grafikbibliothek ist verfügbar';
-const L_LIBXML_NOT_INSTALLED	= 'XML Grafikbibliothek ist nicht verfügbar';
+const L_LIB_INSTALLED			= 'GD Grafikbibliothek ist verfügbar';
+const L_LIB_NOT_INSTALLED		= 'GD Grafikbibliothek ist nicht verfügbar';
 const L_MAIL_AVAILABLE			= 'E-Mail versenden ist möglich';
 const L_MAIL_NOT_AVAILABLE		= 'E-Mail versenden ist nicht möglich';
 

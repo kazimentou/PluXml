@@ -1416,6 +1416,14 @@ fieldset div:not(.label-expanded) input[type="email"] {
 	display: none;
 }
 
+#parametres_infos .admin .success {
+	color: #5CB85C;
+}
+
+#parametres_infos .admin .warning {
+	color: #D9534F;
+}
+
 /* ------------- parametres_themes.php ----- */
 
 #form_themes .themes {
@@ -1813,6 +1821,7 @@ input:checked ~ .modal__overlay {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
 	}
+
 }
 
 /* $large = 992px - 1024px avec knacss-reborn */
@@ -1899,6 +1908,19 @@ input:checked ~ .modal__overlay {
 	#form_article .thumbnail-container {
 		display: block;
 	}
+
+	#parametres_infos .admin {
+		display: flex;
+		gap: 1.5%;
+	}
+
+	#parametres_infos .admin > div {
+		max-width: 48rem;
+		padding: 1rem;
+		border: 1px solid #666;
+		border-radius: 1rem;
+	}
+
 }
 
 /* $extra-large = 1200px - 1330px avec knacss-reborn */

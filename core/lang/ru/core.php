@@ -85,10 +85,8 @@ const L_WRITE_ACCESS				= '%s имеет доступ на запись';
 const L_WRITE_NOT_ACCESS			= '%s не имеет доступ на запись или не существует';
 const L_MODREWRITE_AVAILABLE		= 'Apache URL модуля mod_rewrite доступны';
 const L_MODREWRITE_NOT_AVAILABLE	= 'Apache URL модуля mod_rewrite недоступен';
-const L_LIBGD_INSTALLED				= 'GD библиотека установлена';
-const L_LIBGD_NOT_INSTALLED			= 'GD библиотека не установлена';
-const L_LIBXML_INSTALLED			= 'XML библиотека установлена';
-const L_LIBXML_NOT_INSTALLED		= 'XML библиотека не установлена';
+const L_LIB_INSTALLED				= 'GD библиотека установлена';
+const L_LIB_NOT_INSTALLED			= 'GD библиотека не установлена';
 const L_MAIL_AVAILABLE				= 'функция отправки почты доступна';
 const L_MAIL_NOT_AVAILABLE			= 'Функция отправки почты недоступна';
 

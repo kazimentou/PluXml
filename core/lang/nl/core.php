@@ -84,10 +84,8 @@ const L_WRITE_ACCESS				= '%s is toegankelijk met schrijfrechten';
 const L_WRITE_NOT_ACCESS			= '%s is niet toegankelijk met schrijfrechten of bestaat niet';
 const L_MODREWRITE_AVAILABLE		= 'Apache module mod_rewrite voor het herschrijven van URLs is beschikbaar';
 const L_MODREWRITE_NOT_AVAILABLE	= 'Apache module mod_rewrite voor het herschrijven van URLs is niet beschikbaar';
-const L_LIBGD_INSTALLED				= 'GD-bibliotheek is geïnstalleerd';
-const L_LIBGD_NOT_INSTALLED			= 'GD-bibliotheek is niet geïnstalleerd of beschikbaar';
-const L_LIBXML_INSTALLED			= 'XML-bibliotheek is geïnstalleerd';
-const L_LIBXML_NOT_INSTALLED		= 'XML-bibliotheek is niet geïnstalleerd of beschikbaar';
+const L_LIB_INSTALLED				= 'GD-bibliotheek is geïnstalleerd';
+const L_LIB_NOT_INSTALLED			= 'GD-bibliotheek is niet geïnstalleerd of beschikbaar';
 const L_MAIL_AVAILABLE				= 'Email verzendfunctie is beschikbaar';
 const L_MAIL_NOT_AVAILABLE			= 'Email verzendfunctie is niet beschikbaar';
 
