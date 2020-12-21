@@ -105,12 +105,18 @@ if (($aFile = $plxAdmin->plxGlob_arts->query('/^' . $artId . '.(.+).xml$/', '', 
 
 # Statut du commentaire
 $com = $plxAdmin->comInfoFromFilename($_GET['c'] . '.xml');
-if ($com['comStatus'] == '_')
-    $statut = '<strong>' . L_COMMENT_OFFLINE . '</strong>';
-elseif ($com['comStatus'] == '')
-    $statut = '<a href="' . $plxAdmin->urlRewrite('?article' . intval($plxAdmin->plxRecord_coms->f('article')) . '/#c' . $plxAdmin->plxRecord_coms->f('index')) . '" title="' . L_COMMENT_ONLINE_TITLE . '">' . L_COMMENT_ONLINE . '</a>';
-else
+if(!empty($com)) {
+	if ($com['comStatus'] == '_')
+	    $statut = '<strong>' . L_COMMENT_OFFLINE . '</strong>';
+	else {
+		$idArt = $plxAdmin->plxRecord_coms->f('article');
+		$idCom = $idArt . '-' . $plxAdmin->plxRecord_coms->f('index');
+		$hrefCom = $plxAdmin->urlRewrite('?article' . intval($idArt) . '/#c' . $idCom);
+	    $statut = '<a href="' . $hrefCom . '" title="' . L_COMMENT_ONLINE_TITLE . '" target="_blank">' . L_COMMENT_ONLINE . '</a>';
+	}
+} else {
     $statut = '';
+}
 
 # Date du commentaire
 $dates5 = plxDate::date2html5(array('date_publication' => $plxAdmin->plxRecord_coms->f('date'))); # récupère les dates - version PluXml >= 6.0.0
@@ -162,34 +168,32 @@ if ($plxAdmin->plxRecord_coms->f('type') != 'admin') {
 # Hook Plugins
 eval($plxAdmin->plxPlugins->callHook('AdminCommentTop'))
 ?>
-        <ul class="unstyled">
-            <li><?= L_COMMENT_IP_FIELD ?> : <?= $plxAdmin->plxRecord_coms->f('ip'); ?></li>
-            <li><?= L_COMMENT_STATUS_FIELD ?> : <?= $statut; ?></li>
-            <li><?= L_COMMENT_TYPE_FIELD ?> : <strong><?= $plxAdmin->plxRecord_coms->f('type'); ?></strong></li>
-            <li><?= L_COMMENT_LINKED_ARTICLE_FIELD ?> : <?= $article; ?></li>
-        </ul>
         <fieldset>
+	        <ul class="unstyled">
+	            <li><?= L_COMMENT_IP_FIELD ?> : <?= $plxAdmin->plxRecord_coms->f('ip'); ?></li>
+	            <li><?= L_COMMENT_STATUS_FIELD ?> : <?= $statut; ?></li>
+	            <li><?= L_COMMENT_TYPE_FIELD ?> : <strong><?= $plxAdmin->plxRecord_coms->f('type'); ?></strong></li>
+	            <li><?= L_COMMENT_LINKED_ARTICLE_FIELD ?> : <?= $article; ?></li>
+	        </ul>
             <div>
 <?php plxUtils::printDates($dates5); ?>
-                <div>
-                    <label for="id_author"><?= L_AUTHOR ?></label>
-                    <input type="text" name="author" value="<?= $author ?>" maxlength="64" required />
-                </div>
-	            <div>
-                    <label for="id_site">
-                        <span><?= L_COMMENT_SITE_FIELD ?></span>
+				<label class="caption-inside">
+					<span><?= L_AUTHOR ?></span>
+					<input type="text" name="author" value="<?= $author ?>" maxlength="64" required />
+				</label>
+				<label class="caption-inside">
+					<span><?= L_COMMENT_SITE_FIELD ?></span>
 <?php
 if($site != '') {
 ?>
-						<a href="<?= $site ?>" target="_blank"><?= L_WATCH ?></a>
+					<a href="<?= $site ?>" target="_blank"><?= L_WATCH ?></a>
 <?php
 }
 ?>
-                    </label>
-                    <?php plxUtils::printInput('site', $site, 'text', '40-255'); ?>
-	            </div>
-                <div>
-                    <label for="id_mail"><?= L_EMAIL ?>
+					<input type="text" name="site" value="<?= $site ?>" maxlength="64" />
+				</label>
+				<label class="caption-inside">
+					<span><?= L_EMAIL ?></span>
 <?php
 if ($plxAdmin->plxRecord_coms->f('mail') != '') :
 ?>
@@ -197,9 +201,8 @@ if ($plxAdmin->plxRecord_coms->f('mail') != '') :
 <?php
 endif;
 ?>
-                    </label>
-                    <input type="email" name="mail" value="<?= plxUtils::strCheck($plxAdmin->plxRecord_coms->f('mail')) ?>" maxlength="64" />
-                </div>
+					<input type="email" name="mail" value="<?= plxUtils::strCheck($plxAdmin->plxRecord_coms->f('mail')) ?>" maxlength="64" />
+				</label>
             </div>
 			<div>
 				<label for="id_content"><?= L_COMMENT_ARTICLE_FIELD ?></label>

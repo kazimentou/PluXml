@@ -489,10 +489,12 @@ class plxUtils
 		foreach($aDates as $k=>$infos) {
 ?>
 			<div>
-				<label><?= DATE_TITLES[$k] ?></label><br>
-				<input type="date" name="<?= $k ?>[0]" value="<?= $infos[0] ?>" />
-				<input type="time" name="<?= $k ?>[1]" value="<?= $infos[1] ?>" />
-				<i class="icon-calendar" title="<?= L_NOW ?>" data-datetime5="<?= $k ?>"></i>
+				<label><?= DATE_TITLES[$k] ?></label>
+				<div>
+					<input type="date" name="<?= $k ?>[0]" value="<?= $infos[0] ?>" />
+					<input type="time" name="<?= $k ?>[1]" value="<?= $infos[1] ?>" />
+					<i class="icon-calendar" title="<?= L_NOW ?>" data-datetime5="<?= $k ?>"></i>
+				</div>
 			</div>
 <?php
 		}
@@ -513,7 +515,7 @@ class plxUtils
 		) as $field=>$caption) {
 			if(isset($datas[$field])) {
 ?>
-				<label class="fullwidth caption-inside">
+				<label class="caption-inside">
 					<span><?= $caption ?></span>
 					<input type="text" name="<?= $field ?>" value="<?= plxUtils::strCheck($datas[$field]) ?>" />
 				</label>
@@ -1381,7 +1383,7 @@ class plxUtils
         $page = basename($url_parts['path'], '.php');
         $id = pathinfo($page, PATHINFO_FILENAME);
         $page = rtrim($page, 's');
-        $script = rtrim(basename($_SERVER['SCRIPT_NAME'], '.php'), 's');
+        $script = ($href != PLX_ROOT) ? rtrim(basename($_SERVER['SCRIPT_NAME'], '.php'), 's') : 'homepage';
         $classList = array(
             'menu'
         );

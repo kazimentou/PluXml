@@ -192,13 +192,13 @@ if(!empty($msg)) {
 					<p>
 						<input type="text" name="login" value="<?= !empty($_POST['login']) ? PlxUtils::strCheck($_POST['login']) : '' ?>" placeholder="<?= L_AUTH_LOGIN_FIELD ?>" required />
 					</p>
+					<input type="checkbox" name="new_password" value="1" id="toggle-email" class="toggle" />
 					<p>
 						<input type="password" name="password" value="" maxlength="64" placeholder="<?= L_PASSWORD ?>" required />
 					</p>
 <?php
 	if(!empty($plxAdmin->aConf['lostpassword'])) {
 ?>
-					<input type="checkbox" name="new_password" value="1" id="toggle-email" class="toggle" />
 					<p>
 						<input type="email" name="email" value="" placeholder="<?= L_EMAIL ?>" />
 					</p>

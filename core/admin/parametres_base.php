@@ -4,7 +4,7 @@
  * Edition des paramètres de base
  *
  * @package PLX
- * @author    Florent MONTHEL, Stephane F, Philippe-M, Pedro "P3ter" CADETE"
+ * @author    Florent MONTHEL, Stephane F, Philippe-M, Pedro "P3ter" CADETE", Jean-Pierre Pourrez "bazooka07"
  **/
 
 include 'prepend.php';
@@ -40,7 +40,7 @@ include 'top.php';
 # Hook Plugins
 eval($plxAdmin->plxPlugins->callHook('AdminSettingsBaseTop'));
 ?>
-    <fieldset>
+    <fieldset class="caption-inside">
 <?php
 foreach(array(
 	'title'				=> L_CONFIG_BASE_SITE_TITLE,
@@ -55,27 +55,27 @@ foreach(array(
 	'enable_rss'		=> array(L_CONFIG_BASE_ENABLE_RSS),
 ) as $k=>$infos) {
 ?>
-		<div <?= is_string($infos) ? '' : 'class="label-expanded"' ?>>
+		<label>
 <?php
 	if(is_string($infos)) {
 ?>
-			<label for="id_<?= $k ?>"><?= $infos ?></label>
-			<input type="text" name="<?= $k ?>" value="<?= plxUtils::strCheck($plxAdmin->aConf[$k]) ?>" id="id_<?= $k ?>" />
+			<span><?= $infos ?></span>
+			<input type="text" name="<?= $k ?>" value="<?= plxUtils::strCheck($plxAdmin->aConf[$k]) ?>" />
 <?php
 	} else {
 ?>
-			<label for="id_<?= $k ?>"><?= $infos[0] ?></label>
+			<span><?= $infos[0] ?></span>
 <?php
 		if(isset($infos[1])) {
 			plxUtils::printSelect($k, $infos[1], $plxAdmin->aConf[$k]);
 		} else {
 ?>
-			<input type="checkbox" name="<?= $k ?>" value="1" id="id_<?= $k ?>" class="switch" <?= !empty($plxAdmin->aConf[$k]) ? 'checked' : '' ?> />
+			<input type="checkbox" name="<?= $k ?>" value="1" class="switch" <?= !empty($plxAdmin->aConf[$k]) ? 'checked' : '' ?> />
 <?php
 		}
 	}
 ?>
-		</div>
+		</label>
 <?php
 }
 ?>

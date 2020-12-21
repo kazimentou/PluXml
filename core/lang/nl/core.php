@@ -157,3 +157,4 @@ const L_ART_NEXT					= 'De volgende';
 const L_ART_LAST					= 'Laatste';
 const L_ART_UP						= 'Omhoog gaan';
 
+const L_BACK_TO_BLOG_TITLE = 'Terug naar blog';

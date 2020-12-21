@@ -71,7 +71,7 @@ if ($plxAdmin->aUsers) {
 <?php plxUtils::printSelect('profil[' . $userId . ']', PROFIL_NAMES, $infos['profil'], $readonly); ?>
 						</td>
 						<td><input type="checkbox" name="active[<?= $userId ?>]" value="1" <?= !empty($infos['active']) ? 'checked' : '' ?> class="switch" <?= $readonly ? 'disabled' : '' ?> /></td>
-						<td><button><a href="user.php?p=<?= $userId ?>"><i class="icon-cog-1"></i></a></button></td>
+						<td><a href="user.php?p=<?= $userId ?>" class="btn"><i class="icon-cog-1"></i></a></td>
 					</tr>
 <?php
 		}

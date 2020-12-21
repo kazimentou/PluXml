@@ -90,12 +90,21 @@ eval($plxAdmin->plxPlugins->callHook('AdminStaticTop'))
 				<label for="id_content"><?= L_CONTENT_FIELD ?></label>
 				<textarea name="content" rows="19" id="id_content"><?= plxUtils::strCheck($content) ?></textarea>
 			</div>
-			<div>
-				<label class="fullwidth caption-inside">
+			<div class="meta-tags">
+<?php
+if(count($aTemplates) > 1) {
+	# Choix du template
+?>
+				<label class="caption-inside">
 					<span><?= L_TEMPLATE . PHP_EOL ?></span>
 <?php plxUtils::printSelect('template', $aTemplates, $plxAdmin->aStats[$id]['template']) ?>
 				</label>
-<?php plxUtils::printInputs_Metas_Title($plxAdmin->aStats[$id]); ?>
+<?php
+}
+
+plxUtils::printInputs_Metas_Title($plxAdmin->aStats[$id]);
+
+?>
 			</div>
 <?php
 

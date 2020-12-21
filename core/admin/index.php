@@ -131,8 +131,9 @@ foreach(array(
 	$nbArticles = $plxAdmin->nbArticles(($mode != 'mod') ? $mode : 'all', $userId, $moderation);
 	if($nbArticles > 0) {
 		$className = '';
-		if($mode == $_SESSION['sel_get']) {
-			$className = 'class="selected"';
+		$active = ($mode == $_SESSION['sel_get']);
+		if($active) {
+			$className = 'class="active"';
 			if(empty($artTitle)) {
 				# Pas de recherche particulière
 				$nbArtPagination = $nbArticles;
@@ -144,12 +145,20 @@ foreach(array(
 			default: $tag = 'tag';
 		}
 		$countArts = ($nbArticles > 0) ? '<span class="' . $tag . '">' . $nbArticles . '</span>' : '';
-		$disabled = ($_SESSION['sel_get'] == $mode) ? 'disabled' : '';
-	?>
+?>
         <li <?= $className ?>>
-			<a href="index.php?sel=<?= $mode ?>" <?= $disabled ?>><?= $caption ?></a><?= $countArts ?>
+<?php
+if($active) {
+?>
+			<span><?= $caption ?></span><?= $countArts ?>
+<?php	} else {
+?>
+			<a href="index.php?sel=<?= $mode ?>"><?= $caption ?></a><?= $countArts ?>
+<?php
+}
+?>
 		</li>
-	<?php
+<?php
 	}
 }
 ?>
@@ -247,12 +256,12 @@ if ($arts) { # On a des articles
 						<td><a title="<?= L_NEW_COMMENTS_TITLE ?>" href="comments.php?sel=offline&a=<?= $plxAdmin->plxRecord_arts->f('numero') ?>&page=1"><?= $nbComsToValidate ?></a> / <a title="<?= L_VALIDATED_COMMENTS_TITLE ?>" href="comments.php?sel=online&a=<?= $plxAdmin->plxRecord_arts->f('numero') ?>&page=1"><?= $nbComsValidated ?></a></td>
 						<td><?= PlxUtils::strCheck($author) ?></td>
 						<td>
-							<button><a href="article.php?a=<?= $idArt ?>" title="<?= L_ARTICLE_EDIT_TITLE ?>"><i class="icon-pencil"></i></a></button>
+							<a href="article.php?a=<?= $idArt ?>" title="<?= L_ARTICLE_EDIT_TITLE ?>" class="btn"><i class="icon-pencil"></i></a>
 <?php
 		if (!preg_match('@^_@', $idArt) and $publi and $draft == '') {
 			# Si l'article est publié
 ?>
-							<button><a href="<?= $plxAdmin->urlRewrite('?article' . intval(ltrim($idArt, '_')) . '/' . $plxAdmin->plxRecord_arts->f('url')) ?>" title="<?= L_ARTICLE_VIEW_TITLE ?>" target="_blank"><i class="icon-eye"></i></a></button>
+							<a href="<?= $plxAdmin->urlRewrite('?article' . intval(ltrim($idArt, '_')) . '/' . $plxAdmin->plxRecord_arts->f('url')) ?>" title="<?= L_ARTICLE_VIEW_TITLE ?>" target="_blank" class="btn"><i class="icon-eye"></i></a>
 <?php
 		}
 ?>

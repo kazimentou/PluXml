@@ -64,8 +64,8 @@ const PROFIL_WRITER		= 4; // grants only for editing his own articles and managi
 // For plugins, grants are setting by plxPlugin::setConfigProfil and plxPlugin::setAdminProfil
 
 # taille redimensionnement des images et miniatures
-const IMG_REDIM = array('320x200', '500x380', '640x480');
-const IMG_THUMB = array('50x50', '75x75', '100x100');
+const IMG_REDIM = array('320x200', '640x480', '800x600', '1280x800', );
+const IMG_THUMB = array('75x75', '100x100', '150x100', '200x100', );
 
 # Fonction qui retourne le timestamp UNIX actuel avec les microsecondes
 function getMicrotime() {

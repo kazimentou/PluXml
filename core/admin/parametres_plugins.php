@@ -161,8 +161,8 @@ include 'top.php';
 		    <h2 class="h3-like"><?= L_PLUGINS_TITLE ?></h2>
 	<?php /* fil d'ariane  */ ?>
 		    <ul>
-				<li <?= ($_SESSION['selPlugins'] == '1') ? 'class="selected" ' : ''?>><a href="parametres_plugins.php?sel=1"><?= L_PLUGINS_ACTIVE_LIST ?></a>&nbsp;<span class="tag"><?= $nbActivePlugins ?></span></li>
-				<li <?= ($_SESSION['selPlugins'] == '0') ? 'class="selected" ' : '' ?>><a href="parametres_plugins.php?sel=0"><?= L_PLUGINS_INACTIVE_LIST ?></a>&nbsp;<span class="tag"><?= $nbInactivePlugins ?></span></li>
+				<li><a href="parametres_plugins.php?sel=1" <?= ($_SESSION['selPlugins'] == '1') ? 'disabled' : ''?>><?= L_PLUGINS_ACTIVE_LIST ?></a>&nbsp;<span class="tag"><?= $nbActivePlugins ?></span></li>
+				<li><a href="parametres_plugins.php?sel=0" <?= ($_SESSION['selPlugins'] == '0') ? 'disabled' : ''?>><?= L_PLUGINS_INACTIVE_LIST ?></a>&nbsp;<span class="tag"><?= $nbInactivePlugins ?></span></li>
 		    </ul>
 		</div>
 		<div>
@@ -181,7 +181,7 @@ include 'top.php';
                     <th>&nbsp;</th>
                     <th><?= !empty($sel) ? L_PLUGINS_ACTIVE_LIST : L_PLUGINS_INACTIVE_LIST ?></th>
 <?php if ($_SESSION['selPlugins'] == '1') : ?>
-						<th><?= L_PLUGINS_LOADING_SORT ?></th>
+						<th class="wrap"><?= L_PLUGINS_LOADING_SORT ?></th>
 <?php endif; ?>
                     <th><?= L_ACTION ?></th>
                 </tr>
@@ -191,7 +191,7 @@ include 'top.php';
 			</tbody>
 		</table>
 	</div>
-	<div class="tableheader">
+	<div class="tablefooter">
 		<button class="submit btn--warning" name="delete" disabled data-lang="<?= L_CONFIRM_DELETE ?>"><i class="icon-trash"></i><?= L_DELETE ?></button>
 		<button class="submit btn--primary" name="<?= ($_SESSION['selPlugins'] == '1') ? 'deactivate' : 'activate' ?>" disabled data-lang="<?= ($_SESSION['selPlugins'] == '1') ? L_CONFIRM_DEACTIVATE : L_CONFIRM_ACTIVATE ?>"><i class="<?= ($_SESSION['selPlugins'] == '1') ? 'icon-lock' : 'icon-unlock' ?>"></i><?= ($_SESSION['selPlugins'] == '1')  ? L_PLUGINS_DEACTIVATE : L_PLUGINS_ACTIVATE ?></button>
 	</div>

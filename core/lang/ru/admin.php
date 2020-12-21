@@ -101,7 +101,7 @@ const L_LINK_VIEW = 'посмотреть';
 const L_ARTICLE_STATUS = 'Статус';
 const L_DRAFT = 'Черновик';
 const L_PUBLISHED = 'Опубликовано';
-const L_AWAITING = 'Ожидание модерации автором блога';
+const L_AWAITING = 'подтверждать';
 const L_ARTICLE_DATE = 'Дата статьи';
 const L_NOW = 'сейчас';
 const L_ARTICLE_CATEGORIES = 'Категории';
@@ -132,6 +132,7 @@ const L_ARTICLE_CHAPO_DISPLAY = 'показать';
 const L_AUTH_PAGE_TITLE = 'Страница авторизации';
 const L_LOGOUT_SUCCESSFUL = 'Успешный выход';
 const L_LOGIN_PAGE = 'Вход в Админпанель';
+const L_LASTLOGIN_TIMESTAMP = 'Дата последнего входа в систему';
 const L_AUTH_LOGIN_FIELD = 'Логин';
 const L_AUTH_LOST_FIELD = 'Логин или адрес электронной почты';
 const L_SUBMIT_BUTTON = 'Войти';
@@ -226,7 +227,7 @@ const L_COMMENT_ANSWER = 'Ответ';
 
 const L_COMMENTS_GLOBAL_SCOPE = 'весь сайт';
 
-const L_COMMENTS_LIST_MESSAGE = 'Сообщение';
+const L_COMMENT_ALL_FEEDS = 'Сообщение';
 const L_COMMENT_EDIT_TITLE = 'Изменить этот комментарий';
 const L_COMMENT_OFFLINE_FEEDS_TITLE = 'RSS-поток для выключенных комментариев';
 const L_COMMENT_OFFLINE_FEEDS = 'Выключенные комментарии';
@@ -237,7 +238,7 @@ const L_COMMENTS_PRIVATE_FEEDS = 'Приватный поток';
 const L_COMMENTS_ONLINE_LIST = 'Список опубликованных комментариев';
 const L_COMMENTS_OFFLINE_LIST = 'Комментарии, ожидающие модерации';
 const L_COMMENTS_ALL_LIST = 'Список комментариев';
-
+const L_COMMENTS_ARTICLE = 'Список комментариев к статье';
 const L_COMMENT_SET_ONLINE = 'Включить';
 
 // index.php
@@ -317,7 +318,7 @@ const L_CONFIG_VIEW_IMAGES = 'Размер изображения (Ширина 
 const L_CONFIG_VIEW_THUMBS = 'Размер эскизов (Ширина х Высота)';
 const L_CONFIG_VIEW_HOMESTATIC = 'Использовать статическую страницу как Главную страницу';
 const L_CONFIG_VIEW_HOMESTATIC_ACTIVE = 'Внимание: Эта страница неактивна';
-const L_CONFIG_VIEW_PLUXML_RESSOURCES = 'Загрузка тем %s';
+const L_CONFIG_VIEW_PLUXML_RESSOURCES = 'Скачать больше тем';
 const L_CONFIG_VIEW_BYPAGE_FEEDS = 'N° статьи или комментария в RSS-потоке';
 const L_CONFIG_VIEW_FEEDS_HEADLINE = 'Отображать только заголовки статей в RSS-потоке';
 const L_CONFIG_VIEW_FEEDS_HEADLINE_HELP = 'Поле Заголовка пустое, вместо него отображается содержимое статьи';
@@ -495,8 +496,6 @@ const L_ADMIN = 'Администрирование';
 const L_LOGIN = 'Вы зашли как';
 const L_ADMIN_LOGOUT = 'Выйти';
 const L_ADMIN_LOGOUT_TITLE = 'Завершить администрирование';
-const L_BACK_TO_BLOG = 'Блог';
-const L_BACK_TO_BLOG_TITLE = 'Вернуться к блогу';
 const L_MENU_ARTICLES = 'Статьи';
 const L_MENU_ARTICLES_TITLE = 'Список и редактирование статей';
 const L_MENU_STATICS_TITLE = 'Список и редактирование статических страниц';

@@ -87,6 +87,19 @@ const DATE_TITLES = array(
 	'date_update'		=> L_DATE_UPDATE,
 );
 
+# Tableau de tris
+const TRI_ARTS = array(
+    'desc'		=> L_SORT_DESCENDING_DATE,
+    'asc'		=> L_SORT_ASCENDING_DATE,
+    'alpha'		=> L_SORT_ALPHABETICAL,
+    'ralpha'	=> L_SORT_REVERSE_ALPHABETICAL,
+    'random'	=> L_SORT_RANDOM,
+);
+
+const TRI_COMS = array(
+	'desc' => L_SORT_DESCENDING_DATE,
+	'asc' => L_SORT_ASCENDING_DATE,
+);
 
 # Hook Plugins
 eval($plxAdmin->plxPlugins->callHook('AdminPrepend'));

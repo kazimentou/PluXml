@@ -102,7 +102,7 @@ const L_LINK_VIEW = 'veire';
 const L_ARTICLE_STATUS = 'Estat';
 const L_DRAFT = 'Borrolhon';
 const L_PUBLISHED = 'Publicat';
-const L_AWAITING = 'En espèra de validacion';
+const L_AWAITING = 'En validacion';
 const L_ARTICLE_DATE = 'Data de publicacion';
 const L_NOW = 'ara';
 const L_ARTICLE_CATEGORIES = 'Emplaçaments';
@@ -133,6 +133,7 @@ const L_ARTICLE_CHAPO_DISPLAY = 'afichar';
 const L_AUTH_PAGE_TITLE = 'Pagina d\'autentificacion';
 const L_LOGOUT_SUCCESSFUL = 'Sètz estat corrèctament desconnectat';
 const L_LOGIN_PAGE = 'Connexion a la zòna d\'administracion';
+const L_LASTLOGIN_TIMESTAMP = 'Dernière date de connexion';
 const L_AUTH_LOGIN_FIELD = 'Identificant de connexion';
 const L_AUTH_LOST_FIELD = 'Identificant o adreça electronica';
 
@@ -227,7 +228,7 @@ const L_COMMENT_ANSWER = 'Respondre';
 // comments.php
 
 const L_COMMENTS_GLOBAL_SCOPE = 'site entièr';
-const L_COMMENTS_LIST_MESSAGE = 'Messatge';
+const L_COMMENT_ALL_FEEDS = 'Messatge';
 const L_COMMENT_EDIT_TITLE = 'Editar aquel comentari';
 const L_COMMENT_OFFLINE_FEEDS_TITLE = 'Flus rss dels comentaris fòra-linha';
 const L_COMMENT_OFFLINE_FEEDS = 'Comentaris fòra-linha';
@@ -237,6 +238,7 @@ const L_COMMENTS_PRIVATE_FEEDS = 'Flus de sindicacion privats';
 const L_COMMENTS_ONLINE_LIST = 'Lista dels comentaris publicats';
 const L_COMMENTS_OFFLINE_LIST = 'Lista dels comentaris en espèra de validacion';
 const L_COMMENTS_ALL_LIST = 'Lista dels comentaris';
+const L_COMMENTS_ARTICLE = 'Liste des commentaires pour l\'article';
 const L_COMMENT_SET_ONLINE = 'Metre en linha';
 
 // index.php
@@ -316,7 +318,7 @@ const L_CONFIG_VIEW_IMAGES = 'Talha dels imatges (largor x nautor)';
 const L_CONFIG_VIEW_THUMBS = 'Talha de las miniaturas (largor x nautor)';
 const L_CONFIG_VIEW_HOMESTATIC = 'Utilizar una pagina estatica coma pagina d\'acuèlh';
 const L_CONFIG_VIEW_HOMESTATIC_ACTIVE = 'Atencion aquela pagina es inactiva';
-const L_CONFIG_VIEW_PLUXML_RESSOURCES = 'Telecargar mai tèmas sus : %s';
+const L_CONFIG_VIEW_PLUXML_RESSOURCES = 'Telecargar mai tèmas';
 const L_CONFIG_VIEW_BYPAGE_FEEDS = 'Nombre d\'articles/comentaris afichats suls fils Rss';
 const L_CONFIG_VIEW_FEEDS_HEADLINE = 'Afichar pas que lo chapô dins los flux Rss dels articles';
 const L_CONFIG_VIEW_FEEDS_HEADLINE_HELP = 'Se lo chapô es void, lo contengut es afichat';
@@ -494,8 +496,6 @@ const L_ADMIN = 'Administracion';
 const L_LOGIN = 'Connectat en tant que';
 const L_ADMIN_LOGOUT = 'Desconnexion';
 const L_ADMIN_LOGOUT_TITLE = 'Quitar la session d\'administracion';
-const L_BACK_TO_BLOG = 'Blòg';
-const L_BACK_TO_BLOG_TITLE = 'Retorn a la pagina del blòg';
 const L_MENU_ARTICLES = 'Articles';
 const L_MENU_ARTICLES_TITLE = 'Lista e modificacion d\'articles';
 const L_MENU_STATICS_TITLE = 'Lista e modificacion de las paginas estaticas';

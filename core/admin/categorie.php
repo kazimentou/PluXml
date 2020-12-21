@@ -63,16 +63,14 @@ include 'top.php';
 eval($plxAdmin->plxPlugins->callHook('AdminCategoryTop'))
 ?>
     <fieldset>
-		<div class="label-expanded">
-			<label>
-				<span><?= L_EDITCAT_DISPLAY_HOMEPAGE ?></span>
-			</label>
+		<label class="caption-inside">
+			<span><?= L_EDITCAT_DISPLAY_HOMEPAGE ?></span>
 			<input  type="checkbox" name="homepage" value="1" class="switch" <?= !empty($plxAdmin->aCats[$id]['homepage']) ? ' checked' : '' ?> />
-		</div>
-		<div class="label-expanded">
-			<label for="id_template"><?= L_TEMPLATE ?></label>
+		</label>
+		<label class="caption-inside">
+			<span><?= L_TEMPLATE ?></span>
 <?php plxUtils::printSelect('template', $aTemplates, $plxAdmin->aCats[$id]['template']) ?>
-		</div>
+		</label>
 		<div>
 			<label for="id_content"><?= L_EDITCAT_DESCRIPTION ?></label>
 			<textarea name="content" rows="5" id="id_content"><?= plxUtils::strCheck($plxAdmin->aCats[$id]['description']) ?></textarea>
@@ -80,7 +78,9 @@ eval($plxAdmin->plxPlugins->callHook('AdminCategoryTop'))
 		<div>
 <?php plxUtils::printThumbnail($plxAdmin->aCats[$id]); ?>
 		</div>
+		<div class="meta-tags">
 <?php plxUtils::printInputs_Metas_Title($plxAdmin->aCats[$id]); ?>
+		</div>
     </fieldset>
 <?php
 # Hook Plugins

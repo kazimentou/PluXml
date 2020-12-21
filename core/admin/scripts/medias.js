@@ -14,11 +14,12 @@
 		aux.value = event.target.dataset.copy;
 		aux.select();
 		document.execCommand('copy');
-		const notice = event.target.firstElementChild;
-		notice.classList.add('active');
+
+		const tgt = event.target;
+		tgt.classList.add('active');
 		var t = setTimeout(function() {
 			aux.value = '';
-			notice.classList.remove('active');
+			tgt.classList.remove('active');
 			clearTimeout(t);
 		}, 1000);
 		aux.value = '';
@@ -56,9 +57,13 @@
 			document.getElementById('id_oldname').value = event.target.dataset.rename;
 			document.getElementById('toggle-renamefile').checked = true;
 			const input = document.getElementById('id_newname');
-			input.value = event.target.dataset.rename.replace(/^.*\//, '');
-			input.select();
-			input.focus();
+			if(input != null) {
+				input.value = event.target.dataset.rename.replace(/^.*\//, '');
+				input.select();
+				input.focus();
+			} else {
+				console.error('#id_newname element is missing');
+			}
 			return;
 		}
 	});
@@ -73,7 +78,7 @@
 
 		});
 
-		const toClipboard = breadcrumb.parentElement.querySelector('div[data-copy]');
+		const toClipboard = breadcrumb.parentElement.querySelector('span[data-copy]');
 		if(toClipboard != null) {
 			toClipboard.addEventListener('click', function(event) {
 				if(copy2clipboard(event.target)) {

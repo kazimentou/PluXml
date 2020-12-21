@@ -217,15 +217,24 @@ class plxMotor {
 		# Hook plugins
 		if(eval($this->plxPlugins->callHook('plxMotorPreChauffageBegin'))) return;
 
-		if(!empty($this->get) and !preg_match('#^(?:blog|article\d{1,4}/|static\d{1,3}/|categorie\d{1,3}/|archives/\d{4}(?:/\d{2})?|tag/\w|page\d|preview|telechargement|download)#', $this->get)) { $this->get = ''; }
+		if(
+			!empty($this->get) and
+			!preg_match('#^(?:blog|article\d{1,4}/|static\d{1,3}/|categorie\d{1,3}/|archives/\d{4}(?:/\d{2})?|tag/\w|page\d|preview|telechargement|download)#', $this->get)) {
+			$this->get = '';
+		}
 
-		if(!$this->get AND $this->aConf['homestatic']!='' AND isset($this->aStats[$this->aConf['homestatic']]) AND $this->aStats[$this->aConf['homestatic']]['active']) {
+		if(
+			!$this->get AND
+			$this->aConf['homestatic']!='' AND
+			isset($this->aStats[$this->aConf['homestatic']]) AND
+			$this->aStats[$this->aConf['homestatic']]['active']
+		) {
 			$this->mode = 'static'; # Mode static
 			$this->cible = $this->aConf['homestatic'];
 			$this->template = $this->aStats[ $this->cible ]['template'];
 		}
 		elseif(empty($this->get)
-				OR preg_match('#^(blog|blog\/page\d*|\/?page\d*)$#', $this->get)
+				OR preg_match('#^(blog|blog\/page\d+|\/?page\d+)$#', $this->get)
 				AND !preg_match('#^(?:article|static|categorie|archives|tag|preview|telechargement|download)[\b\d/]+#', $this->get)) {
 			$this->mode = 'home';
 			$this->template = $this->aConf['hometemplate'];
@@ -423,7 +432,7 @@ class plxMotor {
 			}
 			# Récupération des commentaires
 			$this->getCommentaires('#^'.$this->cible.'.\d{10}-\d+.xml$#',$this->tri_coms);
-			$this->template=$this->plxRecord_arts->f('template');
+			$this->template = $this->plxRecord_arts->f('template');
 
 			# Deprecated ! See plxShow::capchaQ()
 			# if($this->aConf['capcha']) $this->plxCapcha = new plxCapcha(); # Création objet captcha
@@ -1157,14 +1166,15 @@ class plxMotor {
 	public function getCommentaires($motif,$ordre='sort',$start=0,$limite=false,$publi='before') {
 
 		# On récupère les fichiers des commentaires
-		$aFiles = $this->plxGlob_coms->query($motif,'com',$ordre,$start,$limite,$publi);
+		$aFiles = $this->plxGlob_coms->query($motif,'com', $ordre, $start, $limite, $publi);
 		if($aFiles) { # On a des fichiers
-			foreach($aFiles as $k=>$v) {
-				$array[$k] = $this->parseCommentaire(PLX_ROOT.$this->aConf['racine_commentaires'].$v);
+			$array = array();
+			foreach($aFiles as $v) {
+				$array[] = $this->parseCommentaire(PLX_ROOT . $this->aConf['racine_commentaires'] . $v);
 			}
 
 			# hiérarchisation et indentation des commentaires seulement sur les écrans requis
-			if (!preg_match('#comments?\.php#',basename($_SERVER['SCRIPT_NAME']))) {
+			if (!preg_match('#comment(?:aire)?s?\.php#',basename($_SERVER['SCRIPT_NAME']))) {
 				$array = $this->parentChildSort_r('index', 'parent', $array);
 			}
 

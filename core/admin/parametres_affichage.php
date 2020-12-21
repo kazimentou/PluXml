@@ -32,22 +32,17 @@ if (isset($_POST['display'])) {
 # On récupère les templates de la page d'accueil
 $aTemplates = $plxAdmin->getTemplatesCurrentTheme('home', L_NONE1);
 
-# Tableau du tri
-$aTriArts = array(
-    'desc'		=> L_SORT_DESCENDING_DATE,
-    'asc'		=> L_SORT_ASCENDING_DATE,
-    'alpha'		=> L_SORT_ALPHABETICAL,
-    'ralpha'	=> L_SORT_REVERSE_ALPHABETICAL,
-    'random'	=> L_SORT_RANDOM,
-);
-
-$aTriComs = array('desc' => L_SORT_DESCENDING_DATE, 'asc' => L_SORT_ASCENDING_DATE);
-
 # On va tester les variables pour les images et miniatures
-if (!is_numeric($plxAdmin->aConf['images_l'])) $plxAdmin->aConf['images_l'] = 800;
-if (!is_numeric($plxAdmin->aConf['images_h'])) $plxAdmin->aConf['images_h'] = 600;
-if (!is_numeric($plxAdmin->aConf['miniatures_l'])) $plxAdmin->aConf['miniatures_l'] = 200;
-if (!is_numeric($plxAdmin->aConf['miniatures_h'])) $plxAdmin->aConf['miniatures_h'] = 100;
+foreach(array(
+	'images_l'		=> 800,
+	'images_h'		=> 600,
+	'miniatures_l'	=> 200,
+	'miniatures_h'	=> 100,
+) as $k=>$default) {
+	if (!is_numeric($plxAdmin->aConf[$k])) {
+		$plxAdmin->aConf[$k] = $default;
+	}
+}
 
 # On inclut le header
 include 'top.php';
@@ -61,82 +56,93 @@ include 'top.php';
             <h2 class="h3-like"><?= L_CONFIG_VIEW ?></h2>
         </div>
         <div>
-            <input class="inbl btn--primary" type="submit" name="config-display" role="button" value="<?= L_SAVE ?>"/>
+            <input class="btn--primary" type="submit" name="config-display" role="button" value="<?= L_SAVE ?>"/>
         </div>
     </div>
 <?php
 # Hook Plugins
 eval($plxAdmin->plxPlugins->callHook('AdminSettingsDisplayTop'))
 ?>
-    <fieldset>
+    <fieldset class="caption-inside">
+<?php
+foreach(array(
+	'hometemplate'		=> array(L_CONFIG_HOMETEMPLATE, $aTemplates),
+	'tri'				=> array(L_ARTICLES_SORT, TRI_ARTS),
+	'bypage'			=> array(L_CONFIG_VIEW_BYPAGE),
+	'bypage_tags'		=> array(L_CONFIG_VIEW_BYPAGE_TAGS),
+	'bypage_archives'	=> array(L_CONFIG_VIEW_BYPAGE_ARCHIVES),
+	'tri_coms'			=> array(L_CONFIG_VIEW_SORT_COMS, TRI_COMS),
+	'bypage_admin_coms'	=> array(L_CONFIG_VIEW_BYPAGE_ADMIN_COMS),
+	'display_empty_cat'	=> L_CONFIG_VIEW_DISPLAY_EMPTY_CAT,
+	'images_l'			=> array(L_CONFIG_VIEW_IMAGES, 'images_h'),
+	'miniatures_l'		=> array(L_CONFIG_VIEW_THUMBS, 'miniatures_h'),
+	'thumbs'			=> L_MEDIAS_THUMBS,
+	# call plxUtils::printThumbnail($plxAdmin->aConf()
+	'bypage_feed'		=> array(L_CONFIG_VIEW_BYPAGE_FEEDS),
+	'feed_chapo'		=> L_CONFIG_VIEW_FEEDS_HEADLINE,
+	'feed_footer'		=> array(L_CONFIG_VIEW_FEEDS_FOOTER, true), # textarea
+) as $k=>$infos) {
+	if(is_string($infos)) {
+		# input[type="checkbox"]
+?>
+		<label>
+			<span><?= $infos ?></span>
+			<input type="checkbox" name="<?= $k ?>" value="1" <?= !empty($plxAdmin->aConf[$k]) ? 'checked' : '' ?> />
+		</label>
+<?php
+	} else {
+		# $infos is an array
+		if(isset($infos[1])) {
+			if(is_array($infos[1])) {
+				if(count($infos[1]) <= 1) {
+					# No choice in <select> tag
+					continue;
+				} else {
+					# <select> tag
+?>
+		<label>
+			<span><?= $infos[0] ?></span>
+<?php plxUtils::printSelect($k, $infos[1], $plxAdmin->aConf[$k]); ?>
+		</label>
+<?php
+				}
+			} elseif($infos[1] === true) {
+				# <textarea>
+?>
 		<div>
-			<label for="id_hometemplate"><?= L_CONFIG_HOMETEMPLATE ?></label>
-<?php plxUtils::printSelect('hometemplate', $aTemplates, $plxAdmin->aConf['hometemplate']) ?>
+			<label for="id_<?= $k ?>"><?= $infos[0] ?></label>
+			<textarea name="<?= $k ?>" rows="5" id="id_<?= $k ?>"><?= $plxAdmin->aConf[$k] ?></textarea>
 		</div>
-		<div>
-			<label for="id_tri"><?= L_ARTICLES_SORT ?></label>
-<?php plxUtils::printSelect('tri', $aTriArts, $plxAdmin->aConf['tri']); ?>
-		</div>
-		<div>
-			<label for="id_bypage"><?= L_CONFIG_VIEW_BYPAGE ?></label>
-			<input type="number" name="bypage" value="<?= $plxAdmin->aConf['bypage'] ?>" id="id_bypage" />
-		</div>
-		<div>
-			<label for="id_bypage_tags"><?= L_CONFIG_VIEW_BYPAGE_TAGS ?></label>
-			<input type="number" name="bypage_tags" value="<?= $plxAdmin->aConf['bypage_tags'] ?>" id="id_bypage_tags" />
-		</div>
-		<div>
-			<label for="id_bypage_archives"><?= L_CONFIG_VIEW_BYPAGE_ARCHIVES ?></label>
-			<input type="number" name="bypage_archives" value="<?= $plxAdmin->aConf['bypage_archives'] ?>" id="id_bypage_archives" />
-		</div>
-		<div>
-			<label for="id_bypage_admin"><?= L_CONFIG_VIEW_BYPAGE_ADMIN ?></label>
-			<input type="number" name="bypage_admin" value="<?= $plxAdmin->aConf['bypage_admin'] ?>" id="id_bypage_admin" />
-		</div>
-		<div>
-			<label for="id_tri_coms"><?= L_CONFIG_VIEW_SORT_COMS ?></label>
-<?php plxUtils::printSelect('tri_coms', $aTriComs, $plxAdmin->aConf['tri_coms']); ?>
-		</div>
-		<div>
-			<label for="id_bypage_admin_coms"><?= L_CONFIG_VIEW_BYPAGE_ADMIN_COMS ?></label>
-			<input type="number" name="bypage_admin_coms" value="<?= $plxAdmin->aConf['bypage_admin_coms'] ?>" id="id_bypage_admin_coms" />
-		</div>
-		<div>
-			<label for="id_display_empty_cat"><?= L_CONFIG_VIEW_DISPLAY_EMPTY_CAT ?></label>
-			<input type="checkbox" name="display_empty_cat" value="1" class="switch" <?= !empty($plxAdmin->aConf['display_empty_cat']) ? 'checked' : '' ?> id="id_display_empty_cat" />
-		</div>
-		<div>
-			<label><?= L_CONFIG_VIEW_IMAGES ?></label>
-			<input type="number" name="images_l" value="<?= $plxAdmin->aConf['images_l'] ?>" /><span class="surface">X</span>
-			<input type="number" name="images_h" value="<?= $plxAdmin->aConf['images_h'] ?>" />
-		</div>
-		<div>
-			<label><?= L_CONFIG_VIEW_THUMBS ?></label>
-			<input type="number" name="miniatures_l" value="<?= $plxAdmin->aConf['miniatures_l'] ?>" /><span class="surface">X</span>
-			<input type="number" name="miniatures_h" value="<?= $plxAdmin->aConf['miniatures_h'] ?>" />
-		</div>
-		<div>
-			<label for="id_thumbs"><?= L_MEDIAS_THUMBS ?></label>
-			<input type="checkbox" name="thumbs" value="1" class="switch" <?= !empty($plxAdmin->aConf['thumbs']) ? 'checked' : '' ?> id="id_display_empty_cat" />
-		</div>
-<?php plxUtils::printThumbnail($plxAdmin->aConf); ?>
-		<div>
-			<label for="id_bypage_feed"><?= L_CONFIG_VIEW_BYPAGE_FEEDS ?></label>
-			<input type="number" name="bypage_feed" value="<?= $plxAdmin->aConf['bypage_feed'] ?>" id="id_bypage_feed" />
-		</div>
-		<div>
-			<label for="id_feed_chapo"><?= L_CONFIG_VIEW_FEEDS_HEADLINE ?></label>
-			<!-- div class="tooltip icon-help-circled">
-				<span class="tooltiptext"><?= L_CONFIG_VIEW_FEEDS_HEADLINE_HELP ?></span>
-			</div -->
-			<input type="checkbox" name="feed_chapo" value="1" class="switch" <?= !empty($plxAdmin->aConf['feed_chapo']) ? 'checked' : '' ?> id="id_feed_chapo" />
-		</div>
-		<div class="large">
-            <label for="id_content"><?= L_CONFIG_VIEW_FEEDS_FOOTER ?></label>
-            <textarea name="content" rows="5"><?= plxUtils::strCheck($plxAdmin->aConf['feed_footer']) ?></textarea>
-        </div>
-    </fieldset>
+<?php
+			} elseif(is_string($infos[1])) {
+				# input[type="number"] by 2
+?>
+		<label>
+			<span><?= $infos[0] ?></span>
+			<input type="number" name="<?= $k ?>" value="<?= $plxAdmin->aConf[$k] ?>" min="1" max="3072" />
+			<span class="surface">X</span>
+			<input type="number" name="<?= $infos[1] ?>" value="<?= $plxAdmin->aConf[$infos[1]] ?>"  min="1" max="1920" />
+		</label>
+<?php
 
+			}
+		} else {
+			# $infos[1] is missing. one input[type="number"] only
+?>
+		<label>
+			<span><?= $infos[0] ?></span>
+			<input type="number" name="<?= $k ?>" value="<?= $plxAdmin->aConf[$k] ?>"  min="1" max="50" />
+		</label>
+<?php
+		}
+	}
+
+	if($k == 'thumbs') {
+		plxUtils::printThumbnail($plxAdmin->aConf);
+	}
+}
+?>
+	</fieldset>
 <?php
 # Hook Plugins
 eval($plxAdmin->plxPlugins->callHook('AdminSettingsDisplay'))

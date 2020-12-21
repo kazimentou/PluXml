@@ -158,3 +158,4 @@ const L_ART_NEXT					= 'Următor';
 const L_ART_LAST					= 'Ultimul';
 const L_ART_UP						= 'Urca';
 
+const L_BACK_TO_BLOG_TITLE = 'Inapoi la blog';

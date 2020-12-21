@@ -40,7 +40,7 @@ Options -Multiviews
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteCond %{REQUEST_FILENAME} !-l
 	# Réécriture des urls
-	RewriteRule ^(article\d*|categorie\d*|tag|archives|static\d*|page\d*|telechargement|download)\b(.*)$ index.php?$1$2 [L]
+	RewriteRule ^(article\d*|categorie\d*|tag|archives|static\d*|page\d*|blog|telechargement|download)\b(.*)$ index.php?$1$2 [L]
 	RewriteRule ^feed\/(.*)$ feed.php?$1 [L]
 </IfModule>
 # END -- Pluxml
@@ -1579,33 +1579,38 @@ EOT;
 	 **/
 	public function checkMaj() {
 
+		$useJS = true; # Use Javascript to check for a new version of PluXml
+
 		$latest_version = false;
-		$updateLink = sprintf('%s : <a href="%s" download>%s</a>', L_PLUXML_UPDATE_AVAILABLE, PLX_URL_REPO, PLX_URL_REPO);
+		# $updateLink = sprintf(L_PLUXML_UPDATE_AVAILABLE, PLX_URL_REPO, PLX_URL_REPO);
+		$updateLink = sprintf('<a href="%s/download/pluxml-latest.zip" download>%s</a>', PLX_URL_REPO, L_PLUXML_UPDATE_AVAILABLE);
 
-		# test avec allow_url_open ou file_get_contents ?
-		if(ini_get('allow_url_fopen')) {
-			$latest_version = @file_get_contents(PLX_URL_VERSION, false, null, 0, 16);
-			if($latest_version === false) {
-				$latest_version = 'UNAVAILABLE';
+		if(!$useJS) {
+			# test avec allow_url_open ou file_get_contents ?
+			if(ini_get('allow_url_fopen')) {
+				$latest_version = @file_get_contents(PLX_URL_VERSION, false, null, 0, 16);
+				if($latest_version === false) {
+					$latest_version = 'UNAVAILABLE';
+				}
+			}
+			# test avec curl
+			elseif(function_exists('curl_init')) {
+				$ch = curl_init();
+				curl_setopt_array($ch, array(
+					CURLOPT_HEADER			=> false,
+					CURLOPT_RETURNTRANSFER	=> true,
+					CURLOPT_URL				=> PLX_URL_VERSION
+				));
+				$latest_version = curl_exec($ch);
+				$info = curl_getinfo($ch);
+				if ($latest_version === false || $info['http_code'] != 200) {
+					$latest_version = 'ERROR';
+				}
+				curl_close($ch);
 			}
 		}
-		# test avec curl
-		elseif(function_exists('curl_init')) {
-			$ch = curl_init();
-			curl_setopt_array($ch, array(
-				CURLOPT_HEADER			=> false,
-				CURLOPT_RETURNTRANSFER	=> true,
-				CURLOPT_URL				=> PLX_URL_VERSION
-			));
-			$latest_version = curl_exec($ch);
-			$info = curl_getinfo($ch);
-			if ($latest_version === false || $info['http_code'] != 200) {
-				$latest_version = 'ERROR';
-			}
-			curl_close($ch);
-		}
 
-		if(preg_match('@^\d+\.\d+(?:\.\d+)?@', $latest_version)) {
+		if(is_string($latest_version) and preg_match('@^\d+\.\d+(?:\.\d+)?@', $latest_version)) {
 			if(version_compare(PLX_VERSION, $latest_version, ">=")) {
 				$msg = L_PLUXML_UPTODATE.' ('.PLX_VERSION.')';
 				$alert = 'success';

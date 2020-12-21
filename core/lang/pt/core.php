@@ -158,3 +158,4 @@ const L_ART_NEXT					= 'Próximo';
 const L_ART_LAST					= 'Último';
 const L_ART_UP						= 'Suba';
 
+const L_BACK_TO_BLOG_TITLE = 'Voltar ao blog';

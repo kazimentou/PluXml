@@ -55,7 +55,7 @@ if ($emailBuild) {
             <li><?= $_SERVER['SERVER_SOFTWARE']; ?></li>
 <?php } ?>
 	    </ul>
-	    <ul class="unstyled-list">
+	    <ul class="unstyled">
 <?php
 foreach(array(
 	'',

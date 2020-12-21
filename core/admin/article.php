@@ -367,7 +367,7 @@ if ($_SESSION['profil'] > PROFIL_MODERATOR and $plxAdmin->aConf['mod_art']) {
             <div>
                 <div>
                     <fieldset>
-						<label class="fullwidth caption-inside">
+						<label class="caption-inside">
 							<span><?= L_TITLE ?></span>
 							<input type="text" name="title" value="<?= PlxUtils::strCheck(trim($result['title'])) ?>" maxlength="80" required />
 						</label>
@@ -391,11 +391,13 @@ if ($artId != '' and $artId != '0000') {
                             <label for="id_content"><?= L_CONTENT_FIELD ?></label>
                             <textarea name="content" rows="20" id="id_content"><?= PlxUtils::strCheck(trim($result['content'])) ?></textarea>
                         </div>
+                        <div class="meta-tags">
 <?php plxUtils::printInputs_Metas_Title($result); ?>
-						<label class="fullwidth caption-inside">
-							<span><?= L_URL ?></span>
-							<input type="text" name="url" value="<?= $result['url'] ?>" maxlength="127" placeholder="<?= L_ARTICLE_URL_FIELD_TITLE ?>" />
-						</label>
+							<label class="caption-inside">
+								<span><?= L_URL ?></span>
+								<input type="text" name="url" value="<?= $result['url'] ?>" maxlength="127" placeholder="<?= L_ARTICLE_URL_FIELD_TITLE ?>" />
+							</label>
+                        </div>
                     </fieldset>
 <?php
 # Hook Plugins
@@ -405,40 +407,40 @@ eval($plxAdmin->plxPlugins->callHook('AdminArticleContent'))
             </div>
 
             <!-- SIDEBAR FOR ARTICLE -->
-            <div id="aside-art" class="sidebar">
-                <fieldset class="pan">
-                    <div class="flex-container--column">
+            <aside id="aside-art">
+                <fieldset>
 <?php /* ------ author ------ */ ?>
 <?php
-	if ($_SESSION['profil'] < PROFIL_WRITER) {
+	if ($_SESSION['profil'] < PROFIL_WRITER and count($_users) > 1) {
 ?>
-						<label class="fullwidth caption-inside">
-							<span><?= L_AUTHOR ?></span>
+					<label class="fullwidth caption-inside">
+						<span><?= L_AUTHOR ?></span>
 <?php PlxUtils::printSelect('author', $_users, $result['author']); ?>
-						</label>
+					</label>
 <?php
 	} else {
 ?>
-                        <div>
-                            <input type="hidden" id="id_author" name="author" value="<?= $result['author'] ?>" />
-                            <span><?= L_AUTHOR ?></span> :
-                            <strong><?= PlxUtils::strCheck($plxAdmin->aUsers[$result['author']]['name']) ?></strong>
-                        </div>
+					<div>
+						<input type="hidden" id="id_author" name="author" value="<?= $result['author'] ?>" />
+						<span><?= L_AUTHOR ?></span> :
+						<strong><?= PlxUtils::strCheck($plxAdmin->aUsers[$result['author']]['name']) ?></strong>
+					</div>
 <?php
 	}
 ?>
 <?php /* ------ vignette ------ */ ?>
-                        <div>
+					<div>
 <?php plxUtils::printThumbnail(!empty($_POST) ? $_POST : (!empty($result) ? $result : false)); ?>
-                        </div>
+					</div>
 <?php
 /* -------- categories --------- */
 $checked = ($artId != '0000' and !empty($catIds) and (count($catIds) > 1 or $catIds[0] != '000')) ? ' checked' : '';
 ?>
-                        <input class="toggle" id="toggle_categories" type="checkbox"<?= $checked ?> />
-                        <label class="drop collapsible" for="toggle_categories">Categories</label>
-                        <div class="expander">
-                            <ul id="cats-art" class="unstyled">
+					<div id="cats-list-container">
+						<input class="toggle" id="toggle_categories" type="checkbox"<?= $checked ?> />
+						<label class="drop collapsible" for="toggle_categories">Categories</label>
+						<div class="drop-box">
+							<ul id="cats-art" class="unstyled">
 <?php
 # on boucle sur les catégories
 foreach (array_merge(
@@ -466,7 +468,7 @@ foreach (array_merge(
                             </ul>
 <?php
 if ($_SESSION['profil'] < PROFIL_WRITER) { ?>
-							<div id="new-categorie">
+							<div class="new-categorie">
 								<input type="text" name="new_catname" maxlength="32" placeholder="<?= L_NEW_CATEGORY ?>" />
 								<input class="btn" type="submit" name="new_category" value="<?= L_ADD ?>"/>
 							</div>
@@ -474,27 +476,25 @@ if ($_SESSION['profil'] < PROFIL_WRITER) { ?>
 }
 ?>
                         </div>
+					</div>
 <?php
 /* ------ tags ------ */
 $tags = trim($result['tags']);
 $checked = !empty($tags) ? ' checked' : '';
 ?>
+					<div id="tags-list-container">
 						<input type="checkbox" class="toggle" id="toggle_tags"<?= $checked ?> />
-                        <label class="drop collapsible" for="toggle_tags">Tags</label>
-                        <div class="expander">
-							<label for="id_tags"><?= L_ARTICLE_TAGS_FIELD; ?></label>
-							<div class="tooltip icon-help-circled">
-								<span class="tooltiptext"><?= L_ARTICLE_TAGS_FIELD_TITLE ?></span>
-							</div>
+                        <label class="drop" for="toggle_tags">
+							<span><?= L_ARTICLE_TAGS_FIELD; ?></span>
+							<span  class="tooltip" data-tip="<?= L_ARTICLE_TAGS_FIELD_TITLE ?>">&nbsp;</span>
+						</label>
 <?php
 if ($plxAdmin->aTags) {
-	/*
-	 * */
 ?>
+                        <div class="drop-box">
+							<input type="text" name="tags" value="<?= $result['tags'] ?>" id="id_tags" />
 							<input type="checkbox" class="toggle" id="toggle_tagslist"<?= empty($tags) ? ' checked' : ''; ?>>
-							<label for="toggle_tagslist"  class="drop">
-								<input type="text" name="tags" value="<?= $result['tags'] ?>" id="id_tags" />
-							</label>
+							<label for="toggle_tagslist" class="drop"></label>
 							<ul id="tags-list" class="unstyled txtcenter drop-box">
 <?php
 	$array = array();
@@ -519,28 +519,34 @@ if ($plxAdmin->aTags) {
 }
 ?>
 							</ul>
+						</div>
 <?php
 } else {
 ?>
-							<input type="text" name="tags" value="<?= $result['tags'] ?>" id="id_tags" />
-							<p><?= L_NO_TAG ?></p>
+						<input type="text" name="tags" value="<?= $result['tags'] ?>" id="id_tags" />
+						<p><?= L_NO_TAG ?></p>
 <?php
 }
 ?>
-						</div>
+					</div>
 <?php
 /* --------- dates ---------- */
 plxUtils::printDates($dates5);
+
+/* ------- templates --------- */
+if(count($aTemplates) > 1) {
 ?>
-						<label class="fullwidth caption-inside">
-								<span><?= L_TEMPLATE ?></span>
+					<label class="fullwidth caption-inside">
+							<span><?= L_TEMPLATE ?></span>
 <?php PlxUtils::printSelect('template', $aTemplates, $result['template']); ?>
-						</label>
+					</label>
 <?php
+}
 /* ------ comments ------ */
 if(!empty($plxAdmin->aConf['allow_com'])) {
 	$checked = ($artId == '0000' or !empty($result['allow_com'])) ? ' checked' : '';
 ?>
+					<div>
 						<label class="fullwidth caption-inside">
 							<span><?= L_ALLOW_COMMENTS ?></span>
 							<input type="checkbox" name="allow_com" value="1"<?= $checked ?> />
@@ -549,9 +555,9 @@ if(!empty($plxAdmin->aConf['allow_com'])) {
 <?php
 	if($artId != '0000') {
 ?>
-						<ul class="comments-art">
+						<ul class="comments-art rss">
 						   <li>
-								<a href="comments.php?a=<?= $artId ?>&amp;page=1"
+								<a href="comments.php?a=<?= $artId ?>&sel=all&page=1"
 								   title="<?= L_ARTICLE_MANAGE_COMMENTS_TITLE ?>"><?= L_ARTICLE_MANAGE_COMMENTS ?></a>
 							</li>
 <?php
@@ -578,6 +584,7 @@ if(!empty($plxAdmin->aConf['allow_com'])) {
 								</a>
 							</li>
 						</ul>
+					</div>
 <?php
 	}
 }
@@ -587,7 +594,7 @@ eval($plxAdmin->plxPlugins->callHook('AdminArticleSidebar'));
 ?>
                     </div>
                 </fieldset>
-            </div>
+            </aside>
         </div>
     </div>
 </form>

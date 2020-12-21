@@ -155,3 +155,4 @@ const L_ART_LAST					= 'Ultima';
 const L_ART_UP						= 'Subir';
 
 ?>
+const L_BACK_TO_BLOG_TITLE = 'Volver ó caderno';

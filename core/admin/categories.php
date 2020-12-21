@@ -92,7 +92,7 @@ if ($plxAdmin->aCats) {
                     <td><input type="number" name="bypage[<?= $catId ?>]" value="<?= $v['bypage'] ?>" maxlength="3" /></td>
                     <td><input type="number" name="order[<?= $catId ?>]" value="<?= $order ?>" maxlength="3" /></td>
                     <td><input type="checkbox" name="menu[<?= $catId ?>]" value="1" class="switch" <?= !empty($v['menu']) ? 'checked' : '' ?> /></td>
-                    <td><button><a href="categorie.php?p=<?= $catId ?>"><i class="icon-cog-1"></i></a></button></td>
+                    <td><a href="categorie.php?p=<?= $catId ?>" class="btn"><i class="icon-cog-1"></i></a></td>
 				</tr>
 <?php
 		$order++;

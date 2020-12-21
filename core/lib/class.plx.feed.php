@@ -8,6 +8,7 @@
  **/
 
 const PLX_FEED = true;
+const FEED_GENERATOR = 'PluXml ' . PLX_VERSION;
 
 class plxFeed extends plxMotor {
 
@@ -99,7 +100,7 @@ class plxFeed extends plxMotor {
 			# On modifie le motif de recherche
 			$this->motif = '#^\d{4}.((?:home,|\d{3},)*(?:'.$this->cible.')(?:,\d{3}|,home)*)\.\d{3}\.\d{12}\.[\w-]+\.xml$#';
 		}
-		elseif($this->get AND preg_match('#^(?:atom/|rss/)?commentaires/?$#',$this->get)) {
+		elseif($this->get AND preg_match('#^(?:atom/|rss/)?comment(?:aire)?s/?$#',$this->get)) {
 			$this->mode = 'commentaire'; # Mode du flux
 		}
 		elseif($this->get AND preg_match('#^(?:atom/|rss/)?tag/([\w-]+)/?$#', $this->get, $capture)) {
@@ -126,21 +127,18 @@ class plxFeed extends plxMotor {
 				$this->motif = '';
 
 		}
-		elseif($this->get AND preg_match('#^(?:atom/|rss/)?commentaires/article(\d+)/?$#',$this->get,$capture)) {
+		elseif($this->get AND preg_match('#^(?:atom/|rss/)?comment(?:aire)?s/article(\d+)/?$#', $this->get, $capture)) {
 			$this->mode = 'commentaire'; # Mode du flux
 			# On récupère l'article cible
 			$this->cible = str_pad($capture[1],4,'0',STR_PAD_LEFT); # On complète sur 4 caractères
 			# On modifie le motif de recherche
 			$this->motif = '#^'.$this->cible.'.(?:\d|home|,)*(?:'.$this->activeCats.'|home)(?:\d|home|,)*.\d{3}.\d{12}.[\w-]+.xml$#';
 		}
-		elseif($this->get AND preg_match('#^admin([\w-]+)/commentaires/(hors|en)-ligne/?$#',$this->get,$capture)) {
+		elseif($this->get AND preg_match('#^admin([\w-]+)/comment(?:aire)?s/(off|on)line/?$#', $this->get, $capture)) {
 			$this->mode = 'admin'; # Mode du flux
 			$this->cible = '-';	# /!\: il ne faut pas initialiser à blanc sinon ça prend par défaut les commentaires en ligne (faille sécurité)
 			if ($capture[1] == $this->clef) {
-				if($capture[2] == 'hors')
-					$this->cible = '_';
-				elseif($capture[2] == 'en')
-					$this->cible = '';
+				$this->cible = ($capture[2] == 'off') ? '_' : '';
 			}
 		} else {
 			$this->mode = 'article'; # Mode du flux
@@ -192,7 +190,7 @@ class plxFeed extends plxMotor {
 				exit;
 			}
 			# On récupère les commentaires
-			$this->getCommentaires('#^'.$this->cible.'\d{4}.\d{10}-\d+.xml$#','rsort',0,$this->bypage,'all');
+			$this->getCommentaires('#^' . $this->cible . '\d{4}\.\d{10}-\d+\.xml$#', 'rsort', 0, $this->bypage, 'all');
 		}
 		# Flux d'articles pour un tag
 		elseif($this->mode == 'tag') {
@@ -265,7 +263,7 @@ class plxFeed extends plxMotor {
 		<description><?= plxUtils::cdataCheck($this->aConf['description']) ?></description>
 		<atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="self" type="application/rss+xml" href="<?= $this->urlRewrite('feed.php?'.$this->get) ?>" />
 		<lastBuildDate><?= plxDate::dateIso2rfc822($lastBuildDate) ?></lastBuildDate>
-		<generator>PluXml</generator>
+		<generator><?= FEED_GENERATOR ?></generator>
 <?php
 		# On va boucler sur les articles (s'il y en a)
 		if(!empty($this->plxRecord_arts)) {
@@ -341,7 +339,7 @@ class plxFeed extends plxMotor {
 		<language><?= $this->aConf['default_lang'] ?></language>
 		<description><?= plxUtils::cdataCheck($this->aConf['description']) ?></description>
 		<lastBuildDate><?= plxDate::dateIso2rfc822($lastBuildDate) ?></lastBuildDate>
-		<generator>PluXml</generator>
+		<generator><?= FEED_GENERATOR ?></generator>
 <?php
 		# On va boucler sur les commentaires (s'il y en a)
 		if(!empty($this->plxRecord_coms)) {
@@ -400,7 +398,7 @@ class plxFeed extends plxMotor {
 		$offline = ($this->cible == '_'); # Commentaires en/hors ligne
 		$link = $url_base . 'comments.php?sel=' . ($offline ? 'offline' : 'online');
 		$title = $this->aConf['title'].' - ' . ($offline ? L_FEED_OFFLINE_COMMENTS : L_FEED_ONLINE_COMMENTS);
-		$link_feed = $this->racine.'feed.php?admin' . $this->clef . '/commentaires/' . ($offline ? 'hors-ligne' : 'en-ligne');
+		$link_feed = $this->racine.'feed.php?admin' . $this->clef . '/comments/' . ($offline ? 'offline' : 'online');
 
 		$lastBuildDate = (!empty($this->plxRecord_coms)) ? $this->plxRecord_coms->lastUpdated() : date(self::FORMAT_DATE);
 
@@ -415,7 +413,7 @@ class plxFeed extends plxMotor {
 		<language><?= $this->aConf['default_lang'] ?></language>
 		<atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="self" type="application/rss+xml" href="<?= $link_feed ?>" />
 		<lastBuildDate><?= plxDate::dateIso2rfc822($lastBuildDate) ?></lastBuildDate>
-		<generator>PluXml</generator>
+		<generator><?= FEED_GENERATOR ?></generator>
 <?php
 		# On va boucler sur les commentaires (s'il y en a)
 		if(!empty($this->plxRecord_coms)) {

@@ -94,20 +94,20 @@ if ($plxAdmin->aStats) {
 		$url = $v['url'];
 		if (!PlxUtils::checkSite($url)) {
 ?>
-							<button><a href="statique.php?p=<?= $staticId ?>" title="<?= L_STATICS_SRC_TITLE ?>"><i class="icon-pencil"></i></a></button>
+							<a href="statique.php?p=<?= $staticId ?>" title="<?= L_STATICS_SRC_TITLE ?>" class="btn"><i class="icon-pencil"></i></a>
 <?php
 			if ($v['active']) {
 ?>
-							<button><a href="<?= $plxAdmin->urlRewrite('?static' . intval($staticId) . '/' . $v['url']) ?>" title="<?= L_STATIC_VIEW_PAGE ?> <?= PlxUtils::strCheck($v['name']) ?> <?= L_STATIC_ON_SITE ?>" target="_blank"><i class="icon-eye"></i></a></button>
+							<a href="<?= $plxAdmin->urlRewrite('?static' . intval($staticId) . '/' . $v['url']) ?>" title="<?= L_STATIC_VIEW_PAGE ?> <?= PlxUtils::strCheck($v['name']) ?> <?= L_STATIC_ON_SITE ?>" target="_blank" class="btn"><i class="icon-eye"></i></a>
 <?php
 			}
 		} elseif ($v['url'][0] == '?') {
 ?>
-							<button><a href="<?= $plxAdmin->urlRewrite($v['url']) ?>" title="<?= PlxUtils::strCheck($v['name']) ?>" target="_blank"><i class="icon-eye"></i></a></button>
+							<a href="<?= $plxAdmin->urlRewrite($v['url']) ?>" title="<?= PlxUtils::strCheck($v['name']) ?>" target="_blank" class="btn"><i class="icon-eye"></i></a>
 <?php
 		} else {
 ?>
-							<button><a href="<?= $v['url'] ?>" title="<?= PlxUtils::strCheck($v['name']) ?>" target="_blank"><i class="icon-eye"></i></a></button>
+							<a href="<?= $v['url'] ?>" title="<?= PlxUtils::strCheck($v['name']) ?>" target="_blank"><i class="icon-eye" class="btn"></i></a>
 <?php
 		}
 ?>

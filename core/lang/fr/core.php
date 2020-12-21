@@ -157,3 +157,4 @@ const L_ART_NEXT					= 'Suivant';
 const L_ART_LAST					= 'Dernier';
 const L_ART_UP						= 'Remonter';
 
+const L_BACK_TO_BLOG_TITLE = 'Retour à la page du blog';

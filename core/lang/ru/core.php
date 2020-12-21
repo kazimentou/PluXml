@@ -158,3 +158,4 @@ const L_ART_NEXT					= 'следующий';
 const L_ART_LAST					= 'прошлой';
 const L_ART_UP						= 'подниматься';
 
+const L_BACK_TO_BLOG_TITLE = 'Вернуться к блогу';
