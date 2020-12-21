@@ -565,7 +565,7 @@ class plxMotor {
 					'url'				=> isset($attributes['url']) ? (string) $attributes['url'] : '', # url de la categorie
 					'tri'				=> isset($attributes['tri']) ? (string) $attributes['tri'] : $this->aConf['tri'], # tri de la categorie si besoin est
 					'bypage'			=> isset($attributes['bypage']) ? intval((string) $attributes['bypage']) : $this->bypage, # nb d'articles par page de la categorie si besoin est
-					'template'			=> !empty($attributes['template']) ? (string) $attributes['number'] : 'categorie.php', # fichier template
+					'template'			=> !empty($attributes['template']) ? (string) $attributes['template'] : 'categorie.php', # fichier template
 					'menu'				=> !empty($attributes['menu']), # état affichage de la catégorie dans le menu
 					'active'			=> !empty($attributes['active']), # activation de la catégorie dans le menu
 					'homepage'			=> !empty($attributes['homepage']), # affichage en page d'accueil
