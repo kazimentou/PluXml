@@ -281,7 +281,7 @@ if ($coms) {
 						<td class="author"><?= $author ?></td>
 						<td class="site"><?=  $site ?></td>
 						<td>
-							<a href="comment_new.php?c=<?= $id . (!empty($_GET['a']) ? '&a=' . $_GET['a'] : '') ?>" title="<?= L_COMMENT_ANSWER ?>" class="btn"><i class="icon-reply-1"></i></a>
+							<a href="comment_new.php?c=<?= $id . (!empty($_GET['a']) ? '&a=' . $_GET['a'] : '') ?>" title="<?= L_COMMENT_REPLY_TITLE ?>" class="btn"><i class="icon-reply-1"></i></a>
 							<a href="comment.php?c=<?= $id . (!empty($_GET['a']) ? '&a=' . $_GET['a'] : '') ?>" title="<?= L_COMMENT_EDIT_TITLE ?>" class="btn"><i class="icon-pencil"></i></a>
 							<a href="article.php?a=<?= $artId ?>" title="<?= L_COMMENT_ARTICLE_LINKED_TITLE ?>" class="btn"><i class="icon-doc-inv"></i></a>
 						</td>

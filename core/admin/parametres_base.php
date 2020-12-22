@@ -26,7 +26,7 @@ if (!empty($_POST)) {
 include 'top.php';
 ?>
 
-<form method="post" id="form_base_settings" class="first-level">
+<form method="post" id="form_base_settings" class="first-level meta-tags-site">
     <?= plxToken::getTokenPostMethod() ?>
     <div class="adminheader">
         <div>

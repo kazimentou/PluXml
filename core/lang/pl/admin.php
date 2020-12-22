@@ -184,7 +184,7 @@ const L_EDITCAT_UPDATE = 'Zapisz zmiany';
 // commentaire.php
 
 const L_COMMENT_ORPHAN_STATUS = 'Nie jest wyświetlany (radzimy usunąć ten komentarz)';
-const L_COMMENT_ARTICLE_LINKED_TITLE = 'Edytuj artykuł z tego komentarza';
+const L_COMMENT_ARTICLE_LINKED_TITLE = 'Edytuj artykuł powiązany z tym komentarzem';
 const L_COMMENT_OFFLINE = 'Nieaktywne';
 const L_COMMENT_ONLINE = 'Aktywne';
 const L_COMMENT_ONLINE_TITLE = 'Przejdż do tego komentarza';
@@ -202,7 +202,6 @@ const L_COMMENT_LINKED_ARTICLE_FIELD = 'Dołączony artykuł';
 const L_COMMENT_ARTICLE_FIELD = 'Komentarz';
 const L_COMMENT_DELETE_CONFIRM = 'Usunąć ten komentarz ?';
 const L_COMMENT_PUBLISH_BUTTON = 'Zatwierdz';
-const L_COMMENT_ANSWER_BUTTON = 'Odpowiedź';
 const L_COMMENT_UPDATE_BUTTON = 'Zaktualizuj';
 const L_COMMENT_WRITTEN_BY = 'Napisane przez';
 const L_ERR_CATEGORY_ALREADY_EXISTS = 'Nazwa kategorii jest zajęta';
@@ -221,7 +220,7 @@ const L_ERR_CREATING_COMMENT = 'Wystąpił błąd podczas tworzenia komentarza';
 const L_CREATING_COMMENT_SUCCESSFUL = 'Komentarz pomyślnie utworzono';
 const L_CREATE_NEW_COMMENT = 'Odpowiedź na komentarz';
 const L_ARTICLE_COMMENTS_LIST = 'Komentarze do tego artukułu';
-const L_COMMENT_ANSWER = 'Odpowiedź';
+const L_COMMENT_REPLY_TITLE = 'Odpowiedz na ten komentarz';
 
 // comments.php
 

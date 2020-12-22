@@ -192,7 +192,7 @@ const L_EDITCAT_META_KEYWORDS = 'Contido da metaetiqueta de palabras chave («ke
 const L_COMMENT_ORPHAN = 'sen artigo';
 const L_COMMENT_ORPHAN_STATUS = 'invisible (suxerimos elimiar este comentario)';
 const L_COMMENT_ARTICLE_LINKED = 'Artigo';
-const L_COMMENT_ARTICLE_LINKED_TITLE = 'Artigo asociado a este comentario';
+const L_COMMENT_ARTICLE_LINKED_TITLE = 'Edita o artigo ligado a este comentario';
 const L_COMMENT_OFFLINE = 'desconectado';
 const L_COMMENT_ONLINE = 'conectado';
 const L_COMMENT_ONLINE_TITLE = 'Lista de comentarios publicados';
@@ -211,7 +211,6 @@ const L_COMMENT_ARTICLE_FIELD = 'Comentarios';
 const L_COMMENT_DELETE_CONFIRM = 'Desexa eliminar este comentario?';
 const L_COMMENT_PUBLISH_BUTTON = 'Aprobala publicación';
 const L_COMMENT_OFFLINE_BUTTON = 'Cambiar a invisible';
-const L_COMMENT_ANSWER_BUTTON = 'Responder a este comentario';
 const L_COMMENT_UPDATE_BUTTON = 'Actualizar';
 const L_COMMENT_WRITTEN_BY = 'Escrito por';
 const L_ERR_CATEGORY_ALREADY_EXISTS = 'Xa existe unha categoría con ese nome';
@@ -230,8 +229,8 @@ const L_ERR_CREATING_COMMENT = 'Erro grave durante a creación do comentario';
 const L_CREATING_COMMENT_SUCCESSFUL = 'Comentario creado correctamente';
 const L_CREATE_NEW_COMMENT = 'Escribir un comentario';
 const L_ARTICLE_COMMENTS_LIST = 'Comentarios deste artigo (do máis recente ó máis antigo)';
-const L_COMMENT_ANSWER_TITLE = 'Responder a este comentario';
-const L_COMMENT_ANSWER = 'Responder';
+const L_COMMENT_REPLY_TITLE_TITLE = 'Responder a este comentario';
+const L_COMMENT_REPLY_TITLE = 'Responde a este comentario';
 
 // comments.php
 

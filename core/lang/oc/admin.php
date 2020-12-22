@@ -204,7 +204,6 @@ const L_COMMENT_LINKED_ARTICLE_FIELD = 'Article estacat';
 const L_COMMENT_ARTICLE_FIELD = 'Comentari';
 const L_COMMENT_DELETE_CONFIRM = 'Suprimir aqueste comentari ?';
 const L_COMMENT_PUBLISH_BUTTON = 'Validar la publicacion';
-const L_COMMENT_ANSWER_BUTTON = 'Respondre';
 const L_COMMENT_UPDATE_BUTTON = 'Metre a jorn';
 const L_COMMENT_WRITTEN_BY = 'Redigit per';
 const L_ERR_CATEGORY_ALREADY_EXISTS = 'Nom de categoria ja utilizat';
@@ -223,7 +222,7 @@ const L_ERR_CREATING_COMMENT = 'Una error es subrevenguda al temps de la creacio
 const L_CREATING_COMMENT_SUCCESSFUL = 'Lo comentari es estat creat amb succès';
 const L_CREATE_NEW_COMMENT = 'Redigir un comentari';
 const L_ARTICLE_COMMENTS_LIST = 'Comentaris d\'aquel article';
-const L_COMMENT_ANSWER = 'Respondre';
+const L_COMMENT_REPLY_TITLE = 'Respondre comentari';
 
 // comments.php
 

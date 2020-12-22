@@ -166,7 +166,7 @@ const L_EDITCAT_UPDATE = 'De wijzigingen voor deze categorie doorveoeren';
 // commentaire.php
 
 const L_COMMENT_ORPHAN_STATUS = 'Niet zichtbaar (Wij raden u aan deze commentaar te verwijderen)';
-const L_COMMENT_ARTICLE_LINKED_TITLE = 'Artikel van deze commentaar';
+const L_COMMENT_ARTICLE_LINKED_TITLE = 'Bewerk het artikel dat aan deze opmerking is gekoppeld';
 const L_COMMENT_OFFLINE = 'offline';
 const L_COMMENT_ONLINE = 'online';
 const L_COMMENT_ONLINE_TITLE = 'Deze commentaar online bekijken';
@@ -184,7 +184,6 @@ const L_COMMENT_LINKED_ARTICLE_FIELD = 'Artikel vastgepind';
 const L_COMMENT_ARTICLE_FIELD = 'Commentaar;';
 const L_COMMENT_DELETE_CONFIRM = 'Commentaar verwijderen ?';
 const L_COMMENT_PUBLISH_BUTTON = 'Publicatie bevestigen';
-const L_COMMENT_ANSWER_BUTTON = 'Antwoorden';
 const L_COMMENT_UPDATE_BUTTON = 'Aanpassingen doorvoeren';
 const L_COMMENT_WRITTEN_BY = 'Geschreven door';
 const L_COMMENT_SAVE_SUCCESSFUL = 'Commentaar succesvol opgeslagen';
@@ -211,7 +210,7 @@ const L_ERR_CREATING_COMMENT = 'er is een fout opgetreden tijdens het opslaan va
 const L_CREATING_COMMENT_SUCCESSFUL = 'Commentaar plaatsen succesvol';
 const L_CREATE_NEW_COMMENT = 'Commentaar schrijven';
 const L_ARTICLE_COMMENTS_LIST = 'Commentaar van dit artikel (nieuwste commentaar eerst)';
-const L_COMMENT_ANSWER = 'Antwoorden';
+const L_COMMENT_REPLY_TITLE = 'Reageer op deze opmerking';
 
 // comments.php
 

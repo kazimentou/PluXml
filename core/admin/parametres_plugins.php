@@ -159,8 +159,8 @@ include 'top.php';
 	<div class="adminheader">
 		<div>
 		    <h2 class="h3-like"><?= L_PLUGINS_TITLE ?></h2>
-	<?php /* fil d'ariane  */ ?>
-		    <ul>
+<?php /* fil d'ariane  */ ?>
+		    <ul class="unstyled">
 				<li><a href="parametres_plugins.php?sel=1" <?= ($_SESSION['selPlugins'] == '1') ? 'disabled' : ''?>><?= L_PLUGINS_ACTIVE_LIST ?></a>&nbsp;<span class="tag"><?= $nbActivePlugins ?></span></li>
 				<li><a href="parametres_plugins.php?sel=0" <?= ($_SESSION['selPlugins'] == '0') ? 'disabled' : ''?>><?= L_PLUGINS_INACTIVE_LIST ?></a>&nbsp;<span class="tag"><?= $nbInactivePlugins ?></span></li>
 		    </ul>

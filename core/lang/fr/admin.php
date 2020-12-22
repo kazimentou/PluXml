@@ -177,7 +177,7 @@ const L_EDITCAT_UPDATE = 'Mettre à jour cette catégorie';
 // comment.php
 
 const L_COMMENT_ORPHAN_STATUS = 'non visible (nous vous conseillons de supprimer ce commentaire)';
-const L_COMMENT_ARTICLE_LINKED_TITLE = 'Article attaché à ce commentaire';
+const L_COMMENT_ARTICLE_LINKED_TITLE = 'Editer l\'article lié à ce commentaire';
 const L_COMMENT_OFFLINE = 'Hors ligne';
 const L_COMMENT_ONLINE = 'En ligne';
 const L_COMMENT_OFFLINE_COUNT = '%d commentaires à valider';
@@ -197,7 +197,6 @@ const L_COMMENT_LINKED_ARTICLE_FIELD = 'Article attaché';
 const L_COMMENT_ARTICLE_FIELD = 'Commentaire';
 const L_COMMENT_DELETE_CONFIRM = 'Supprimer ce commentaire ?';
 const L_COMMENT_PUBLISH_BUTTON = 'Valider la publication';
-const L_COMMENT_ANSWER_BUTTON = 'Répondre';
 const L_COMMENT_UPDATE_BUTTON = 'Mettre à jour';
 const L_COMMENT_WRITTEN_BY = 'Rédigé par';
 const L_COMMENT_SAVE_SUCCESSFUL = 'Commentaire modifié avec succès';
@@ -224,7 +223,7 @@ const L_ERR_CREATING_COMMENT = 'Une erreur est survenue au cours de la création
 const L_CREATING_COMMENT_SUCCESSFUL = 'Le commentaire a été crée avec succès';
 const L_CREATE_NEW_COMMENT = 'Ajouter un commentaire';
 const L_ARTICLE_COMMENTS_LIST = 'Commentaires de cet article';
-const L_COMMENT_ANSWER = 'Répondre';
+const L_COMMENT_REPLY_TITLE = 'Répondre à ce commentaire';
 
 // comments.php
 

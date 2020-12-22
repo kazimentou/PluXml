@@ -178,7 +178,7 @@ const L_EDITCAT_UPDATE = 'Update this category';
 // commentaire.php
 
 const L_COMMENT_ORPHAN_STATUS = 'not displayed (we advise you to delete this comment)';
-const L_COMMENT_ARTICLE_LINKED_TITLE = 'Article linked to this comment';
+const L_COMMENT_ARTICLE_LINKED_TITLE = 'Edit the article linked to this comment';
 const L_COMMENT_OFFLINE = 'Offline';
 const L_COMMENT_ONLINE = 'Online';
 const L_COMMENT_ONLINE_TITLE = 'Published comments';
@@ -196,7 +196,6 @@ const L_COMMENT_LINKED_ARTICLE_FIELD = 'Linked article';
 const L_COMMENT_ARTICLE_FIELD = 'Comments';
 const L_COMMENT_DELETE_CONFIRM = 'Delete this comment?';
 const L_COMMENT_PUBLISH_BUTTON = 'Confirm publication';
-const L_COMMENT_ANSWER_BUTTON = 'Reply';
 const L_COMMENT_UPDATE_BUTTON = 'Update';
 const L_COMMENT_WRITTEN_BY = 'Written by';
 const L_COMMENT_SAVE_SUCCESSFUL = 'Comment was succesfully saved';
@@ -223,7 +222,7 @@ const L_ERR_CREATING_COMMENT = 'An error occured while creating the comment';
 const L_CREATING_COMMENT_SUCCESSFUL = 'Comment succesfully created';
 const L_CREATE_NEW_COMMENT = 'Write a comment';
 const L_ARTICLE_COMMENTS_LIST = 'Comments for this article (from most recent to the oldest)';
-const L_COMMENT_ANSWER = 'Answer';
+const L_COMMENT_REPLY_TITLE = 'Reply to this comment';
 
 // comments.php
 

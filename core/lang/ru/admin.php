@@ -184,7 +184,7 @@ const L_EDITCAT_UPDATE = 'Обновление этой категории';
 // commentaire.php
 
 const L_COMMENT_ORPHAN_STATUS = 'не отображается (мы советуем вам удалить этот комментарий';
-const L_COMMENT_ARTICLE_LINKED_TITLE = 'Статьи, связанные с этим комментарием';
+const L_COMMENT_ARTICLE_LINKED_TITLE = 'Отредактируйте статью, связанную с этим комментарием';
 const L_COMMENT_OFFLINE = 'выключенных';
 const L_COMMENT_ONLINE = 'включенных';
 const L_COMMENT_ONLINE_TITLE = 'Опубликованные комментарии';
@@ -202,7 +202,6 @@ const L_COMMENT_LINKED_ARTICLE_FIELD = 'Связанные статьи';
 const L_COMMENT_ARTICLE_FIELD = 'Комментарии';
 const L_COMMENT_DELETE_CONFIRM = 'Удалить этот комментарий?';
 const L_COMMENT_PUBLISH_BUTTON = 'Подтверждение публикации';
-const L_COMMENT_ANSWER_BUTTON = 'Ответить';
 const L_COMMENT_UPDATE_BUTTON = 'Обновить';
 const L_COMMENT_WRITTEN_BY = 'Автор';
 const L_ERR_CATEGORY_ALREADY_EXISTS = 'Название категории уже используется';
@@ -221,7 +220,7 @@ const L_ERR_CREATING_COMMENT = 'Произошла ошибка при созд�
 const L_CREATING_COMMENT_SUCCESSFUL = 'Комментарий успешно создан';
 const L_CREATE_NEW_COMMENT = 'Написать комментарий';
 const L_ARTICLE_COMMENTS_LIST = 'Комментарии к статье (от новых к старым)';
-const L_COMMENT_ANSWER = 'Ответ';
+const L_COMMENT_REPLY_TITLE = 'Ответить на этот комментарий';
 
 // comments.php
 

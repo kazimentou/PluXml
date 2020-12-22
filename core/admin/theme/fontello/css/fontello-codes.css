@@ -34,6 +34,7 @@
 .icon-right-open:before { content: '\e820'; } /* '' */
 .icon-up-open-1:before { content: '\e821'; } /* '' */
 .icon-down-open:before { content: '\e822'; } /* '' */
+.icon-mail:before { content: '\e823'; } /* '' */
 .icon-spin3:before { content: '\e832'; } /* '' */
 .icon-link-ext:before { content: '\f08e'; } /* '' */
 .icon-filter:before { content: '\f0b0'; } /* '' */

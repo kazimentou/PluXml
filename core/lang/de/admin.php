@@ -180,7 +180,7 @@ const L_EDITCAT_UPDATE = 'Kategorie aktualisieren';
 // commentaire.php
 
 const L_COMMENT_ORPHAN_STATUS = 'verwaist (Sie sollten diesen Kommentar löschen)';
-const L_COMMENT_ARTICLE_LINKED_TITLE = 'Artikel zu diesem Kommentar';
+const L_COMMENT_ARTICLE_LINKED_TITLE = 'Bearbeiten Sie den mit diesem Kommentar verknüpften Artikel';
 const L_COMMENT_OFFLINE = 'Offline';
 const L_COMMENT_ONLINE = 'Online';
 const L_COMMENT_ONLINE_TITLE = 'Liste der publizierten Kommentare';
@@ -198,7 +198,6 @@ const L_COMMENT_LINKED_ARTICLE_FIELD = 'Bezieht sich auf Artikel';
 const L_COMMENT_ARTICLE_FIELD = 'Kommentar';
 const L_COMMENT_DELETE_CONFIRM = 'Diesen Kommentar löschen?';
 const L_COMMENT_PUBLISH_BUTTON = 'Publizieren bestätigen';
-const L_COMMENT_ANSWER_BUTTON = 'Antworten';
 const L_COMMENT_UPDATE_BUTTON = 'Aktualisieren';
 const L_COMMENT_WRITTEN_BY = 'Geschrieben von';
 const L_COMMENT_SAVE_SUCCESSFUL = 'Kommentar erfolgreich geändert';
@@ -225,7 +224,7 @@ const L_ERR_CREATING_COMMENT = 'Es gab einen Fehler beim Erstellen des Kommentar
 const L_CREATING_COMMENT_SUCCESSFUL = 'Der Kommentar wurde erfolgreich erstellt';
 const L_CREATE_NEW_COMMENT = 'Kommentar schreiben';
 const L_ARTICLE_COMMENTS_LIST = 'Kommentare dieses Artikels (neueste zuerst)';
-const L_COMMENT_ANSWER = 'Antworten';
+const L_COMMENT_REPLY_TITLE = 'Auf diesen Kommentar antworten';
 
 // comments.php
 

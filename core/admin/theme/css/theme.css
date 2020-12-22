@@ -613,6 +613,10 @@ ul.rss {
 	font-size: 85%;
 }
 
+#main-header .responsive-menu .active {
+	color: #eed75c;
+}
+
 .adminheader {
 	position: sticky;
 	top: 0;
@@ -829,6 +833,73 @@ i.icon-calendar {
 
 #form_comments th.content {
 	min-width: 30rem;
+}
+
+/* ------- comment_new.php --------- */
+
+.comment {
+	--indent1: 1rem;
+	padding: 0.5rem 1rem 0.5rem;
+	border: 1px solid #e3bc77;
+}
+
+.comment:not(:first-of-type) {
+	border-top: none;
+}
+
+.comment-content,
+.comment.active {
+	background-color: var(--backsection);
+}
+
+.comment.level-1 { margin-left: var(--indent1); }
+.comment.level-2 { margin-left: calc(var(--indent1) * 2); }
+.comment.level-3 { margin-left: calc(var(--indent1) * 3); }
+.comment.level-4 { margin-left: calc(var(--indent1) * 4); }
+.comment.level-5 { margin-left: calc(var(--indent1) * 5); }
+.comment.level-6 { margin-left: calc(var(--indent1) * 6); }
+.comment.level-7 { margin-left: calc(var(--indent1) * 7); }
+.comment.level-8 { margin-left: calc(var(--indent1) * 8); }
+
+.comment-content {
+	/* border: 1px solid #88a; */
+	padding: 1rem;
+	margin-top: 1rem;
+}
+
+.comment header {
+	display: grid;
+	grid-template-columns: 1fr auto auto;
+	align-items: center;
+	gap: 1rem;
+}
+
+.comment.admin .author {
+	color: red;
+}
+
+.comment-header a {
+	white-space: nowrap;
+}
+
+.comment a.button {
+	padding: 0.5rem;
+	margin: 0;
+	color: #444;
+}
+
+.comment blockquote {
+	margin: 0.5rem 0.5rem 0;
+}
+.comment blockquote::before {
+	content: '';
+	height: auto;
+}
+
+.comment .author + a[href^="http"] {
+	padding: 0 0.5rem;
+	background-color: lemonchiffon;
+	color: purple;
 }
 
 /* ------- medias.php ---------- */
@@ -1076,8 +1147,12 @@ i.icon-calendar {
 		padding: 0.1rem 0;
 	}
 
-	.meta-tags .caption-inside input {
+	.meta-tags .caption-inside input[type="text"] {
 		width: calc(100% - 20rem);
+	}
+
+	.meta-tags-site .caption-inside input[type="text"] {
+		width: calc(100% - 25rem);
 	}
 
 }
@@ -1146,6 +1221,21 @@ i.icon-calendar {
 		height: 100%;
 	}
 
+	/* ------ comment_new.php -------- */
+
+	#form_comment_new .writer {
+		display: flex;
+		justify-content: space-between;
+		border-bottom: 1px solid #88a;
+	}
+
+	#form_comment_new .comment-header {
+		display: grid;
+		gap: 1rem;
+		grid-template-columns: auto 1fr auto;
+		align-items: center;
+	}
+
 }
 
 @media screen and (max-width: 767px) {
@@ -1163,9 +1253,9 @@ i.icon-calendar {
 @media screen and (min-width: 768px) {
 
 	body:not(.fullwide) fieldset {
-		max-width: 64rem;
+		max-width: 75rem;
 		margin: 1rem auto;
-		border: 1px solid #668;
+		border: 1px solid #88a;
 		border-radius: 1rem;
 	}
 
