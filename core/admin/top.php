@@ -169,7 +169,7 @@ if (isset($plxAdmin->aConf['homestatic']) and !empty($plxAdmin->aConf['homestati
 			</div>
         </nav>
 	</header>
-	<section id="main-section" class="main section<?= !empty($isSetup) ? ' setup' : '' ?><?= $hideMenu ?>">
+	<section id="main-section" class="main section<?= !empty($isSetup) ? ' setup' : '' ?>">
 <?php
 # Hook Plugins
 eval($plxAdmin->plxPlugins->callHook('AdminTopBottom'));
