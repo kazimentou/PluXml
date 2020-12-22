@@ -29,11 +29,11 @@ eval($plxAdmin->plxPlugins->callHook('AdminTopEndHead'));
 
 # pour tablettes
 $currentScript = basename($_SERVER['SCRIPT_NAME'], ".php");
-$fullwide = in_array($currentScript, array('article', 'statique'/* , 'medias' */, 'parametres_themes', 'parametres_edittpl', 'parametres_plugin', 'parametres_plugincss')) ? ' fullwide' : '';
-$hideMenu = in_array($currentScript, array(
-	'article', 'categorie', 'comment', 'profil', 'user', 'parametres_base',
-	'parametres_affichage', 'parametres_themes', 'parametres_avances', 'statique')
-) ? ' hide-menu' : '';
+$fullwide = in_array($currentScript, array(
+	'article', 'statique'/* , 'medias' */,
+	'parametres_themes', 'parametres_edittpl',
+	'parametres_plugin', 'parametres_plugincss'
+)) ? ' fullwide' : '';
 
 if($currentScript == 'medias') {
 	# on active le medias manager
