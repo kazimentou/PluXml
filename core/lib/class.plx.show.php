@@ -215,48 +215,53 @@ class plxShow
         # Hook Plugins
         if (eval($this->plxMotor->plxPlugins->callHook('plxShowPageTitle'))) return;
 
-        if ($this->plxMotor->mode == 'home') {
-            $title = $this->plxMotor->aConf['title'];
-            $subtitle = $this->plxMotor->aConf['description'];
-        } elseif ($this->plxMotor->mode == 'categorie') {
-            $title_htmltag = $this->plxMotor->aCats[$this->plxMotor->cible]['title_htmltag'];
-            $title = $title_htmltag != '' ? $title_htmltag : $this->plxMotor->aCats[$this->plxMotor->cible]['name'];
-            $subtitle = $this->plxMotor->aConf['title'];
-        } elseif ($this->plxMotor->mode == 'article') {
-            $title_htmltag = $this->plxMotor->plxRecord_arts->f('title_htmltag');
-            $title = $title_htmltag != '' ? $title_htmltag : $this->plxMotor->plxRecord_arts->f('title');
-            $subtitle = $this->plxMotor->aConf['title'];
-        } elseif ($this->plxMotor->mode == 'static') {
-            $title_htmltag = $this->plxMotor->aStats[$this->plxMotor->cible]['title_htmltag'];
-            $title = $title_htmltag != '' ? $title_htmltag : $this->plxMotor->aStats[$this->plxMotor->cible]['name'];
-            $subtitle = $this->plxMotor->aConf['title'];
-        } elseif ($this->plxMotor->mode == 'archives') {
-            preg_match('/^(\d{4})(\d{2})?(\d{2})?/', $this->plxMotor->cible, $capture);
-            $year = !empty($capture[1]) ? ' ' . $capture[1] : '';
-            $month = !empty($capture[2]) ? ' ' . plxDate::getCalendar('month', $capture[2]) : '';
-            $day = !empty($capture[3]) ? ' ' . plxDate::getCalendar('day', $capture[3]) : '';
-            $title = L_ARCHIVES . $day . $month . $year;
-            $subtitle = $this->plxMotor->aConf['title'];
-        } elseif ($this->plxMotor->mode == 'tags') {
-            $title = L_TAG . ' ' . $this->plxMotor->cibleName;
-            $subtitle = $this->plxMotor->aConf['title'];
-        } elseif ($this->plxMotor->mode == 'erreur') {
-            $title = $this->plxMotor->plxErreur->getMessage();
-            $subtitle = $this->plxMotor->aConf['title'];
-        } else { # mode par défaut
-            $title = $this->plxMotor->aConf['title'];
-            $subtitle = $this->plxMotor->aConf['description'];
+		$subtitle = $this->plxMotor->aConf['title'];
+		$title_htmltag = $this->plxMotor->aConf['title'];
+		switch($this->plxMotor->mode) {
+	        case 'categorie':
+	            $title_htmltag = $this->plxMotor->aCats[$this->plxMotor->cible]['title_htmltag'];
+	            $title = !empty($title_htmltag) ? $title_htmltag : $this->plxMotor->aCats[$this->plxMotor->cible]['name'];
+	            break;
+	        case 'article':
+	            $title_htmltag = $this->plxMotor->plxRecord_arts->f('title_htmltag');
+	            $title = $title_htmltag != '' ? $title_htmltag : $this->plxMotor->plxRecord_arts->f('title');
+	            break;
+	        case 'static':
+	            $title_htmltag = $this->plxMotor->aStats[$this->plxMotor->cible]['title_htmltag'];
+	            $title = $title_htmltag != '' ? $title_htmltag : $this->plxMotor->aStats[$this->plxMotor->cible]['name'];
+	            break;
+	        case 'archives':
+	            preg_match('/^(\d{4})(\d{2})?(\d{2})?/', $this->plxMotor->cible, $capture);
+	            $year = !empty($capture[1]) ? ' ' . $capture[1] : '';
+	            $month = !empty($capture[2]) ? ' ' . plxDate::getCalendar('month', $capture[2]) : '';
+	            $day = !empty($capture[3]) ? ' ' . plxDate::getCalendar('day', $capture[3]) : '';
+	            $title = L_ARCHIVES . $day . $month . $year;
+	            break;
+	        case 'tags':
+	            $title = L_TAG . ' : ' . $this->plxMotor->cibleName;
+	            break;
+	        case 'erreur':
+	            $title = $this->plxMotor->plxErreur->getMessage();
+	            break;
+	        default:
+	            $title = $this->plxMotor->aConf['title'];
+	            $subtitle = $this->plxMotor->aConf['description'];
         }
 
-        $fmt = '';
-        if (preg_match('/' . $this->plxMotor->mode . '\s*=\s*(.*?)\s*(' . $sep . '|$)/i', $format, $capture)) {
-            $fmt = trim($capture[1]);
-        }
-        $format = $fmt == '' ? '#title - #subtitle' : $fmt;
-        $txt = str_replace('#title', trim($title), $format);
-        $txt = str_replace('#subtitle', trim($subtitle), $txt);
-        echo plxUtils::strCheck(trim($txt, ' - '));
+        if (!empty($format) and preg_match('@\b' . $this->plxMotor->mode . '\s*=\s*(.*?)\s*(?:' . $sep . '|$)@i', $format, $captures)) {
+            $fmt = trim($captures[1]);
+        } else {
+			$fmt = '#title - #subtitle';
+		}
 
+        echo plxUtils::strCheck(trim(
+			strtr($fmt, array(
+				'#title'			=> trim($title),
+				'#subtitle'			=> trim($subtitle),
+				'#title_htmltag'	=> trim($title_htmltag),
+			)),
+			" \t\n\r\0\x0B-."
+		));
     }
 
     /**
@@ -1597,8 +1602,9 @@ class plxShow
         }
         $group_active = "";
         if ($this->plxMotor->aStats) {
+			$blogId = $this->plxMotor->aConf['homestatic'];
             foreach ($this->plxMotor->aStats as $k => $v) {
-                if ($v['active'] == 1 and $v['menu'] == 1) { # La page  est bien active et dispo ds le menu
+                if ($k != $blogId and !empty($v['active']) and !empty($v['menu'])) { # La page n'est pas le blog et est bien active et dispo ds le menu
                     if ($v['url'][0] == '?') # url interne commençant par ?
                         $url = $this->plxMotor->urlRewrite($v['url']);
                     elseif (plxUtils::checkSite($v['url'], false)) # url externe en http ou autre
@@ -1895,6 +1901,7 @@ class plxShow
 
         if (
             empty($_SESSION['previous']) or
+            !isset($_SESSION['previous']['position']) or
             !array_key_exists('artIds', $_SESSION['previous']) or
             preg_match_all('@\b(?:' . implode('|', array_keys(self::ART_DIRECTIONS)) . ')\b@', $buttons, $matches) == 0
         ) {
@@ -1977,7 +1984,7 @@ class plxShow
      */
     public function artNavigationRange()
     {
-        if (empty($_SESSION['previous']) or $_SESSION['previous']['count'] == 0) {
+        if (empty($_SESSION['previous']) or empty($_SESSION['previous']['count'])) {
             return;
         }
         ?>

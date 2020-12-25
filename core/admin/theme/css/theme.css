@@ -1099,6 +1099,7 @@ i.icon-calendar {
 	display: flex;
 	justify-content: space-between;
 	flex-wrap: wrap;
+	padding: 0.1rem 0.5rem;
 }
 
 #email-config input[type="radio"]:not(:checked) + label + .tabs {
@@ -1108,9 +1109,13 @@ i.icon-calendar {
 #email-config .tabs {
 	position: absolute;
 	left: 0;
-	top: 100%;
+	top: 3rem;
 	width: 100%;
 }
+
+#email-by-sendmail:checked { margin-bottom: 4rem; }
+#email-by-smtp:checked { margin-bottom: 20.5rem; }
+#email-by-smtpOauth:checked { margin-bottom: 24rem; }
 
 #email-config-tabs > div {
 	display: inline-block;

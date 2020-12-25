@@ -34,7 +34,7 @@ include 'top.php';
             <h2 class="h3-like"><?= L_CONFIG_ADVANCED ?></h2>
         </div>
         <div>
-			<button class="btn--primary" name="config-more" role="button"><?= L_SAVE ?></button>
+			<button class="btn--primary" role="button"><?= L_SAVE ?></button>
         </div>
     </div>
 <?php
@@ -200,12 +200,12 @@ foreach(array(
 <?php
 					}
 
-					if(empty($value)) { $value = '0'; }
+					if(empty($value)) { $value = array_keys($infos[2])[0]; }
 					foreach($infos[2] as $sec=>$r) {
 						$idR = $v . $r;
-						$checked = ($sec == $value) ? ' checked' : '';
+						$checked = ($sec === $value) ? ' checked' : '';
 ?>
-				<div class="inbl">
+				<div>
 					<input type="radio" name="<?= $v . $k ?>" value="<?= $sec ?>" id="<?= $idR ?>" <?= $checked ?> />
 					<label for="<?= $idR ?>"><?= $r ?></label>
 				</div>
