@@ -52,6 +52,10 @@ nav ul { /* like knacss-reborn */
 	white-space: normal;
 }
 
+.table[data-rows-num] tr[draggable] td:first-child {
+	background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAECAYAAACzzX7wAAAAGUlEQVR42mNggIKCgoL/IIyLj1sB+TqhAAB5gyTxdLI4kwAAAABJRU5ErkJggg==') left repeat-y;
+}
+
 fieldset {
 	padding: 0.5rem;
 }
@@ -352,7 +356,7 @@ textarea {
 	padding-left: 0;
 }
 
-.treeview > ul > li:not(.active) li.has-children:not(.is-path):not(:hover) > ul {
+.treeview > ul:not(.move) > li:not(.active) li.has-children:not(.is-path):not(:hover) > ul {
 	display: none;
 }
 
@@ -379,13 +383,14 @@ textarea {
 	background-color: var(--backheaderborder);
 }
 
-.treeview .has-children > a::after {
-	content: '▶';
-	padding-left: 1rem;
+.treeview .move .active > a {
+	color: crimson;
 }
 
-.treeview .has-children.is-path > a::after {
-	content: '▲';
+.treeview > ul > li:not(.active) .has-children:not(.is-path) > a::after {
+	content: '\e820';
+	padding-left: 0.5rem;
+	font-family: fontello;
 }
 
 /* -------- pagination ----------- */
@@ -406,6 +411,10 @@ body.mobile {
 .section a:not(.btn) {
 	color: var(--primary);
 	text-decoration: none;
+}
+
+.section a.btn--primary {
+	color: #fff;
 }
 
 section.setup .adminheader h2 {
@@ -613,6 +622,10 @@ ul.rss {
 	font-size: 85%;
 }
 
+#main-header .responsive-menu li:hover {
+	background-color: #446;
+}
+
 #main-header .responsive-menu .active {
 	color: #eed75c;
 }
@@ -651,6 +664,12 @@ ul.rss {
 .section .adminheader a:not(.button) {
 	color: var(--primary);
 	text-decoration: none;
+}
+
+.unfold::after {
+	content: '\e822';
+	font-family: fontello;
+	margin-left: 0.5rem;
 }
 
 /* -------- table sort -------------- */
@@ -964,6 +983,10 @@ i.icon-calendar {
 	min-width: 6.5rem;
 }
 
+#medias-table .thumb {
+	max-width: 48px;
+}
+
 #medias-table td:nth-of-type(5),
 #medias-table td:nth-of-type(6) {
 	text-align: right;
@@ -978,10 +1001,91 @@ i.icon-calendar {
 	cursor: pointer;
 }
 
+#form_uploader .toolbar {
+	padding-bottom: 1rem;
+	width: 100%;
+	white-space: nowrap;
+	overflow-x: auto;
+}
+
+#form_uploader .toolbar button:last-of-type {
+	margin-left: auto;
+}
+
 #form_uploader .limits-upload {
 	display: flex;
 	gap: 1rem;
 	justify-content: space-between;
+	padding: 0.5rem 1rem;
+}
+
+#form_uploader .limits-upload p {
+	margin: 0;
+}
+
+#form_uploader .drag {
+	border: 2px dashed transparent;
+}
+
+#form_uploader .drag.active {
+	border-color: #aaa;
+}
+
+#form_uploader .files_list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+	min-height: 10rem;
+	text-align: center;
+}
+
+#form_uploader .files_list > div {
+	z-index: -1;
+}
+#form_uploader .files_list.awaiting {
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	font-size: 200%;
+	color: #888;
+}
+
+#form_uploader .files_list > li {
+	position: relative;
+	display: grid;
+	grid-template-rows: 1fr auto auto;
+	align-items: center;
+	background-color: var(--backheaderborder);
+	padding: 0.5rem;
+	border-radius: 0.5rem;
+}
+
+#form_uploader .files_list > li.big-size::after {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	content: '';
+	background-color: red;
+	opacity: 0.6;
+}
+
+#form_uploader .files_list img {
+	max-width: 10rem;
+	border: 2px inset var(--fg-main-header);
+	margin: 0 auto;
+}
+
+#form_uploader .files_list button {
+	color: red;
+	position: absolute;
+	top: 0.25rem;
+	right: 0.25rem;
+	padding: 0.5rem;
+	background-color: var(--backsection);
+	border-radius: 50%;
+	z-index: 10;
 }
 
 #form_uploader .img-sizes {
@@ -1196,6 +1300,12 @@ i.icon-calendar {
 		gap: 1rem;
 	}
 
+	#form_uploader .toolbar {
+		display: flex;
+		gap: 1rem;
+		padding: 0;
+	}
+
 	#form_static #calendar {
 		column-count: 2;
 	}
@@ -1259,6 +1369,16 @@ i.icon-calendar {
 		border-radius: 1rem;
 	}
 
+	/* ------ medias.php ------- */
+
+	#form_uploader {
+		max-width: 75rem;
+		margin: 1rem auto 0;
+		border: 1px solid #88a;
+		padding: 1rem;
+		border-radius: 1rem;
+	}
+
 	#form_themes .themes li {
 		width: 31%;
 	}
@@ -1277,14 +1397,14 @@ i.icon-calendar {
 	nav {
 		position: fixed;
 		top: 1rem;
-		background-color: #fff;
-		color: #444;
-		border: 1px solid #444;
+		/* border: 1px solid #444; */
 		z-index: 15;
 	}
 
 	nav .nav-button {
 		padding: 0.5rem;
+		background-color: #fff;
+		color: #444;
 	}
 
 	nav:hover .nav-button > * {
@@ -1316,6 +1436,11 @@ i.icon-calendar {
 
 	nav li {
 		padding: 0.25rem 1rem;
+	}
+
+	#main-header .responsive-menu > div {
+		background-color: var(--bg-main-header);
+		color: var(--fg-main-header);
 	}
 }
 

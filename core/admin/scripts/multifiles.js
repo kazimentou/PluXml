@@ -1,92 +1,201 @@
-var nfiles = 0;
-var MultiSelector = {
+'use strict';
 
-	init: function() {
-		this.count = 0;
-		this.files_list = document.getElementById("files_list");
-		this.selector = document.getElementById("selector_0");
-		if(this.selector) this.selector.addEventListener("change", this, false);
-	},
+(function() {
+	'use strict';
 
-	handleEvent: function(e) {
-		switch(e.type) {
-			case "change":
-				e.stopPropagation();
-				e.preventDefault();
-				this.handleChange();
-				break;
-		}
-	},
-
-	handleChange: function() {
-		this.selector = document.getElementById("selector_" + this.count++);
-		this.selector.style.position = 'absolute';
-		this.selector.style.left = '-1000px';
-		var new_element = document.createElement('input');
-		new_element.type = "file";
-		new_element.multiple = "multiple";
-		new_element.id = "selector_"+this.count;
-		new_element.name = "selector_"+this.count+"[]";
-		new_element.addEventListener("change", this, false);
-		this.selector.parentNode.insertBefore(new_element, this.selector)
-		for(i=0;i<this.selector.files.length;i++) {
-			this.addListRow(this.selector, (this.count-1)+'_'+i, this.selector.files[i].name);
-			this.selector.parentNode.insertBefore(new_element, this.selector);
-		}
-	},
-
-	addListRow: function(element, i, filename) {
-		// Row div
-		var new_row = document.createElement('div');
-		new_row.setAttribute("id","rowfile_"+i);
-		new_row.setAttribute("class","rowfile");
-		new_row.setAttribute("className","rowfile"); /* Hack IE */
-		// Input hidden input
-		new_hidden = document.createElement('input');
-		new_hidden.type = "checkbox";
-		new_hidden.name = "myfiles[]";
-		new_hidden.checked = "checked";
-		new_hidden.value = i;
-		new_hidden.style.position = 'absolute';
-		new_hidden.style.left = '-1000px';
-		// Delete link
-		var new_lnkDelete = document.createElement('a');
-		new_lnkDelete.setAttribute('href', 'javascript:void(0)');
-		new_lnkDelete.innerHTML = '&#10006';
-		new_lnkDelete.setAttribute("class","btnDelete");
-		new_lnkDelete.setAttribute("className","btnDelete"); /* Hack IE */
-		// div with filename
-		var new_row_div = document.createElement('div');
-		new_row_div.innerHTML = '&nbsp;'+this.basename(filename);
-		new_row_div.setAttribute("class","divtitle");
-		new_row_div.setAttribute("className","divtitle"); /* Hack IE */
-		// References
-		new_row.element = element;
-		// Delete function
-		new_lnkDelete.onclick = function(){
-			var div = document.getElementById('rowfile_'+i);
-			div.parentNode.removeChild(div);
-			nfiles--;
-			//if(nfiles==0) {
-			//  document.getElementById('btn_upload').setAttribute("style","display:none");
-			//}
-		}
-		// Add hidden input
-		new_row.appendChild(new_hidden);
-		// Add delete link
-		new_row.appendChild(new_lnkDelete);
-		// Add filename
-		new_row.appendChild(new_row_div);
-		// Add it to the list
-		this.files_list.appendChild(new_row);
-		// Selected files counter
-		nfiles++;
-		//document.getElementById('btn_upload').setAttribute("style","display:inline-block");
-	},
-
-	basename: function(path) {
-		return path.replace(/\\/g,'/').replace( /.*\//, '' );
+	const form = document.querySelector('form[enctype="multipart/form-data"]');
+	if(form == null) {
+		return;
 	}
 
-};
-MultiSelector.init();
+	const inputFiles = form.querySelector('input[type="file"]');
+	if(inputFiles == null) {
+		return;
+	}
+
+	const filesList = document.getElementById('files_list');
+	if(filesList == null || !filesList.hasAttribute('data-limits')) {
+		console.error('<input type="file" data-limits="..." /> is missing');
+		return;
+	}
+
+	const limits = filesList.dataset.limits.split(';').map(function(value) {
+		return parseInt(value);
+	});
+
+	const queryFiles = new Array();
+	const ACCEPT = /^image\//i;
+
+	form.onsubmit = function(event) {
+		event.preventDefault();
+		if(queryFiles.length == 0) {
+			return;
+		}
+		const formData = new FormData(form);
+		const name = inputFiles.name;
+		queryFiles.forEach(function(item) {
+			formData.append(name, item);
+		});
+		const request = new XMLHttpRequest();
+		request.onload = function() {
+			if(request.status == 200) {
+				console.log('ok');
+				window.location.href = form.action;
+			} else {
+				console.error(request.status, request.responseText);
+			}
+		};
+		request.open('POST', form.action);
+		request.send(formData);
+	}
+
+	function formatBytes(value) {
+		for(var i=0, UNITS = [' bytes', ' KB', ' MB', ' GB', ' TB'], iMax=UNITS.length, r=value ; i<iMax; i++) {
+			if(r < 1024) {
+				return r.toFixed(2) + UNITS[i];
+				break;
+			}
+			r /= 1024;
+		}
+		return
+	}
+
+	function filesHandler(files) {
+		if(typeof files == 'object' && typeof files.length == 'number') {
+			for(var i=0, iMax=files.length; i<iMax; i++) {
+				queryFiles.push(files[i]);
+			}
+		}
+		const batch = {
+			count: queryFiles.length,
+			size: 0,
+		};
+		if(queryFiles.length > 0) {
+			filesList.classList.remove('awaiting');
+		} else {
+			filesList.classList.add('awaiting');
+		}
+		filesList.textContent = '';
+		var isBigFile = false; // checks size for each file
+		for(var i=0; i<batch.count; i++) {
+			const file1 = queryFiles[i];
+			const wrapper = document.createElement('LI');
+			if(ACCEPT.test(file1.type)) {
+				const img = document.createElement('IMG');
+				wrapper.appendChild(img);
+				const reader = new FileReader();
+			    reader.onload = function(e) {
+					img.src = e.target.result;
+				};
+			    reader.readAsDataURL(file1);
+			} else {
+				const el = document.createElement('P');
+				el.innerHTML = '&nbsp;';
+				wrapper.appendChild(el);
+			}
+			const name = document.createElement('P');
+			name.textContent = file1.name;
+			wrapper.appendChild(name);
+			const size = document.createElement('P');
+			size.textContent = formatBytes(file1.size);
+			batch.size += file1.size;
+			if(file1.size > limits[2]) {
+				wrapper.classList.add('big-size');
+				isBigFile = true;
+			}
+			wrapper.appendChild(size);
+			const deleteBtn = document.createElement('BUTTON');
+			deleteBtn.textContent = 'X';
+			deleteBtn.dataset.id = i;
+			wrapper.appendChild(deleteBtn);
+			filesList.appendChild(wrapper);
+		}
+
+		['count', 'size'].forEach(function(field) {
+			const el = document.getElementById('batch-' + field);
+			if(el != null) {
+				el.textContent = (field != 'size') ? batch[field] : formatBytes(batch[field]);
+			}
+		});
+
+		document.getElementById('btn_upload').disabled = (isBigFile || batch.count == 0 || batch.count > limits[0] || batch.size > limits[1]);
+	}
+
+	inputFiles.addEventListener('change', function(event) {
+		filesHandler(this.files);
+		inputFiles.value = '';
+	}, false);
+
+	function dragHandler(event) {
+		if(typeof event.target.tagName == undefined) {
+			return;
+		}
+
+		if(event.target.tagName != 'INPUT') {
+			event.stopPropagation();
+			event.preventDefault();
+		}
+
+		switch(event.type) {
+			case 'dragenter':
+			case 'dragover':
+				event.target.classList.add('active');
+				break;
+			case 'drop':
+				if(event.target.tagName != 'INPUT') {
+					const dt = event.dataTransfer;
+					filesHandler(dt.files);
+				}
+				// no break !
+			default:
+				event.target.classList.remove('active');
+		}
+	}
+
+	['dragenter', 'dragover', 'dragleave', 'dragexit', 'dragend', 'drop'].forEach(function(eventType) {
+		filesList.addEventListener(eventType, dragHandler, false);
+		inputFiles.addEventListener(eventType, dragHandler);
+	});
+
+	filesList.addEventListener('click', function(event) {
+		if(event.target.hasAttribute('data-id')) {
+			event.preventDefault();
+			const trash = queryFiles.splice(parseInt(event.target.dataset.id), 1);
+			filesHandler();
+		}
+	});
+
+	// Move the medias
+
+	const treeview = document.querySelector('.treeview > ul');
+	const formMedias = document.querySelector('form[data-chk]');
+	if(treeview != null && formMedias != null) {
+		const selection = formMedias.elements.selection;
+		selection.addEventListener('change', function(event) {
+			if(event.target.value == 'move') {
+				treeview.classList.add('move');
+			} else {
+				treeview.classList.remove('move');
+			}
+		});
+		treeview.addEventListener('click', function(event) {
+			if(typeof event.target.href == 'string') {
+				if(selection.value == 'move') {
+					event.preventDefault();
+					formMedias.elements.folder.value = event.target.href.replace(/^.*\bpath=/, '');
+					const moves = treeview.querySelectorAll('.active');
+					for(var i=0,iMax=moves.length; i<iMax; i++) {
+						moves[i].classList.remove('active');
+					}
+					event.target.parentElement.classList.add('active');
+					const btn = formMedias.querySelector('button[data-select]');
+
+					if(btn != null) {
+						btn.click();
+					}
+				}
+			}
+		});
+	}
+
+})();

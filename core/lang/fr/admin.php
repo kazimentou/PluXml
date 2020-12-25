@@ -1,11 +1,11 @@
 <?php
 const L_MENU = 'Menu';
 const L_UNKNOWN_ERROR = 'Erreur inconnue';
-const L_CONFIRM_DELETE = 'Confirmer la suppression de 999 éléments ?';
-const L_CONFIRM_ACTIVATE = 'Confirmer l\'activation de 999 éléments ?';
-const L_CONFIRM_DEACTIVATE = 'Confirmer la désactivation de 999 éléments ?';
-const L_CONFIRM_OFFLINE = 'Confirmer la mise hors-ligne de 999 commentaires ?';
-const L_CONFIRM_ONLINE = 'Confirmer la publication de 999 commentaires ?';
+const L_CONFIRM_DELETE = 'Supprimer 999 éléments ?';
+const L_CONFIRM_ACTIVATE = 'Activer 999 éléments ?';
+const L_CONFIRM_DEACTIVATE = 'Désactiver de 999 éléments ?';
+const L_CONFIRM_OFFLINE = 'Mettre hors-ligne 999 commentaires ?';
+const L_CONFIRM_ONLINE = 'Publier 999 commentaires ?';
 const L_SAVE_FILE = 'Sauvegarder le fichier';
 const L_SAVE_FILE_SUCCESSFULLY = 'Fichier enregistré avec succès';
 const L_SAVE_FILE_ERROR = 'Erreur pendant l\'enregistrement du fichier';
@@ -270,7 +270,11 @@ const L_MEDIAS_DIRECTORY = 'Emplacement';
 const L_MEDIAS_BACK = 'Retour à la liste des médias';
 const L_MEDIAS_MAX_UPLOAD_FILE = 'Taille maxi par fichier';
 const L_MEDIAS_MAX_UPLOAD_NBFILE = 'Nombre maxi de fichiers par envoi';
-const L_MEDIAS_MAX_POST_SIZE = 'Taille maxi des données';
+const L_MEDIAS_MAX_POST_SIZE = 'Taille maxi de l\'envoi';
+const L_BROWSE = 'Parcourir';
+const L_DEPOSIT_FILES = 'Déposez vos fichiers ici';
+const L_FILES = 'fichiers';
+const L_BATCH_SIZE = 'Taille de l\'envoi';
 const L_MEDIAS_SUBMIT_FILE = 'Envoyer';
 const L_MEDIAS_IMAGES = 'Images';
 const L_MEDIAS_DOCUMENTS = 'Documents';
@@ -300,9 +304,10 @@ const L_MEDIAS_LINK_COPYCLP_ERR = 'Impossible de copier le lien dans le presse-p
 const L_MEDIAS_LINK_COPYCLP_DONE = 'Lien copié';
 const L_MEDIAS_NEW_NAME = 'Nouveau nom';
 const L_MEDIAS_RENAME = 'Renommer';
-const L_CONFIRM_THUMBNAIL = 'Confirmer la création de 999 vignettes';
-const L_CONFIRM_MOVE_MEDIAS = 'Confirmer le déplacement de 999 documents';
-const L_REQUIRED_OPTION = 'Vous devez sélectionner une option';
+const L_CONFIRM_THUMBNAIL = 'Créer 999 vignettes';
+const L_CONFIRM_MOVE_MEDIAS = 'Déplacer 999 documents vers';
+const L_REQUIRED_OPTION = 'Sélectionnez une option';
+const L_REQUIRED_TARGET = 'Sélectionnez une autre destination';
 
 // parametres_affichage.php
 

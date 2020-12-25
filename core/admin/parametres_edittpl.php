@@ -76,7 +76,12 @@ include 'top.php';
 			</div>
 		</div>
 		<div>
-			<input name="submit" type="submit" value="<?= L_SAVE ?>" />
+			<div>
+				<a href="index.php" class="icon-logout"></a>
+			</div>
+			<div>
+				<input name="submit" type="submit" value="<?= L_SAVE ?>" />
+			</div>
 		</div>
 	</div>
 <?php

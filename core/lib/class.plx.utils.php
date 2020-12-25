@@ -1413,7 +1413,7 @@ class plxUtils
 
         $onclick = $onclick ? 'onclick="' . $onclick . '"' : '';
         $title = $title ? 'title="' . $title . '"' : '';
-        $extra = ((!empty($extra))) ? ' ' . trim($extra) : '';
+        $extra = (is_string($extra) and (!empty($extra))) ? ' ' . trim($extra) : '';
 
         $caption = ucfirst($caption);
         return <<< EOT

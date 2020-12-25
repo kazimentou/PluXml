@@ -101,6 +101,13 @@ const TRI_COMS = array(
 	'asc' => L_SORT_ASCENDING_DATE,
 );
 
+const PLX_MEDIAS_MSG = array(
+	L_PLXMEDIAS_UPLOAD_SUCCESSFUL,
+	L_PLXMEDIAS_WRONG_FILESIZE,
+	L_PLXMEDIAS_WRONG_FILEFORMAT,
+	L_PLXMEDIAS_UPLOAD_ERR,
+);
+
 # Hook Plugins
 eval($plxAdmin->plxPlugins->callHook('AdminPrepend'));
 

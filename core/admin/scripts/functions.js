@@ -34,7 +34,7 @@ function addText(where, open, close) {
 }
 
 (function() {
-	// gestion des cases à cocher dans un tableau pour envoi avec un formulaire
+	// gestion des cases à cocher dans un tableau pour envoi d'un formulaire
 	// les boutons avec attribut "data-lang" ou "data-select" seront désactivés si aucune case cochée.
 	const myForm = document.querySelector('form[data-chk]');
 
@@ -84,16 +84,39 @@ function addText(where, open, close) {
 					if('lang' in event.target.dataset) {
 						msg = event.target.dataset.lang;
 					} else if('select' in event.target.dataset) {
-						const select = document.getElementById(event.target.dataset.select);
+						const params = event.target.dataset.select.split('|');
+						const form = event.target.form;
+						const select = form.elements[params[0]];
 						if(select != null) {
 							const option = select.selectedOptions[0];
-							console.log(option.value);
+							// console.log(option.value);
+							const alerts = ('alert' in event.target.dataset) ? event.target.dataset.alert.split('|') : ['What ?'];
 							if(!option.value.match(/^\w/)) {
-								alert(('alert' in event.target.dataset) ? event.target.dataset.alert : 'What ?');
+								alert(alerts[0]);
 								return false;
 							}
+
+							var folderValue = '';
+							if(option.value == params[1]) {
+								// On déplace des medias
+								const folder = form.elements[params[2]];
+								if(folder == null) {
+									console.error('<input name="' + params[2] + '" is missing');
+									return false;
+								}
+								folderValue = folder.value.trim();
+								if(folderValue.length == 0 || folderValue == window.location.href.replace(/^.*path=/, '')) {
+									alert((alerts.length > 0) ? alerts[1] : alerts[0]);
+									return false;
+								}
+							}
+
 							if('lang' in option.dataset) {
 								msg = option.dataset.lang;
+							}
+
+							if(folderValue.length > 0) {
+								msg = msg + ' :\n' + folderValue;
 							}
 						}
 					}

@@ -38,7 +38,7 @@ $plxThemes = new plxThemes(PLX_ROOT . $plxAdmin->aConf['racine_themes'], $plxAdm
 			</p>
         </div>
         <div>
-			<a class="inbl button btn--primary" href="parametres_edittpl.php"><?= L_TEMPLATES_EDIT ?></a>
+			<a class="button btn--primary" href="parametres_edittpl.php"><?= L_TEMPLATES_EDIT ?></a>
         </div>
     </div>
 <?php

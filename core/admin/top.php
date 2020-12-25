@@ -30,8 +30,7 @@ eval($plxAdmin->plxPlugins->callHook('AdminTopEndHead'));
 # pour tablettes
 $currentScript = basename($_SERVER['SCRIPT_NAME'], ".php");
 $fullwide = in_array($currentScript, array(
-	'article', 'statique'/* , 'medias' */,
-	'parametres_themes', 'parametres_edittpl',
+	'article', 'statique', 'parametres_edittpl',
 	'parametres_plugin', 'parametres_plugincss'
 )) ? ' fullwide' : '';
 
@@ -122,7 +121,7 @@ if ($_SESSION['profil'] == PROFIL_ADMIN) { # PROFIL_ADMIN == 0
 		$menus[] = plxUtils::formatMenu(L_INFOS, 'parametres_infos.php', L_MENU_CONFIG_INFOS_TITLE, 'menu-config');
 		$menus[] = plxUtils::formatMenu(L_MENU_CONFIG_PLUGINS, 'parametres_plugins.php', L_MENU_CONFIG_PLUGINS_TITLE, 'menu-config');
 	} else {
-		$menus[] = plxUtils::formatMenu(L_MENU_CONFIG, 'parametres_base.php', L_MENU_CONFIG_TITLE, 'icon-cog-1', false, '', false);
+		$menus[] = plxUtils::formatMenu(L_MENU_CONFIG, 'parametres_base.php', L_MENU_CONFIG_TITLE, 'icon-cog-1 unfold', false, '', false);
 	}
 }
 
@@ -155,7 +154,7 @@ if (isset($plxAdmin->aConf['homestatic']) and !empty($plxAdmin->aConf['homestati
 	$artsHomepage = $plxAdmin->plxGlob_arts->query('#^\d{4}\.(\d{3},)*home(,\d{3})*\.\d{3}\.\d{12}\.[\w-]+\.xml$#');
 	if(!empty($artsHomepage)) {
 ?>
-					<li><?= plxUtils::formatMenu(L_BLOG, $plxAdmin->urlRewrite('index.php?blog'), L_BACK_TO_BLOG_TITLE, 'icon-left-open') ?></li>
+					<li><?= plxUtils::formatMenu(L_BLOG, $plxAdmin->urlRewrite('index.php?blog'), L_BACK_TO_BLOG_TITLE, 'icon-left-open', false, false, false) ?></li>
 <?php
 	}
 }

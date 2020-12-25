@@ -9,16 +9,16 @@
 class plxMedias
 {
 
+    const IMG_EXTS = '/\b(jpe?g|png|gif|bmp|webp)$/i';
+    const DOC_EXTS = '/\b(7z|aiff|asf|avi|csv|docx?|epub|fla|flv|gpx|gz|gzip|m4a|m4v|mid|mov|mp3|mp4|mpc|mpe?g|ods|odt|odp|ogg|pdf|pptx?|ppt|pxd|qt|ram|rar|rm|rmi|rmvb|rtf|svg|swf|sxc|sxw|tar|tgz|txt|vtt|wav|webm|wma|wmv|xcf|xlsx?|zip)$/i';
+	const DEFAULT_THUMB = 'theme/images/file.png';
+
     public $path = null; # chemin vers les médias
     public $dir = null;
     public $aDirs = array(); # liste des dossiers et sous dossiers
     public $aFiles = array(); # liste des fichiers d'un dossier
     public $maxUpload = array(); # valeur upload_max_filesize
     public $maxPost = array(); # valeur post_max_size
-
-    public $img_supported = array('.png', '.gif', '.jpg', '.jpeg', '.bmp', '.webp'); # images formats supported
-    public $img_exts = '/\.(jpe?g|png|gif|bmp|webp)$/i';
-    public $doc_exts = '/\.(7z|aiff|asf|avi|csv|docx?|epub|fla|flv|gpx|gz|gzip|m4a|m4v|mid|mov|mp3|mp4|mpc|mpe?g|ods|odt|odp|ogg|pdf|pptx?|ppt|pxd|qt|ram|rar|rm|rmi|rmvb|rtf|svg|swf|sxc|sxw|tar|tgz|txt|vtt|wav|webm|wma|wmv|xcf|xlsx?|zip)$/i';
 
     /**
      * Constructeur qui initialise la variable de classe
@@ -50,10 +50,10 @@ class plxMedias
         $this->aDirs = $this->_getAllDirs($this->path);
         $this->aFiles = $this->_getDirFiles($this->dir);
 
+		$replaces = array('K' => 'Kb', 'M' => 'Mb', 'G' => 'Gb');
         # Taille maxi des fichiers
         $maxUpload = strtoupper(ini_get("upload_max_filesize"));
-        $this->maxUpload['display'] = str_replace('M', ' Mo', $maxUpload);
-        $this->maxUpload['display'] = str_replace('K', ' Ko', $this->maxUpload['display']);
+        $this->maxUpload['display'] = strtr($maxUpload, $replaces);
         if (substr_count($maxUpload, 'K')) $this->maxUpload['value'] = str_replace('K', '', $maxUpload) * 1024;
         elseif (substr_count($maxUpload, 'M')) $this->maxUpload['value'] = str_replace('M', '', $maxUpload) * 1024 * 1024;
         elseif (substr_count($maxUpload, 'G')) $this->maxUpload['value'] = str_replace('G', '', $maxUpload) * 1024 * 1024 * 1024;
@@ -61,8 +61,7 @@ class plxMedias
 
         # Taille maxi des données
         $maxPost = strtoupper(ini_get("post_max_size"));
-        $this->maxPost['display'] = str_replace('M', ' Mo', $maxPost);
-        $this->maxPost['display'] = str_replace('K', ' Ko', $this->maxPost['display']);
+        $this->maxPost['display'] = strtr($maxPost, $replaces);
         if (substr_count($maxPost, 'K')) $this->maxPost['value'] = str_replace('K', '', $maxPost) * 1024;
         elseif (substr_count($maxPost, 'M')) $this->maxPost['value'] = str_replace('M', '', $maxPost) * 1024 * 1024;
         elseif (substr_count($maxPost, 'G')) $this->maxPost['value'] = str_replace('G', '', $maxPost) * 1024 * 1024 * 1024;
@@ -110,12 +109,9 @@ class plxMedias
     private function _getDirFiles($dir)
     {
 
-        $matches = '';
-
         $src = $this->path . $dir;
         if (!is_dir($src)) return array();
 
-        $defaultSample = 'theme/images/file.png';
         $offset = strlen($this->path);
         $files = array();
         foreach (array_filter(
@@ -128,8 +124,12 @@ class plxMedias
                 continue;
             }
 
+            $thumb = self::DEFAULT_THUMB;
             $thumbInfos = false;
-            if (preg_match($this->img_exts, $filename, $matches)) {
+            $imgSize = false;
+            $parts = pathinfo($filename);
+            $extension = strtolower($parts['extension']);
+            if (preg_match(self::IMG_EXTS, $extension, $matches)) {
                 $thumbName = plxUtils::thumbName($filename);
                 if (file_exists($thumbName)) {
                     $thumbInfos = array(
@@ -137,26 +137,22 @@ class plxMedias
                         'filesize' => filesize($thumbName)
                     );
                 }
-                $sample = $this->path . '.thumbs/' . substr($filename, $offset);
-                $sampleOk = (
-                    file_exists($sample) or
-                    plxUtils::makeThumb(
-                        $filename,
-                        $sample
-                    )
-                );
+                $f = $this->path . '.thumbs/' . substr($filename, $offset);
+                if(
+                    file_exists($f) or
+                    plxUtils::makeThumb($filename,$f)
+                ) {
+					$thumb = $f;
+				}
                 $imgSize = getimagesize($filename);
-            } else {
-                $imgSize = false;
+            } elseif($extension == 'svg') {
+                $thumb = $filename;
             }
+
             $stats = stat($filename);
-            $extension = '.' . strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-            if ($extension == '.svg') {
-                $defaultSample = $filename;
-            }
             $files[basename($filename)] = array(
-                '.thumb' => (!empty($sampleOk)) ? $sample : $defaultSample,
-                'name' => basename($filename),
+                '.thumb' => $thumb,
+                'name' => $parts['basename'],
                 'path' => $filename,
                 'date' => $stats['mtime'],
                 'filesize' => $stats['size'],
@@ -164,8 +160,6 @@ class plxMedias
                 'infos' => $imgSize,
                 'thumb' => $thumbInfos
             );
-            $sample = '';
-            $sampleOk = "";
         }
 
         ksort($files);
@@ -368,7 +362,7 @@ class plxMedias
         if ($file['size'] > $this->maxUpload['value'])
             return L_PLXMEDIAS_WRONG_FILESIZE;
 
-        if (!preg_match($this->img_exts, $file['name']) and !preg_match($this->doc_exts, $file['name']))
+        if (!preg_match(self::IMG_EXTS, $file['name']) and !preg_match(self::DOC_EXTS, $file['name']))
             return L_PLXMEDIAS_WRONG_FILEFORMAT;
 
         // On teste l'existence du fichier et on formate son nom pour éviter les doublons
@@ -382,7 +376,7 @@ class plxMedias
         if (!move_uploaded_file($file['tmp_name'], $upFile)) { # Erreur de copie
             return L_PLXMEDIAS_UPLOAD_ERR;
         } else { # Ok
-            if (preg_match($this->img_exts, $file['name'])) {
+            if (preg_match(self::IMG_EXTS, $file['name'])) {
                 plxUtils::makeThumb($upFile, $this->path . '.thumbs/' . $this->dir . basename($upFile));
                 if ($resize)
                     plxUtils::makeThumb($upFile, $upFile, $resize['width'], $resize['height'], 80);
@@ -404,61 +398,70 @@ class plxMedias
     public function uploadFiles($usrfiles, $post)
     {
 
-        $files = array();
-        if (isset($post['myfiles'])) {
-            foreach ($post['myfiles'] as $key => $val) {
-                list($selnum, $selval) = explode('_', $val);
-                if (ini_get('max_file_uploads') - 1 < $selval) break;
-                $files[] = array(
-                    'name' => $usrfiles['selector_' . $selnum]['name'][$selval],
-                    'size' => $usrfiles['selector_' . $selnum]['size'][$selval],
-                    'tmp_name' => $usrfiles['selector_' . $selnum]['tmp_name'][$selval]
-                );
-            }
-        }
+		if(empty($_FILES) or !isset($_POST['resize']) or !isset($_POST['thumb'])) {
+			return;
+		}
+
+		$all_sizes = array(
+			'resize'	=> false,
+			'thumb'		=> false,
+		);
+		foreach(array_keys($all_sizes) as $size) {
+			if(isset($_POST[$size]) and !empty($_POST[$size])) {
+				if($_POST[$size] == 'user') {
+					$all_sizes[$size] = array(
+						isset($_POST[$size . '_w']) ? intval($_POST[$size . '_w']) : false,
+						isset($_POST[$size . '_h']) ? intval($_POST[$size . '_h']) : false,
+					);
+				} else {
+					$all_sizes[$size] = explode('x', $_POST[$size]);
+				}
+			}
+		}
 
         $count = 0;
-        foreach ($files as $file) {
-            $resize = false;
-            $thumb = false;
-            if (!empty($post['resize'])) {
-                if ($post['resize'] == 'user') {
-                    $resize = array('width' => intval($post['user_w']), 'height' => intval($post['user_h']));
-                } else {
-                    list($width, $height) = explode('x', $post['resize']);
-                    $resize = array('width' => $width, 'height' => $height);
-                }
-            }
-            if (!empty($post['thumb'])) {
-                if ($post['thumb'] == 'user') {
-                    $thumb = array('width' => intval($post['thumb_w']), 'height' => intval($post['thumb_h']));
-                } else {
-                    list($width, $height) = explode('x', $post['thumb']);
-                    $thumb = array('width' => $width, 'height' => $height);
-                }
-            }
-            if ($res = $this->_uploadFile($file, $resize, $thumb)) {
-                switch ($res) {
-                    case L_PLXMEDIAS_WRONG_FILESIZE:
-                        return plxMsg::Error(L_PLXMEDIAS_WRONG_FILESIZE);
-                        break;
-                    case L_PLXMEDIAS_WRONG_FILEFORMAT:
-                        return plxMsg::Error(L_PLXMEDIAS_WRONG_FILEFORMAT);
-                        break;
-                    case L_PLXMEDIAS_UPLOAD_ERR:
-                        return plxMsg::Error(L_PLXMEDIAS_UPLOAD_ERR);
-                        break;
-                    case L_PLXMEDIAS_UPLOAD_SUCCESSFUL:
-                        $count++;
-                        break;
-                }
-            }
-        }
+        foreach($_FILES as $k=>$values) {
+			foreach ($values['size'] as $i=>$size) {
+				if(intval($size) > 0 and $_FILES[$k]['error'][$i] == 0) {
+					$filename = $_FILES[$k]['name'][$i];
+					$parts = pathinfo($filename);
+					$isPicture = preg_match(self::IMG_EXTS, $parts['extension']);
+					if(
+						$isPicture or
+						preg_match(self::DOC_EXTS, $parts['extension'])
+					) {
+						$x = 0;
+						$upFile = $this->path . $this->dir . $parts['basename'];
+						$pattern = $this->path . $this->dir . $parts['filename'] . '-%02d.' . $parts['extension'];
+						# contrôle si fichiers en double
+						while(file_exists($upFile) and $x < 100) {
+							$upFile = sprintf($pattern, $x++);
+						}
+						if($x < 100) {
+							$tmp_name = $_FILES[$k]['tmp_name'][$i];
+							if(move_uploaded_file($tmp_name, $upFile)) {
+								$count++;
+					            if($isPicture) {
+					                plxUtils::makeThumb($upFile, $this->path . '.thumbs/' . $this->dir . basename($upFile));
+					                if(is_array($all_sizes['resize'])) {
+					                    plxUtils::makeThumb($upFile, $upFile, $all_sizes['resize'][0], $all_sizes['resize'][1], 80);
+									}
+					                if(is_array($all_sizes['thumb'])) {
+					                    plxUtils::makeThumb($upFile, plxUtils::thumbName($upFile),$all_sizes['thumb'][0], $all_sizes['thumb'][1], 80);
+									}
+					            }
+							} else {
+								# Can't move temporary file
+							}
+						} else {
+							# Too many files
+						}
+					}
+				}
+	        }
+		}
 
-        if ($count == 1)
-            return plxMsg::Info(L_PLXMEDIAS_UPLOAD_SUCCESSFUL);
-        elseif ($count > 1)
-            return plxMsg::Info(L_PLXMEDIAS_UPLOADS_SUCCESSFUL);
+		return plxMsg::Info(($count == 1) ? L_PLXMEDIAS_UPLOAD_SUCCESSFUL : L_PLXMEDIAS_UPLOADS_SUCCESSFUL);
     }
 
     /**
@@ -528,7 +531,7 @@ class plxMedias
             if (is_file($this->path . $this->dir . $file)) {
                 $thumName = plxUtils::thumbName($file);
                 $ext = strtolower(strrchr($this->path . $this->dir . $file, '.'));
-                if (in_array($ext, $this->img_supported)) {
+                if (preg_match(self::IMG_EXTS, $ext)) {
                     if (plxUtils::makeThumb($this->path . $this->dir . $file, $this->path . $this->dir . $thumName, $width, $height, 80))
                         $count++;
                 }
