@@ -226,12 +226,13 @@ class plxMotor {
 		* */
 
 		$this->bypage = $this->aConf['bypage']; # Nombre d'article par page
+		$style = PLX_ROOT. $this->aConf['racine_themes'] . $this->aConf['style'];
 		if(!empty($this->get) and !preg_match('@^page\d+@', $this->get)) {
 			if(preg_match('@(article|static|categorie)(\d+)?(?:/(.*))?$@', $this->get, $matches)) {
-				list($get, $this->mode, $id, $url) = $matches;
+				$this->mode = $matches[1];
+				$this->cible = !empty($matches[2]) ? substr(str_pad($matches[2], 4, '0', STR_PAD_LEFT), ($this->mode == 'article') ? -4 : -3) : false;
+				$url = !empty($matches[3]) ? $matches[3] : false;
 				$this->template = $this->mode . '.php';
-				$id = $matches[2];
-				$this->cible = !empty($id) ? substr(str_pad($id, 4, '0', STR_PAD_LEFT), ($this->mode == 'article') ? -4 : -3) : false;
 				switch($matches[1]) {
 					case 'article':
 						$parts = array(
@@ -245,9 +246,12 @@ class plxMotor {
 							$this->error404(L_UNKNOWN_ARTICLE);
 						}
 						if(empty($this->cible)) {
-							$this->cible = $arts[0];
-							# vérifier si template existe
-							$this->template = 'article.php';
+							$this->cible = $this->plxRecord_arts->result[0]['numero'];
+						}
+
+						$t = $this->plxRecord_arts->result[0]['template'];
+						if(empty($t) and $t != $this->template and file_exists($style . $t)) {
+							$this->template = $t;
 						}
 						break;
 					case 'static':
@@ -271,7 +275,10 @@ class plxMotor {
 							if(!empty($this->aConf['homestatic']) and $this->aConf['homestatic'] == $this->cible) {
 								$this->redir301($this->urlRewrite());
 							} else {
-								$this->template = $this->aStats[$this->cible]['template'];
+								$t = $this->aStats[$this->cible]['template'];
+								if(empty($t) and $t != $this->template and file_exists($style . $t)) {
+									$this->template = $t;
+								}
 							}
 						}
 						break;
@@ -285,26 +292,28 @@ class plxMotor {
 								return ($item['url'] == $url);
   							});
 							if(count($items) != 1) {
-								$this->error404(L_UNKNOWN_STATIC);
+								$this->error404(L_UNKNOWN_CATEGORY);
 							}
 
-							$id = array_keys($items)[0];
-							$this->redir301($this->urlRewrite('index.php?categorie' . intval($id) . '/' . $items[$id]['url']));
+							$this->cible = array_keys($items)[0];
 						} elseif(!isset($this->aCats[$this->cible]) or !$this->aCats[$this->cible]['active']) {
 							$this->error404(L_UNKNOWN_CATEGORY);
-						} else {
-							$this->template = $this->aCats[$this->cible]['template'];
-							$parts = array(
-								'\d{4}', # id of article
-								'(?:home,|\d{3},)*' . $this->cible . '(?:,\d{3})*', # categories
-								'\d{3}\.\d{12}', # id of author and published date
-								'[\w\+-]+' # url
-							);
-							$this->motif = '@^' . implode('\.', $parts) .'\.xml$@';
-							$this->tri = $this->aCats[$this->cible]['tri']; # tri des articles
-							if(!empty($this->aCats[$this->cible]['bypage'])) {
-								$this->bypage = $this->aCats[$this->cible]['bypage'];
-							};
+						}
+
+						$parts = array(
+							'\d{4}', # id of article
+							'(?:home,|\d{3},)*' . $this->cible . '(?:,\d{3})*', # categories
+							'\d{3}\.\d{12}', # id of author and published date
+							'[\w\+-]+' # url
+						);
+						$this->motif = '@^' . implode('\.', $parts) .'\.xml$@';
+						$this->tri = $this->aCats[$this->cible]['tri']; # tri des articles
+						if(!empty($this->aCats[$this->cible]['bypage'])) {
+							$this->bypage = $this->aCats[$this->cible]['bypage'];
+						};
+						$t = $this->aCats[$this->cible]['template'];
+						if(empty($t) and $t != $this->template and file_exists($style . $t)) {
+							$this->template = $t;
 						}
 						break;
 				}
@@ -319,8 +328,10 @@ class plxMotor {
 					$this->motif = '@^' . implode('\.', $parts) .'\.xml$@';
 					if($this->getArticles()) {
 						$this->mode = 'home';
-						$this->template = $this->aStats[$this->aConf['homestatic']]['template'];
-						if($this->template == 'static.php') {
+						$t = $this->aStats[$this->aConf['homestatic']]['template'];
+						if(!empty($t) and $t != 'static.php' and file_exists($style . $t)) {
+							$this->template = $t;
+						} else {
 							$this->template = $this->aConf['hometemplate'];
 						}
 					} else {
@@ -1513,19 +1524,30 @@ class plxMotor {
 
 		if(!empty($url) and $url != '?' and preg_match('@^([\w./-]+)?(?:\?([\w./,&=%-]+))?(?:#(.*))?$@i', $url, $args)) {
 			if($this->aConf['urlrewriting']) {
-				$new_url  = str_replace('index.php', '', $args[1]);
-				$new_url  = str_replace('feed.php', 'feed/', $new_url);
-				$new_url .= !empty($args[2])?$args[2]:'';
-				if(empty($new_url))	$new_url = $this->path_url;
-				$new_url .= !empty($args[3])?'#'.$args[3]:'';
-				return str_replace('&', '&amp;', $this->racine.$new_url);
+				$new_url  = strtr(is_string($args[1]) ? $args[1] : '', array(
+					'index.php'	=> '',
+					'feed.php'	=> 'feed/',
+				));
+				if(!empty($args[2])) {
+					$new_url .= preg_replace('@^(article|static|categorie)\d+@', '$1', $args[2]);
+				}
+				if(empty($new_url))	{
+					$new_url = $this->path_url;
+				}
 			} else {
-				if(empty($args[1]) AND !empty($args[2])) $args[1] = 'index.php';
-				$new_url  = !empty($args[1])?$args[1]:$this->path_url;
-				$new_url .= !empty($args[2])?'?'.$args[2]:'';
-				$new_url .= !empty($args[3])?'#'.$args[3]:'';
-				return $this->racine.$new_url;
+				if(empty($args[1]) AND !empty($args[2])) {
+					$args[1] = 'index.php';
+				}
+				$new_url  = !empty($args[1]) ? $args[1] : $this->path_url;
+				if(!empty($args[2])) {
+					$new_url .= '?' . $args[2];
+				}
 			}
+
+			if(!empty($args[3])) {
+				$new_url .= '#' . $args[3];
+			}
+			return $this->racine . $new_url;
 		}
 
 		return $this->racine;
