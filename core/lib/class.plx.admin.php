@@ -42,6 +42,7 @@ Options -Multiviews
 	# Réécriture des urls
 	RewriteRule ^(article\d*|categorie\d*|tag|archives|static\d*|page\d*|blog|telechargement|download)\b(.*)$ index.php?$1$2 [L]
 	RewriteRule ^feed\/(.*)$ feed.php?$1 [L]
+	RewriteRule ^(##CAT_URLS##)\b(.*)$ index.php?categorie/$1$2 [L]
 </IfModule>
 # END -- Pluxml
 EOT;
@@ -268,7 +269,22 @@ EOT;
 				break;
 			case '1': # activation
 				$base = parse_url(!empty($url) ? $url : $this->racine);
-				$plxhtaccess = PHP_EOL . str_replace('##BASE##', $base['path'], self::URLREWRITING_TEMPLATE) . PHP_EOL;
+				$catUrls = array_map(
+					function($item) {
+						return $item['url'];
+					},
+					array_filter(
+						$this->aCats,
+						function($item) {
+							return !empty($item['active']);
+						}
+					)
+				);
+				arsort($catUrls);
+				$plxhtaccess = PHP_EOL . strtr(self::URLREWRITING_TEMPLATE,array(
+					'##BASE##'		=> $base['path'],
+					'##CAT_URLS'	=> implode('|', array_values($catUrls)),
+				)) . PHP_EOL;
 				if(!empty($htaccess) and preg_match(self::URLREWRITING_PATTERN, $htaccess) === 1) {
 					$htaccess = preg_replace(self::URLREWRITING_PATTERN, $plxhtaccess, $htaccess);
 				} else

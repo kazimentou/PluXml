@@ -383,7 +383,7 @@ class plxShow
                                 # On modifie nos motifs
                                 echo strtr($format, array(
                                     '#cat_id' => 'cat-' . $idCatNum,
-                                    '#cat_url' => $this->plxMotor->urlRewrite('?categorie' . $idCatNum . '/' . $v['url']),
+                                    '#cat_url' => $this->plxMotor->urlRewrite(!empty($this->plxMotor->aConf['urlrewriting']) ? $v['url'] : '?categorie' . $idCatNum . '/' . $v['url']),
                                     '#cat_name' => plxUtils::strCheck($v['name']),
                                     '#cat_status' => !empty($currentCats) && in_array($idCatStr, $currentCats) ? 'active' : 'noactive',
                                     '#cat_description' => plxUtils::strCheck($v['description']),
