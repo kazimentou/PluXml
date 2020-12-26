@@ -1511,24 +1511,24 @@ class plxMotor {
 			return $url;
 		}
 
-		if($url=='' OR $url=='?') return $this->racine;
-
-		preg_match('#^([0-9a-z\_\-\.\/]+)?[\?]?([0-9a-z\_\-\.\/,&=%]+)?[\#]?(.*)$#i', $url, $args);
-
-		if($this->aConf['urlrewriting']) {
-			$new_url  = str_replace('index.php', '', $args[1]);
-			$new_url  = str_replace('feed.php', 'feed/', $new_url);
-			$new_url .= !empty($args[2])?$args[2]:'';
-			if(empty($new_url))	$new_url = $this->path_url;
-			$new_url .= !empty($args[3])?'#'.$args[3]:'';
-			return str_replace('&', '&amp;', $this->racine.$new_url);
-		} else {
-			if(empty($args[1]) AND !empty($args[2])) $args[1] = 'index.php';
-			$new_url  = !empty($args[1])?$args[1]:$this->path_url;
-			$new_url .= !empty($args[2])?'?'.$args[2]:'';
-			$new_url .= !empty($args[3])?'#'.$args[3]:'';
-			return $this->racine.$new_url;
+		if(!empty($url) and $url != '?' and preg_match('@^([\w./-]+)?(?:\?([\w./,&=%-]+))?(?:#(.*))?$@i', $url, $args)) {
+			if($this->aConf['urlrewriting']) {
+				$new_url  = str_replace('index.php', '', $args[1]);
+				$new_url  = str_replace('feed.php', 'feed/', $new_url);
+				$new_url .= !empty($args[2])?$args[2]:'';
+				if(empty($new_url))	$new_url = $this->path_url;
+				$new_url .= !empty($args[3])?'#'.$args[3]:'';
+				return str_replace('&', '&amp;', $this->racine.$new_url);
+			} else {
+				if(empty($args[1]) AND !empty($args[2])) $args[1] = 'index.php';
+				$new_url  = !empty($args[1])?$args[1]:$this->path_url;
+				$new_url .= !empty($args[2])?'?'.$args[2]:'';
+				$new_url .= !empty($args[3])?'#'.$args[3]:'';
+				return $this->racine.$new_url;
+			}
 		}
+
+		return $this->racine;
 	}
 
 	/**
