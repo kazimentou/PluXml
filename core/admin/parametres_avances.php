@@ -206,7 +206,7 @@ foreach(array(
 						$checked = ($sec == $value) ? ' checked' : '';
 ?>
 				<div class="inbl">
-					<input type="radio" name="<?= $v . $k ?>" value="<?= $r ?>" id="<?= $idR ?>" <?= $checked ?> />
+					<input type="radio" name="<?= $v . $k ?>" value="<?= $sec ?>" id="<?= $idR ?>" <?= $checked ?> />
 					<label for="<?= $idR ?>"><?= $r ?></label>
 				</div>
 <?php

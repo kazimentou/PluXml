@@ -165,8 +165,8 @@ EOT;
 			$oldValue = $this->aConf['urlrewriting'];
 
 			foreach($content as $k=>$v) {
-				if(!in_array($k,array('token', 'config_path'))) {
-					# parametres à ne pas mettre dans le fichier
+				# parametres à ne pas mettre dans le fichier
+				if(!in_array($k, array('token', 'config_path', 'config-base', 'config-more'))) {
 					$this->aConf[$k] = $v;
 				}
 			}
@@ -209,7 +209,7 @@ EOT;
 <document>
 <?php
 		foreach($this->aConf as $k=>$v) {
-			if($k != 'racine') {
+			if(!in_array($k, array('token', 'config_path', 'config-base', 'config-more', 'racine'))) {
 				$cdata = (preg_match(self::PATTERN_CONFIG_CDATA, $k) === 0);
 
 				# Le chemin du dossier doit finir par "/"
