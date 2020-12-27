@@ -1400,6 +1400,11 @@ class plxUtils
                         $classList[] = 'active';
                     }
                     break;
+                case 'plugin' :
+					if(preg_replace('@.*/(plugin.php.*?)$@', '$1', $_SERVER['REQUEST_URI']) == $href) {
+                        $classList[] = 'active';
+					}
+					break;
                 default:
                     if ($script == $page) {
                         $classList[] = 'active';
@@ -1409,16 +1414,26 @@ class plxUtils
         if (!empty($aClass)) {
             $classList[] = $aClass;
         }
-        $className = implode(' ', $classList);
 
-        $onclick = $onclick ? 'onclick="' . $onclick . '"' : '';
-        $title = $title ? 'title="' . $title . '"' : '';
-        $extra = (is_string($extra) and (!empty($extra))) ? ' ' . trim($extra) : '';
+		$attrs = array(
+			'class="' . implode(' ', $classList) . '"',
+		);
+		if(!empty($onclick)) {
+			$attrs[] = 'onclick="' . $onclick . '"';
+		}
+		if(!empty($title)) {
+			$attrs[] = 'title="' . $title . '"';
+		}
+        if(strpos($href, PLX_ROOT) === 0) {
+			$attrs[] = 'target="_blank"';
+		}
 
         $caption = ucfirst($caption);
-        return <<< EOT
-<a href="$href" id="mnu_$id" class="$className" $title $onclick>$caption$extra</a>
-EOT;
+        if(is_string($extra) and (!empty($extra))) {
+			$caption .= ' ' . trim($extra);
+		}
+
+        return '<a href="' . $href . '" id="mnu_' . $id . '" ' . implode(' ', $attrs) . '>' . $caption . '</a>';
     }
 
     /**

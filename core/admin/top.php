@@ -19,7 +19,9 @@ if (isset($_GET["del"]) and $_GET["del"] == "install") {
 	<meta charset="<?= strtolower(PLX_CHARSET) ?>">
     <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1.0">
     <title><?= plxUtils::strCheck($plxAdmin->aConf['title']) ?> <?= L_ADMIN ?></title>
-    <link rel="stylesheet" href="theme/css/theme.css?v=<?= PLX_VERSION ?>" media="screen"/>
+    <link rel="stylesheet" href="theme/fontello/css/fontello.css" media="screen"/>
+    <link rel="stylesheet" href="theme/css/knacss.css" media="screen"/>
+    <link rel="stylesheet" href="theme/css/theme.css" media="screen"/>
 <?php
 plxUtils::printLinkCss($plxAdmin->aConf['custom_admincss_file'], true);
 plxUtils::printLinkCss($plxAdmin->aConf['racine_plugins'] . 'admin.css', true);
@@ -56,7 +58,7 @@ $logoSizes = getimagesize($logo);
 		<div class="banner">
 			<div class="brand">
 				<div>
-					<a href="<?= PLX_ROOT ?>" title="<?= L_BACK_HOMEPAGE_TITLE ?>" class="logo"><img src="<?= $logo ?>" <?= !empty($logoSizes) ? $logoSizes[3] : '' ?> /></a>
+					<a href="<?= PLX_ROOT ?>" title="<?= L_BACK_HOMEPAGE_TITLE ?>" class="logo" target="_blank"><img src="<?= $logo ?>" <?= !empty($logoSizes) ? $logoSizes[3] : '' ?> /></a>
 				</div>
 				<div>
 					<h1 class="h4-like"><?= PlxUtils::strCheck($plxAdmin->aConf['title']) ?></h1>
@@ -154,7 +156,7 @@ if (isset($plxAdmin->aConf['homestatic']) and !empty($plxAdmin->aConf['homestati
 	$artsHomepage = $plxAdmin->plxGlob_arts->query('#^\d{4}\.(\d{3},)*home(,\d{3})*\.\d{3}\.\d{12}\.[\w-]+\.xml$#');
 	if(!empty($artsHomepage)) {
 ?>
-					<li><?= plxUtils::formatMenu(L_BLOG, $plxAdmin->urlRewrite('index.php?blog'), L_BACK_TO_BLOG_TITLE, 'icon-left-open', false, false, false) ?></li>
+					<li><?= plxUtils::formatMenu(L_BLOG, PLX_ROOT . 'index.php?blog', L_BACK_TO_BLOG_TITLE, 'icon-left-open', false, false, false) ?></li>
 <?php
 	}
 }
