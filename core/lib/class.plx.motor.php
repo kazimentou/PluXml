@@ -415,22 +415,34 @@ class plxMotor {
 		} else {
 			$this->mode = 'home';
 			$this->template = $this->aConf['hometemplate'];
+			$noBlog = empty($this->aConf['homestatic']);
+			$homepageCats = '(?:' . $this->homepageCats . ')';
 			$parts = array(
 				'\d{4}', # id of article
-				'(?:' . (empty($this->aConf['homestatic']) ? 'home,|' : '' ) . '\d{3},)*(?:' . $this->homepageCats . ')(?:,\d{3})*', # categories
-				'\d{3}\.' . $this->cible . '\d{' . (12 - strlen($this->cible)) . '}', # id of author and published date
+				'(?:\d{3},)*' . ($noBlog ? 'home' : $homepageCats) . '(?:,\d{3})*', # categories
+				'\d{3}\.\d{12}', # id of author and published date
 				'[\w\+-]+' # url
 			);
 			$this->motif = '@^' . implode('\.', $parts) .'\.xml$@';
-			/*
 
-			# On regarde si on a des articles en mode "home"
-			if($this->plxGlob_arts->query('#^\d{4}\.(home[0-9,]*)\.\d{3}\.\d{12}\.[\w-]+\.xml$#')) {
-				$this->motif = '#^\d{4}.(home[0-9,]*).\d{3}.\d{12}.[\w-]+.xml$#';
-			} else { # Sinon on recupere tous les articles
-				$this->motif = '#^\d{4}.(?:\d|,)*(?:'.$this->homepageCats.')(?:\d|,)*.\d{3}.\d{12}.[\w-]+.xml$#';
+			if(empty($this->plxGlob_arts->query($this->motif))) {
+				# pas d'articles. On tente une nouvelle recherche.
+				if($noBlog) {
+					$allCats = '\d{3}(?:,\d{3})';
+					# categories
+					$parts[1] = '(?:\d{3},)*' . $homepageCats . '(?:,\d{3})*';
+					$this->motif = '@^' . implode('\.', $parts) .'\.xml$@';
+					if(empty($this->plxGlob_arts->query($this->motif))) {
+						# On prend toutes les catégories
+						$parts[1] = $allCats;
+						$this->motif = '@^' . implode('\.', $parts) .'\.xml$@';
+					}
+				} else {
+					# On prend toutes les catégories
+					$parts[1] = $allCats;
+					$this->motif = '@^' . implode('\.', $parts) .'\.xml$@';
+				}
 			}
-			 * */
 		}
 
 		# Hook plugins
