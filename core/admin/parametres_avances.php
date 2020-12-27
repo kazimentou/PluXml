@@ -34,7 +34,7 @@ include 'top.php';
             <h2 class="h3-like"><?= L_CONFIG_ADVANCED ?></h2>
         </div>
         <div>
-			<button class="btn--primary" role="button"><?= L_SAVE ?></button>
+			<button name="config-more" class="btn--primary" role="button"><?= L_SAVE ?></button>
         </div>
     </div>
 <?php

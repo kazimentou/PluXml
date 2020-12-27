@@ -218,96 +218,99 @@ class plxMotor {
 		if(eval($this->plxPlugins->callHook('plxMotorPreChauffageBegin'))) return;
 
 		$this->bypage = $this->aConf['bypage']; # Nombre d'article par page
-		$style = PLX_ROOT. $this->aConf['racine_themes'] . $this->aConf['style'];
+		$style = PLX_ROOT. $this->aConf['racine_themes'] . $this->aConf['style'] . '/';
 		if(!empty($this->get) and !preg_match('@^page\d+@', $this->get)) {
-			if(preg_match('@(article|static|categorie)(\d+)?(?:/(.*))?$@', $this->get, $matches)) {
+			if(preg_match('@(article|static|categorie)(\d*)(?:/(.*))?$@', $this->get, $matches)) {
 				$this->mode = $matches[1];
 				$this->cible = !empty($matches[2]) ? substr(str_pad($matches[2], 4, '0', STR_PAD_LEFT), ($this->mode == 'article') ? -4 : -3) : false;
 				$url = !empty($matches[3]) ? $matches[3] : false;
-				$this->template = $this->mode . '.php';
-				switch($matches[1]) {
-					case 'article':
-						$parts = array(
-							!empty($this->cible) ? $this->cible : '\d{4}', # id of article
-							'(?:home,|\d{3},)*(?:' . $this->activeCats . ')(?:,\d{3})*', # categories
-							'\d{3}\.\d{12}', # id of author and published date
-							!empty($url) ? $url : '[\w\+-]+' # url
-						);
-						$this->motif = '@^' . implode('\.', $parts) .'\.xml$@';
-						if(!$this->getArticles()) {
-							$this->error404(L_UNKNOWN_ARTICLE);
-						}
-						if(empty($this->cible)) {
-							$this->cible = $this->plxRecord_arts->result[0]['numero'];
-						}
+				if(empty($this->cible) and empty($url)) {
+					$this->error404(L_ERR_PAGE_NOT_FOUND);
+				} else {
+					$this->template = $this->mode . '.php';
+					switch($matches[1]) {
+						case 'article':
+								$parts = array(
+									!empty($this->cible) ? $this->cible : '\d{4}', # id of article
+									'(?:home,|\d{3},)*(?:' . $this->activeCats . ')(?:,\d{3})*', # categories
+									'\d{3}\.\d{12}', # id of author and published date
+									!empty($url) ? $url : '[\w\+-]+' # url
+								);
+								$this->motif = '@^' . implode('\.', $parts) .'\.xml$@';
+								if(!$this->getArticles()) {
+									$this->error404(L_UNKNOWN_ARTICLE);
+								} else {
+									if(empty($this->cible)) {
+										$this->cible = $this->plxRecord_arts->result[0]['numero'];
+									}
 
-						$t = $this->plxRecord_arts->result[0]['template'];
-						if(empty($t) and $t != $this->template and file_exists($style . $t)) {
-							$this->template = $t;
-						}
-						break;
-					case 'static':
-						if(empty($this->cible)) {
-							if(empty($url)) {
-								$this->error404(L_UNKNOWN_STATIC);
+									$t = $this->plxRecord_arts->result[0]['template'];
+									if(empty($t) and $t != $this->template and file_exists($style . $t)) {
+										$this->template = $t;
+									}
+								}
+							break;
+						case 'static':
+							if(empty($this->cible)) {
+								# $url n'est pas vide
+								$items = array_filter($this->aStats, function($item) use($url) {
+									return ($item['url'] == $url);
+	  							});
+								if(count($items) != 1) {
+									$this->error404(L_UNKNOWN_STATIC);
+								} else {
+									$this->cible = array_keys($items)[0];
+								}
 							}
 
-							$items = array_filter($this->aStats, function($item) use($url) {
-								return ($item['url'] == $url);
-  							});
-							if(count($items) != 1) {
+							if(empty($this->cible) or !isset($this->aStats[$this->cible]) or !$this->aStats[$this->cible]['active']) {
 								$this->error404(L_UNKNOWN_STATIC);
-							}
-
-							$id = array_keys($items)[0];
-							$this->redir301($this->urlRewrite('index.php?static' . intval($id) . '/' . $items[$id]['url']));
-						} elseif(!isset($this->aStats[$this->cible]) or !$this->aStats[$this->cible]['active']) {
-							$this->error404(L_UNKNOWN_STATIC);
-						} else {
-							if(!empty($this->aConf['homestatic']) and $this->aConf['homestatic'] == $this->cible) {
-								$this->redir301($this->urlRewrite());
 							} else {
-								$t = $this->aStats[$this->cible]['template'];
+								if(!empty($this->aConf['homestatic']) and $this->aConf['homestatic'] == $this->cible) {
+									# Page du blog
+									$this->redir301($this->urlRewrite('index.php?blog'));
+								} else {
+									$t = $this->aStats[$this->cible]['template'];
+									if(!empty($t) and $t != $this->template and file_exists($style . $t)) {
+										$this->template = $t;
+									}
+								}
+							}
+							break;
+						case 'categorie':
+							if(empty($this->cible)) {
+								# $url n'est pas vide
+								$items = array_filter($this->aCats, function($item) use($url) {
+									return ($item['url'] == $url);
+	  							});
+								if(count($items) != 1) {
+									$this->error404(L_UNKNOWN_CATEGORY);
+								} else {
+									$this->cible = array_keys($items)[0];
+								}
+							}
+
+							if(empty($this->cible) or !isset($this->aCats[$this->cible]) or !$this->aCats[$this->cible]['active']) {
+								$this->error404(L_UNKNOWN_CATEGORY);
+							} else {
+								$parts = array(
+									'\d{4}', # id of article
+									'(?:home,|\d{3},)*' . $this->cible . '(?:,\d{3})*', # categories
+									'\d{3}\.\d{12}', # id of author and published date
+									'[\w\+-]+' # url
+								);
+								$this->motif = '@^' . implode('\.', $parts) .'\.xml$@';
+								$this->tri = $this->aCats[$this->cible]['tri']; # tri des articles
+								if(!empty($this->aCats[$this->cible]['bypage'])) {
+									$this->bypage = $this->aCats[$this->cible]['bypage'];
+								};
+								$t = $this->aCats[$this->cible]['template'];
 								if(empty($t) and $t != $this->template and file_exists($style . $t)) {
 									$this->template = $t;
 								}
 							}
-						}
-						break;
-					case 'categorie':
-						if(empty($this->cible)) {
-							if(empty($url)) {
-								$this->error404(L_UNKNOWN_CATEGORY);
-							}
-
-							$items = array_filter($this->aCats, function($item) use($url) {
-								return ($item['url'] == $url);
-  							});
-							if(count($items) != 1) {
-								$this->error404(L_UNKNOWN_CATEGORY);
-							}
-
-							$this->cible = array_keys($items)[0];
-						} elseif(!isset($this->aCats[$this->cible]) or !$this->aCats[$this->cible]['active']) {
-							$this->error404(L_UNKNOWN_CATEGORY);
-						}
-
-						$parts = array(
-							'\d{4}', # id of article
-							'(?:home,|\d{3},)*' . $this->cible . '(?:,\d{3})*', # categories
-							'\d{3}\.\d{12}', # id of author and published date
-							'[\w\+-]+' # url
-						);
-						$this->motif = '@^' . implode('\.', $parts) .'\.xml$@';
-						$this->tri = $this->aCats[$this->cible]['tri']; # tri des articles
-						if(!empty($this->aCats[$this->cible]['bypage'])) {
-							$this->bypage = $this->aCats[$this->cible]['bypage'];
-						};
-						$t = $this->aCats[$this->cible]['template'];
-						if(empty($t) and $t != $this->template and file_exists($style . $t)) {
-							$this->template = $t;
-						}
-						break;
+							break;
+					}
 				}
 			} elseif(preg_match('@^blog\b@', $this->get, $matches)) {
 				if(!empty($this->aConf['homestatic'])) {
@@ -407,7 +410,7 @@ class plxMotor {
 					$this->error404(L_DOCUMENT_NOT_FOUND);
 				}
 			} else {
-				$this->error404(L_DOCUMENT_NOT_FOUND);
+				$this->error404(L_ERR_PAGE_NOT_FOUND);
 			}
 		} else {
 			$this->mode = 'home';

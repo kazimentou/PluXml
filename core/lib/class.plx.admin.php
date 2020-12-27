@@ -280,10 +280,10 @@ EOT;
 						}
 					)
 				);
-				arsort($catUrls);
+				arsort($catUrls); # on trie à l'inverse pour rechercher en premiers les mots les plus longs
 				$plxhtaccess = PHP_EOL . strtr(self::URLREWRITING_TEMPLATE,array(
 					'##BASE##'		=> $base['path'],
-					'##CAT_URLS'	=> implode('|', array_values($catUrls)),
+					'##CAT_URLS##'	=> implode('|', array_values($catUrls)),
 				)) . PHP_EOL;
 				if(!empty($htaccess) and preg_match(self::URLREWRITING_PATTERN, $htaccess) === 1) {
 					$htaccess = preg_replace(self::URLREWRITING_PATTERN, $plxhtaccess, $htaccess);

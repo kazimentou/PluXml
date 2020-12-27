@@ -1551,10 +1551,13 @@ class plxShow
 			!empty($this->plxMotor->aStats[$this->plxMotor->aConf['homestatic']]['active']) and
 			!empty($this->plxMotor->plxGlob_arts->query('#^\d{4}\.(\d{3},)*home(,\d{3})*\.\d{3}\.\d{12}\.[\w-]+\.xml$#'))
 		) {
+			/*
 			$active = (
                 $this->plxMotor->get and
                 preg_match('/(blog|categorie|archives|tag|article)/', $_SERVER['QUERY_STRING'] . $this->plxMotor->mode)
             );
+			 * */
+			$active = ($this->plxMotor->mode == 'home' and !empty($this->plxMotor->get) and preg_match('@\bblog\b@', $this->plxMotor->get));
             $replaces = array(
 				'#page_id'		=> 'static-blog',
 				'#page_class'	=> 'static menu',
