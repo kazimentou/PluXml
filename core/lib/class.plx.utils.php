@@ -1203,6 +1203,9 @@ class plxUtils
     /**
      * Méthode qui retourne la liste des langues disponibles dans un tableau
      *
+     * Noms de dossiers admis pour les langues: fr, de, pt-BR, pt-PT (norme ISO-639)
+     * https://fr.wikipedia.org/wiki/Liste_des_codes_ISO_639-1#Liste_des_codes_ISO_639-1/2/3
+     *
      * @return    array
      * @author    J.P. Pourrez, Stephane F.
      **/
