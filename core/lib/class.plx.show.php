@@ -910,21 +910,31 @@ class plxShow
     {
 
         # On verifie qu'un chapo existe
-        if ($this->plxMotor->plxRecord_arts->f('chapo') != '') {
+        $value = trim($this->plxMotor->plxRecord_arts->f('chapo'));
+        if ($value != '') {
             # On récupère les infos de l'article
             $id = intval($this->plxMotor->plxRecord_arts->f('numero'));
             $title = plxUtils::strCheck($this->plxMotor->plxRecord_arts->f('title'));
             $url = $this->plxMotor->plxRecord_arts->f('url');
             # On effectue l'affichage
-            echo $this->plxMotor->plxRecord_arts->f('chapo') . "\n";
+            echo $value . PHP_EOL;
+
+            # lien pour lire la suite
             if ($format) {
                 $title = str_replace("#art_title", $title, $format);
-                echo '<p class="more"><a href="' . $this->plxMotor->urlRewrite('?article' . $id . '/' . $url) . ($anchor != '' ? '#' . $anchor : '') . '" title="' . $title . '">' . $title . '</a></p>' . "\n";
+                $href = $this->plxMotor->urlRewrite('?article' . $id . '/' . $url);
+                if($anchor != '') {
+					$href .= '#' . $anchor;
+				}
+?>
+	<p class="more">
+		<a href="<?= $href ?>" title="<?= $title ?>"><?= $title ?></a>
+	</p>
+<?php
             }
-        } else { # Pas de chapo, affichage du contenu
-            if ($content === true) {
-                echo $this->plxMotor->plxRecord_arts->f('content') . "\n";
-            }
+        } elseif ($content === true) {
+			# Pas de chapo, affichage direct du contenu de l'article
+			echo $this->plxMotor->plxRecord_arts->f('content') . PHP_EOL;
         }
     }
 
@@ -938,10 +948,15 @@ class plxShow
     public function artContent($chapo = true)
     {
 
-        if ($chapo === true)
-            echo $this->plxMotor->plxRecord_arts->f('chapo') . "\n"; # Chapo
-        echo $this->plxMotor->plxRecord_arts->f('content') . "\n";
+        if ($chapo === true) {
+			# Chapo
+			$value = trim($this->plxMotor->plxRecord_arts->f('chapo'));
+			if($value != '') {
+				echo $value . PHP_EOL;
+			}
+		}
 
+        echo $this->plxMotor->plxRecord_arts->f('content') . PHP_EOL;
     }
 
     /**
