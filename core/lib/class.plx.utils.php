@@ -1211,10 +1211,10 @@ class plxUtils
         $result = array();
         foreach (
             array_map(
-                function ($dir1) {
-                    return preg_replace('#.*/([a-z]{2})$#', '$1', $dir1);
+                function ($item) {
+                    return preg_replace('#.*/(\w{2,3}(?:[-_]\w+)?)/core\.php$#', '$1', $item);
                 },
-                glob(PLX_CORE . 'lang/*', GLOB_ONLYDIR)
+                glob(PLX_CORE . 'lang/*/core.php')
             ) as $lang
         ) {
             $result[$lang] = $lang;
