@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Langues by Google</title>
+    <link rel="icon" href="../admin/theme/images/favicon.png" />
+</head><body>
+		<h1><a href="https://translate.google.com"><img src="google.svg" alt="Google" style="max-height: 3rem; width: auto;"/></a></h1>
+	<form method="post">
+		<select id ="lg" name="lg"></select>
+		<input type="submit" />
+	</form>
+	<script>
+		(function() {
+			'use strict';
+
+			// https://ssl.gstatic.com/inputtools/js/ln/17/fr.js
+			const script1 = document.createElement('SCRIPT');
+			// script1.src = 'fr.js';
+			script1.src = 'https://ssl.gstatic.com/inputtools/js/ln/17/' + navigator.language.replace(/-.*$/, '') + '.js';
+			script1.onload = function(params) {
+				const select = document.getElementById('lg');
+				/*
+				const theList = window.LanguageDisplays.nativeNames;
+				for(var i in theList) {
+					const option = document.createElement('OPTION');
+					option.value = i;
+					option.textContent = theList[i];
+					select.appendChild(option);
+				}
+				*/
+
+				window.LanguageDisplays.localNames.forEach(function(value) {
+					const parts = value.split(':');
+					const option = document.createElement('OPTION');
+					option.value = parts[1];
+					option.title = parts[1];
+					option.textContent = parts[0];
+					select.appendChild(option);
+				});
+			}
+			document.head.appendChild(script1);
+		})();
+	</script>
+</body></html>

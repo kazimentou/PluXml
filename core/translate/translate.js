@@ -2,7 +2,6 @@
 	'use strict';
 
 	const tbody = document.getElementById('translations-body');
-	const translatorUrl = tbody.hasAttribute('data-url') ? tbody.dataset.url : false;
 	const langs = document.querySelectorAll('input[name="langs[]"]');
 
 	tbody.addEventListener('focusin', function(event) {
@@ -31,53 +30,117 @@
 		}
 	});
 
-	if(typeof translatorUrl == 'string') {
-		tbody.addEventListener('click', function(event) {
-			if(event.target.tagName == 'INPUT' && event.target.value.trim().length == 0 && !event.target.hasAttribute('data-extra')) {
-				event.preventDefault();
-				// On traduit une cellule du tableau si elle est vide
-				const targetLang = event.target.name.replace(/^(\w+).*/, '$1');
-				const srcLang = langs[0].value;
-				const name = event.target.name.replace(/.*(\[\d+\])$/, srcLang + '$1');
-				const idiom = event.target.form.elements[name].value;
-				if(confirm('Translate :\n' + idiom)) {
-					const input = event.target
-					input.parentElement.classList.add('awaiting');
-					const uri = translatorUrl.replace(/#SL#/, srcLang).replace(/#TL#/, targetLang).replace(/#Q#/, encodeURIComponent(idiom));
-					const xhr = new XMLHttpRequest();
-					xhr.target = targetLang;
-					xhr.onload = function() {
-						if(this.getResponseHeader('Content-Type').startsWith('application/json')) {
-							const datas = JSON.parse(this.responseText);
-							if(typeof datas[0][0] == 'object') {
-								console.log(this.target);
-								for(var i=0, iMax=2; i<iMax; i++) {
-									console.log(datas[0][0][i]);
-								}
-								input.value = datas[0][0][0];
-								input.parentElement.classList.remove('awaiting');
-								input.parentElement.classList.remove('missing');
-								input.parentElement.classList.add('new');
-								const chks = input.form.elements['langs[]'];
-								for(var i=0, iMax = chks.length; i<iMax; i++) {
-									if(chks[i].value == this.target) {
-										chks[i].checked = true;
-										break;
-									}
-								}
-								return;
-							}
-						}
-						console.error('Bad Content-Type');
-					};
-					xhr.open('GET', uri);
-					xhr.send();
-				}
+	function fromGoogle(datas) {
+		if(typeof datas[0][0] == 'object') {
+			console.log('Translated from Google');
+			for(var i=0, iMax=2; i<iMax; i++) {
+				console.log(datas[0][0][i]);
 			}
-		});
-	} else {
-		console.error('Url for translations is missing');
+			return datas[0][0][0];
+		}
+
+		return '';
 	}
+
+	function fromMymemory(datas) {
+		if(datas.quotaFinished) {
+			alert('Quota finished from MyMemory');
+		} else if(datas.responseStatus != 200) {
+			console.error('response status ' + datas.responseStatus + ' from MyMemory');
+		} else if(typeof datas.responseData.translatedText == 'string') {
+			if(datas.matches.length > 1) {
+				console.log('Translated from MyMemory');
+				datas.matches.forEach(function(item) {
+					console.log(item.segment + ': ' + item.translation);
+				});
+			}
+			return datas.responseData.translatedText;
+		}
+
+		return '';
+	}
+
+	// traduit une cellule vide du tableau
+	if(typeof localStorage == 'object') {
+		const KEY = 'translator';
+		const translator = localStorage.getItem(KEY);
+		if(translator != null) {
+			document.forms.translation_form.elements.translator.value = translator;
+		}
+
+		const els = document.getElementsByClassName('translator-motor');
+		if(els.length > 0) {
+			els[0].addEventListener('change', function(event) {
+				if(event.target.name == 'translator') {
+					localStorage.setItem(KEY, event.target.value);
+				}
+			});
+		}
+	}
+
+	tbody.addEventListener('click', function(event) {
+		if(event.target.tagName == 'INPUT' && event.target.value.trim().length == 0 && !event.target.hasAttribute('data-extra')) {
+			// On traduit une cellule du tableau si elle est vide
+			event.preventDefault();
+
+			const translatorMotor = event.target.form.elements.translator.value;
+			if(translatorMotor == '') {
+				alert(tbody.dataset.lang);
+				return;
+			}
+
+			if(!tbody.hasAttribute('data-' + translatorMotor)) {
+				console.error('Attribute data-' + translatorMotor + ' is missing in tbody element');
+				return;
+			}
+
+			const translatorUrl = tbody.dataset[translatorMotor];
+			const targetLang = event.target.name.replace(/^(\w+).*/, '$1');
+			const srcLang = langs[0].value;
+			const name = event.target.name.replace(/.*(\[\d+\])$/, srcLang + '$1');
+			const idiom = event.target.form.elements[name].value;
+
+			if(confirm('Translate :\n' + idiom)) {
+				const input = event.target
+				input.parentElement.classList.add('awaiting');
+				const uri = translatorUrl.replace(/#SL#/, srcLang).replace(/#TL#/, targetLang).replace(/#Q#/, encodeURIComponent(idiom));
+				const xhr = new XMLHttpRequest();
+				xhr.target = targetLang;
+				xhr.translator = translatorMotor;
+				xhr.onload = function() {
+					if(this.getResponseHeader('Content-Type').startsWith('application/json')) {
+						const datas = JSON.parse(this.responseText);
+						switch(this.translator) {
+							case 'google':
+								input.value = fromGoogle(datas);
+								break;
+							case 'mymemory':
+								input.value = fromMymemory(datas);
+								break;
+						}
+
+						if(input.value != '') {
+							input.parentElement.classList.remove('awaiting');
+							input.parentElement.classList.remove('missing');
+							input.parentElement.classList.add('new');
+							const chks = input.form.elements['langs[]'];
+							for(var i=0, iMax = chks.length; i<iMax; i++) {
+								if(chks[i].value == this.target) {
+									chks[i].checked = true;
+									break;
+								}
+							}
+							return;
+						}
+					}
+
+					console.error('Bad Content-Type');
+				};
+				xhr.open('GET', uri);
+				xhr.send();
+			}
+		}
+	});
 
 	// deactive tous les inputs sauf pour les langues choisies
 	document.forms[1].addEventListener('submit', function(event) {

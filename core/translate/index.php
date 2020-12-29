@@ -5,8 +5,8 @@
  * */
 
 const ROOT = '../lang/';
-const TRANSLATOR_URL = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=#SL#&tl=#TL#&dt=t&q=#Q#';
-# const TRANSLATOR_URL = 'https://api.mymemory.translated.net/get?q=#Q#&langpair=#SL#|#TL#';
+const GOOGLE_TRANSLATOR_URL = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=#SL#&tl=#TL#&dt=t&q=#Q#';
+const MYMEMORY_TRANSLATOR_URL = 'https://api.mymemory.translated.net/get?q=#Q#&langpair=#SL#|#TL#';
 
 
 $langs = array_map(
@@ -293,7 +293,7 @@ Rechercher toutes les clés utilisées : grep -E '\bL_\w+' *.php core/{admin,lib
 
 	<!-- formulaire pour les traductions -->
 	<section id="main">
-		<form method="post">
+		<form method="post" name="translation_form">
 				<table id="translations">
 					<thead>
 						<tr class="toolbar">
@@ -317,6 +317,12 @@ Rechercher toutes les clés utilisées : grep -E '\bL_\w+' *.php core/{admin,lib
 										<span>Nettoyer</span>
 									</label>
 									<input type="submit" name="saveBtn" value="Sauvegarder" />
+									<div class="translator-motor">
+										<input type="radio" name="translator" value="google" />
+										<a href="https://translate.google.com" rel="noreferrer" target="_blank"><img src="google.svg" alt="Google" /></a>
+										<input type="radio" name="translator" value="mymemory" />
+										<a href="https://mymemory.translated.net" rel="noreferrer" "target="_blank"><img src="mymemory.svg" alt="MyMemory" /></a>
+									</div>
 								</div>
 							</th>
 						</tr>
@@ -339,7 +345,7 @@ Rechercher toutes les clés utilisées : grep -E '\bL_\w+' *.php core/{admin,lib
 <?= $header ?>
 						</tr>
 					</thead>
-					<tbody id="translations-body" data-url="<?= TRANSLATOR_URL ?>">
+					<tbody id="translations-body" data-lang="Sélectionnez un moteur de traduction" data-google="<?= GOOGLE_TRANSLATOR_URL ?>" data-mymemory="<?= MYMEMORY_TRANSLATOR_URL ?>">
 <?php
 	foreach($translations as $key=>$values) {
 		$i = $values['line'];

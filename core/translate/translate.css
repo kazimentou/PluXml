@@ -185,9 +185,25 @@ header form {
 
 .toolbar label {
 	background-color: #888;
-	border: ;
 }
 
 select[name="new"] {
 	min-width: 30rem;
+}
+
+.translator-motor {
+	background-color: #fff;
+	padding: 0.25rem 0.5rem;
+}
+
+.translator-motor label {
+	background-color: inherit;
+	padding: 0;
+	display: inline-block;
+	height: 100%;
+}
+
+.translator-motor img {
+	height: 3.0rem;
+	width: auto;
 }
