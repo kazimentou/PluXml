@@ -121,7 +121,6 @@
 
 						if(input.value != '') {
 							input.parentElement.classList.remove('awaiting');
-							input.parentElement.classList.remove('missing');
 							input.parentElement.classList.add('new');
 							const chks = input.form.elements['langs[]'];
 							for(var i=0, iMax = chks.length; i<iMax; i++) {
@@ -130,8 +129,12 @@
 									break;
 								}
 							}
-							return;
+						} else {
+							alert('Error. See console.log()');
 						}
+
+						input.parentElement.classList.remove('awaiting');
+						return;
 					}
 
 					console.error('Bad Content-Type');
