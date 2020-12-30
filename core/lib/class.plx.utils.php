@@ -1211,6 +1211,16 @@ class plxUtils
      **/
     public static function getLangs()
     {
+       	# https://flagpedia.net/emoji
+		$lang2flag = array(
+			'en'	=> 'GB',
+			'oc'	=> 'FR', # 🏴󠁦󠁲󠁯󠁣󠁣󠁿 '🏴frocc' . chr(127)
+			'co'	=> 'FR', # 🏴󠁦󠁲󠁣󠁯󠁲󠁿 '🏴frcor' . chr(127)
+			'br'	=> 'FR', # 🏴󠁦󠁲󠁣󠁯󠁲󠁿 '🏴frbre' . chr(127)
+			'gl'	=> 'ES', # 🏴󠁥󠁳󠁧󠁡󠁿 '🏴esga' . chr(127)
+			'ca'	=> 'ES', # 🏴󠁥󠁳󠁣󠁴󠁿 '🏴esct' . chr(127)
+		);
+
         $result = array();
         foreach (
             array_map(
@@ -1220,7 +1230,12 @@ class plxUtils
                 glob(PLX_CORE . 'lang/*/core.php')
             ) as $lang
         ) {
-            $result[$lang] = $lang;
+			$flag = isset($lang2flag[$lang]) ? $lang2flag[$lang] : strtoupper($lang);
+			$emoji = '';
+			for($e=0, $eMax=strlen($flag); $e<$eMax; $e++) {
+				$emoji .= sprintf('&#x1f1%x;', ord(substr($flag, $e)) + 165);
+			}
+            $result[$lang] = '<span>' . $emoji . '</span>&nbsp;&nbsp;' . $lang;
         }
         return $result;
     }

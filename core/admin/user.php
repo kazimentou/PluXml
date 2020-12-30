@@ -85,7 +85,6 @@ eval($plxAdmin->plxPlugins->callHook('AdminUserTop')) ;
 			<span><?= L_PROFIL_LOGIN ?></span>
 			<input type="text" name="login" value="<?= plxUtils::strCheck($plxAdmin->aUsers[$id]['login']) ?>" required />
 		</label>
-		</div>
 		<label class="caption-inside">
 			<span><?= L_USER_LANG ?></span>
 <?php plxUtils::printSelect('lang', plxUtils::getLangs(), $plxAdmin->aUsers[$id]['lang']) ?>
