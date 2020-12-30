@@ -170,6 +170,100 @@
 	});
 
 	// Pour ajout d'une nouvelle langue
+	function emojiFlag(lang) {
+		// https://emojipedia.org/flags/
+		// https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
+		// https://iso639-3.sil.org/sites/iso639-3/files/downloads/iso-639-3.tab
+		const lang2flag = {
+			af: 'ZA',
+			zu: 'ZA',
+			xh: 'ZA',
+			en: 'GB',
+			oc: 'FR', // '🏴frocc'
+			be: 'BY', // Biélorussie
+			ca: 'ES', // '🏴󠁥󠁳󠁣󠁴󠁿'󠁥󠁳󠁣󠁴󠁿 '🏴esct' Catalogne
+			ga: 'IE',
+			da: 'DK',
+			ka: 'GE',
+			gl: 'ES', // '🏴esga',
+			cy: '🏴󠁧󠁢󠁷󠁬󠁳󠁿', // Pays de Galles Wales
+			gd: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', // '🏴gbsct', Scotland
+			sq: 'AL',
+			eu: 'ES', // '🏴espv', // Euskadi Pays Basque
+			rom: 'RO',
+			hy: 'AM',
+			ko: 'KR',
+			nn: 'NO',
+			nb: 'NO',
+			he: 'IL',
+			ja: 'JP',
+			el: 'GR',
+			ff: 'NE', // '🇪🇭' Peul
+			haw: '🏴󠁵󠁳󠁨󠁩󠁿', // '🏴ushi󠁿󠁿 U+E007F Hawaii
+			hi: 'IN',
+			co: '🏴󠁦󠁲󠁣󠁯󠁲󠁿',
+			fil: 'PH',
+			tl: 'PH',
+			fy: 'NL',
+			su: 'SD',
+			sw: 'KE',
+			te:'IN',
+			yi: 'DE',
+			lb: 'LU',
+			uk: 'UA',
+			vi: 'VN',
+			bo: 'CN', // '🏴󠁣󠁮󠀵󠀴󠁿',
+			fa: 'IR',
+			nv: 'US',
+			kk: 'KZ',
+			lo: 'LA',
+			iu: 'CA',
+			ny: 'MW',
+			ccp: 'BD',
+			ceb: 'PH',
+			crk: 'CA',
+			jv: 'ID',
+			jw: 'ID',
+			ku: 'TR',
+			cs: 'CZ',
+			yo : 'NG',
+			ti: 'ER',
+			ckb: 'IQ',
+			uzs: 'UZ',
+			ur: 'PK',
+			mi: 'MG',
+			ne: 'NP',
+			or: 'IN',
+			ar: 'SA',
+			'pt-PT': 'PT',
+			'pt-BR': 'BR',
+			'zh-HK': 'HK',
+			'zh-Hant': 'TW',
+			'mni-Mtei': 'IN',
+			rhg: 'MM IN'
+		}
+		var s = '';
+		if(lang in lang2flag) {
+			s = lang2flag[lang];
+			if(s.substr(0, 2) == '🏴') {
+				return s;
+			}
+		} else if(/^(zh-|hmn|lis)/.test(lang)) {
+			// Languages in China
+			s = 'CN';
+		} else if(/^(mez|oj|one|osa|see|chr|ug)/.test(lang)) {
+			// Languages in USA
+			s = 'US';
+		} else {
+			s = lang.toUpperCase();
+		}
+		var result = '';
+		for(var i=0, iMax=s.length; i<iMax; i++) {
+			result += (s.charCodeAt(i) != 32) ? '&#x1f1' + (s.charCodeAt(i) + 165).toString(16) + ';' : ' ';
+		}
+		return result;
+	}
+
 	const newLang = document.getElementById('id_new');
 	if(newLang != null) {
 		var updated = false;
@@ -195,10 +289,10 @@
 
 					window.LanguageDisplays.localNames.forEach(function(value) {
 						const parts = value.split(':');
-						if(excludes.indexOf(parts[1]) < 0) {
+						if(true || excludes.indexOf(parts[1]) < 0) {
 							const option = document.createElement('OPTION');
 							option.value = parts[1];
-							option.textContent = parts[0] + ' (' + parts[1] + ')';
+							option.innerHTML = emojiFlag(parts[1]) +  ' ' + parts[0] + ' (' + parts[1] + ')';
 							select.appendChild(option);
 						}
 					});
