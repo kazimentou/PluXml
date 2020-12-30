@@ -259,15 +259,15 @@ foreach(array_keys($langs) as $lang) {
 	<header>
 		<form method="post">
 <?php
-foreach(array('principale', 'secondaire') as $caption) {
+foreach(array('principale', 'secondaire') as $k) {
 ?>
 			<div>
-				<label for="id_<?= $caption ?>">Langue <?= $caption ?></label>
-				<select id="id_<?= $caption ?>" name="<?= $caption ?>">
+				<label for="id_<?= $k ?>">Langue <?= $k ?></label>
+				<select id="id_<?= $k ?>" name="<?= $k ?>">
 					<option value="">--</option>
 <?php
 	foreach($langs as $lang=>$caption) {
-		$selected = ($lang == $_SESSION[$caption]) ? 'selected' : '';
+		$selected = ($lang == $_SESSION[$k]) ? 'selected' : '';
 ?>
 					<option value="<?= $lang ?>" <?= $selected ?>><?= $caption ?></option>
 <?php
