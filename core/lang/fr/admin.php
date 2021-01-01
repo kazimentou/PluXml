@@ -540,5 +540,4 @@ const L_THEMES_TITLE = 'Gérer les thèmes';
 const L_HELP = 'Aide';
 const L_HELP_TITLE = 'Voir l\'aide';
 const L_BACK_TO_THEMES = 'Retour à la page des thèmes';
-const L_CONFIG_THEME_UPDATE = 'Modifier le thème'
 ?>

@@ -484,5 +484,4 @@ const L_THEMES_TITLE = 'Het beheren van thema\'s';
 const L_HELP = 'Hulp';
 const L_HELP_TITLE = 'Zie hulp';
 const L_BACK_TO_THEMES = 'Terug naar de onderwerpen van de pagina';
-const L_CONFIG_THEME_UPDATE = 'Change Theme'
 ?>

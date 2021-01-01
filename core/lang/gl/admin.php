@@ -585,7 +585,6 @@ const L_THEMES_TITLE = 'Xestión de temas';
 const L_HELP = 'Axuda';
 const L_HELP_TITLE = 'Consulta a axuda';
 const L_BACK_TO_THEMES = 'Volver á lista de temas';
-const L_CONFIG_THEME_UPDATE = 'Cambiar tema';
 
 const L_MEDIAS_DELETE_FOLDER = 'Eliminar o cartafol';
 const L_CAT_LIST_ID = 'Identificador';

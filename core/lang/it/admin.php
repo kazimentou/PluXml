@@ -453,5 +453,4 @@ const L_HELP_TITLE = 'Vedere l\'aiuto';
 const L_BACK_TO_THEMES = 'Torna alla pagina dei temi';
 const L_ERR_INVALID_DATE_CREATION = 'Data di creazione non valida';
 const L_ERR_INVALID_DATE_UPDATE = 'Data non valida aggiornato';
-const L_CONFIG_THEME_UPDATE = 'Cambia Aspetto'
 ?>

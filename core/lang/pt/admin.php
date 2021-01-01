@@ -454,7 +454,6 @@ const L_THEMES_TITLE = 'Gerenciando temas';
 const L_HELP = 'Ajuda';
 const L_HELP_TITLE = 'Vêr a ajuda';
 const L_BACK_TO_THEMES = 'Voltar para os temas da página';
-const L_CONFIG_THEME_UPDATE = 'Change Theme';
 const L_ERR_INVALID_DATE_CREATION = 'Data de criação inválido';
 const L_ERR_INVALID_DATE_UPDATE = 'Data inválida atualizado'
 ?>

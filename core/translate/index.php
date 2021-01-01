@@ -14,11 +14,16 @@ const GOOGLE_TRANSLATOR_URL = 'https://translate.googleapis.com/translate_a/sing
 const MYMEMORY_TRANSLATOR_URL = 'https://api.mymemory.translated.net/get?q=#Q#&langpair=#SL#|#TL#';
 
 $langs = plxUtils::getLangs();
+$success = '';
+$errorMsg = '';
+
 
 function saveNewTranslation($translations, $lang, $file) {
+	global $success, $errorMsg;
+
 	ob_start();
 ?>
-/* New translation on <?= date('Y-m-d H:i') ?> */
+# New translation on <?= date('Y-m-d H:i') ?>
 
 <?php
 	foreach($translations as $token=>$infos) {
@@ -35,6 +40,8 @@ const <?= $token ?> = '<?= addslashes(html_entity_decode($infos[$lang])) ?>';
 }
 
 function addNewTranslation($targetLang, $srcLang) {
+	global $success, $errorMsg;
+
 	$folder = PLX_LANGS . $targetLang;
 
 	$files = array_map(
@@ -116,9 +123,11 @@ function addNewTranslation($targetLang, $srcLang) {
 }
 
 function saveTranslation($lang, $name, $tokens, $translations, $keep=false) {
+	global $success, $errorMsg, $langs;
+
 	$filename = PLX_LANGS . $lang . '/' . $name . '.php';
 	if(!is_writable($filename) or !is_writable(PLX_LANGS . $lang)) {
-		$errorMsg = 'Pas de permission en écriture pour la langue ' . $lang;
+		$errorMsg = 'Pas de permission en écriture pour la langue "' . $langs[$lang] . ' ' . $lang . '" sur le fichier' . ' :<br />' . realpath($filename);
 		return;
 	}
 
@@ -149,9 +158,6 @@ const <?= substr($token, 1) ?> = '<?= addslashes($translations[$i]) ?>';
 
 session_start();
 
-unset($_SESSION['success']);
-unset($_SESSION['errorMsg']);
-
 # Sauvegarde des traductions pour les langues sélectionnés
 if(isset($_SESSION['principale']) and isset($_POST['saveBtn'])) {
 	foreach($_POST['langs'] as $lang) {
@@ -163,6 +169,8 @@ if(isset($_SESSION['principale']) and isset($_POST['saveBtn'])) {
 		addNewTranslation($_POST['new'], $_SESSION['principale']);
 		# On recrée la liste des langues
 		$langs = array_keys($langs);
+	} else {
+		$errorMsg = 'Pas de droit en écriture sur le dossier ' . PLX_LANGS;
 	}
 } else {
 	# On initialise la sélection du fichier, et des langues principales et secondaires
@@ -182,6 +190,18 @@ if(isset($_SESSION['principale']) and isset($_POST['saveBtn'])) {
 	}
 }
 
+if(!is_writable(PLX_LANGS)) {
+	$errorMsg = 'Pas de droits en écriture pour le dossier' . ' :<br />' . realpath(PLX_LANGS);
+	$noGrants = true;
+} else {
+	foreach(array_keys($langs) as $lang) {
+		if(!is_writable(PLX_LANGS . $lang)) {
+			$errorMsg = 'Pas de droits en écriture pour le dossier' . ' :<br />' . realpath(PLX_LANGS . $lang . '/');
+			$noGrants = true;
+			break;
+		}
+	}
+}
 
 // Tri préférentiel des langues
 $df = array($_SESSION['principale'], $_SESSION['secondaire']);
@@ -313,6 +333,10 @@ Rechercher toutes les clés utilisées : grep -E '\bL_\w+' *.php core/{admin,lib
 		<form method="post" name="translation_form">
 				<table id="translations">
 					<thead>
+<?php
+if(empty($noGrants)) {
+	# On a des droits en écriture dans les dossiers
+?>
 						<tr class="toolbar">
 							<th colspan="<?= count($langs) + 2 ?>" id="langs">
 								<input type="hidden" name="cible" value="<?= $_SESSION['fichier'] ?>" />
@@ -338,10 +362,13 @@ Rechercher toutes les clés utilisées : grep -E '\bL_\w+' *.php core/{admin,lib
 										<input type="radio" name="translator" value="google" />
 										<a href="https://translate.google.com" rel="noreferrer" target="_blank"><img src="google.svg" alt="Google" /></a>
 										<input type="radio" name="translator" value="mymemory" />
-										<a href="https://mymemory.translated.net" rel="noreferrer" "target="_blank"><img src="mymemory.svg" alt="MyMemory" /></a>
+										<a href="https://mymemory.translated.net" rel="noreferrer" target="_blank"><img src="mymemory.svg" alt="MyMemory" /></a>
 									</div>
 								</div>
 							</th>
+<?php
+}
+?>
 						</tr>
 						<tr class="ruler" id="ruler">
 <?php
@@ -433,7 +460,11 @@ Rechercher toutes les clés utilisées : grep -E '\bL_\w+' *.php core/{admin,lib
 <?php
 	if(!empty($errorMsg) or !empty($success)) {
 ?>
-	<div class="notification <?= !empty($errorMsg) ? 'error' : '' ?>"><?= !empty($errorMsg) ? $errorMsg : $success ?></div>
+	<div class="notification <?= !empty($errorMsg) ? 'error' : '' ?>">
+		<div>
+			<?= !empty($errorMsg) ? $errorMsg : $success ?>
+		</div>
+	</div>
 <?php
 	}
 ?>

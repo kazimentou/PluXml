@@ -536,5 +536,4 @@ const L_THEMES_TITLE = 'Verwalten von Themen';
 const L_HELP = 'Hilfe';
 const L_HELP_TITLE = 'Siehe Hilfe';
 const L_BACK_TO_THEMES = 'Zurück Hilfe';
-const L_CONFIG_THEME_UPDATE = 'Theme ändern'
 ?>

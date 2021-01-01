@@ -533,5 +533,4 @@ const L_THEMES_TITLE = 'Управление темы';
 const L_HELP = 'помощь';
 const L_HELP_TITLE = 'См помощь';
 const L_BACK_TO_THEMES = 'Вернуться к темам страницы';
-const L_CONFIG_THEME_UPDATE = 'Изменить стиль'
 ?>

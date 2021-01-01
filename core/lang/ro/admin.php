@@ -451,7 +451,6 @@ const L_THEMES_TITLE = 'Gestionarea teme';
 const L_HELP = 'Ajutor';
 const L_HELP_TITLE = 'Vezi de ajutor';
 const L_BACK_TO_THEMES = 'Înapoi la subiectele paginii';
-const L_CONFIG_THEME_UPDATE = 'Înregistrarea temă';
 const L_ERR_INVALID_DATE_CREATION = 'Data creării invalid';
 const L_ERR_INVALID_DATE_UPDATE = 'Data invalid actualizat'
 ?>
