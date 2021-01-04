@@ -1,10 +1,9 @@
 <?php
-
 const L_MENU = 'Menu';
 const L_UNKNOWN_ERROR = 'Onbekende fout';
 const L_CONFIRM_DELETE = 'Bevestig de verwijdering van 999 items ?';
-const L_CONFIRM_ACTIVATE = 'Bevestig voor het uitschakelen van 999 items ?'
-const L_CONFIRM_DEACTIVATE = 'Bevestig voor het inschakelen van 999 items ?'
+const L_CONFIRM_ACTIVATE = '999 items activeren?';
+const L_CONFIRM_DEACTIVATE = '999 items uitschakelen?';
 const L_CONFIRM_OFFLINE = 'Bevestig dat 999 reacties offline zijn geweest ?';
 const L_CONFIRM_ONLINE = 'Bevestig het uploaden van 999 opmerkingen ?';
 const L_SAVE_FILE = 'Sla het bestand op';
@@ -21,12 +20,10 @@ const L_DELETE_SUCCESSFUL = 'Succesvol wissen';
 const L_DELETE_FILE_ERR = 'Fout bij het verwijderen van het bestand';
 const L_RENAME_FILE_SUCCESSFUL = 'Bestand met succes omgedoopt';
 const L_RENAME_FILE = 'Hernoem bestand';
-
 const L_THUMBNAIL = 'Thumbnail (facultatief)';
 const L_THUMBNAIL_SELECTION = 'Selecteer Afbeelding';
 const L_THUMBNAIL_TITLE = 'Beeld (facultatief)';
 const L_THUMBNAIL_ALT = 'Alternatieve tekst van het beeld (facultatief)';
-
 const L_ERR_INVALID_DATE_CREATION = 'Ongeldige aanmaakdatum';
 const L_ERR_INVALID_DATE_UPDATE = 'Ongeldige datum bijgewerkt';
 
@@ -53,20 +50,20 @@ const L_ERR_URL_ALREADY_EXISTS = 'Url al in gebruik. Moet u de waarde van het ve
 
 const L_PLXMEDIAS_MEDIAS_FOLDER_ERR = 'Het is onmogelijk de MEDIA folder aan te maken voor deze gebruiker';
 const L_PLXMEDIAS_ROOT = 'root-map';
+const L_PLXMEDIAS_DELETE_FILES_SUCCESSFUL = 'Succesvol verwijderde bestanden';
+const L_PLXMEDIAS_DELETE_FILES_ERR = 'Fout tijdens het verwijderen van een bestand';
+const L_PLXMEDIAS_DELETE_FILE_SUCCESSFUL = 'Bestand met succes verwijderd';
+const L_PLXMEDIAS_DEL_FOLDER_ERR = 'Er is een fout opgetreden tijdens het verwijderen van de map';
+const L_PLXMEDIAS_DEL_FOLDER_SUCCESSFUL = 'Map succesvol verwijderd';
 const L_PLXMEDIAS_NEW_FOLDER_ERR = 'Kan de map niet aanmaken';
 const L_PLXMEDIAS_NEW_FOLDER_SUCCESSFUL = 'Map succesvol aangemaakt';
 const L_PLXMEDIAS_NEW_FOLDER_EXISTS = 'Map bestaat al';
-const L_PLXMEDIAS_DEL_FOLDER_ERR = 'Er is een fout opgetreden tijdens het verwijderen van de map';
-const L_PLXMEDIAS_DEL_FOLDER_SUCCESSFUL = 'Map succesvol verwijderd';
-const L_PLXMEDIAS_WRONG_FILEFORMAT = 'Het bestandstype is niet toegestaan';
 const L_PLXMEDIAS_WRONG_FILESIZE = 'Een bestand is groter dan';
+const L_PLXMEDIAS_WRONG_FILEFORMAT = 'Het bestandstype is niet toegestaan';
 const L_PLXMEDIAS_UPLOAD_ERR = 'Fout tijdens het verzenden van een bestand';
 const L_PLXMEDIAS_UPLOAD_SUCCESSFUL = 'Bestand dat verstuurd wordt met succes';
 const L_PLXMEDIAS_UPLOADS_ERR = 'Fout tijdens het uploaden van bestanden';
 const L_PLXMEDIAS_UPLOADS_SUCCESSFUL = 'Bestanden succesvol verzonden';
-const L_PLXMEDIAS_DELETE_FILES_SUCCESSFUL = 'Succesvol verwijderde bestanden';
-const L_PLXMEDIAS_DELETE_FILES_ERR = 'Fout tijdens het verwijderen van een bestand';
-const L_PLXMEDIAS_DELETE_FILE_SUCCESSFUL = 'Bestand met succes verwijderd';
 const L_PLXMEDIAS_MOVE_FILES_SUCCESSFUL = 'Bestanden succesvol verplaatst';
 const L_PLXMEDIAS_MOVE_FILE_SUCCESSFUL = 'Bestand succesvol verwijderd';
 const L_PLXMEDIAS_MOVE_FILES_ERR = 'Er is een fout opgetreden tijdens het verplaatsen van de bestanden';
@@ -98,7 +95,6 @@ const L_AWAITING = 'Valideren';
 const L_ARTICLE_DATE = 'Publicatiedatum';
 const L_NOW = 'onmiddellijk';
 const L_ARTICLE_CATEGORIES = 'Categorie';
-const L_NEW_CATEGORY = 'Nieuwe categorie';
 const L_ARTICLE_TAGS_FIELD = 'Sleutelwoorden';
 const L_ARTICLE_TAGS_FIELD_TITLE = 'Scheidt de sleutelwoorden door middel van een komma';
 const L_ARTICLE_TOGGLER_TITLE = 'Lijst van sleutelwoorden';
@@ -135,10 +131,21 @@ const L_POWERED_BY = 'Gegenereerd door <a href="https://www.%s">PluXml</a>';
 const L_ERR_MAXLOGIN = 'Te veel mislukte login<br />Probeer het over% s minuten';
 const L_NEW_PASSWORD = 'Nieuw paswoord';
 const L_LOST_PASSWORD_LOGIN = 'Aanmelden';
-const L_NEW_PASSWORD_SUCCESS = 'Er is een nieuw wachtwoord naar u gestuurd op %s'; 
+const L_NEW_PASSWORD_SUCCESS = 'Er is een nieuw wachtwoord naar u gestuurd op %s';
 const L_LOST_PASSWORD_ERROR = 'De link is verlopen';
 
 //
+
+const L_SORT_ASCENDING_DATE = 'datum oplopend';
+const L_SORT_DESCENDING_DATE = 'datum aflopend';
+const L_SORT_ALPHABETICAL = 'alfabetisch';
+const L_SORT_REVERSE_ALPHABETICAL = 'alfabetisch omgekeerd';
+const L_SORT_RANDOM = 'onzeker';
+const L_YES = 'Ja';
+const L_NO = 'Neen';
+const L_OK = 'Ok';
+
+// categories.php
 
 const L_CAT_TITLE = 'Aanmaken en aanpassen van categorie?n';
 const L_ACTIVE = 'Actief';
@@ -150,9 +157,11 @@ const L_ORDER = 'Volgorde';
 const L_DISPLAY = 'Tonen';
 const L_HIDE = 'Onzichtbaar maken';
 const L_OPTIONS = 'Opties';
+const L_NEW_CATEGORY = 'Nieuwe categorie';
 const L_FOR_SELECTION = 'Met geselecteerde...';
 const L_CAT_APPLY_BUTTON = 'Categorielijst aanpassen';
 const L_CAT_UNKNOWN = 'onbekende categorie';
+const L_ERR_CATEGORY_ALREADY_EXISTS = 'Categorie naam al in gebruik';
 
 // categorie.php
 
@@ -163,12 +172,14 @@ const L_TEMPLATE = 'Template';
 const L_BACK_TO_CATEGORIES = 'Terug naar categorielijst';
 const L_EDITCAT_UPDATE = 'De wijzigingen voor deze categorie doorveoeren';
 
-// commentaire.php
+// comment.php
 
 const L_COMMENT_ORPHAN_STATUS = 'Niet zichtbaar (Wij raden u aan deze commentaar te verwijderen)';
 const L_COMMENT_ARTICLE_LINKED_TITLE = 'Bewerk het artikel dat aan deze opmerking is gekoppeld';
 const L_COMMENT_OFFLINE = 'offline';
 const L_COMMENT_ONLINE = 'online';
+const L_COMMENT_OFFLINE_COUNT = '%d opmerkingen om te valideren';
+const L_COMMENT_ONLINE_COUNT = '%d reacties geplaatst';
 const L_COMMENT_ONLINE_TITLE = 'Deze commentaar online bekijken';
 const L_BACK_TO_ARTICLE_COMMENTS = 'Terug naar commentaar van dit artikel';
 const L_BACK_TO_COMMENTS = 'Terug naar lijst van commentaar';
@@ -201,7 +212,7 @@ const L_SEND_MAIL = 'Een email sturen';
 const L_COMMENT_NEW_COMMENT_TITLE = 'Nieuwe commentaar schrijven voor dit artikel';
 const L_COMMENT_NEW_COMMENT = 'Nieuwe commentaar schrijven';
 
-// commentaire_new.php
+// comment_new.php
 
 const L_ERR_ANSWER_UNKNOWN_COMMENT = 'De commentaar bestaat niet of niet meer!';
 const L_ERR_ANSWER_OFFLINE_COMMENT = 'Commentaar is offline. Kan niet antwoorden op commentaar !';
@@ -215,7 +226,6 @@ const L_COMMENT_REPLY_TITLE = 'Reageer op deze opmerking';
 // comments.php
 
 const L_COMMENTS_GLOBAL_SCOPE = 'volledige site';
-const L_COMMENTS_OFFLINE_LIST = 'Commentaar dat wacht op goedkeuring ';
 const L_COMMENT_ALL_FEEDS = 'Bericht';
 const L_COMMENT_EDIT_TITLE = 'Deze commentaar aanpassen';
 const L_COMMENT_OFFLINE_FEEDS_TITLE = 'Feed van offline commentaren';
@@ -224,9 +234,20 @@ const L_COMMENT_ONLINE_FEEDS_TITLE = 'Feed van online commentaren';
 const L_COMMENT_ONLINE_FEEDS = 'Online commentaren';
 const L_COMMENTS_PRIVATE_FEEDS = 'Feed prive syndicaties';
 const L_COMMENTS_ONLINE_LIST = 'Lijst van gepubliceerde beoordelingen';
+const L_COMMENTS_OFFLINE_LIST = 'Commentaar dat wacht op goedkeuring';
 const L_COMMENTS_ALL_LIST = 'Reacties Lijst';
 const L_COMMENTS_ARTICLE = 'Lijst met opmerkingen bij het artikel';
 const L_COMMENT_SET_ONLINE = 'Neem Online';
+const L_BACK_TO_ARTICLE = 'Terug naar artikel';
+
+// index.php
+
+const L_SEARCH = 'Zoek';
+const L_SEARCH_PLACEHOLDER = 'artikel-ID of titel';
+const L_ARTICLES_ALL_CATEGORIES = 'Alle categorie?n ...';
+const L_ALL = 'Alle';
+const L_ALL_PUBLISHED = 'Gepubliceerd';
+const L_ALL_DRAFTS = 'Concepten';
 const L_ARTICLES_FILTER_BUTTON = 'Filteren';
 const L_SPECIFIC_CATEGORIES_TABLE = 'Specifieke locatie';
 const L_ALL_ARTICLES_CATEGORIES_TABLE = 'Alle artikels';
@@ -238,31 +259,32 @@ const L_EDIT = 'Aanpassen';
 const L_ARTICLE_EDIT_TITLE = 'Artikel aanpassen';
 const L_NEW_COMMENTS_TITLE = 'Commentaar die op goedkeuring wacht';
 const L_VALIDATED_COMMENTS_TITLE = 'Geplubliceerde commentaar';
-const L_SEARCH = 'Zoek';
-const L_SEARCH_PLACEHOLDER = 'artikel-ID of titel';
-const L_ARTICLES_ALL_CATEGORIES = 'Alle categorie?n ...';
-const L_ALL = 'Alle';
-const L_ALL_PUBLISHED = 'Gepubliceerd';
-const L_ALL_DRAFTS = 'Concepten';
-const L_MEDIAS_DELETE_FOLDER_CONFIRM = 'Map en inhoud van de map verwijderen %s ?';
-const L_MEDIAS_NO_FILE = 'Geen bestand';
+
+// medias.php
+
 const L_MEDIAS_FILENAME = 'Naam bastand';
-const L_MEDIAS_ADD_FILE = 'Bestand toevoegne';
-const L_MEDIAS_BACK = 'Terug';
 const L_MEDIAS_TITLE = 'Media beheren';
-const L_MEDIAS_IMAGES = 'Afbeeldingen';
-const L_MEDIAS_DOCUMENTS = 'Documenten';
-const L_MEDIAS_CREATE_FOLDER = 'Map aanmaken';
-const L_MEDIAS_SUBMIT_FILE = 'Versturen';
+const L_MEDIAS_DIRECTORY = 'Locatie';
+const L_MEDIAS_BACK = 'Terug';
 const L_MEDIAS_MAX_UPLOAD_FILE = 'Maximale grootte bestand';
 const L_MEDIAS_MAX_UPLOAD_NBFILE = 'Max aantal bestanden per upload';
 const L_MEDIAS_MAX_POST_SIZE = 'Maximale gegevensgrootte';
-const L_MEDIAS_DIRECTORY = 'Locatie';
+const L_BROWSE = 'Bladeren';
+const L_DEPOSIT_FILES = 'Zet uw bestanden hier neer';
+const L_FILES = 'bestanden';
+const L_BATCH_SIZE = 'Seriegrootte';
+const L_MEDIAS_SUBMIT_FILE = 'Versturen';
+const L_MEDIAS_IMAGES = 'Afbeeldingen';
+const L_MEDIAS_DOCUMENTS = 'Documenten';
+const L_MEDIAS_ADD_FILE = 'Bestand toevoegne';
+const L_MEDIAS_DELETE_FOLDER_CONFIRM = 'Map en inhoud van de map verwijderen %s ?';
 const L_MEDIAS_FOLDER = 'Bestand';
 const L_MEDIAS_NEW_FOLDER = 'Nieuwe map';
+const L_MEDIAS_CREATE_FOLDER = 'Map aanmaken';
 const L_MEDIAS_FILESIZE = 'Maat';
 const L_DATE = 'Datum';
 const L_MEDIAS_DIMENSIONS = 'Dimensies';
+const L_MEDIAS_NO_FILE = 'Geen bestand';
 const L_MEDIAS_RESIZE = 'Afbeeldinggrootte';
 const L_MEDIAS_RESIZE_NO = 'Oorspronkelijk formaat';
 const L_MEDIAS_THUMBS = 'Maak thumbnails';
@@ -283,14 +305,10 @@ const L_MEDIAS_RENAME = 'Andere naam geven';
 const L_CONFIRM_THUMBNAIL = 'Confirmer la création de 999 vignettes';
 const L_CONFIRM_MOVE_MEDIAS = 'Confirmer le déplacement de 999 documents';
 const L_REQUIRED_OPTION = 'Vous devez sélectionner une option';
-const L_SORT_ASCENDING_DATE = 'datum oplopend';
-const L_SORT_DESCENDING_DATE = 'datum aflopend';
-const L_SORT_ALPHABETICAL = 'alfabetisch';
-const L_SORT_REVERSE_ALPHABETICAL = 'alfabetisch omgekeerd';
-const L_SORT_RANDOM = 'onzeker';
-const L_OK = 'Ok';
-const L_YES = 'Ja';
-const L_NO = 'Neen';
+const L_REQUIRED_TARGET = 'Kies een ander doel';
+
+// parametres_affichage.php
+
 const L_CONFIG_VIEW = 'Options d\'affichage';
 const L_CONFIG_VIEW_SKIN_SELECT = 'Keuze van layout';
 const L_TEMPLATES_EDIT = 'Layout-bestanden editeren';
@@ -312,6 +330,9 @@ const L_CONFIG_VIEW_FEEDS_FOOTER = 'Tekskt die getoond zal worden onder elke RSS
 const L_CONFIG_VIEW_UPDATE = 'Pas de veranderingen toe';
 const L_CONFIG_VIEW_DISPLAY_EMPTY_CAT = 'Toon categorieën zonder artikel';
 const L_CONFIG_HOMETEMPLATE = 'Template van de homepage';
+
+// parametres_avances.php
+
 const L_CONFIG_ADVANCED = 'Geavanceerde configuratie';
 const L_CONFIG_ADVANCED_URL_REWRITE = 'herschrijven van URLs aanzetten';
 const L_CONFIG_ADVANCED_URL_REWRITE_ALERT = 'Opgepast. Er bestaat al een .htaccess bestand in de root van uw installatie. Door het inschakelen van URL herschrijven dit bestand zal worden gewijzigd';
@@ -334,10 +355,10 @@ const L_CONFIG_ADVANCED_PLUGINS_FOLDER = 'Locatie van de plugins (map)';
 const L_CONFIG_ADVANCED_CONFIG_FOLDER = 'Locatie van de configuratie-bestanden (map)';
 const L_CONFIG_ADVANCED_UPDATE = 'Aanpassingen doorvoeren';
 const L_CONFIG_CUSTOM_CSSADMIN_PATH = 'Locatie en de naam van aangepaste css-bestand van de administratie gebied (optioneel)';
+const L_CONFIG_CUSTOM_CSSADMIN_PATH_HELP = 'Specificeer het volledige pad vanaf de homepage';
 const L_CONFIG_ADVANCED_EMAIL_SENDING_TITLE = 'E-mail verzenden';
 const L_CONFIG_ADVANCED_EMAIL_METHOD = 'E-mail verzendmethode';
 const L_CONFIG_ADVANCED_SMTP_TITLE = 'E-mails verzenden met SMTP';
-const L_CONFIG_ADVANCED_SMTP_ACTIVATION = 'Schakel e-mails verzenden door een SMTP-server in';
 const L_CONFIG_ADVANCED_SMTP_SERVER = 'SMTP-hostnaam';
 const L_CONFIG_ADVANCED_SMTP_USERNAME = 'SMTP-gebruikersnaam';
 const L_CONFIG_ADVANCED_SMTP_PASSWORD = 'SMTP-wachtwoord';
@@ -348,17 +369,19 @@ const L_CONFIG_ADVANCED_SMTPOAUTH_CLIENTID = 'Klant ID';
 const L_CONFIG_ADVANCED_SMTPOAUTH_SECRETKEY = 'Client geheime sleutel';
 const L_CONFIG_ADVANCED_SMTPOAUTH_TOKEN = 'Token';
 const L_CONFIG_ADVANCED_SMTPOAUTH_GETTOKEN = 'Genereer een token';
-const L_CONFIG_ADVANCED_EMAIL_SENDING_TITLE_HELP = 'Hulp nodig : <a href="https://wiki.%s/personnaliser/personnalisation/#envoi-de-mails">PluXml documentation</a>&nbsp;(fr).';
+const L_CONFIG_ADVANCED_EMAIL_SENDING_TITLE_HELP = 'Hulp nodig : <a href="https://wiki.%s/personnaliser/personnalisation/#envoi-de-mails">PluXml documentation</a> (fr).';
 const L_CONFIG_ADVANCED_EMAIL_METHOD_HELP = 'Er is geen configuratie vereist voor sendmail.';
 const L_CONFIG_ADVANCED_SMTP_SERVER_HELP = 'SMTP-servernaam (voorbeeld : ssl0.ovh.net)';
 const L_CONFIG_ADVANCED_SMTP_USERNAME_HELP = 'Gebruikersnaam op de SMTP-host (voorbeeld : pluxml@monserveursmtp.com)';
 const L_CONFIG_ADVANCED_SMTP_PASSWORD_HELP = 'Gebruikerswachtwoord op de SMTP-host';
 const L_CONFIG_ADVANCED_SMTP_PORT_HELP = 'SMTP-hostpoortnummer (standaard : 465)';
-const L_CONFIG_ADVANCED_SMTPOAUTH_TITLE_HELP = 'Met PluXml kunnen alleen tokens voor de service worden gegenereerd GOOGLE.
-Hulp nodig bij het genereren van de gebruikersnaam en de geheime sleutel : WIKI.';
+const L_CONFIG_ADVANCED_SMTPOAUTH_TITLE_HELP = 'Met PluXml kunt u alleen tokens genereren voor de GOOGLE-service.';
 const L_CONFIG_ADVANCED_SMTPOAUTH_CLIENTID_HELP = 'Klant-ID voor de OAUTH2-service (voorbeeld : 664335625964-uha1vop20qPluXml81ubjkkgfabbbj6d.apps.googleusercontent.com)';
 const L_CONFIG_ADVANCED_SMTPOAUTH_SECRETKEY_HELP = 'De clientsleutel op de OAUTH2-service (voorbeeld : PrsvKp6aprKpoP8snnCoC8-x)';
 const L_CONFIG_ADVANCED_SMTPOAUTH_TOKEN_HELP = 'Sla de klant-ID en klantgeheime code op zodat u het token kunt genereren.';
+
+// parametres_base.php
+
 const L_CONFIG_BASE_SITE_TITLE = 'Titel van de site';
 const L_CONFIG_BASE_SITE_SLOGAN = 'Ondertitel van de site';
 const L_CONFIG_BASE_DEFAULT_LANG = 'Standaardtaal';
@@ -368,10 +391,16 @@ const L_CONFIG_BASE_UPDATE = 'Basisconfiguratie aanpassen';
 const L_CONFIG_META_DESCRIPTION = 'META-tag "descriptie" van de site (optioneel)';
 const L_CONFIG_META_KEYWORDS = 'META-tag "keywords" van de site (optioneel)';
 const L_CONFIG_BASE_ENABLE_RSS = 'RSS-feeds weergeven';
+
+// parametres_edittpl.php
+
 const L_CONFIG_EDITTPL_ERROR_NOTHEME = 'Layout bestaat niet !';
 const L_CONFIG_EDITTPL_TITLE = 'Layout aanpassen';
 const L_CONFIG_EDITTPL_SELECT_FILE = 'Keuze aan te passen bestand :';
 const L_CONFIG_EDITTPL_LOAD = 'Laden';
+
+// parametres_infos.php
+
 const L_CONFIG_INFOS_TITLE = 'Informatie over uw PluXml-installatie';
 const L_CONFIG_INFOS_DESCRIPTION = 'Deze informatie kan handig zijn om eventuele problemen van uw installatie te vinden';
 const L_CONFIG_INFOS_NB_CATS = 'aantal categorie?n :';
@@ -381,11 +410,14 @@ const L_PLUXML_CHECK_VERSION = 'Uw huidige versie van PluXml wordt vergeleken me
 const L_PLUXML_UPDATE_UNAVAILABLE = 'Onmogelijk om updates te vinden zolang de optie \'allow_url_fopen\' gedesactiveerd is op dit systeem';
 const L_PLUXML_UPDATE_ERR = 'De verificatie van updates kon om een onbekende reden niet doorgevoerd worden';
 const L_PLUXML_UPTODATE = 'U beschikt over de laatste versie van PluXml';
-const L_PLUXML_UPDATE_AVAILABLE = 'Er is een nieuwe versie van PluXml beschikbaar ! U kan ze downloaden op ';
+const L_PLUXML_UPDATE_AVAILABLE = 'Er is een nieuwe versie van PluXml beschikbaar ! U kan ze downloaden op';
 const L_MAIL_TEST = 'Stuur een testmail';
 const L_MAIL_TEST_SUBJECT = 'Test-e-mail verzonden van %s';
 const L_MAIL_TEST_SENT_TO = 'Test-e-mail verzonden naar %s. Controleer je postvak';
 const L_MAIL_TEST_FAILURE = 'Probleem voor het verzenden van de test-e-mail';
+
+// parametres_users.php
+
 const L_CONFIG_USERS_TITLE = 'Gebruikers beheren';
 const L_CONFIG_USER = 'Gebruiker';
 const L_CONFIG_USERS_ACTIVE = 'Actief';
@@ -394,8 +426,9 @@ const L_CONFIG_USERS_UPDATE = 'Lijst van gebruikers aanpassen';
 const L_ERR_LOGIN_ALREADY_EXISTS = 'Login ID al in gebruik';
 const L_ERR_USERNAME_ALREADY_EXISTS = 'Gebruikersnaam al in gebruik';
 const L_ERR_EMAIL_ALREADY_EXISTS = 'E-mailadres al in gebruik';
-const L_ERR_CATEGORY_ALREADY_EXISTS = 'Categorie naam al in gebruik';
-const L_ERR_STATIC_ALREADY_EXISTS = 'Zoals reeds gebruikt';
+
+// parametre_plugins.php
+
 const L_BACK_TO_PLUGINS = 'Terug naar Plugin-pagina';
 const L_NO_PLUGIN = 'Geen plugin';
 const L_PLUGIN_NO_CONFIG = 'Plugin niet geconfigureerd';
@@ -403,6 +436,9 @@ const L_PLUGINS_CSS = 'CSS-code';
 const L_PLUGINS_CSS_TITLE = 'Bewerk de CSS-code van de plugin';
 const L_CONTENT_FIELD_FRONTEND = 'Css-bestand inhoud website';
 const L_CONTENT_FIELD_BACKEND = 'Css-bestand inhoud administrator';
+
+// parametres_plugins.php
+
 const L_PLUGINS_TITLE = 'Plugins beheren';
 const L_PLUGINS_VERSION = 'Versie';
 const L_PLUGINS_ACTIVATE = 'Activeren';
@@ -419,6 +455,9 @@ const L_ACTION = 'Actie';
 const L_PLUGINS_APPLY_BUTTON = 'De lijst met plugins';
 const L_PLUGINS_ACTIVE_LIST = 'Actieve plugins';
 const L_PLUGINS_INACTIVE_LIST = 'Inactief plugins';
+
+// profil.php
+
 const L_PROFIL_EDIT_TITLE = 'Uw profiel aanpassen';
 const L_PROFIL = 'Profiel';
 const L_PROFIL_USER = 'Achternaam en voornaam';
@@ -426,6 +465,9 @@ const L_INFOS = 'Informatie';
 const L_PROFIL_UPDATE = 'Uw profiel aanpassen';
 const L_PROFIL_CHANGE_PASSWORD = 'Wachtwoord veranderen';
 const L_PROFIL_UPDATE_PASSWORD = 'Wachtwoord veranderen';
+
+// statique.php
+
 const L_STATIC_BACK_TO_PAGE = 'Terug naar lijst van statische paginas';
 const L_STATIC_UNKNOWN_PAGE = 'Deze statische pagina bestaat niet of niet meer !';
 const L_STATIC_TITLE = 'Bron van statische pagina aanpassen';
@@ -433,6 +475,9 @@ const L_STATIC_VIEW_PAGE = 'Bekijk de pagina';
 const L_STATIC_ON_SITE = 'op de site';
 const L_STATIC_UPDATE = 'Statische pagina opslaan';
 const L_TITLE_HTMLTAG = 'Title tag inhoud (optioneel)';
+
+// statiques.php
+
 const L_STATICS_PAGE_TITLE = 'Aanmaken en aanpassen van statische paginas';
 const L_STATICS_GROUP = 'Groep';
 const L_STATICS_URL = 'Url';
@@ -442,6 +487,10 @@ const L_VIEW = 'Bekijken';
 const L_STATICS_SRC_TITLE = 'Bron van deze pagina aanpassen';
 const L_STATICS_NEW_PAGE = 'Nieuwe pagina';
 const L_STATICS_UPDATE = 'Lijst van statische paginas bewerken';
+const L_ERR_STATIC_ALREADY_EXISTS = 'Zoals reeds gebruikt';
+
+// top.php
+
 const L_PROFIL_ADMIN = 'Administrateur';
 const L_PROFIL_MANAGER = 'Beheerder';
 const L_PROFIL_MODERATOR = 'Moderator';
@@ -462,13 +511,18 @@ const L_MENU_CATEGORIES_TITLE = 'Categorie?n aanmaken, beheren, verwijderen';
 const L_MENU_CONFIG_TITLE = 'PluXml configureren';
 const L_MENU_CONFIG = 'Afstemmen';
 const L_MENU_PROFIL_TITLE = 'Uw gebruikersprofiel beheren';
-const L_WARNING_INSTALLATION_FILE = 'het bestand install.php is nog aanwezig in de basismap van uw PluXml.
-Om veiligheidsredenen raden wij u aan dit bestand te <a class="lnkdelete" href="?del=install">verwijderen</a> of te hernoemen.';
+const L_WARNING_INSTALLATION_FILE = 'Het install.php-bestand bevindt zich in de root van uw PluXml.n Om veiligheidsredenen <a class="lnkdelete" href="?del=install">verwijder het</a>!';
+
+// user.php
+
 const L_USER_UNKNOWN = 'Onbekende gebruiker';
 const L_USER_LANG = 'Gebruikte taal in adminstratief gedeelte';
 const L_USER_UPDATE = 'Deze gebruiker aanpassen';
 const L_USER_PAGE_TITLE = '%s-profiel bewerken';
 const L_USER_BACK_TO_PAGE = 'Terug naar gebruikerslijst';
+
+//
+
 const L_MENU_CONFIG_BASE_TITLE = 'Uw PluXml basisconfiguratie bewerken';
 const L_CONFIG_BASE = 'Basisconfiguratie';
 const L_MENU_CONFIG_VIEW_TITLE = 'PluXml Scherminstellingen';
@@ -484,4 +538,5 @@ const L_THEMES_TITLE = 'Het beheren van thema\'s';
 const L_HELP = 'Hulp';
 const L_HELP_TITLE = 'Zie hulp';
 const L_BACK_TO_THEMES = 'Terug naar de onderwerpen van de pagina';
-?>
+const L_CONFIG_ADVANCED_SMTP_ACTIVATION = 'Schakel e-mails verzenden door een SMTP-server in';
+

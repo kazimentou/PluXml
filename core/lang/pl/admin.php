@@ -1,10 +1,9 @@
 <?php
-
 const L_MENU = 'Menu';
 const L_UNKNOWN_ERROR = 'Nieznany błąd';
 const L_CONFIRM_DELETE = 'Potwierdzić usunięcie 999 pozycji ?';
-const L_CONFIRM_ACTIVATE = 'Potwierdź włączenie 999 elementów ?'
-const L_CONFIRM_DEACTIVATE = 'Potwierdź wyłączenie 999 elementów ?'
+const L_CONFIRM_ACTIVATE = 'Aktywować 999 elementów?';
+const L_CONFIRM_DEACTIVATE = 'Wyłączyć 999 elementów?';
 const L_CONFIRM_OFFLINE = 'Potwierdź, że 999 komentarzy było w trybie offline ?';
 const L_CONFIRM_ONLINE = 'Potwierdź przesłanie 999 komentarzy ?';
 const L_SAVE_FILE = 'Zapisz plik';
@@ -45,15 +44,6 @@ const L_ARTICLE_MODIFY_SUCCESSFUL = 'Post został pomyślnie edytowany';
 const L_ARTICLE_SAVE_ERR = 'Wystąpił błąd podczas zapisywania posta';
 const L_ARTICLE_DELETE_ERR = 'Wystąpił błąd podczas usuwania posta';
 const L_ERR_UNKNOWN_COMMENT = 'Wybrany komentarz już nie istnieje';
-const L_COMMENT_SAVE_SUCCESSFUL = 'Komentarz został pomyślnie zapisany';
-const L_COMMENT_UPDATE_ERR = 'Wystąpił błąd podczas aktualizacji komentarza';
-const L_COMMENT_DELETE_ERR = 'Wystąpił błąd podczas usuwania komentarza';
-const L_COMMENT_VALIDATE_SUCCESSFUL = 'Walidacja zakończyła się powodzeniem';
-const L_COMMENT_VALIDATE_ERR = 'Wystąpił błąd podczas walidacji';
-const L_COMMENT_MODERATE_SUCCESSFUL = 'Komentarz został pomyślnie edytowany';
-const L_COMMENT_MODERATE_ERR = 'Wystąpił błąd podczas edycji komentarza';
-const L_WATCH = 'Zegarek';
-const L_SEND_MAIL = 'Wysłać emaila';
 const L_ERR_URL_ALREADY_EXISTS = 'Adres URL jest używany. Proszę zmienić wartość pola URL';
 
 // class.plx.media.php
@@ -121,7 +111,7 @@ const L_ARTICLE_PUBLISHING_BUTTON = 'Opublikuj';
 const L_ARTICLE_MODERATE_BUTTON = 'Do walidacji';
 const L_SET_OFFLINE = 'Deaktywuj';
 const L_SAVE = 'Zapisz';
-const L_ADD = "Dodaj";
+const L_ADD = 'Dodaj';
 const L_META_DESCRIPTION = 'Zawartość tagu "opisu" (opcjonalnie)';
 const L_META_KEYWORDS = 'Zawartość tagu "słowa kluczowego" (opcjonalnie)';
 const L_ARTICLE_CHAPO_HIDE = 'ukryj';
@@ -171,6 +161,7 @@ const L_NEW_CATEGORY = 'Nowa kategoria';
 const L_FOR_SELECTION = 'Wybrane pozycje...';
 const L_CAT_APPLY_BUTTON = 'Zapisz zmiany';
 const L_CAT_UNKNOWN = 'Nieznana kategoria';
+const L_ERR_CATEGORY_ALREADY_EXISTS = 'Nazwa kategorii jest zajęta';
 
 // categorie.php
 
@@ -181,12 +172,14 @@ const L_TEMPLATE = 'Szablon';
 const L_BACK_TO_CATEGORIES = 'Przejdż do listy kategorii';
 const L_EDITCAT_UPDATE = 'Zapisz zmiany';
 
-// commentaire.php
+// comment.php
 
 const L_COMMENT_ORPHAN_STATUS = 'Nie jest wyświetlany (radzimy usunąć ten komentarz)';
 const L_COMMENT_ARTICLE_LINKED_TITLE = 'Edytuj artykuł powiązany z tym komentarzem';
 const L_COMMENT_OFFLINE = 'Nieaktywne';
 const L_COMMENT_ONLINE = 'Aktywne';
+const L_COMMENT_OFFLINE_COUNT = '%d komentarzy do zweryfikowania';
+const L_COMMENT_ONLINE_COUNT = '%d opublikowanych komentarzy';
 const L_COMMENT_ONLINE_TITLE = 'Przejdż do tego komentarza';
 const L_BACK_TO_ARTICLE_COMMENTS = 'Przejdż do listy komentarzy z tego artykułu';
 const L_BACK_TO_COMMENTS = 'Przejdż do listy komentarzy';
@@ -204,14 +197,22 @@ const L_COMMENT_DELETE_CONFIRM = 'Usunąć ten komentarz ?';
 const L_COMMENT_PUBLISH_BUTTON = 'Zatwierdz';
 const L_COMMENT_UPDATE_BUTTON = 'Zaktualizuj';
 const L_COMMENT_WRITTEN_BY = 'Napisane przez';
-const L_ERR_CATEGORY_ALREADY_EXISTS = 'Nazwa kategorii jest zajęta';
+const L_COMMENT_SAVE_SUCCESSFUL = 'Komentarz został pomyślnie zapisany';
+const L_COMMENT_UPDATE_ERR = 'Wystąpił błąd podczas aktualizacji komentarza';
+const L_COMMENT_DELETE_ERR = 'Wystąpił błąd podczas usuwania komentarza';
+const L_COMMENT_VALIDATE_SUCCESSFUL = 'Walidacja zakończyła się powodzeniem';
+const L_COMMENT_VALIDATE_ERR = 'Wystąpił błąd podczas walidacji';
+const L_COMMENT_MODERATE_SUCCESSFUL = 'Komentarz został pomyślnie edytowany';
+const L_COMMENT_MODERATE_ERR = 'Wystąpił błąd podczas edycji komentarza';
+const L_WATCH = 'Zegarek';
+const L_SEND_MAIL = 'Wysłać emaila';
 
 // sous_navigation/commentaires.php
 
 const L_COMMENT_NEW_COMMENT_TITLE = 'Dodaj nowy komentarz do tego artykułu';
 const L_COMMENT_NEW_COMMENT = 'Dodaj nowy komentarz';
 
-// commentaire_new.php
+// comment_new.php
 
 const L_ERR_ANSWER_UNKNOWN_COMMENT = 'Próbujesz odpowiedzieć na komentarz który nie istnieje lub jest niepoprawny';
 const L_ERR_ANSWER_OFFLINE_COMMENT = 'Komentarz jest nieaktywny, nie można na niego odpowiedzieć !';
@@ -237,6 +238,7 @@ const L_COMMENTS_OFFLINE_LIST = 'Lista komentarzy oczekujących na zatwierdzenie
 const L_COMMENTS_ALL_LIST = 'Lista komentarzy';
 const L_COMMENTS_ARTICLE = 'Lista komentarzy do artykułu';
 const L_COMMENT_SET_ONLINE = 'Aktywuj komentarz';
+const L_BACK_TO_ARTICLE = 'Powrót do artykułu';
 
 // index.php
 
@@ -267,6 +269,10 @@ const L_MEDIAS_BACK = 'Powrót do mediów';
 const L_MEDIAS_MAX_UPLOAD_FILE = 'Maksymalny rozmiar pliku';
 const L_MEDIAS_MAX_UPLOAD_NBFILE = 'Maksymalna liczba plików na przesyłanie';
 const L_MEDIAS_MAX_POST_SIZE = 'Maksymalny rozmiar danych';
+const L_BROWSE = 'Przeglądaj';
+const L_DEPOSIT_FILES = 'Upuść swoje pliki tutaj';
+const L_FILES = 'akta';
+const L_BATCH_SIZE = 'Wielkość partii';
 const L_MEDIAS_SUBMIT_FILE = 'Wysłać';
 const L_MEDIAS_IMAGES = 'Obrazowość';
 const L_MEDIAS_DOCUMENTS = 'Dokumenty';
@@ -299,6 +305,7 @@ const L_MEDIAS_RENAME = 'Przemianować';
 const L_CONFIRM_THUMBNAIL = 'Confirmer la création de 999 vignettes';
 const L_CONFIRM_MOVE_MEDIAS = 'Confirmer le déplacement de 999 documents';
 const L_REQUIRED_OPTION = 'Vous devez sélectionner une option';
+const L_REQUIRED_TARGET = 'Wybierz inny cel';
 
 // parametres_affichage.php
 
@@ -348,10 +355,10 @@ const L_CONFIG_ADVANCED_PLUGINS_FOLDER = 'Lokalizacja wtyczek (folder)';
 const L_CONFIG_ADVANCED_CONFIG_FOLDER = 'Lokalizacja plików konfiguracyjnych (folder)';
 const L_CONFIG_ADVANCED_UPDATE = 'Zmień zaawansowaną konfigurację';
 const L_CONFIG_CUSTOM_CSSADMIN_PATH = 'Lokalizacja i nazwa osobistego pliku css do dostosowania interfejsu administracyjnego (opcjonalnie)';
+const L_CONFIG_CUSTOM_CSSADMIN_PATH_HELP = 'Podaj pełną ścieżkę ze strony głównej';
 const L_CONFIG_ADVANCED_EMAIL_SENDING_TITLE = 'Wysyłanie wiadomości e-mail';
 const L_CONFIG_ADVANCED_EMAIL_METHOD = 'Metoda wysyłania wiadomości e-mail';
 const L_CONFIG_ADVANCED_SMTP_TITLE = 'Wysyłanie wiadomości e-mail za pomocą SMTP';
-const L_CONFIG_ADVANCED_SMTP_ACTIVATION = 'Włącz wysyłanie wiadomości e-mail przez serwer SMTP';
 const L_CONFIG_ADVANCED_SMTP_SERVER = 'Nazwa hosta SMTP';
 const L_CONFIG_ADVANCED_SMTP_USERNAME = 'Nazwa użytkownika SMTP';
 const L_CONFIG_ADVANCED_SMTP_PASSWORD = 'Hasło SMTP';
@@ -362,14 +369,13 @@ const L_CONFIG_ADVANCED_SMTPOAUTH_CLIENTID = 'ID klienta';
 const L_CONFIG_ADVANCED_SMTPOAUTH_SECRETKEY = 'Tajny klucz klienta';
 const L_CONFIG_ADVANCED_SMTPOAUTH_TOKEN = 'Token';
 const L_CONFIG_ADVANCED_SMTPOAUTH_GETTOKEN = 'Wygeneruj token';
-const L_CONFIG_ADVANCED_EMAIL_SENDING_TITLE_HELP = 'Necessitar ajuda : <a href="https://wiki.%s/personnaliser/personnalisation/#envoi-de-mails">PluXml documentation</a>&nbsp;(fr).';
+const L_CONFIG_ADVANCED_EMAIL_SENDING_TITLE_HELP = 'Necessitar ajuda : <a href="https://wiki.%s/personnaliser/personnalisation/#envoi-de-mails">PluXml documentation</a> (fr).';
 const L_CONFIG_ADVANCED_EMAIL_METHOD_HELP = 'No es requereix cap configuració per a sendmail.';
 const L_CONFIG_ADVANCED_SMTP_SERVER_HELP = 'Nom del servidor SMTP (exemple : ssl0.ovh.net)';
 const L_CONFIG_ADVANCED_SMTP_USERNAME_HELP = 'Nom d\'usuari de l\'amfitrió SMTP (exemple : pluxml@monserveursmtp.com)';
 const L_CONFIG_ADVANCED_SMTP_PASSWORD_HELP = 'Contrasenya de l’usuari a l’amfitrió SMTP';
 const L_CONFIG_ADVANCED_SMTP_PORT_HELP = 'Número de port amfitrió SMTP (predeterminat : 465)';
-const L_CONFIG_ADVANCED_SMTPOAUTH_TITLE_HELP = 'PluXml permet generar fitxes només per al servei GOOGLE.
-Necessiteu ajuda per generar el nom d’usuari i la clau secreta : WIKI.';
+const L_CONFIG_ADVANCED_SMTPOAUTH_TITLE_HELP = 'PluXml pozwala na generowanie tokenów tylko dla usługi GOOGLE.';
 const L_CONFIG_ADVANCED_SMTPOAUTH_CLIENTID_HELP = 'Identificador de client al servei OAUTH2 (example: 664335625964-uha1vop20qPluXml81ubjkkgfabbbj6d.apps.googleusercontent.com)';
 const L_CONFIG_ADVANCED_SMTPOAUTH_SECRETKEY_HELP = 'La clau de client del servei OAUTH2 (example: PrsvKp6aprKpoP8snnCoC8-x)';
 const L_CONFIG_ADVANCED_SMTPOAUTH_TOKEN_HELP = 'Deseu l\'identificador de client i el codi secret de client per tal de generar el token.';
@@ -390,7 +396,7 @@ const L_CONFIG_BASE_ENABLE_RSS = 'Wyświetl kanały RSS';
 
 const L_CONFIG_EDITTPL_ERROR_NOTHEME = 'Ten szablon nie istnieje!';
 const L_CONFIG_EDITTPL_TITLE = 'Edycja szablonu';
-const L_CONFIG_EDITTPL_SELECT_FILE = 'Wybierz plik, który ma być edytowany: ';
+const L_CONFIG_EDITTPL_SELECT_FILE = 'Wybierz plik, który ma być edytowany:';
 const L_CONFIG_EDITTPL_LOAD = 'Zmień';
 
 // parametres_infos.php
@@ -484,6 +490,7 @@ const L_STATICS_UPDATE = 'Zapisz zmiany';
 const L_ERR_STATIC_ALREADY_EXISTS = 'Strona o tym tytule już istnieje';
 
 // top.php
+
 const L_PROFIL_ADMIN = 'Administrator';
 const L_PROFIL_MANAGER = 'Menedżer';
 const L_PROFIL_MODERATOR = 'Moderator';
@@ -504,10 +511,10 @@ const L_MENU_CATEGORIES_TITLE = 'Lista i edytor kategorii';
 const L_MENU_CONFIG_TITLE = 'Skonfiguruj PluXml';
 const L_MENU_CONFIG = 'Strojenie';
 const L_MENU_PROFIL_TITLE = 'Zarządzaj profilami użytkowników';
-const L_WARNING_INSTALLATION_FILE = 'Plik install.php znajduje się w katalogu głównym PluXml. 
-Ze względów bezpieczeństwa zaleca się, aby go <a class="lnkdelete" href="?del=install">usunąć</a>.';
+const L_WARNING_INSTALLATION_FILE = 'Plik install.php znajduje się w katalogu głównym twojego PluXml.n Ze względów bezpieczeństwa <a class="lnkdelete" href="?del=install"> usuń go </a>!';
 
 // user.php
+
 const L_USER_UNKNOWN = 'Nieznany użytkownik';
 const L_USER_LANG = 'Język używany w administracji';
 const L_USER_UPDATE = 'Zapisz zmiany';
@@ -531,4 +538,5 @@ const L_THEMES_TITLE = 'Zarządzanie tematy';
 const L_HELP = 'Pomoc';
 const L_HELP_TITLE = 'Zobacz pomoc';
 const L_BACK_TO_THEMES = 'Powrót do tematów strony';
-?>
+const L_CONFIG_ADVANCED_SMTP_ACTIVATION = 'Włącz wysyłanie wiadomości e-mail przez serwer SMTP';
+

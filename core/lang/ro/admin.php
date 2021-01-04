@@ -1,5 +1,4 @@
 <?php
-
 const L_MENU = 'Meniu';
 const L_UNKNOWN_ERROR = 'Eroare necunoscută';
 const L_CONFIRM_DELETE = 'Confirmați ștergerea a 999 articole ?';
@@ -25,7 +24,12 @@ const L_THUMBNAIL = 'Miniatură (opţional)';
 const L_THUMBNAIL_SELECTION = 'Selectați Image';
 const L_THUMBNAIL_TITLE = 'Titlu imagine (opţional)';
 const L_THUMBNAIL_ALT = 'Textul alternativ al imaginii (opţional)';
-const L_SAVE_ERR = 'Eroare la înregistrare ';
+const L_ERR_INVALID_DATE_CREATION = 'Data creării invalid';
+const L_ERR_INVALID_DATE_UPDATE = 'Data nevalidă a fost actualizată';
+
+// class.plx.admin.php
+
+const L_SAVE_ERR = 'Eroare la înregistrare';
 const L_NO_ENTRY = 'Acces refuzat';
 const L_ERR_USER_EMPTY = 'Vă rugăm să introduceţi un nume de utilizator';
 const L_ERR_PASSWORD_EMPTY = 'Vă rugăm să introduceţi o parolă';
@@ -40,32 +44,26 @@ const L_ARTICLE_MODIFY_SUCCESSFUL = 'Articol actualizat cu succes';
 const L_ARTICLE_SAVE_ERR = 'Eroare la salvarea articolului';
 const L_ARTICLE_DELETE_ERR = 'A apărut o eroare în timpul eliminarii articolului';
 const L_ERR_UNKNOWN_COMMENT = 'Comentariul cerut nu exista, sau nu e accesibil';
-const L_COMMENT_SAVE_SUCCESSFUL = 'Comentariu modificat cu succes';
-const L_COMMENT_UPDATE_ERR = 'Eroare la actualizarea comentariului';
-const L_COMMENT_DELETE_ERR = 'A apărut o eroare la ştergere';
-const L_COMMENT_VALIDATE_SUCCESSFUL = 'Validarea a decurs cu succes';
-const L_COMMENT_VALIDATE_ERR = 'A apărut o eroare în timpul validării';
-const L_COMMENT_MODERATE_SUCCESSFUL = 'Moderarea a decurs cu succes';
-const L_COMMENT_MODERATE_ERR = 'A apărut o eroare la moderare';
-const L_WATCH = 'Ceas';
-const L_SEND_MAIL = 'Pentru a trimite un e-mail';
-const L_COMMENT_WRITTEN_BY = 'Scris de';
+const L_ERR_URL_ALREADY_EXISTS = 'Url deja în uz. Vă rugăm să schimbați valoarea din câmpul \'Url\'';
+
+// class.plx.media.php
+
 const L_PLXMEDIAS_MEDIAS_FOLDER_ERR = 'Imposibil de a crea un fişier media';
 const L_PLXMEDIAS_ROOT = 'radacina';
+const L_PLXMEDIAS_DELETE_FILES_SUCCESSFUL = 'eliminat cu succes fişiere';
+const L_PLXMEDIAS_DELETE_FILES_ERR = 'Eroare la ştergerea unui fişier';
+const L_PLXMEDIAS_DELETE_FILE_SUCCESSFUL = 'Fişier şters cu succes';
+const L_PLXMEDIAS_DEL_FOLDER_ERR = 'Eroare la ştergerea fişierului';
+const L_PLXMEDIAS_DEL_FOLDER_SUCCESSFUL = 'Fişier şters cu succes';
 const L_PLXMEDIAS_NEW_FOLDER_ERR = 'Nu poate fi creat directoriul';
 const L_PLXMEDIAS_NEW_FOLDER_SUCCESSFUL = 'Fişier creat cu succes';
 const L_PLXMEDIAS_NEW_FOLDER_EXISTS = 'Acest fişier există deja';
-const L_PLXMEDIAS_DEL_FOLDER_ERR = 'Eroare la ştergerea fişierului';
-const L_PLXMEDIAS_DEL_FOLDER_SUCCESSFUL = 'Fişier şters cu succes';
+const L_PLXMEDIAS_WRONG_FILESIZE = 'Dimensiunea fisierului espre prea mare';
 const L_PLXMEDIAS_WRONG_FILEFORMAT = 'tipul de fişier nu este permis';
-const L_PLXMEDIAS_WRONG_FILESIZE = 'Dimensiunea fisierului espre prea mare ';
 const L_PLXMEDIAS_UPLOAD_ERR = 'Eroare în timp ce trimiterea unui fişier';
 const L_PLXMEDIAS_UPLOAD_SUCCESSFUL = 'Fişier trimis cu succes';
 const L_PLXMEDIAS_UPLOADS_ERR = 'Eroare în timp ce încărcarea fişierelor';
 const L_PLXMEDIAS_UPLOADS_SUCCESSFUL = 'FFişierele trimise cu succes';
-const L_PLXMEDIAS_DELETE_FILES_SUCCESSFUL = 'eliminat cu succes fişiere';
-const L_PLXMEDIAS_DELETE_FILES_ERR = 'Eroare la ştergerea unui fişier';
-const L_PLXMEDIAS_DELETE_FILE_SUCCESSFUL = 'Fişier şters cu succes';
 const L_PLXMEDIAS_MOVE_FILES_SUCCESSFUL = 'Fişiere mutate cu succes';
 const L_PLXMEDIAS_MOVE_FILE_SUCCESSFUL = 'Fişier mutat cu succes';
 const L_PLXMEDIAS_MOVE_FILES_ERR = 'Eroare în timpul mutarii fişierelor';
@@ -75,6 +73,9 @@ const L_PLXMEDIAS_RECREATE_THUMB_ERR = 'Eroare în timp ce crearea miniatură';
 const L_PLXMEDIAS_RECREATE_THUMBS_ERR = 'Eroare la crearea miniatură';
 const L_PLXMEDIAS_RECREATE_THUMB_SUCCESSFUL = 'Miniatură creat cu succes';
 const L_PLXMEDIAS_RECREATE_THUMBS_SUCCESSFUL = 'Thumbnails creat cu succes';
+
+// article.php
+
 const L_NEW_ARTICLE = 'Articol Nou';
 const L_ERR_INVALID_PUBLISHING_DATE = 'Data publicării gresita.';
 const L_ERR_UNKNOWN_ARTICLE = 'Articolul solicitat nu exista sau a fost sters !';
@@ -94,7 +95,6 @@ const L_AWAITING = 'A valida';
 const L_ARTICLE_DATE = 'Data publicării';
 const L_NOW = 'acum';
 const L_ARTICLE_CATEGORIES = 'Categoriile articolului';
-const L_NEW_CATEGORY = 'Categorie nouă';
 const L_ARTICLE_TAGS_FIELD = 'Cuvinte cheie';
 const L_ARTICLE_TAGS_FIELD_TITLE = 'Separaţi cuvintele cheie prin virgulă';
 const L_ARTICLE_TOGGLER_TITLE = 'Listă de cuvinte cheie';
@@ -116,9 +116,12 @@ const L_META_DESCRIPTION = 'Meta tag-ul de conţinut "descriere" (opţional)';
 const L_META_KEYWORDS = 'Meta tag-ul "Cuvinte cheie" (opţional)';
 const L_ARTICLE_CHAPO_HIDE = 'ascunde';
 const L_ARTICLE_CHAPO_DISPLAY = 'afişa';
+
+// auth.php
+
 const L_AUTH_PAGE_TITLE = 'Pagina de autentificare';
 const L_LOGOUT_SUCCESSFUL = 'Vati deconectat cu succes';
-const L_LOGIN_PAGE = 'Conectare in zona de administrare ';
+const L_LOGIN_PAGE = 'Conectare in zona de administrare';
 const L_LASTLOGIN_TIMESTAMP = 'Data ultimei autentificări';
 const L_AUTH_LOGIN_FIELD = 'Username';
 const L_AUTH_LOST_FIELD = 'Username sau adresa de e-mail';
@@ -130,6 +133,20 @@ const L_NEW_PASSWORD = 'Parolă Nouă';
 const L_LOST_PASSWORD_LOGIN = 'Conectare';
 const L_NEW_PASSWORD_SUCCESS = 'O nouă parolă v-a fost trimisă la %s';
 const L_LOST_PASSWORD_ERROR = 'Legătura a expirat';
+
+//
+
+const L_SORT_ASCENDING_DATE = 'data crescator';
+const L_SORT_DESCENDING_DATE = 'descendentă Data';
+const L_SORT_ALPHABETICAL = 'alfabetic';
+const L_SORT_REVERSE_ALPHABETICAL = 'inversă alfabetică';
+const L_SORT_RANDOM = 'aleatoriu';
+const L_YES = 'Da';
+const L_NO = 'Nu';
+const L_OK = 'Ok';
+
+// categories.php
+
 const L_CAT_TITLE = 'Crearea şi editarea categoriei';
 const L_ACTIVE = 'Activ';
 const L_CAT_LIST_NAME = 'Nume categorie';
@@ -140,19 +157,29 @@ const L_ORDER = 'Pentru';
 const L_DISPLAY = 'Afişează';
 const L_HIDE = 'Ascunde';
 const L_OPTIONS = 'Opţiuni';
+const L_NEW_CATEGORY = 'Categorie nouă';
 const L_FOR_SELECTION = 'Alegeţi obţiunea...';
 const L_CAT_APPLY_BUTTON = 'Modifică lista de categorii';
 const L_CAT_UNKNOWN = 'Categorie necunoscuta';
+const L_ERR_CATEGORY_ALREADY_EXISTS = 'Categorie nume deja utilizate';
+
+// categorie.php
+
 const L_EDITCAT_PAGE_TITLE = 'Editarea categoriei';
 const L_EDITCAT_DESCRIPTION = 'Descrierea';
 const L_EDITCAT_DISPLAY_HOMEPAGE = 'Afișare articole în această categorie pe pagina de start';
 const L_TEMPLATE = 'Template';
 const L_BACK_TO_CATEGORIES = 'Înapoi la lista de categorii';
 const L_EDITCAT_UPDATE = 'Actualizeaza această categorie';
+
+// comment.php
+
 const L_COMMENT_ORPHAN_STATUS = 'nu sunt vizibile (vă recomandăm să ştergeţi acest comentariu)';
 const L_COMMENT_ARTICLE_LINKED_TITLE = 'Editați articolul legat de acest comentariu';
 const L_COMMENT_OFFLINE = 'Offline';
 const L_COMMENT_ONLINE = 'Online';
+const L_COMMENT_OFFLINE_COUNT = '%d comentarii de validat';
+const L_COMMENT_ONLINE_COUNT = '%d comentarii postate';
 const L_COMMENT_ONLINE_TITLE = 'Lista de comentarii publicate';
 const L_BACK_TO_ARTICLE_COMMENTS = 'Înapoi la lista de comentarii la acest articol';
 const L_BACK_TO_COMMENTS = 'Înapoi la lista de comentarii';
@@ -169,6 +196,24 @@ const L_COMMENT_ARTICLE_FIELD = 'Comentariu';
 const L_COMMENT_DELETE_CONFIRM = 'Ştergeţi acest comentariu ?';
 const L_COMMENT_PUBLISH_BUTTON = 'Validarea publicarea';
 const L_COMMENT_UPDATE_BUTTON = 'Update';
+const L_COMMENT_WRITTEN_BY = 'Scris de';
+const L_COMMENT_SAVE_SUCCESSFUL = 'Comentariu modificat cu succes';
+const L_COMMENT_UPDATE_ERR = 'Eroare la actualizarea comentariului';
+const L_COMMENT_DELETE_ERR = 'A apărut o eroare la ştergere';
+const L_COMMENT_VALIDATE_SUCCESSFUL = 'Validarea a decurs cu succes';
+const L_COMMENT_VALIDATE_ERR = 'A apărut o eroare în timpul validării';
+const L_COMMENT_MODERATE_SUCCESSFUL = 'Moderarea a decurs cu succes';
+const L_COMMENT_MODERATE_ERR = 'A apărut o eroare la moderare';
+const L_WATCH = 'Ceas';
+const L_SEND_MAIL = 'Pentru a trimite un e-mail';
+
+// sous_navigation/commentaires.php
+
+const L_COMMENT_NEW_COMMENT_TITLE = 'Scrie un comentariu nou pentru acest articol';
+const L_COMMENT_NEW_COMMENT = 'Scrie un comentariu nou';
+
+// comment_new.php
+
 const L_ERR_ANSWER_UNKNOWN_COMMENT = 'Comentariul va încerca să răspundă la nu există sau nu-i sunt mai !';
 const L_ERR_ANSWER_OFFLINE_COMMENT = 'comentariul este offline, nu răspunsul !';
 const L_ERR_COMMENT_UNKNOWN_ARTICLE = 'Articolul solicitat nu exista, sau nu puteti scrie comentarii la acest articol !';
@@ -177,10 +222,10 @@ const L_CREATING_COMMENT_SUCCESSFUL = 'Comentariul a fost creat cu succes';
 const L_CREATE_NEW_COMMENT = 'Scrie un comentariu';
 const L_ARTICLE_COMMENTS_LIST = 'Comentarii la acest articol (mai nou de la vechi la cele mai)';
 const L_COMMENT_REPLY_TITLE = 'Răspundeți la acest comentariu';
-const L_COMMENT_NEW_COMMENT_TITLE = 'Scrie un comentariu nou pentru acest articol';
-const L_COMMENT_NEW_COMMENT = 'Scrie un comentariu nou';
+
+// comments.php
+
 const L_COMMENTS_GLOBAL_SCOPE = 'Întregul site-ului';
-const L_COMMENTS_OFFLINE_LIST = 'Lista de comentarii ce aşteaptă a fi aprobate ';
 const L_COMMENT_ALL_FEEDS = 'Mesaj';
 const L_COMMENT_EDIT_TITLE = 'Editaţi acest comentariu';
 const L_COMMENT_OFFLINE_FEEDS_TITLE = 'RSS comentarii offline';
@@ -189,9 +234,20 @@ const L_COMMENT_ONLINE_FEEDS_TITLE = 'Comentarii RSS online';
 const L_COMMENT_ONLINE_FEEDS = 'Comentarii Online';
 const L_COMMENTS_PRIVATE_FEEDS = 'Feed privat de comentarii';
 const L_COMMENTS_ONLINE_LIST = 'Lista de comentarii publicate';
+const L_COMMENTS_OFFLINE_LIST = 'Lista de comentarii ce aşteaptă a fi aprobate';
 const L_COMMENTS_ALL_LIST = 'Lista comentarii';
 const L_COMMENTS_ARTICLE = 'Lista comentariilor pentru articol';
 const L_COMMENT_SET_ONLINE = 'Ia Online';
+const L_BACK_TO_ARTICLE = 'Înapoi la articol';
+
+// index.php
+
+const L_SEARCH = 'Căutare';
+const L_SEARCH_PLACEHOLDER = 'Identificator sau titlu';
+const L_ARTICLES_ALL_CATEGORIES = 'Toate categoriile ...';
+const L_ALL = 'Toate';
+const L_ALL_PUBLISHED = 'Publicat';
+const L_ALL_DRAFTS = 'Schiţe';
 const L_ARTICLES_FILTER_BUTTON = 'Caută';
 const L_SPECIFIC_CATEGORIES_TABLE = 'Locaţii specifice';
 const L_ALL_ARTICLES_CATEGORIES_TABLE = 'Toate elementele';
@@ -203,32 +259,32 @@ const L_EDIT = 'Editează';
 const L_ARTICLE_EDIT_TITLE = 'Editează articolul dat';
 const L_NEW_COMMENTS_TITLE = 'Comentarii ce aşteaptă validarea';
 const L_VALIDATED_COMMENTS_TITLE = 'Comentarii postate';
-const L_SEARCH = 'Căutare';
-const L_SEARCH_PLACEHOLDER = 'Identificator sau titlu';
-const L_ARTICLES_ALL_CATEGORIES = 'Toate categoriile ...';
-const L_ALL = 'Toate';
-const L_ALL_PUBLISHED = 'Publicat';
-const L_ALL_DRAFTS = 'Schiţe';
-const L_MEDIAS_DELETE_FOLDER_CONFIRM = 'Sunteti sigur ca doriti sa stergeţi directoriul şi conţinutul lui %s ?';
-const L_MEDIAS_NO_FILE = 'Nici un fişier';
+
+// medias.php
+
 const L_MEDIAS_FILENAME = 'Filename';
-const L_MEDIAS_ADD_FILE = 'Adăugaţi fişiere';
-const L_MEDIAS_BACK = 'Back';
-const L_MEDIAS_MAX_FILE_UPLOAD = 'Numărul maxim de fișiere permise prin încărcarea';
 const L_MEDIAS_TITLE = 'Management Media';
-const L_MEDIAS_IMAGES = 'Images';
-const L_MEDIAS_DOCUMENTS = 'Documente';
-const L_MEDIAS_CREATE_FOLDER = 'Crearea unui directoriu';
-const L_MEDIAS_SUBMIT_FILE = 'Trimite';
+const L_MEDIAS_DIRECTORY = 'Locaţie';
+const L_MEDIAS_BACK = 'Back';
 const L_MEDIAS_MAX_UPLOAD_FILE = 'Dimensiunea maximă de fişier';
 const L_MEDIAS_MAX_UPLOAD_NBFILE = 'Numărul maxim de fișiere per încărcare';
 const L_MEDIAS_MAX_POST_SIZE = 'Dimensiunea maximă a datelor';
-const L_MEDIAS_DIRECTORY = 'Locaţie';
+const L_BROWSE = 'Naviga';
+const L_DEPOSIT_FILES = 'Lăsați fișierele aici';
+const L_FILES = 'fișiere';
+const L_BATCH_SIZE = 'Dimensiunea lotului';
+const L_MEDIAS_SUBMIT_FILE = 'Trimite';
+const L_MEDIAS_IMAGES = 'Images';
+const L_MEDIAS_DOCUMENTS = 'Documente';
+const L_MEDIAS_ADD_FILE = 'Adăugaţi fişiere';
+const L_MEDIAS_DELETE_FOLDER_CONFIRM = 'Sunteti sigur ca doriti sa stergeţi directoriul şi conţinutul lui %s ?';
 const L_MEDIAS_FOLDER = 'Fişier';
 const L_MEDIAS_NEW_FOLDER = 'New Folder';
+const L_MEDIAS_CREATE_FOLDER = 'Crearea unui directoriu';
 const L_MEDIAS_FILESIZE = 'Dimensiunea';
 const L_DATE = 'Data';
 const L_MEDIAS_DIMENSIONS = 'Dimensiuni';
+const L_MEDIAS_NO_FILE = 'Nici un fişier';
 const L_MEDIAS_RESIZE = 'Redimensionarea Imagini';
 const L_MEDIAS_RESIZE_NO = 'Dimensiune original';
 const L_MEDIAS_THUMBS = 'A crea thumbnails';
@@ -249,14 +305,10 @@ const L_MEDIAS_RENAME = 'Redenumire';
 const L_CONFIRM_THUMBNAIL = 'Confirmer la création de 999 vignettes';
 const L_CONFIRM_MOVE_MEDIAS = 'Confirmer le déplacement de 999 documents';
 const L_REQUIRED_OPTION = 'Vous devez sélectionner une option';
-const L_SORT_ASCENDING_DATE = 'data crescator';
-const L_SORT_DESCENDING_DATE = 'descendentă Data';
-const L_SORT_ALPHABETICAL = 'alfabetic';
-const L_SORT_REVERSE_ALPHABETICAL = 'inversă alfabetică';
-const L_SORT_RANDOM = 'aleatoriu';
-const L_OK = 'Ok';
-const L_YES = 'Da';
-const L_NO = 'Nu';
+const L_REQUIRED_TARGET = 'Selectați o altă țintă';
+
+// parametres_affichage.php
+
 const L_CONFIG_VIEW = 'Optiuni de afisare';
 const L_CONFIG_VIEW_SKIN_SELECT = 'Alege tema';
 const L_TEMPLATES_EDIT = 'Editaţi fişierele tema';
@@ -278,9 +330,12 @@ const L_CONFIG_VIEW_FEEDS_FOOTER = 'Text se adaugă şi o semnătură în partea
 const L_CONFIG_VIEW_UPDATE = 'Editare Opţiuni afişare';
 const L_CONFIG_VIEW_DISPLAY_EMPTY_CAT = 'Afişarea categorii fără articolul';
 const L_CONFIG_HOMETEMPLATE = 'Format din pagina de start';
+
+// parametres_avances.php
+
 const L_CONFIG_ADVANCED = 'Avansate de configurare';
 const L_CONFIG_ADVANCED_URL_REWRITE = 'Permite rescrierea url-uri';
-const L_CONFIG_ADVANCED_URL_REWRITE_ALERT = 'Atenţie într-un fişier. Htaccess este deja prezent la rădăcina PluXml dumneavoastră. Prin activarea rescrierea dosarul \ url va fi modificat';
+const L_CONFIG_ADVANCED_URL_REWRITE_ALERT = 'Atenţie într-un fişier. Htaccess este deja prezent la rădăcina PluXml dumneavoastră. Prin activarea rescrierea dosarul  url va fi modificat';
 const L_CONFIG_CLEAN_URLS = 'Eliminați cuvinte scurte din adresele URL';
 const L_CONFIG_CLEAN_URLS_HELP = 'Generați adrese URL mai scurte pentru articole și pagini';
 const L_CONFIG_ADVANCED_GZIP = 'Activeaza compresia GZIP';
@@ -300,10 +355,10 @@ const L_CONFIG_ADVANCED_PLUGINS_FOLDER = 'Locul de amplasare a plugin-uri (dosar
 const L_CONFIG_ADVANCED_CONFIG_FOLDER = 'Locul de fişiere de configurare (dosar)';
 const L_CONFIG_ADVANCED_UPDATE = 'Editare configuraţie avansată';
 const L_CONFIG_CUSTOM_CSSADMIN_PATH = 'Locația și numele de fișier css personalizat buna administrare (opțional)';
+const L_CONFIG_CUSTOM_CSSADMIN_PATH_HELP = 'Specificați calea completă din pagina de pornire';
 const L_CONFIG_ADVANCED_EMAIL_SENDING_TITLE = 'Trimitere prin e-mail';
 const L_CONFIG_ADVANCED_EMAIL_METHOD = 'Metoda de trimitere prin e-mail';
 const L_CONFIG_ADVANCED_SMTP_TITLE = 'Trimiterea de e-mailuri cu SMTP';
-const L_CONFIG_ADVANCED_SMTP_ACTIVATION = 'Activați e-mailurile trimise de un server SMTP';
 const L_CONFIG_ADVANCED_SMTP_SERVER = 'Nume gazdă SMTP';
 const L_CONFIG_ADVANCED_SMTP_USERNAME = 'Numele de utilizator SMTP';
 const L_CONFIG_ADVANCED_SMTP_PASSWORD = 'Parola SMTP';
@@ -314,17 +369,19 @@ const L_CONFIG_ADVANCED_SMTPOAUTH_CLIENTID = 'ID client';
 const L_CONFIG_ADVANCED_SMTPOAUTH_SECRETKEY = 'Cheia secretă a clientului';
 const L_CONFIG_ADVANCED_SMTPOAUTH_TOKEN = 'Token';
 const L_CONFIG_ADVANCED_SMTPOAUTH_GETTOKEN = 'Generați un jeton';
-const L_CONFIG_ADVANCED_EMAIL_SENDING_TITLE_HELP = 'Nevoie de ajutor : <a href="https://wiki.%s/personnaliser/personnalisation/#envoi-de-mails">PluXml documentation</a>&nbsp;(fr).';
+const L_CONFIG_ADVANCED_EMAIL_SENDING_TITLE_HELP = 'Nevoie de ajutor : <a href="https://wiki.%s/personnaliser/personnalisation/#envoi-de-mails">PluXml documentation</a> (fr).';
 const L_CONFIG_ADVANCED_EMAIL_METHOD_HELP = 'Nicio configurație nu este necesară pentru sendmail.';
 const L_CONFIG_ADVANCED_SMTP_SERVER_HELP = 'Nume server SMTP (exemplu : ssl0.ovh.net)';
 const L_CONFIG_ADVANCED_SMTP_USERNAME_HELP = 'Numele de utilizator pe gazda SMTP (exemplu : pluxml@monserveursmtp.com)';
 const L_CONFIG_ADVANCED_SMTP_PASSWORD_HELP = 'Parolă de utilizator pe gazda SMTP';
 const L_CONFIG_ADVANCED_SMTP_PORT_HELP = 'Numărul portului gazdă SMTP (implicit: 465)';
-const L_CONFIG_ADVANCED_SMTPOAUTH_TITLE_HELP = 'PluXml permite generarea de jetoane numai pentru serviciu GOOGLE.
-Aveți nevoie de ajutor pentru a genera numele de utilizator și cheia secretă : WIKI.';
+const L_CONFIG_ADVANCED_SMTPOAUTH_TITLE_HELP = 'PluXml vă permite să generați jetoane numai pentru serviciul GOOGLE.';
 const L_CONFIG_ADVANCED_SMTPOAUTH_CLIENTID_HELP = 'ID client la serviciul OAUTH2 (exemplu : 664335625964-uha1vop20qPluXml81ubjkkgfabbbj6d.apps.googleusercontent.com)';
 const L_CONFIG_ADVANCED_SMTPOAUTH_SECRETKEY_HELP = 'Cheia de client a serviciului OAUTH2 (exemplu : PrsvKp6aprKpoP8snnCoC8-x)';
 const L_CONFIG_ADVANCED_SMTPOAUTH_TOKEN_HELP = 'Salvați codul de identificare și codul secret al clientului, astfel încât să puteți genera jetonul.';
+
+// parametres_base.php
+
 const L_CONFIG_BASE_SITE_TITLE = 'Denumirea sitului';
 const L_CONFIG_BASE_SITE_SLOGAN = 'Descriere sitului';
 const L_CONFIG_BASE_DEFAULT_LANG = 'Limba';
@@ -334,10 +391,16 @@ const L_CONFIG_BASE_UPDATE = 'Schimba configuraţia de bază';
 const L_CONFIG_META_DESCRIPTION = 'Conţinutul tag-ul meta "descriere" a site-ului (opţional)';
 const L_CONFIG_META_KEYWORDS = 'Conţinut de meta tags "cuvinte cheie" Site-ul (opţional)';
 const L_CONFIG_BASE_ENABLE_RSS = 'Afișați fluxuri RSS';
+
+// parametres_edittpl.php
+
 const L_CONFIG_EDITTPL_ERROR_NOTHEME = 'Aceasta temă nu există!';
 const L_CONFIG_EDITTPL_TITLE = 'Editare Tematica';
 const L_CONFIG_EDITTPL_SELECT_FILE = 'Selectaţi fişierul pentru a edita :';
 const L_CONFIG_EDITTPL_LOAD = 'Sarcină';
+
+// parametres_infos.php
+
 const L_CONFIG_INFOS_TITLE = 'Informaţii privind PluXml';
 const L_CONFIG_INFOS_DESCRIPTION = 'Informaţiile pe care le furniza informaţii cu privire la modul PluXml dumneavoastră şi poate dovedi util pentru depanare.';
 const L_CONFIG_INFOS_NB_CATS = 'Numărul de categorii :';
@@ -352,6 +415,9 @@ const L_MAIL_TEST = 'Trimiteți un e-mail de testare';
 const L_MAIL_TEST_SUBJECT = 'E-mail de testare trimis de la %s';
 const L_MAIL_TEST_SENT_TO = 'E-mail de testare trimis la %s. Verifica-ti casuta de e-mail';
 const L_MAIL_TEST_FAILURE = 'Problemă pentru trimiterea e-mailului de testare';
+
+// parametres_users.php
+
 const L_CONFIG_USERS_TITLE = 'Gestionarea utilizatorilor';
 const L_CONFIG_USER = 'Utilizator';
 const L_CONFIG_USERS_ACTIVE = 'Activitate';
@@ -360,8 +426,9 @@ const L_CONFIG_USERS_UPDATE = 'Modifică lista de utilizatori';
 const L_ERR_LOGIN_ALREADY_EXISTS = 'Login ID deja utilizate';
 const L_ERR_USERNAME_ALREADY_EXISTS = 'Nume de utilizator deja în uz';
 const L_ERR_EMAIL_ALREADY_EXISTS = 'Adresa de email este deja in folosinta';
-const L_ERR_CATEGORY_ALREADY_EXISTS = 'Categorie nume deja utilizate';
-const L_ERR_STATIC_ALREADY_EXISTS = 'Aşa cum deja utilizate';
+
+// parametre_plugins.php
+
 const L_BACK_TO_PLUGINS = 'Back to Plugins';
 const L_NO_PLUGIN = 'Nr plugin';
 const L_PLUGIN_NO_CONFIG = 'Nu Plugin configurat';
@@ -369,6 +436,9 @@ const L_PLUGINS_CSS = 'Css';
 const L_PLUGINS_CSS_TITLE = 'Edita codul CSS al plugin';
 const L_CONTENT_FIELD_FRONTEND = 'Site-ul de conținut fișier css';
 const L_CONTENT_FIELD_BACKEND = 'CSS administrator conținutul fișierului';
+
+// parametres_plugins.php
+
 const L_PLUGINS_TITLE = 'Gestiunea plugin-urilor';
 const L_PLUGINS_VERSION = 'Versiune';
 const L_PLUGINS_ACTIVATE = 'Activează';
@@ -385,6 +455,9 @@ const L_ACTION = 'Acţiune';
 const L_PLUGINS_APPLY_BUTTON = 'Modificarea lista de plugin-uri';
 const L_PLUGINS_ACTIVE_LIST = 'Plugin-uri active';
 const L_PLUGINS_INACTIVE_LIST = 'Plugin-uri inactive';
+
+// profil.php
+
 const L_PROFIL_EDIT_TITLE = 'Editează Profilul';
 const L_PROFIL = 'Profil';
 const L_PROFIL_USER = 'Numele și prenumele';
@@ -392,6 +465,9 @@ const L_INFOS = 'Informaţii';
 const L_PROFIL_UPDATE = 'Editează-ţi profilul';
 const L_PROFIL_CHANGE_PASSWORD = 'Schimbarea parolei';
 const L_PROFIL_UPDATE_PASSWORD = 'Schimbaţi parola';
+
+// statique.php
+
 const L_STATIC_BACK_TO_PAGE = 'Înapoi la lista de pagini statice';
 const L_STATIC_UNKNOWN_PAGE = 'Această pagină statică nu există sau nu este accesibila !';
 const L_STATIC_TITLE = 'Editează codul sursă a paginei statice';
@@ -399,6 +475,9 @@ const L_STATIC_VIEW_PAGE = 'Vizualizează pagina';
 const L_STATIC_ON_SITE = 'pe site';
 const L_STATIC_UPDATE = 'Salvaţi această pagină statică';
 const L_TITLE_HTMLTAG = 'Conţinutul tag-ul titlu (opţional)';
+
+// statiques.php
+
 const L_STATICS_PAGE_TITLE = 'Crearea şi publicarea paginei statice';
 const L_STATICS_GROUP = 'Grupa';
 const L_STATICS_URL = 'Url';
@@ -408,6 +487,10 @@ const L_VIEW = 'Vizualizează';
 const L_STATICS_SRC_TITLE = 'Editează codul sursă a acestei pagini';
 const L_STATICS_NEW_PAGE = 'Pagină nouă';
 const L_STATICS_UPDATE = 'Modifică lista paginilor statice';
+const L_ERR_STATIC_ALREADY_EXISTS = 'Aşa cum deja utilizate';
+
+// top.php
+
 const L_PROFIL_ADMIN = 'Administrator';
 const L_PROFIL_MANAGER = 'Manager';
 const L_PROFIL_MODERATOR = 'Moderator';
@@ -428,29 +511,33 @@ const L_MENU_CATEGORIES_TITLE = 'Crează,gestionează,editează categoriile';
 const L_MENU_CONFIG_TITLE = 'Configurarează PluXml';
 const L_MENU_CONFIG = 'Reglare';
 const L_MENU_PROFIL_TITLE = 'Gestionează profilul';
-const L_WARNING_INSTALLATION_FILE = 'Fişierul install.php încă se află în rădăcina sit-ului 
- PluXml. Din motive de securitate, se recomandă să-l <a class="lnkdelete" href="?del=install">ştergeţi</a>.';
+const L_WARNING_INSTALLATION_FILE = 'Fișierul install.php este prezent la rădăcina PluXml.n dvs. Din motive de securitate, <a class="lnkdelete" href="?del=install"> ștergeți-l </a>!';
+
+// user.php
+
 const L_USER_UNKNOWN = 'Utilizator necunoscut';
-const L_USER_LANG = 'Limba utilizată ';
+const L_USER_LANG = 'Limba utilizată';
 const L_USER_UPDATE = 'Actualizează acest utilizator';
 const L_USER_PAGE_TITLE = 'Editarea profilului %s';
 const L_USER_BACK_TO_PAGE = 'Înapoi la lista de utilizatori';
+
+//
+
 const L_MENU_CONFIG_BASE_TITLE = 'Schimbă configuraţia de bază';
 const L_CONFIG_BASE = 'Configuraţia de bază';
 const L_MENU_CONFIG_VIEW_TITLE = 'Editarea opţiunilor de afişare';
-const L_MENU_CONFIG_VIEW = 'Opţiuni \ Afişare';
+const L_MENU_CONFIG_VIEW = 'Opţiuni  Afişare';
 const L_MENU_CONFIG_USERS_TITLE = 'Gestionează conturile utilizatorilor';
 const L_MENU_CONFIG_USERS = 'Conturile utilizatorilor';
 const L_MENU_CONFIG_ADVANCED_TITLE = 'Editarea configuraţiei avansate';
 const L_MENU_CONFIG_INFOS_TITLE = 'Obţinerea de informaţii despre PluXml';
 const L_MENU_CONFIG_PLUGINS_TITLE = 'Administrează Plugin-uri';
 const L_MENU_CONFIG_PLUGINS = 'Plugin-uri';
-const L_ERR_URL_ALREADY_EXISTS = 'Url deja în uz. Vă rugăm să schimbați valoarea din câmpul \'Url\'';
 const L_THEMES = 'Teme';
 const L_THEMES_TITLE = 'Gestionarea teme';
 const L_HELP = 'Ajutor';
 const L_HELP_TITLE = 'Vezi de ajutor';
 const L_BACK_TO_THEMES = 'Înapoi la subiectele paginii';
-const L_ERR_INVALID_DATE_CREATION = 'Data creării invalid';
-const L_ERR_INVALID_DATE_UPDATE = 'Data invalid actualizat'
-?>
+const L_CONFIG_ADVANCED_SMTP_ACTIVATION = 'Activați e-mailurile trimise de un server SMTP';
+const L_MEDIAS_MAX_FILE_UPLOAD = 'Numărul maxim de fișiere permise prin încărcarea';
+
