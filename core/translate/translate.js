@@ -36,7 +36,7 @@
 			for(var i=0, iMax=2; i<iMax; i++) {
 				console.log(datas[0][0][i]);
 			}
-			return datas[0][0][0];
+			return datas[0][0][0].replace(/% (\w)/, '%$1');
 		}
 
 		return '';
@@ -280,15 +280,6 @@
 					select.textContent = '';
 
 					const excludes = select.dataset.excludes.split('|');
-					/*
-					const theList = window.LanguageDisplays.nativeNames;
-					for(var i in theList) {
-						const option = document.createElement('OPTION');
-						option.value = i;
-						option.textContent = theList[i];
-						select.appendChild(option);
-					}
-					*/
 
 					window.LanguageDisplays.localNames.forEach(function(value) {
 						const parts = value.split(':');

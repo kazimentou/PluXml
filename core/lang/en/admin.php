@@ -1,10 +1,9 @@
 <?php
-
 const L_MENU = 'Menu';
 const L_UNKNOWN_ERROR = 'Unknown error';
 const L_CONFIRM_DELETE = 'Confirm the deletion of 999 items ?';
-const L_CONFIRM_ACTIVATE = 'Confirm for enabling 999 items ?'
-const L_CONFIRM_DEACTIVATE = 'Confirm for disabling 999 items ?'
+const L_CONFIRM_ACTIVATE = 'Activate 999 items ?';
+const L_CONFIRM_DEACTIVATE = 'Disable 999 items ?';
 const L_CONFIRM_OFFLINE = 'Confirm that 999 comments have been offline ?';
 const L_CONFIRM_ONLINE = 'Confirm the upload of 999 comments ?';
 const L_SAVE_FILE = 'Save the file';
@@ -21,12 +20,10 @@ const L_DELETE_SUCCESSFUL = 'Successfully deleted';
 const L_DELETE_FILE_ERR = 'Error while deleting file';
 const L_RENAME_FILE_SUCCESSFUL = 'Successfully renamed file';
 const L_RENAME_FILE = 'Rename file';
-
 const L_THUMBNAIL = 'Thumbnail (optional)';
 const L_THUMBNAIL_SELECTION = 'Select image';
 const L_THUMBNAIL_TITLE = 'Image Title (optional)';
 const L_THUMBNAIL_ALT = 'Alternative text of the image (optional)';
-
 const L_ERR_INVALID_DATE_CREATION = 'Invalid creation date';
 const L_ERR_INVALID_DATE_UPDATE = 'Invalid date updated';
 
@@ -175,12 +172,14 @@ const L_TEMPLATE = 'Template';
 const L_BACK_TO_CATEGORIES = 'Back to categories';
 const L_EDITCAT_UPDATE = 'Update this category';
 
-// commentaire.php
+// comment.php
 
 const L_COMMENT_ORPHAN_STATUS = 'not displayed (we advise you to delete this comment)';
 const L_COMMENT_ARTICLE_LINKED_TITLE = 'Edit the article linked to this comment';
 const L_COMMENT_OFFLINE = 'Offline';
 const L_COMMENT_ONLINE = 'Online';
+const L_COMMENT_OFFLINE_COUNT = '%d comments to validate';
+const L_COMMENT_ONLINE_COUNT = '%d comments posted';
 const L_COMMENT_ONLINE_TITLE = 'Published comments';
 const L_BACK_TO_ARTICLE_COMMENTS = 'Back to this article\'s comments';
 const L_BACK_TO_COMMENTS = 'Back to comments';
@@ -213,7 +212,7 @@ const L_SEND_MAIL = 'To send an email';
 const L_COMMENT_NEW_COMMENT_TITLE = 'Write a new comment for this article';
 const L_COMMENT_NEW_COMMENT = 'Write a new comment';
 
-// commentaire_new.php
+// comment_new.php
 
 const L_ERR_ANSWER_UNKNOWN_COMMENT = 'The comment you are trying to reply to no longer exists!';
 const L_ERR_ANSWER_OFFLINE_COMMENT = 'Comment is offline, you can\'t answer it!';
@@ -239,6 +238,7 @@ const L_COMMENTS_OFFLINE_LIST = 'Comments awaiting moderation';
 const L_COMMENTS_ALL_LIST = 'Comments List';
 const L_COMMENTS_ARTICLE = 'List of comments for the article';
 const L_COMMENT_SET_ONLINE = 'Set online';
+const L_BACK_TO_ARTICLE = 'Back to article';
 
 // index.php
 
@@ -269,6 +269,10 @@ const L_MEDIAS_BACK = 'Back';
 const L_MEDIAS_MAX_UPLOAD_FILE = 'Maximum file size';
 const L_MEDIAS_MAX_UPLOAD_NBFILE = 'Max number of files per upload';
 const L_MEDIAS_MAX_POST_SIZE = 'Maximum data size';
+const L_BROWSE = 'Browse';
+const L_DEPOSIT_FILES = 'Drop your files here';
+const L_FILES = 'files';
+const L_BATCH_SIZE = 'Batch size';
 const L_MEDIAS_SUBMIT_FILE = 'Send';
 const L_MEDIAS_IMAGES = 'Pictures';
 const L_MEDIAS_DOCUMENTS = 'Documents';
@@ -298,9 +302,10 @@ const L_MEDIAS_LINK_COPYCLP_ERR = 'Unable to copy link to clipboard';
 const L_MEDIAS_LINK_COPYCLP_DONE = 'Copied link';
 const L_MEDIAS_NEW_NAME = 'New name';
 const L_MEDIAS_RENAME = 'Rename';
-const L_CONFIRM_THUMBNAIL = 'Confirmer la création de 999 vignettes';
-const L_CONFIRM_MOVE_MEDIAS = 'Confirmer le déplacement de 999 documents';
-const L_REQUIRED_OPTION = 'Vous devez sélectionner une option';
+const L_CONFIRM_THUMBNAIL = 'Confirm creation of 999 thumbnails';
+const L_CONFIRM_MOVE_MEDIAS = 'Move 999 documents';
+const L_REQUIRED_OPTION = 'Selecting one option  is required';
+const L_REQUIRED_TARGET = 'Select another target';
 
 // parametres_affichage.php
 
@@ -350,6 +355,7 @@ const L_CONFIG_ADVANCED_PLUGINS_FOLDER = 'Plugins (folder) location';
 const L_CONFIG_ADVANCED_CONFIG_FOLDER = 'Configuration files (folder) location';
 const L_CONFIG_ADVANCED_UPDATE = 'Save advanced configuration';
 const L_CONFIG_CUSTOM_CSSADMIN_PATH = 'Location and name of custom css file of the administration area (optional)';
+const L_CONFIG_CUSTOM_CSSADMIN_PATH_HELP = 'Specify the full path from the homepage';
 const L_CONFIG_ADVANCED_EMAIL_SENDING_TITLE = 'Email sending';
 const L_CONFIG_ADVANCED_EMAIL_METHOD = 'Email sending method';
 const L_CONFIG_ADVANCED_SMTP_TITLE = 'Sending emails with SMTP';
@@ -362,18 +368,17 @@ const L_CONFIG_ADVANCED_SMTPOAUTH_TITLE = 'Sending emails with SMTP and OAUTH2';
 const L_CONFIG_ADVANCED_SMTPOAUTH_CLIENTID = 'Client ID';
 const L_CONFIG_ADVANCED_SMTPOAUTH_SECRETKEY = 'Client secret key';
 const L_CONFIG_ADVANCED_SMTPOAUTH_TOKEN = 'Token';
-const L_CONFIG_ADVANCED_SMTPOAUTH_TOKEN_HELP = 'Your login for this service';
 const L_CONFIG_ADVANCED_SMTPOAUTH_GETTOKEN = 'Generate a token';
-const L_CONFIG_ADVANCED_EMAIL_SENDING_TITLE_HELP = 'Need help: <a href="https://wiki.%s/personnaliser/personnalisation/#envoi-de-mails">PluXml documentation</a>&nbsp;(fr).';
+const L_CONFIG_ADVANCED_EMAIL_SENDING_TITLE_HELP = 'Need help: <a href="https://wiki.%s/personnaliser/personnalisation/#envoi-de-mails">PluXml documentation</a> (fr).';
 const L_CONFIG_ADVANCED_EMAIL_METHOD_HELP = 'No configuration is required for sendmail.';
 const L_CONFIG_ADVANCED_SMTP_SERVER_HELP = 'SMTP server name (example: ssl0.ovh.net)';
 const L_CONFIG_ADVANCED_SMTP_USERNAME_HELP = 'User name on the SMTP host (example: pluxml@monserveursmtp.com)';
 const L_CONFIG_ADVANCED_SMTP_PASSWORD_HELP = 'User password on the SMTP host';
 const L_CONFIG_ADVANCED_SMTP_PORT_HELP = 'SMTP host port number (default: 465)';
-const L_CONFIG_ADVANCED_SMTPOAUTH_TITLE_HELP = 'PluXml allows to generate tokens only for the service GOOGLE.
-Need help to generate the username and secret key: WIKI.';
+const L_CONFIG_ADVANCED_SMTPOAUTH_TITLE_HELP = 'PluXml allows you to generate tokens only for the GOOGLE service. NFor help on the secret key: WIKI.';
 const L_CONFIG_ADVANCED_SMTPOAUTH_CLIENTID_HELP = 'Customer ID on the OAUTH2 service (example: 664335625964-uha1vop20qPluXml81ubjkkgfabbbj6d.apps.googleusercontent.com)';
 const L_CONFIG_ADVANCED_SMTPOAUTH_SECRETKEY_HELP = 'The client key on the OAUTH2 service (example: PrsvKp6aprKpoP8snnCoC8-x)';
+const L_CONFIG_ADVANCED_SMTPOAUTH_TOKEN_HELP = 'Your login for this service';
 
 // parametres_base.php
 
@@ -506,8 +511,7 @@ const L_MENU_CATEGORIES_TITLE = 'Create, manage, edit categories';
 const L_MENU_CONFIG_TITLE = 'Tuning for PluXml';
 const L_MENU_CONFIG = 'Tuning';
 const L_MENU_PROFIL_TITLE = 'Manage your user profiles';
-const L_WARNING_INSTALLATION_FILE = 'install.php file can still be found at the root of your website.
-Please <a class="lnkdelete" href="?del=install">drop it</a> for security reason.';
+const L_WARNING_INSTALLATION_FILE = 'The install.php file is present at the root of your PluXml.n For security reasons, <a class="lnkdelete" href="?del=install"> delete it </a>!';
 
 // user.php
 
@@ -534,4 +538,4 @@ const L_THEMES_TITLE = 'Manage themes';
 const L_HELP = 'Help';
 const L_HELP_TITLE = 'See help';
 const L_BACK_TO_THEMES = 'Back to themes';
-?>
+

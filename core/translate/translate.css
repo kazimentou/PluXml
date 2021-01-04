@@ -90,6 +90,10 @@ aside {
 	min-width: 7.5rem;
 }
 
+.ruler .unwritable {
+	color: red;
+}
+
 .toolbar th > div {
 	display: flex;
 	align-items: center;

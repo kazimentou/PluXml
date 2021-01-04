@@ -2,6 +2,10 @@
 const L_MENU = 'Menú';
 const L_UNKNOWN_ERROR = 'Erro descoñecido';
 const L_CONFIRM_DELETE = 'Desexas confirmar a eliminación?';
+const L_CONFIRM_ACTIVATE = 'Queres activar 999 elementos?';
+const L_CONFIRM_DEACTIVATE = 'Desactivar 999 elementos?';
+const L_CONFIRM_OFFLINE = 'Confirmar que hai 999 comentarios fóra de liña?';
+const L_CONFIRM_ONLINE = 'Confirmar a carga de 999 comentarios?';
 const L_SAVE_FILE = 'Gardar o arquivo';
 const L_SAVE_FILE_SUCCESSFULLY = 'Arquivo gardado correctamente';
 const L_SAVE_FILE_ERROR = 'Erro ó gardar o arquivo';
@@ -13,8 +17,8 @@ const L_DELETE = 'Eliminar';
 const L_DELETE_FILE = 'Eliminar arquivo';
 const L_DELETE_FOLDER = 'Eliminar cartafol';
 const L_DELETE_SUCCESSFUL = 'Supresión correcta';
-const L_RENAME_FILE_SUCCESSFUL = 'Arquivo renomeado con éxito';
 const L_DELETE_FILE_ERR = 'Erro ó borrar o arquivo';
+const L_RENAME_FILE_SUCCESSFUL = 'Arquivo renomeado con éxito';
 const L_RENAME_FILE = 'Renomear arquivo';
 const L_THUMBNAIL = 'Miniatura (opcional)';
 const L_THUMBNAIL_SELECTION = 'Seleccionar Imaxe';
@@ -40,14 +44,6 @@ const L_ARTICLE_MODIFY_SUCCESSFUL = 'Artígo actualizado correctamente';
 const L_ARTICLE_SAVE_ERR = 'Erro ó guardar o artígo';
 const L_ARTICLE_DELETE_ERR = 'Erro ó eliminar o artígo';
 const L_ERR_UNKNOWN_COMMENT = 'O comentario buscado non existe';
-const L_COMMENT_SAVE_SUCCESSFUL = 'Comentario gardado correctamente';
-const L_COMMENT_UPDATE_ERR = 'Erro ó actualizar o comentario';
-const L_COMMENT_DELETE_SUCCESSFUL = 'Comentario eliminado correctamente';
-const L_COMMENT_DELETE_ERR = 'Erro ó eliminar o comentario';
-const L_COMMENT_VALIDATE_SUCCESSFUL = 'Comentario aprobado correctamente';
-const L_COMMENT_VALIDATE_ERR = 'Erro ó aprobar o comentario';
-const L_COMMENT_MODERATE_SUCCESSFUL = 'Comentario moderado correctamente';
-const L_COMMENT_MODERATE_ERR = 'Erro ó moderar o comentario';
 const L_ERR_URL_ALREADY_EXISTS = 'URL xa empregada. Cambia o valor do eido «URL»';
 
 // class.plx.media.php
@@ -55,7 +51,7 @@ const L_ERR_URL_ALREADY_EXISTS = 'URL xa empregada. Cambia o valor do eido «URL
 const L_PLXMEDIAS_MEDIAS_FOLDER_ERR = 'Non se puido crear o cartafol de medios para o usuario';
 const L_PLXMEDIAS_ROOT = 'raíz';
 const L_PLXMEDIAS_DELETE_FILES_SUCCESSFUL = 'Arquivos eliminados correctamente';
-const L_PLXMEDIAS_DELETE_FILES_ERR	= 'Erro ao eliminar un ficheiro';
+const L_PLXMEDIAS_DELETE_FILES_ERR = 'Erro ao eliminar un ficheiro';
 const L_PLXMEDIAS_DELETE_FILE_SUCCESSFUL = 'Archivo eliminado correctamente';
 const L_PLXMEDIAS_DEL_FOLDER_ERR = 'Erro ó eliminar o cartafol';
 const L_PLXMEDIAS_DEL_FOLDER_SUCCESSFUL = 'Cartafol eliminado correctamente';
@@ -83,7 +79,7 @@ const L_PLXMEDIAS_RECREATE_THUMBS_SUCCESSFUL = 'Miniaturas creadas correctamente
 const L_NEW_ARTICLE = 'Novo artígo';
 const L_ERR_INVALID_PUBLISHING_DATE = 'Data de publicación incorrecta.';
 const L_ERR_UNKNOWN_ARTICLE = 'O artígo solicitado non existe.';
-const L_ERR_FORBIDDEN_ARTICLE = 'Non tes os permisos necesarios para acceder a este artígo ';
+const L_ERR_FORBIDDEN_ARTICLE = 'Non tes os permisos necesarios para acceder a este artígo';
 const L_BACK_TO_ARTICLES = 'Volver á lista de artígos';
 const L_ARTICLE_EDITING = 'Modificar un artígo';
 const L_TITLE = 'Título';
@@ -113,17 +109,13 @@ const L_ARTICLE_PREVIEW_BUTTON = 'Previsualización';
 const L_ARTICLE_DRAFT_BUTTON = 'Gardar borrador';
 const L_ARTICLE_PUBLISHING_BUTTON = 'Publicar';
 const L_ARTICLE_MODERATE_BUTTON = 'Agregar á cola de validación';
-const L_ARTICLE_OFFLINE_BUTTON = 'Por invisible';
-const L_ARTICLE_UPDATE_BUTTON = 'Gardar';
+const L_SET_OFFLINE = 'Configurar como invisible';
 const L_SAVE = 'Gardar';
 const L_ADD = 'Agregar';
-const L_ARTICLE_META_DESCRIPTION = 'Contido da metaetiqueta de descripción («description», opcional)';
-const L_ARTICLE_META_KEYWORDS = 'Contido da metaetiqueta de palabras chave («keywords», opcional)';
-const L_ARTICLE_TITLE_HTMLTAG = 'Contido da etiqueta de título («title», opcional)';
+const L_META_DESCRIPTION = '"Descrición" Contido da metaetiqueta (opcional)';
+const L_META_KEYWORDS = 'Contido de metaetiqueta "Palabras clave" (opcional)';
 const L_ARTICLE_CHAPO_HIDE = 'agochar';
 const L_ARTICLE_CHAPO_DISPLAY = 'mostrar';
-const L_ARTICLE = 'artigo';
-const L_ARTICLE_ID = 'Identificador';
 
 // auth.php
 
@@ -132,15 +124,14 @@ const L_LOGOUT_SUCCESSFUL = 'Sesión finalizada correctamente';
 const L_LOGIN_PAGE = 'Iniciar sesión na zona de administración';
 const L_LASTLOGIN_TIMESTAMP = 'Última data de inicio de sesión';
 const L_AUTH_LOGIN_FIELD = 'Nome de usuario';
-const L_AUTH_PASSWORD_FIELD = 'Contrasinal';
 const L_AUTH_LOST_FIELD = 'Nome de usuario ou correo-e';
 const L_SUBMIT_BUTTON = 'Enviar';
 const L_ERR_WRONG_PASSWORD = 'Nome de usuario ou contrasinal incorrectos';
 const L_POWERED_BY = 'Xerado con <a href="https://www.pluxml.org">PluXml</a>';
 const L_ERR_MAXLOGIN = 'Demasiado erro no inicio de sesión<br />Reintentar en% s minutos';
-const L_LOST_PASSWORD = 'Contrasinal esquecida?';
+const L_NEW_PASSWORD = 'Novo contrasinal';
 const L_LOST_PASSWORD_LOGIN = 'Iniciar sesión';
-const L_LOST_PASSWORD_SUCCESS = 'Enviouse un correo-e o usuario';
+const L_NEW_PASSWORD_SUCCESS = 'Enviouse un novo contrasinal en% s';
 const L_LOST_PASSWORD_ERROR = 'A ligazón caducou';
 
 //
@@ -153,8 +144,6 @@ const L_SORT_RANDOM = 'aleatorio';
 const L_YES = 'Si';
 const L_NO = 'Non';
 const L_OK = 'OK';
-const L_NONE1 = 'ningún';
-const L_NONE2 = 'ningunha';
 
 // categories.php
 
@@ -165,8 +154,6 @@ const L_URL = 'URL';
 const L_ARTICLES_SORT = 'Ordear artigos';
 const L_CAT_LIST_BYPAGE = 'Artigo/paxina';
 const L_ORDER = 'Orde';
-const L_MENU = 'Menú';
-const L_CATEGORY = 'Categoría';
 const L_DISPLAY = 'Mostrar';
 const L_HIDE = 'Agochar';
 const L_OPTIONS = 'Opcións';
@@ -174,6 +161,7 @@ const L_NEW_CATEGORY = 'Nova categoría';
 const L_FOR_SELECTION = 'Elementos seleccionados...';
 const L_CAT_APPLY_BUTTON = 'Modificala lista de categorías';
 const L_CAT_UNKNOWN = 'Categoría descoñecida';
+const L_ERR_CATEGORY_ALREADY_EXISTS = 'Xa existe unha categoría con ese nome';
 
 // categorie.php
 
@@ -181,20 +169,17 @@ const L_EDITCAT_PAGE_TITLE = 'Editar opcións de categoría';
 const L_EDITCAT_DESCRIPTION = 'Descrición';
 const L_EDITCAT_DISPLAY_HOMEPAGE = 'Mostrar artigos na paxina principal';
 const L_TEMPLATE = 'Plantilla';
-const L_EDITCAT_BACK_TO_PAGE = 'Volver á lista de categorías';
+const L_BACK_TO_CATEGORIES = 'Volver ás categorías';
 const L_EDITCAT_UPDATE = 'Actualizar esta categoría';
-const L_EDITCAT_TITLE_HTMLTAG = 'Contido da etiqueta de título («title», opcional)';
-const L_EDITCAT_META_DESCRIPTION = 'Contido da metaetiqueta de descripción («description», opcional) ';
-const L_EDITCAT_META_KEYWORDS = 'Contido da metaetiqueta de palabras chave («keywords», opcional)';
 
-// commentaire.php
+// comment.php
 
-const L_COMMENT_ORPHAN = 'sen artigo';
 const L_COMMENT_ORPHAN_STATUS = 'invisible (suxerimos elimiar este comentario)';
-const L_COMMENT_ARTICLE_LINKED = 'Artigo';
 const L_COMMENT_ARTICLE_LINKED_TITLE = 'Edita o artigo ligado a este comentario';
 const L_COMMENT_OFFLINE = 'desconectado';
 const L_COMMENT_ONLINE = 'conectado';
+const L_COMMENT_OFFLINE_COUNT = '%d comentarios para validar';
+const L_COMMENT_ONLINE_COUNT = '%d comentarios publicados';
 const L_COMMENT_ONLINE_TITLE = 'Lista de comentarios publicados';
 const L_BACK_TO_ARTICLE_COMMENTS = 'Volver á lista de comentarios deste artigo';
 const L_BACK_TO_COMMENTS = 'Volver á lista de comentarios';
@@ -210,17 +195,24 @@ const L_COMMENT_LINKED_ARTICLE_FIELD = 'Artigo asociado';
 const L_COMMENT_ARTICLE_FIELD = 'Comentarios';
 const L_COMMENT_DELETE_CONFIRM = 'Desexa eliminar este comentario?';
 const L_COMMENT_PUBLISH_BUTTON = 'Aprobala publicación';
-const L_COMMENT_OFFLINE_BUTTON = 'Cambiar a invisible';
 const L_COMMENT_UPDATE_BUTTON = 'Actualizar';
 const L_COMMENT_WRITTEN_BY = 'Escrito por';
-const L_ERR_CATEGORY_ALREADY_EXISTS = 'Xa existe unha categoría con ese nome';
+const L_COMMENT_SAVE_SUCCESSFUL = 'Comentario gardado correctamente';
+const L_COMMENT_UPDATE_ERR = 'Erro ó actualizar o comentario';
+const L_COMMENT_DELETE_ERR = 'Erro ó eliminar o comentario';
+const L_COMMENT_VALIDATE_SUCCESSFUL = 'Comentario aprobado correctamente';
+const L_COMMENT_VALIDATE_ERR = 'Erro ó aprobar o comentario';
+const L_COMMENT_MODERATE_SUCCESSFUL = 'Comentario moderado correctamente';
+const L_COMMENT_MODERATE_ERR = 'Erro ó moderar o comentario';
+const L_WATCH = 'Vixiar';
+const L_SEND_MAIL = 'Para enviar un correo electrónico';
 
 // sous_navigation/commentaires.php
 
 const L_COMMENT_NEW_COMMENT_TITLE = 'Escribir un novo comentario para este artigo';
 const L_COMMENT_NEW_COMMENT = 'Escribir un novo comentario';
 
-// commentaire_new.php
+// comment_new.php
 
 const L_ERR_ANSWER_UNKNOWN_COMMENT = 'O comentario ó que estás intentando responder non existe!';
 const L_ERR_ANSWER_OFFLINE_COMMENT = 'É imposible responder a un comentario invisible!';
@@ -229,16 +221,13 @@ const L_ERR_CREATING_COMMENT = 'Erro grave durante a creación do comentario';
 const L_CREATING_COMMENT_SUCCESSFUL = 'Comentario creado correctamente';
 const L_CREATE_NEW_COMMENT = 'Escribir un comentario';
 const L_ARTICLE_COMMENTS_LIST = 'Comentarios deste artigo (do máis recente ó máis antigo)';
-const L_COMMENT_REPLY_TITLE_TITLE = 'Responder a este comentario';
 const L_COMMENT_REPLY_TITLE = 'Responde a este comentario';
 
 // comments.php
 
 const L_COMMENTS_GLOBAL_SCOPE = 'todo o sitio';
 const L_COMMENT_ALL_FEEDS = 'Mensaxe';
-const L_COMMENT_EDIT = 'Editar';
 const L_COMMENT_EDIT_TITLE = 'Editar este comentario';
-const L_COMMENT_DELETE = 'Eliminar';
 const L_COMMENT_OFFLINE_FEEDS_TITLE = 'Sindicación RSS dos comentarios invisibles';
 const L_COMMENT_OFFLINE_FEEDS = 'Comentarios invisibles';
 const L_COMMENT_ONLINE_FEEDS_TITLE = 'Sindicación RSS dos comentarios visibles';
@@ -248,9 +237,8 @@ const L_COMMENTS_ONLINE_LIST = 'Lista de revisións publicadas';
 const L_COMMENTS_OFFLINE_LIST = 'Comentarios esperando moderación';
 const L_COMMENTS_ALL_LIST = 'Lista de comentarios';
 const L_COMMENTS_ARTICLE = 'Lista de comentarios para o artigo';
-const L_SET_ONLINE = 'Configurar como visible';
 const L_COMMENT_SET_ONLINE = 'Configurar como visible';
-const L_SET_OFFLINE = 'Configurar como invisible';
+const L_BACK_TO_ARTICLE = 'Volver ao artigo';
 
 // index.php
 
@@ -260,26 +248,17 @@ const L_ARTICLES_ALL_CATEGORIES = 'Tódalas categorías...';
 const L_ALL = 'Todos';
 const L_ALL_PUBLISHED = 'Publicados';
 const L_ALL_DRAFTS = 'Borradores';
-const L_ALL_AWAITING_MODERATION = 'En espera de validación';
 const L_ARTICLES_FILTER_BUTTON = 'Filtrar';
-const L_CATEGORIES_TABLE = 'Categorías';
 const L_SPECIFIC_CATEGORIES_TABLE = 'Categorías específicas';
 const L_ALL_ARTICLES_CATEGORIES_TABLE = 'Tódolos artigos';
 const L_ARTICLES_LIST = 'Lista de artigos';
-const L_ARTICLE_LIST_DATE = 'Data';
-const L_ARTICLE_LIST_TITLE = 'Título';
 const L_ARTICLE_LIST_CATEGORIES = 'Categoría';
 const L_ARTICLE_LIST_NBCOMS = 'Cant. de comentarios';
-const L_ARTICLE_LIST_AUTHOR = 'Autor';
-const L_ARTICLE_LIST_ACTION = 'Acción';
-const L_CATEGORY_HOME = 'Inicio';
-const L_CATEGORY_DRAFT = 'Borrador';
 const L_ARTICLE_VIEW_TITLE = 'Visualizar este artigo no sitio';
 const L_EDIT = 'Editar';
 const L_ARTICLE_EDIT_TITLE = 'Editar este artigo';
 const L_NEW_COMMENTS_TITLE = 'Comentarios en espera de moderación';
 const L_VALIDATED_COMMENTS_TITLE = 'Comentarios publicados';
-const L_NO_ARTICLE = 'Nonn existe este artigo';
 
 // medias.php
 
@@ -290,6 +269,10 @@ const L_MEDIAS_BACK = 'Volver';
 const L_MEDIAS_MAX_UPLOAD_FILE = 'Tamaño máximo de arquivo';
 const L_MEDIAS_MAX_UPLOAD_NBFILE = 'Número máximo de arquivos por carga';
 const L_MEDIAS_MAX_POST_SIZE = 'Tamaño máximo de datos';
+const L_BROWSE = 'Examinar';
+const L_DEPOSIT_FILES = 'Solte os ficheiros aquí...';
+const L_FILES = 'Abrir un ficheiro';
+const L_BATCH_SIZE = 'Tamaño do lote';
 const L_MEDIAS_SUBMIT_FILE = 'Enviar';
 const L_MEDIAS_IMAGES = 'Imaxes';
 const L_MEDIAS_DOCUMENTS = 'Documentos';
@@ -309,9 +292,7 @@ const L_MEDIAS_THUMBS_NONE = 'Sen miniatura';
 const L_MEDIAS_MODIFY = 'Editar';
 const L_MEDIAS_THUMB = 'Miniatura';
 const L_MEDIAS_EXTENSION = 'Extensión';
-const L_MEDIAS_ADD = 'Agregar';
 const L_MEDIAS_ALIGNMENT = 'Aliñación';
-const L_MEDIAS_ALIGN_NONE = 'Ningunha';
 const L_MEDIAS_ALIGN_LEFT = 'Esquerda';
 const L_MEDIAS_ALIGN_CENTER = 'Centro';
 const L_MEDIAS_ALIGN_RIGHT = 'Dereita';
@@ -321,13 +302,16 @@ const L_MEDIAS_LINK_COPYCLP_ERR = 'Non se pode copiar a ligazón no portapapeis'
 const L_MEDIAS_LINK_COPYCLP_DONE = 'Ligazón copiado';
 const L_MEDIAS_NEW_NAME = 'Novo nome';
 const L_MEDIAS_RENAME = 'Renomear';
+const L_CONFIRM_THUMBNAIL = 'Confirma a creación de 999 miniaturas';
+const L_CONFIRM_MOVE_MEDIAS = 'Move 999 documentos';
+const L_REQUIRED_OPTION = 'É necesario seleccionar unha opción';
+const L_REQUIRED_TARGET = 'Selecciona outro destino';
 
 // parametres_affichage.php
 
 const L_CONFIG_VIEW = 'Opcións de visualización';
 const L_CONFIG_VIEW_SKIN_SELECT = 'Elixir tema';
 const L_TEMPLATES_EDIT = 'Editar arquivos do tema';
-const L_CONFIG_VIEW_SORT = 'Ordear artigos';
 const L_CONFIG_VIEW_BYPAGE = 'Cantidade de artigos por paxina';
 const L_CONFIG_VIEW_BYPAGE_ARCHIVES = 'Cantidade de artigos por paxina nos archivos';
 const L_CONFIG_VIEW_BYPAGE_TAGS = 'Cantidade de artigos por paxina en etiquetas';
@@ -352,8 +336,8 @@ const L_CONFIG_HOMETEMPLATE = 'Plantilla da paxina principal';
 const L_CONFIG_ADVANCED = 'Configuración avanzada';
 const L_CONFIG_ADVANCED_URL_REWRITE = 'Activar a reescritura de URLs';
 const L_CONFIG_ADVANCED_URL_REWRITE_ALERT = 'Advertencia: xa existe un arquivo «.htaccess» na raíz da túa instalación de PluXml. Si activas a reescritura de URLs, se modificará este arquivo';
-const L_CONFIG_CLEAN_URLS	= 'Elimina palabras curtas das URL';
-const L_CONFIG_CLEAN_URLS_HELP	= 'Xera URL máis curtos para artigos e páxinas';
+const L_CONFIG_CLEAN_URLS = 'Elimina palabras curtas das URL';
+const L_CONFIG_CLEAN_URLS_HELP = 'Xera URL máis curtos para artigos e páxinas';
 const L_CONFIG_ADVANCED_GZIP = 'Activar compresión GZIP';
 const L_CONFIG_ADVANCED_GZIP_HELP = 'Permite comprimir as paxinas para aforrar ancho de banda, pero pode aumentar a carga do procesador';
 const L_CONFIG_ADVANCED_CAPCHA = 'Activar protección anti-spam («CAPTCHA»)';
@@ -361,7 +345,7 @@ const L_CONFIG_ADVANCED_LOSTPASSWORD = 'Habilitar recuperación de contrasinal';
 const L_CONFIG_ADVANCED_ADMIN_KEY = 'Chave de administración (URLs privadas)';
 const L_CONFIG_ADVANCED_KEY_HELP = 'Deixa este eido baleiro para rexenerar a chave';
 const L_CONFIG_ADVANCED_USERFOLDERS = 'Utilizar carpetas diferentes para medios en cada redactor';
-const L_SLASH_END_REQUIRED				= 'Non esquecer a barra ó final';
+const L_SLASH_END_REQUIRED = 'Non esquecer a barra ó final';
 const L_CONFIG_ADVANCED_MEDIAS_FOLDER = 'Ubicación do cartafol de medios';
 const L_CONFIG_ADVANCED_ARTS_FOLDER = 'Ubicación do cartafol de artículos';
 const L_CONFIG_ADVANCED_COMS_FOLDER = 'Ubicación do cartafol de comentarios';
@@ -371,6 +355,7 @@ const L_CONFIG_ADVANCED_PLUGINS_FOLDER = 'Ubicación do cartafol de complementos
 const L_CONFIG_ADVANCED_CONFIG_FOLDER = 'Ubicación do cartafol de configuración';
 const L_CONFIG_ADVANCED_UPDATE = 'Gardar configuración avanzada';
 const L_CONFIG_CUSTOM_CSSADMIN_PATH = 'Ubicación e nome do arquivo CSS personalizado da área de administración (opcional)';
+const L_CONFIG_CUSTOM_CSSADMIN_PATH_HELP = 'Especifique o camiño completo desde a páxina de inicio';
 const L_CONFIG_ADVANCED_EMAIL_SENDING_TITLE = 'Envío de correo-e';
 const L_CONFIG_ADVANCED_EMAIL_METHOD = 'Método de envío de correo-e';
 const L_CONFIG_ADVANCED_SMTP_TITLE = 'Envío de correo-e con SMTP';
@@ -380,32 +365,26 @@ const L_CONFIG_ADVANCED_SMTP_PASSWORD = 'Contrasinal SMTP';
 const L_CONFIG_ADVANCED_SMTP_PORT = 'Porto SMTP';
 const L_CONFIG_ADVANCED_SMTP_SECURITY = 'Cifrado SMTP';
 const L_CONFIG_ADVANCED_SMTPOAUTH_TITLE = 'Envío de correo-e con SMTP e OAUTH2';
-const L_CONFIG_ADVANCED_SMTPOAUTH_EMAIL = 'Dirección de correo-e';
 const L_CONFIG_ADVANCED_SMTPOAUTH_CLIENTID = 'ID cliente';
 const L_CONFIG_ADVANCED_SMTPOAUTH_SECRETKEY = 'Chave secreta do ciente';
 const L_CONFIG_ADVANCED_SMTPOAUTH_TOKEN = 'Token';
 const L_CONFIG_ADVANCED_SMTPOAUTH_GETTOKEN = 'Xerar un token';
-const L_CONFIG_ADVANCED_EMAIL_SENDING_TITLE_HELP = 'Necesitas axuda : <a href="https://wiki.pluxml.org/personnaliser/personnalisation/#envoi-de-mails">PluXml documentación</a>&nbsp;(fr).';
+const L_CONFIG_ADVANCED_EMAIL_SENDING_TITLE_HELP = 'Necesitas axuda : <a href="https://wiki.pluxml.org/personnaliser/personnalisation/#envoi-de-mails">PluXml documentación</a> (fr).';
 const L_CONFIG_ADVANCED_EMAIL_METHOD_HELP = 'Non se require configuración para sendmail.';
 const L_CONFIG_ADVANCED_SMTP_SERVER_HELP = 'Nome do servidor SMTP (exemplo: ssl0.ovh.net)';
 const L_CONFIG_ADVANCED_SMTP_USERNAME_HELP = 'Nome de usuario no host SMTP (exemplo : pluxml@monserveursmtp.com)';
 const L_CONFIG_ADVANCED_SMTP_PASSWORD_HELP = 'Contrasinal de usuario no host SMTP';
 const L_CONFIG_ADVANCED_SMTP_PORT_HELP = 'Número do porto do host SMTP (predeterminado : 465)';
-const L_CONFIG_ADVANCED_SMTPOAUTH_TITLE_HELP = 'PluXml permite xerar tokens só para o servizo <a href="https://cloud.google.com">GMAIL (Google)</a>.<br>Necesita axuda para xerar o nome de usuario e a chave secreta : <a href="https://wiki.pluxml.org/personnaliser/personnalisation/#envoi-de-mails">PluXml documentación</a>&nbsp;(fr).';
-const L_CONFIG_ADVANCED_SMTPOAUTH_EMAIL_HELP = 'Dirección utilizada no servizo OAUTH2 (exemplo: pluxml@gmail.com)';
+const L_CONFIG_ADVANCED_SMTPOAUTH_TITLE_HELP = 'PluXml permite xerar tokens só para o servizo <a href="https://cloud.google.com">GMAIL (Google)</a>.<br>Necesita axuda para xerar o nome de usuario e a chave secreta : <a href="https://wiki.pluxml.org/personnaliser/personnalisation/#envoi-de-mails">PluXml documentación</a> (fr).';
 const L_CONFIG_ADVANCED_SMTPOAUTH_CLIENTID_HELP = 'ID de cliente no servizo OAUTH2 (exemplo : 664335625964-uha1vop20qPluXml81ubjkkgfabbbj6d.apps.googleusercontent.com)';
 const L_CONFIG_ADVANCED_SMTPOAUTH_SECRETKEY_HELP = 'A chave do cliente no servizo OAUTH2 (exemplo : PrsvKp6aprKpoP8snnCoC8-x)';
 const L_CONFIG_ADVANCED_SMTPOAUTH_TOKEN_HELP = 'Garda a identificación do cliente e o código secreto do cliente para que poida xerar o token.';
 
 // parametres_base.php
 
-const L_CONFIG_BASE_CONFIG_TITLE = 'Configuración básica';
 const L_CONFIG_BASE_SITE_TITLE = 'Título do sitio';
 const L_CONFIG_BASE_SITE_SLOGAN = 'Subtítulo e descrición do sitio';
-const L_CONFIG_BASE_URL_HELP = 'Non esquezas a barra ó final';
 const L_CONFIG_BASE_DEFAULT_LANG = 'Idioma predeterminado';
-const L_CONFIG_BASE_TIMEZONE = 'Fuso horario';
-const L_CONFIG_BASE_ALLOW_COMMENTS = 'Permitir comentarios';
 const L_CONFIG_BASE_MODERATE_COMMENTS = 'Moderar os comentarios creados';
 const L_CONFIG_BASE_MODERATE_ARTICLES = 'Moderar os artigos para os perfiles «Redactor» e «Editor»';
 const L_CONFIG_BASE_UPDATE = 'Gardar a configuración básica';
@@ -441,9 +420,7 @@ const L_MAIL_TEST_FAILURE = 'Problema para enviar correo-e de proba';
 
 const L_CONFIG_USERS_TITLE = 'Xestión de usuarios';
 const L_CONFIG_USER = 'Usuario';
-const L_CONFIG_USERS_ID = 'Identificador de usuario';
 const L_CONFIG_USERS_ACTIVE = 'Activo';
-const L_CONFIG_USERS_ACTION = 'Acción';
 const L_CONFIG_USERS_NEW = 'Novo usuario';
 const L_CONFIG_USERS_UPDATE = 'Modificar a lista de usuarios';
 const L_ERR_LOGIN_ALREADY_EXISTS = 'Xa existe un usuario con ese identificador';
@@ -466,16 +443,12 @@ const L_PLUGINS_TITLE = 'Xestión de complementos';
 const L_PLUGINS_VERSION = 'Versión';
 const L_PLUGINS_ACTIVATE = 'Activar';
 const L_PLUGINS_DEACTIVATE = 'Desactivar';
-const L_PLUGINS_DELETE = 'Eliminar';
 const L_PLUGINS_DELETE_ERROR = 'Error ó eliminar o complemento';
-const L_PLUGINS_DELETE_SUCCESSFUL = 'Complemento eliminado correctamente';
 const L_PLUGINS_CONFIG = 'Configuración';
 const L_PLUGINS_CONFIG_TITLE = 'Configuración do complemento';
-const L_PLUGINS_HELP = 'Axuda';
 const L_PLUGINS_HELP_TITLE = 'Consulta Uso do plug-in';
 const L_PLUGINS_REQUIREMENTS = 'Requirimentos';
 const L_PLUGINS_REQUIREMENTS_HELP = 'Complementos dispoñibles e activos necesarios para activar este complemento';
-const L_PLUGINS_REQUIREMENTS_NONE = 'Ningún';
 const L_PLUGINS_ALPHA_SORT = 'Ordear complementos alfabéticamente';
 const L_PLUGINS_LOADING_SORT = 'Orde de carga';
 const L_ACTION = 'Acción';
@@ -492,11 +465,6 @@ const L_INFOS = 'Información';
 const L_PROFIL_UPDATE = 'Gardar perfil';
 const L_PROFIL_CHANGE_PASSWORD = 'Cambiar contrasinal';
 const L_PROFIL_UPDATE_PASSWORD = 'Cambiar contrasinal';
-const L_PROFIL_LOGIN = 'Conta de usuario';
-const L_MAIL_ADDRESS = 'Dirección de correo';
-const L_PROFIL_ADMIN_LANG = 'Idioma de administración';
-const L_PROFIL_PASSWORD = 'Contrasinal';
-const L_PROFIL_CONFIRM_PASSWORD = 'Confirma o contrasinal';
 
 // statique.php
 
@@ -507,8 +475,6 @@ const L_STATIC_VIEW_PAGE = 'Visualizar paxina';
 const L_STATIC_ON_SITE = 'no sitio';
 const L_STATIC_UPDATE = 'Gardar esta paxina';
 const L_TITLE_HTMLTAG = 'Contido da etiqueta de título («title», opcional)';
-const L_STATIC_META_DESCRIPTION = 'Contido da metaetiqueta de descrición («description», opcional)';
-const L_STATIC_META_KEYWORDS = 'Contido da metaetiqueta de palabras chave («keywords», opcional)';
 
 // statiques.php
 
@@ -520,14 +486,11 @@ const L_PAGE = 'Paxina';
 const L_VIEW = 'Visualizar';
 const L_STATICS_SRC_TITLE = 'Editar código fonte desta paxina';
 const L_STATICS_NEW_PAGE = 'Nova paxina';
-const L_STATICS_ACTIVE = 'Activo';
-const L_STATICS_ORDER = 'Orde';
-const L_STATICS_MENU = 'Menú';
-const L_STATICS_ACTION = 'Acción';
-const L_STATICS_TEMPLATE_FIELD = 'Plantilla';
-const L_STATICS_HOME_PAGE = 'Paxina de inicio';
+const L_STATICS_UPDATE = 'Modificala lista das paxinas estáticas';
+const L_ERR_STATIC_ALREADY_EXISTS = 'Xa existe unha paxina con ese título';
 
 // top.php
+
 const L_PROFIL_ADMIN = 'Administrador';
 const L_PROFIL_MANAGER = 'Xestor';
 const L_PROFIL_MODERATOR = 'Moderador';
@@ -537,31 +500,23 @@ const L_ADMIN = 'Administración';
 const L_LOGIN = 'Conectado como';
 const L_ADMIN_LOGOUT = 'Desconectar';
 const L_ADMIN_LOGOUT_TITLE = 'Finalizar sesión do administrador';
-const L_BACK_TO_SITE = 'Inicio';
-const L_BACK_TO_SITE_TITLE = 'Volver ó inicio';
 const L_MENU_ARTICLES = 'Artigos';
 const L_MENU_ARTICLES_TITLE = 'Enumerar ou editar artigos';
-const L_MENU_NEW_ARTICLES = 'Novo artigo';
-const L_MENU_NEW_ARTICLES_TITLE = 'Novo artigo';
 const L_MENU_STATICS_TITLE = 'Enumerar ou editar paxinas estáticas';
 const L_MENU_STATICS = 'Paxinas estáticas';
 const L_MENU_COMMENTS_TITLE = 'Enumerar ou editar comentarios';
-const L_MENU_COMMENTS = 'Comentarios';
 const L_MENU_MEDIAS_TITLE = 'Subir e insertar un medio';
 const L_MENU_MEDIAS = 'Medios';
 const L_MENU_CATEGORIES_TITLE = 'Crear, xestionar e editar categorías';
-const L_MENU_CATEGORIES = 'Categorías';
 const L_MENU_CONFIG_TITLE = 'Configurar PluXml';
 const L_MENU_CONFIG = 'Afinación';
 const L_MENU_PROFIL_TITLE = 'Xestionar os perfiles de usuario';
-const L_MENU_PROFIL = 'Perfil';
 const L_WARNING_INSTALLATION_FILE = 'Inda existe o arquivo «install.php» na raíz de PluXml.<br />Por razóns de seguridade, suxerimos que o <a class="lnkdelete" href="?del=install">elimines</a>.';
 
 // user.php
 
 const L_USER_UNKNOWN = 'Usuario descoñecido';
 const L_USER_LANG = 'Idioma utilizado na administración';
-const L_MAIL_ADDRESS = 'Dirección de correo';
 const L_USER_UPDATE = 'Actualizar este usuario';
 const L_USER_PAGE_TITLE = 'Editar opcións de usuario';
 const L_USER_BACK_TO_PAGE = 'Volver á lista de usuarios';
@@ -575,9 +530,7 @@ const L_MENU_CONFIG_VIEW = 'Opcións de visualización';
 const L_MENU_CONFIG_USERS_TITLE = 'Xestionar contas de usuario de PluXml';
 const L_MENU_CONFIG_USERS = 'Contas de usuario';
 const L_MENU_CONFIG_ADVANCED_TITLE = 'Editar configuración avanzada de PluXml';
-const L_MENU_CONFIG_ADVANCED = 'Configuración avanzada';
 const L_MENU_CONFIG_INFOS_TITLE = 'Información de PluXml';
-const L_MENU_CONFIG_INFOS = 'Información';
 const L_MENU_CONFIG_PLUGINS_TITLE = 'Xestionar complementos';
 const L_MENU_CONFIG_PLUGINS = 'Complementos';
 const L_THEMES = 'Temas';
@@ -586,15 +539,3 @@ const L_HELP = 'Axuda';
 const L_HELP_TITLE = 'Consulta a axuda';
 const L_BACK_TO_THEMES = 'Volver á lista de temas';
 
-const L_MEDIAS_DELETE_FOLDER = 'Eliminar o cartafol';
-const L_CAT_LIST_ID = 'Identificador';
-const L_USER_INFOS = 'Información';
-const L_PLUGINS_AUTHOR = 'Autor';
-const L_STATICS_ID = 'Identificador';
-const L_CATEGORY_HOME_PAGE = 'Paxina de inicio';
-const L_STATICS_TITLE = 'Título';
-const L_STATICS_SRC = 'Editar';
-const L_ERR_STATIC_ALREADY_EXISTS = 'Xa existe unha paxina con ese título';
-const L_STATICS_UPDATE = 'Modificala lista das paxinas estáticas';
-const L_COMMENTS_ARTICLE_SCOPE = 'Artigo';
-?>

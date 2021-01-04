@@ -13,6 +13,8 @@ const PLX_LANGS = PLX_CORE .'lang/';
 const GOOGLE_TRANSLATOR_URL = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=#SL#&tl=#TL#&dt=t&q=#Q#';
 const MYMEMORY_TRANSLATOR_URL = 'https://api.mymemory.translated.net/get?q=#Q#&langpair=#SL#|#TL#';
 
+const PATTERN = '@^(?:const\s+(\w+)\s*=\s*[\'"](.*)[\'"]\s*;|(?:#|//)\s*(.*))@';
+
 $langs = plxUtils::getLangs();
 $success = '';
 $errorMsg = '';
@@ -28,10 +30,10 @@ function saveNewTranslation($translations, $lang, $file) {
 <?php
 	foreach($translations as $token=>$infos) {
 		if(isset($infos['comment'])) {
-			echo PHP_EOL . $infos['comment'] . PHP_EOL;
+			echo PHP_EOL . $infos['comment'] . PHP_EOL . PHP_EOL;
 		} elseif(isset($infos[$lang])) {
 ?>
-const <?= $token ?> = '<?= addslashes(html_entity_decode($infos[$lang])) ?>';
+const <?= $token ?> = '<?= str_replace('\"', '"', addslashes(html_entity_decode($infos[$lang]))) ?>';
 <?php
 		}
 	}
@@ -55,18 +57,28 @@ function addNewTranslation($targetLang, $srcLang) {
 		$buffer = file(PLX_LANGS . $srcLang . '/' . $f . '.php' , FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 		$translations = array();
 		$id = 0;
-		foreach($buffer as $i=>$line) {
-			if(preg_match('@^const\s+(\w+)\s*=\s*[\'"](.*)[\'"]\s*;@', $line, $matches)) {
-				$translations[trim($matches[1])] = array(
-					'src'	=> trim(stripslashes($matches[2])),
-				);
-				$id++;
-			} elseif(preg_match('@^(?:#|//)\s*(.*)@', $line, $matches)) {
-				# ligne de commentaire dans le fichier de langue. On n'en tient compte que pour la première langue
-				$translations[sprintf('comment-%02d', $id)] = array(
-					'comment'	=> '# ' . $matches[1]
-				);
-				$id++;
+
+		$buffer = file($filename , FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+		foreach($buffer as $line) {
+			if(preg_match(PATTERN, $line, $matches)) {
+				if(!isset($matches[3])) {
+					# traduction
+					$token = $matches[1];
+					if(!array_key_exists($token, $translations)) {
+						$translations[$token] = array(
+							'src'	=> trim(stripslashes($matches[2])),
+						);
+						$id++;
+					} else {
+						$translations[$token][$lang] = trim(stripslashes($matches[2]));
+					}
+				} elseif($firstLang) {
+					# commentaire
+					$translations[sprintf('comment-%02d', $id)] = array(
+						'comment'	=> trim('// ' . $matches[3]),
+					);
+					$id++;
+				}
 			}
 		}
 
@@ -122,30 +134,32 @@ function addNewTranslation($targetLang, $srcLang) {
 	}
 }
 
-function saveTranslation($lang, $name, $tokens, $translations, $keep=false) {
+function saveTranslation($lang, $keep=false) {
 	global $success, $errorMsg, $langs;
 
-	$filename = PLX_LANGS . $lang . '/' . $name . '.php';
+	$filename = PLX_LANGS . $lang . '/' . $_POST['cible']  . '.php';
 	if(!is_writable($filename) or !is_writable(PLX_LANGS . $lang)) {
 		$errorMsg = 'Pas de permission en écriture pour la langue "' . $langs[$lang] . ' ' . $lang . '" sur le fichier' . ' :<br />' . realpath($filename);
 		return;
 	}
 
 	ob_start();
-	foreach($tokens as $i=>$token) {
-		if(substr($token, 0, 1) == '#') {
+	foreach($_POST['token'] as $i=>$token) {
+		if(preg_match('@^(?://|#)@', $token)) {
 			# commentaire
-			echo PHP_EOL . $token . PHP_EOL;
-		} else {
+			echo PHP_EOL . $token . PHP_EOL . PHP_EOL;
+		} elseif(isset($_POST[$lang][$i])) {
+			$value = trim($_POST[$lang][$i]);
 			if(
-				isset($translations[$i]) and
-				# la traduction n'est pas nulle
-				!empty(trim($translations[$i])) and
-				# le token est présent dans la langue principale si commence par '@'. A conserver dans ce cas
-				(substr($token, 0, 1) == '@' or $keep)
+				!empty($value) and (
+					substr($token, 0, 1) == '@' or
+					$keep
+				)
 			) {
+				# la traduction n'est pas nulle
+				# le token est présent dans la langue principale si commençant par '@'. A conserver dans ce cas
 ?>
-const <?= substr($token, 1) ?> = '<?= addslashes($translations[$i]) ?>';
+const <?= substr($token, 1) ?> = '<?= str_replace('\"', '"', addslashes($value)) ?>';
 <?php
 			}
 		}
@@ -153,7 +167,7 @@ const <?= substr($token, 1) ?> = '<?= addslashes($translations[$i]) ?>';
 
 	# On sauvegarde
 	file_put_contents($filename, '<?php' . PHP_EOL . ob_get_clean() . PHP_EOL);
-	$success = 'Traduction ' . $lang . ' fichier ' . $name . '.php enregistrée' . PHP_EOL;
+	$success = 'Traduction ' . $lang . ' fichier ' . $_POST['cible'] . '.php enregistrée' . PHP_EOL;
 }
 
 session_start();
@@ -161,7 +175,7 @@ session_start();
 # Sauvegarde des traductions pour les langues sélectionnés
 if(isset($_SESSION['principale']) and isset($_POST['saveBtn'])) {
 	foreach($_POST['langs'] as $lang) {
-		saveTranslation($lang, $_POST['cible'], $_POST['key'], $_POST[$lang], !isset($_POST['cleanup']));
+		saveTranslation($lang, !isset($_POST['cleanup']));
 	}
 } elseif(isset($_SESSION['principale']) and isset($_POST['newBtn']) and !empty($_POST['new'])) {
 	# nouvelle langue
@@ -227,35 +241,38 @@ if(!in_array($_SESSION['fichier'], FILES)) {
  * Génération du dictionnaire multi-langues
  * Inclus les lignes de commentaires
  *
- * Pour les commentaires, la clé de traduction commence par '#',
- * les clés de traduction dans la langue principale commencent par '@'
- * les clés supplémentaires dans les autres langues commencent par ' '
  * */
 $translations = array();
 $firstLang = true;
 $id = 0;
 foreach(array_keys($langs) as $lang) {
+	# $_SESSION['fichier'] : nom du fichier à analyser pour chaque langue
 	$filename = PLX_LANGS . $lang . '/' . $_SESSION['fichier'] . '.php';
 	if(file_exists($filename)) {
 		$buffer = file($filename , FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-		foreach($buffer as $i=>$line) {
-			if(preg_match('@^const\s+(\w+)\s*=\s*[\'"](.*)[\'"]\s*;@', $line, $matches)) {
-				$token = trim($matches[1]);
-				if(!array_key_exists($token, $translations)) {
-					$translations[$token] = array(
-						'line' => $id,
-						'required'	=> $firstLang,
+		foreach($buffer as $line) {
+			if(preg_match(PATTERN, $line, $matches)) {
+				if(!isset($matches[3])) {
+					# traduction
+					$token = $matches[1];
+					if(!array_key_exists($token, $translations)) {
+						$translations[$token] = array(
+							'line'		=> $id,
+							'required'	=> $firstLang,
+							$lang		=> trim(stripslashes($matches[2])),
+						);
+						$id++;
+					} else {
+						$translations[$token][$lang] = trim(stripslashes($matches[2]));
+					}
+				} elseif($firstLang) {
+					# commentaire
+					$translations[sprintf('comment-%02d', $id)] = array(
+						'line'		=> $id,
+						'comment'	=> trim('// ' . $matches[3]),
 					);
 					$id++;
 				}
-				$translations[$token][$lang] = trim(stripslashes($matches[2]));
-			} elseif($firstLang && preg_match('@^(?:#|//)\s*(.*)@', $line, $matches)) {
-				# ligne de commentaire dans le fichier de langue. On n'en tient compte que pour la première langue
-				$translations['comment-' . $id] = array(
-					'line'		=> $id,
-					'comment'	=> $matches[1]
-				);
-				$id++;
 			}
 		}
 
@@ -384,15 +401,16 @@ if(empty($noGrants)) {
 		'oc'	=> 'FR',
 	);
 	foreach($langs as $lang=>$caption) {
-		/*
-		$flag = isset($lang2flag[$lang]) ? $lang2flag[$lang] : strtoupper($lang);
-		$emoji = '';
-		for($e=0, $eMax=strlen($flag); $e<$eMax; $e++) {
-			$emoji .= sprintf('&#x1f1%x;', ord(substr($flag, $e)) + 165);
+		if(!is_writable(PLX_LANGS . $lang . '/' . $_SESSION['fichier'] . '.php')) {
+			$className = 'class="unwritable"';
+			if(empty($errorMsg)) {
+				$errorMsg = 'Pas de droits en écriture sur le fichier "' . $_SESSION['fichier'] . '.php" pour les langues marquées en rouge';
+			}
+		} else {
+			$className = '';
 		}
-		* */
 ?>
-							<th><?= $caption ?></th>
+							<th <?= $className ?>><?= $caption ?></th>
 <?php
 	}
 	$header = ob_get_clean();
@@ -414,14 +432,14 @@ if(empty($noGrants)) {
 		if($isComment) {
 			// ligne de commentaire
 ?>
-						<td colspan="<?= $colspan ?>"># <?= $values['comment'] ?><input type="hidden" name="key[<?= $i ?>]" value="# <?= $values['comment'] ?>" /></td>
+						<td colspan="<?= $colspan ?>"><?= $values['comment'] ?><input type="hidden" name="token[<?= $i ?>]" value="<?= $values['comment'] ?>" /></td>
 <?php
 
 		} else {
 			// Traduction du mot-clé dans chaque langue
 			$prefix = $values['required'] ? '@' : ' ';
 ?>
-						<th><input type="hidden" name="key[<?= $i ?>]" value="<?= $prefix . $key ?>" /><span><?= $key ?></span></th>
+						<th><input type="hidden" name="token[<?= $i ?>]" value="<?= $prefix . $key ?>" /><span><?= $key ?></span></th>
 <?php
 			foreach(array_keys($langs) as $lang) {
 				// traduction pour une langue

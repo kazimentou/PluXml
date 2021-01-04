@@ -1,5 +1,4 @@
 <?php
-
 const L_MENU = 'Menü';
 const L_UNKNOWN_ERROR = 'Unbekannter Fehler';
 const L_CONFIRM_DELETE = 'Bestätigen Sie das Löschen von 999 Elementen ?';
@@ -11,11 +10,9 @@ const L_SAVE_FILE = 'Speichern Sie die Datei';
 const L_SAVE_FILE_SUCCESSFULLY = 'Datei erfolgreich gespeichert';
 const L_SAVE_FILE_ERROR = 'Fehler beim Speichern der Datei für';
 const L_FILE_REQUIRED = 'Bitte auswählen einer Datei';
-
 const L_REPLY = 'Antworten';
 const L_REPLY_TO = 'Antworten';
 const L_CANCEL = 'Abbrechen';
-
 const L_DELETE = 'Löschen';
 const L_DELETE_FILE = 'Datei löschen';
 const L_DELETE_FOLDER = 'Verzeichnis löschen';
@@ -23,12 +20,10 @@ const L_DELETE_SUCCESSFUL = 'Erfolgreiche Löschung';
 const L_DELETE_FILE_ERR = 'Fehler beim Löschen der Datei';
 const L_RENAME_FILE_SUCCESSFUL = 'Datei umbenannt erfolgreich';
 const L_RENAME_FILE = 'Datei umbenennen';
-
 const L_THUMBNAIL = 'Vorschaubild (optional)';
 const L_THUMBNAIL_SELECTION = 'Bild auswählen';
 const L_THUMBNAIL_TITLE = 'Bildtitel (optional)';
 const L_THUMBNAIL_ALT = 'Alternativtext des Bildes (optional)';
-
 const L_ERR_INVALID_DATE_CREATION = 'Ungültige Erstellungsdatum';
 const L_ERR_INVALID_DATE_UPDATE = 'Datum ungültig aktualisiert';
 
@@ -55,24 +50,24 @@ const L_ERR_URL_ALREADY_EXISTS = 'Url bereits im Einsatz. Bitte ändern Sie den 
 
 const L_PLXMEDIAS_MEDIAS_FOLDER_ERR = 'Der Ordner "Medias" konnte für diesen Benutzer nicht angelegt werden';
 const L_PLXMEDIAS_ROOT = 'Grundverzeichnis';
+const L_PLXMEDIAS_DELETE_FILES_SUCCESSFUL = 'Dateien wurden erfolgreich entfernt';
+const L_PLXMEDIAS_DELETE_FILES_ERR = 'Fehler beim Löschen der Dateien';
+const L_PLXMEDIAS_DELETE_FILE_SUCCESSFUL = 'Die Datei wurde erfolgreich gelöscht';
+const L_PLXMEDIAS_DEL_FOLDER_ERR = 'Fehler beim Löschen den Ordners';
+const L_PLXMEDIAS_DEL_FOLDER_SUCCESSFUL = 'Der Ordner wurde erfolgreich gelöscht';
 const L_PLXMEDIAS_NEW_FOLDER_ERR = 'Der Ordner konnte nicht angelegt werden';
 const L_PLXMEDIAS_NEW_FOLDER_SUCCESSFUL = 'Ordner erfolgreich angelegt';
 const L_PLXMEDIAS_NEW_FOLDER_EXISTS = 'Dieser Ordner existiert bereits';
-const L_PLXMEDIAS_DEL_FOLDER_ERR = 'Fehler beim Löschen den Ordners';
-const L_PLXMEDIAS_DEL_FOLDER_SUCCESSFUL = 'Der Ordner wurde erfolgreich gelöscht';
+const L_PLXMEDIAS_WRONG_FILESIZE = 'Die Datei ist größer als';
 const L_PLXMEDIAS_WRONG_FILEFORMAT = 'Dieser Dateityp ist nicht erlaubt';
-const L_PLXMEDIAS_WRONG_FILESIZE = 'Die Datei ist größer als ';
 const L_PLXMEDIAS_UPLOAD_ERR = 'Fehler beim Hochladen der Datei';
 const L_PLXMEDIAS_UPLOAD_SUCCESSFUL = 'Die Datei wurde erfolgreich hochgeladen';
 const L_PLXMEDIAS_UPLOADS_ERR = 'Fehler beim Hochladen von Dateien';
 const L_PLXMEDIAS_UPLOADS_SUCCESSFUL = 'Dateien wurden erfolgreich hochgeladen';
-const L_PLXMEDIAS_DELETE_FILES_SUCCESSFUL = 'Dateien wurden erfolgreich entfernt';
-const L_PLXMEDIAS_DELETE_FILES_ERR = 'Fehler beim Löschen der Dateien';
-const L_PLXMEDIAS_DELETE_FILE_SUCCESSFUL = 'Die Datei wurde erfolgreich gelöscht';
-const L_PLXMEDIAS_MOVE_FILES_ERR = 'Fehler beim Verschieben der Dateien';
-const L_PLXMEDIAS_MOVE_FILE_ERR = 'Fehler beim Verschieben der Datei';
 const L_PLXMEDIAS_MOVE_FILES_SUCCESSFUL = 'Dateien wurden erfolgreich verschoben';
 const L_PLXMEDIAS_MOVE_FILE_SUCCESSFUL = 'Datei wurde erfolgreich verschoben';
+const L_PLXMEDIAS_MOVE_FILES_ERR = 'Fehler beim Verschieben der Dateien';
+const L_PLXMEDIAS_MOVE_FILE_ERR = 'Fehler beim Verschieben der Datei';
 const L_PLXMEDIAS_MOVE_FOLDER = 'Verschieben';
 const L_PLXMEDIAS_RECREATE_THUMB_ERR = 'Fehler beim Erstellen der Miniaturansicht';
 const L_PLXMEDIAS_RECREATE_THUMBS_ERR = 'Fehler beim Erstellen des Miniaturansichten';
@@ -100,7 +95,6 @@ const L_AWAITING = 'Bestätigen';
 const L_ARTICLE_DATE = 'Erscheinungsdatum';
 const L_NOW = 'jetzt';
 const L_ARTICLE_CATEGORIES = 'Kategorien';
-const L_NEW_CATEGORY = 'Neue Kategorie';
 const L_ARTICLE_TAGS_FIELD = 'Schlagworte';
 const L_ARTICLE_TAGS_FIELD_TITLE = 'Trennen Sie Schlagorte mit Komma';
 const L_ARTICLE_TOGGLER_TITLE = 'Schlagwortliste';
@@ -147,9 +141,9 @@ const L_SORT_DESCENDING_DATE = 'Datum absteigend';
 const L_SORT_ALPHABETICAL = 'alphabetisch';
 const L_SORT_REVERSE_ALPHABETICAL = 'rückwärts alphabetisch';
 const L_SORT_RANDOM = 'aleatorischen';
-const L_OK = 'Ok';
 const L_YES = 'Ja';
 const L_NO = 'Nein';
+const L_OK = 'Ok';
 
 // categories.php
 
@@ -163,6 +157,7 @@ const L_ORDER = 'Reihenfolge';
 const L_DISPLAY = 'Anzeigen';
 const L_HIDE = 'Verstecken';
 const L_OPTIONS = 'Optionen';
+const L_NEW_CATEGORY = 'Neue Kategorie';
 const L_FOR_SELECTION = 'Aktion auswählen...';
 const L_CAT_APPLY_BUTTON = 'Änderungen speichern';
 const L_CAT_UNKNOWN = 'Unbekannte Kategorie';
@@ -171,18 +166,20 @@ const L_ERR_CATEGORY_ALREADY_EXISTS = 'Dieser Kategoriename existiert bereits';
 // categorie.php
 
 const L_EDITCAT_PAGE_TITLE = 'Kategorieoptionen ändern';
-const L_EDITCAT_DISPLAY_HOMEPAGE = 'Zeige Artikel in dieser Kategorie auf der Startseite';
 const L_EDITCAT_DESCRIPTION = 'Beschreibung';
+const L_EDITCAT_DISPLAY_HOMEPAGE = 'Zeige Artikel in dieser Kategorie auf der Startseite';
 const L_TEMPLATE = 'Vorlage';
 const L_BACK_TO_CATEGORIES = 'Zurück zur Liste der Kategorien';
 const L_EDITCAT_UPDATE = 'Kategorie aktualisieren';
 
-// commentaire.php
+// comment.php
 
 const L_COMMENT_ORPHAN_STATUS = 'verwaist (Sie sollten diesen Kommentar löschen)';
 const L_COMMENT_ARTICLE_LINKED_TITLE = 'Bearbeiten Sie den mit diesem Kommentar verknüpften Artikel';
 const L_COMMENT_OFFLINE = 'Offline';
 const L_COMMENT_ONLINE = 'Online';
+const L_COMMENT_OFFLINE_COUNT = '%d Kommentare zur Validierung';
+const L_COMMENT_ONLINE_COUNT = '%d Kommentare gepostet';
 const L_COMMENT_ONLINE_TITLE = 'Liste der publizierten Kommentare';
 const L_BACK_TO_ARTICLE_COMMENTS = 'Zurück zur Liste der Kommentare dieses Artikels';
 const L_BACK_TO_COMMENTS = 'Zurück zur Liste der Kommentare';
@@ -215,7 +212,7 @@ const L_SEND_MAIL = 'Eine E-Mail senden';
 const L_COMMENT_NEW_COMMENT_TITLE = 'Einen neuen Kommentar für diesen Artikel schreiben';
 const L_COMMENT_NEW_COMMENT = 'Einen neuen Kommentar schreiben';
 
-// commentaire_new.php
+// comment_new.php
 
 const L_ERR_ANSWER_UNKNOWN_COMMENT = 'Der Kommentar, auf den Sie antworten wollen, existiert nicht oder nicht mehr!';
 const L_ERR_ANSWER_OFFLINE_COMMENT = 'Der Kommentar ist offline, Antworten ist nicht möglich!';
@@ -229,7 +226,6 @@ const L_COMMENT_REPLY_TITLE = 'Auf diesen Kommentar antworten';
 // comments.php
 
 const L_COMMENTS_GLOBAL_SCOPE = 'ganze Website';
-const L_COMMENTS_OFFLINE_LIST = 'Liste der wartenden Kommentare ';
 const L_COMMENT_ALL_FEEDS = 'Nachricht';
 const L_COMMENT_EDIT_TITLE = 'Diesen Kommentar bearbeiten';
 const L_COMMENT_OFFLINE_FEEDS_TITLE = 'Feed der Offline-Kommentare (Rss)';
@@ -238,9 +234,11 @@ const L_COMMENT_ONLINE_FEEDS_TITLE = 'Feed der Online-Kommentare (Rss)';
 const L_COMMENT_ONLINE_FEEDS = 'Online-Kommentare';
 const L_COMMENTS_PRIVATE_FEEDS = 'Private Feed';
 const L_COMMENTS_ONLINE_LIST = 'Liste der veröffentlichten Kommentare';
+const L_COMMENTS_OFFLINE_LIST = 'Liste der wartenden Kommentare';
 const L_COMMENTS_ALL_LIST = 'Liste aller Kommentare';
 const L_COMMENTS_ARTICLE = 'Liste der Kommentare zum Artikel';
 const L_COMMENT_SET_ONLINE = 'Online nehmen';
+const L_BACK_TO_ARTICLE = 'Zurück zum Artikel';
 
 // index.php
 
@@ -271,6 +269,10 @@ const L_MEDIAS_BACK = 'Zurück';
 const L_MEDIAS_MAX_UPLOAD_FILE = 'Maximale Größe der Datei';
 const L_MEDIAS_MAX_UPLOAD_NBFILE = 'Maximale Anzahl an Dateien pro upload';
 const L_MEDIAS_MAX_POST_SIZE = 'Maximale Datengröße';
+const L_BROWSE = 'Durchsuche';
+const L_DEPOSIT_FILES = 'Legen Sie Ihre Dateien hier ab';
+const L_FILES = 'Dateien';
+const L_BATCH_SIZE = 'Chargengröße';
 const L_MEDIAS_SUBMIT_FILE = 'Abschicken';
 const L_MEDIAS_IMAGES = 'Bilder';
 const L_MEDIAS_DOCUMENTS = 'Dokumente';
@@ -303,6 +305,7 @@ const L_MEDIAS_RENAME = 'Umbenennen';
 const L_CONFIRM_THUMBNAIL = 'Confirmer la création de 999 vignettes';
 const L_CONFIRM_MOVE_MEDIAS = 'Confirmer le déplacement de 999 documents';
 const L_REQUIRED_OPTION = 'Vous devez sélectionner une option';
+const L_REQUIRED_TARGET = 'Wählen Sie ein anderes Ziel';
 
 // parametres_affichage.php
 
@@ -352,10 +355,10 @@ const L_CONFIG_ADVANCED_PLUGINS_FOLDER = 'Plugins Ordner';
 const L_CONFIG_ADVANCED_CONFIG_FOLDER = 'Ort der Konfigurationsdateien (Ordner)';
 const L_CONFIG_ADVANCED_UPDATE = 'Änderungen speichern';
 const L_CONFIG_CUSTOM_CSSADMIN_PATH = 'Standort und den Namen der benutzerdefinierten CSS-Datei des Verwaltungsbereich (optional)';
+const L_CONFIG_CUSTOM_CSSADMIN_PATH_HELP = 'Geben Sie den vollständigen Pfad von der Homepage an';
 const L_CONFIG_ADVANCED_EMAIL_SENDING_TITLE = 'E-Mail senden';
 const L_CONFIG_ADVANCED_EMAIL_METHOD = 'E-Mail-Versandmethode';
 const L_CONFIG_ADVANCED_SMTP_TITLE = 'Senden von E-Mails mit SMTP';
-const L_CONFIG_ADVANCED_SMTP_ACTIVATION = 'Aktivieren Sie E-Mails, die einen SMTP-Server senden';
 const L_CONFIG_ADVANCED_SMTP_SERVER = 'SMTP-Hostname';
 const L_CONFIG_ADVANCED_SMTP_USERNAME = 'SMTP username';
 const L_CONFIG_ADVANCED_SMTP_PASSWORD = 'SMTP-Benutzername';
@@ -365,17 +368,17 @@ const L_CONFIG_ADVANCED_SMTPOAUTH_TITLE = 'Senden von E-Mails mit SMTP und OAUTH
 const L_CONFIG_ADVANCED_SMTPOAUTH_CLIENTID = 'Kunden-ID';
 const L_CONFIG_ADVANCED_SMTPOAUTH_SECRETKEY = 'Geheimer Client-Schlüssel';
 const L_CONFIG_ADVANCED_SMTPOAUTH_TOKEN = 'Token';
-const L_CONFIG_ADVANCED_SMTPOAUTH_TOKEN_HELP = 'Ihr login für diesen Dienst';
 const L_CONFIG_ADVANCED_SMTPOAUTH_GETTOKEN = 'Erzeugen Sie ein Token';
+const L_CONFIG_ADVANCED_EMAIL_SENDING_TITLE_HELP = 'Benötigen Sie Hilfe: <a href="https://wiki.%s/personnaliser/personnalisation/#envoi-de-mails">PluXml-Dokumentation</a> (fr).';
 const L_CONFIG_ADVANCED_EMAIL_METHOD_HELP = 'Aucune configuration n\'est requise pour sendmail.<br>';
 const L_CONFIG_ADVANCED_SMTP_SERVER_HELP = 'Nom du serveur SMTP (exemple : ssl0.ovh.net)';
 const L_CONFIG_ADVANCED_SMTP_USERNAME_HELP = 'Nom de l\'utilisateur sur l\'hôte SMTP (exemple : pluxml@monserveursmtp.com)';
 const L_CONFIG_ADVANCED_SMTP_PASSWORD_HELP = 'Mot de passe de l\'utilisateur sur l\'hôte SMTP';
 const L_CONFIG_ADVANCED_SMTP_PORT_HELP = 'Numéro du port de l\'hôte SMTP (par défaut : 465)';
-const L_CONFIG_ADVANCED_SMTPOAUTH_TITLE_HELP = 'Mit PluXml können Token nur für den Dienst GOOGLE generiert werden.
-Benötigen Sie Hilfe, um den Benutzernamen und den geheimen Schlüssel zu generieren : WIKI.';
+const L_CONFIG_ADVANCED_SMTPOAUTH_TITLE_HELP = 'Mit PluXml können Sie Token nur für den GOOGLE-Dienst generieren.';
 const L_CONFIG_ADVANCED_SMTPOAUTH_CLIENTID_HELP = 'Identifiant client sur le service OAUTH2 (exemple : 664335625964-uha1vop20qPluXml81ubjkkgfabbbj6d.apps.googleusercontent.com)';
 const L_CONFIG_ADVANCED_SMTPOAUTH_SECRETKEY_HELP = 'La clé du client sur le service OAUTH2 (exemple : PrsvKp6aprKpoP8snnCoC8-x)';
+const L_CONFIG_ADVANCED_SMTPOAUTH_TOKEN_HELP = 'Ihr login für diesen Dienst';
 
 // parametres_base.php
 
@@ -407,7 +410,7 @@ const L_PLUXML_CHECK_VERSION = 'Aktualitätsprüfung von PluXml (über %s)';
 const L_PLUXML_UPDATE_UNAVAILABLE = 'Update hat nicht funktioniert. Sie sollten \'allow_url_fopen\' aktivieren.';
 const L_PLUXML_UPDATE_ERR = 'Updatefunktion mit unbekanntem Fehler abgebrochen.';
 const L_PLUXML_UPTODATE = 'Sie benutzen die aktuellste Version von PluXml';
-const L_PLUXML_UPDATE_AVAILABLE = 'Eine neue Version ist verfügbar! Sie können sie hier herunterladen: ';
+const L_PLUXML_UPDATE_AVAILABLE = 'Eine neue Version ist verfügbar! Sie können sie hier herunterladen:';
 const L_MAIL_TEST = 'Senden Sie eine E-Mail zum Testen';
 const L_MAIL_TEST_SUBJECT = 'E-Mail wird an gesendet %s';
 const L_MAIL_TEST_SENT_TO = 'Email an gesendet %s. Überprüfen Sie Ihre Mailbox';
@@ -494,7 +497,7 @@ const L_PROFIL_MODERATOR = 'Moderator';
 const L_PROFIL_EDITOR = 'Redakteur';
 const L_PROFIL_WRITER = 'Autor';
 const L_ADMIN = 'Admin';
-const L_LOGIN = 'Angemeldet als ';
+const L_LOGIN = 'Angemeldet als';
 const L_ADMIN_LOGOUT = 'Abmelden';
 const L_ADMIN_LOGOUT_TITLE = 'Administration beenden';
 const L_MENU_ARTICLES = 'Artikel';
@@ -508,8 +511,7 @@ const L_MENU_CATEGORIES_TITLE = 'Kategorieverwaltung';
 const L_MENU_CONFIG_TITLE = 'PluXml Konfiguration';
 const L_MENU_CONFIG = 'Konfiguration';
 const L_MENU_PROFIL_TITLE = 'Mein Benutzerprofil verwalten';
-const L_WARNING_INSTALLATION_FILE = 'Die Datei install.php existiert noch im Grundverzeichnis von PluXml.
-Sie sollten diese aus Sicherheitsgründen <a class="lnkdelete" href="?del=install">löschen</a>.';
+const L_WARNING_INSTALLATION_FILE = 'Die Datei install.php befindet sich im Stammverzeichnis Ihres PluXml.n. Löschen Sie sie aus Sicherheitsgründen <a class="lnkdelete" href="?del=install"> </a>!';
 
 // user.php
 
@@ -536,4 +538,4 @@ const L_THEMES_TITLE = 'Verwalten von Themen';
 const L_HELP = 'Hilfe';
 const L_HELP_TITLE = 'Siehe Hilfe';
 const L_BACK_TO_THEMES = 'Zurück Hilfe';
-?>
+
