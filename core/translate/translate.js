@@ -283,7 +283,7 @@
 
 					window.LanguageDisplays.localNames.forEach(function(value) {
 						const parts = value.split(':');
-						if(true || excludes.indexOf(parts[1]) < 0) {
+						if(excludes.indexOf(parts[1]) < 0) {
 							const option = document.createElement('OPTION');
 							option.value = parts[1];
 							option.innerHTML = emojiFlag(parts[1]) +  ' ' + parts[0] + ' (' + parts[1] + ')';
