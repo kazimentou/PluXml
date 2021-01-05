@@ -19,7 +19,6 @@ $langs = plxUtils::getLangs();
 $success = '';
 $errorMsg = '';
 
-
 function saveNewTranslation($translations, $lang, $file) {
 	global $success, $errorMsg;
 
@@ -58,6 +57,7 @@ function addNewTranslation($targetLang, $srcLang) {
 		$translations = array();
 		$id = 0;
 
+		$filename = PLX_LANGS . $_SESSION['principale'] . '/' . $f . '.php';
 		$buffer = file($filename , FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 		foreach($buffer as $line) {
 			if(preg_match(PATTERN, $line, $matches)) {
@@ -72,7 +72,7 @@ function addNewTranslation($targetLang, $srcLang) {
 					} else {
 						$translations[$token][$lang] = trim(stripslashes($matches[2]));
 					}
-				} elseif($firstLang) {
+				} else {
 					# commentaire
 					$translations[sprintf('comment-%02d', $id)] = array(
 						'comment'	=> trim('// ' . $matches[3]),
