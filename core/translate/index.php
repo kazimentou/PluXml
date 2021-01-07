@@ -19,6 +19,18 @@ $langs = plxUtils::getLangs();
 $success = '';
 $errorMsg = '';
 
+const SOURCES = array(
+	'core'		=> array(
+		'include'	=> array('index', 'feed', 'core/lib/class.plx.*',),
+		'exclude'	=> array('core/lib/class.plx.admin',),
+	),
+	'install'	=> 'install',
+	'update'	=> 'update/*',
+	'admin'		=> array(
+		'include'	=> array('core/admin/*', 'core/lib/class.plx.admin',),
+	),
+);
+
 function saveNewTranslation($translations, $lang, $file) {
 	global $success, $errorMsg;
 
