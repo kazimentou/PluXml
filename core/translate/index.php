@@ -97,7 +97,7 @@ function addNewTranslation($targetLang, $srcLang) {
 		$req = array_filter($translations, function($item) {
 			return isset($item['src']);
 		});
-		$filename = PLX_LANGS . 'notes.txt';
+		$filename = PLX_LANGS . 'translate-notes-' . $f . '.txt';
 		file_put_contents($filename, implode(PHP_EOL, array_values(array_map(
 			function($item) {
 				return $item['src'];
@@ -105,7 +105,7 @@ function addNewTranslation($targetLang, $srcLang) {
 			$req
 		))));
 
-		$cfile = curl_file_create(realpath($filename), 'text/plain', 'notes.txt');
+		$cfile = curl_file_create(realpath($filename), 'text/plain', plxUtils::charAleatoire() . '.txt');
 		$ch = curl_init('https://translate.googleusercontent.com/translate_f');
 		curl_setopt_array($ch, array(
 			CURLOPT_RETURNTRANSFER	=> true,
@@ -129,12 +129,27 @@ function addNewTranslation($targetLang, $srcLang) {
 			$errorMsg = curl_error($ch);
 		}
 		curl_close($ch);
-		unlink($filename);
 
 		if($err == 0 and $content !== false) {
 			$resp = explode(PHP_EOL, preg_replace('@</pre>$@', '', preg_replace('@^<pre>@', '', $content)));
 			$i = 0;
 			foreach(array_keys($req) as $token) {
+				if($i >= count($resp) or count($req) < count($resp)) {
+					# Google refuse la traduction sans envoyer de code d'erreur
+					$errorMsg = array(
+						'lang'		=> $targetLang,
+						'src'		=> $f,
+						'files'		=> array(
+							'response'	=> PLX_LANGS . 'translate-google.html',
+							'tokens'	=> PLX_LANGS . 'translate-tokens-' . $f . '.txt',
+							'sentences'	=> $filename,
+						),
+					);
+					# On sauvegarde les données utilisés pour la traduction
+					file_put_contents($errorMsg['files']['response'], $content);
+					file_put_contents($errorMsg['files']['tokens'], implode(PHP_EOL, array_keys($req)));
+					return;
+				}
 				$translations[$token][$targetLang] = $resp[$i];
 				$i++;
 			}
@@ -143,6 +158,11 @@ function addNewTranslation($targetLang, $srcLang) {
 				saveNewTranslation($translations, $targetLang, $f);
 			}
 		}
+
+		unlink($filename);
+
+		# Ne soyons pas plus rapide qu'un être humain avec Google
+		sleep(2);
 	}
 }
 
@@ -194,7 +214,7 @@ if(isset($_SESSION['principale']) and isset($_POST['saveBtn'])) {
 	if(is_writable(PLX_LANGS)) {
 		addNewTranslation($_POST['new'], $_SESSION['principale']);
 		# On recrée la liste des langues
-		$langs = array_keys($langs);
+		$langs = plxUtils::getLangs();
 	} else {
 		$errorMsg = 'Pas de droit en écriture sur le dossier ' . PLX_LANGS;
 	}
@@ -304,6 +324,35 @@ foreach(array_keys($langs) as $lang) {
 	<link rel="stylesheet" type="text/css" href="translate.css" />
     <meta name="robots" content="noindex, nofollow" />
 </head><body>
+<?php
+if(!empty($errorMsg) and is_array($errorMsg)) {
+	$captions = array(
+		'response'	=> 'Traduction reçue',
+		'tokens'	=> 'Clés de traduction (tokens)',
+		'sentences'	=> 'Phrases à traduire',
+	);
+?>
+	<h1>Erreur de traduction</h1>
+	<p>Langue cible : <?= $errorMsg['lang'] ?></p>
+	<p>Source  : <a href="<?= PLX_LANGS . $_SESSION['principale'] . '/' . $errorMsg['src'] ?>.php" download><?= $_SESSION['principale'] . '/' . $errorMsg['src'] ?>.php</a></p>
+<?php
+	if(isset($errorMsg['files'])) {
+?>
+	<p>Fichiers :</p>
+	<ul>
+<?php
+		foreach($captions as $k=>$caption) {
+?>
+		<li><a href="<?= $errorMsg['files'][$k] ?>" target="_blank"><?= $caption ?></a></li>
+<?php
+		}
+?>
+	</ul>
+	<p><a href="index.php">Retour</a></p>
+<?php
+	}
+} else {
+?>
 	<!-- Formulaire de sélection -->
 	<header>
 		<form method="post">
@@ -499,4 +548,7 @@ if(empty($noGrants)) {
 	}
 ?>
 	<script src="translate.js"></script>
+<?php
+}
+?>
 </body></html>

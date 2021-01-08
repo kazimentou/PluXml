@@ -2,6 +2,7 @@
 /plugins/
 !/themes/defaut/
 /themes/
-.idea
-.vscode/
+/.idea
+/.vscode/
+/core/lang/translate-*
 
