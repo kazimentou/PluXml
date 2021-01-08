@@ -206,9 +206,19 @@ session_start();
 
 # Sauvegarde des traductions pour les langues sélectionnés
 if(isset($_SESSION['principale']) and isset($_POST['saveBtn'])) {
-	foreach($_POST['langs'] as $lang) {
-		saveTranslation($lang, !isset($_POST['cleanup']));
+	if(isset($_POST['lang']) and isset($_POST['cible'])) {
+		$lang = $_POST['lang'];
+		if(array_key_exists($lang, $langs)) {
+			saveTranslation($lang, !isset($_POST['cleanup']));
+			header('Content-Type: text/plain; charset=utf-8');
+			echo 'ok' . PHP_EOL;
+		} else {
+			header($_SERVER['SERVER_PROTOCOL'] . ' 404 ' . $lang . ' language not found');
+		}
+	} else {
+		header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad request');
 	}
+	exit;
 } elseif(isset($_SESSION['principale']) and isset($_POST['newBtn']) and !empty($_POST['new'])) {
 	# nouvelle langue
 	if(is_writable(PLX_LANGS)) {
@@ -422,12 +432,14 @@ if(empty($noGrants)) {
 									<fieldset>
 <?php
 	foreach($langs as $lang=>$caption) {
+		if(is_writable(PLX_LANGS . $lang . '/' . $_SESSION['fichier'] . '.php')) {
 ?>
 										<label>
 											<input type="checkbox" name="langs[]" value="<?= $lang ?>" />
 											<span><?= $lang ?></span>
 										</label>
 <?php
+		}
 	}
 ?>
 									</fieldset>
@@ -536,6 +548,11 @@ if(empty($noGrants)) {
 				</table>
 		</form>
 	</section>
+	<div class="spinner">
+		<div class="bounce1"></div>
+		<div class="bounce2"></div>
+		<div class="bounce3"></div>
+	</div>
 <?php
 	if(!empty($errorMsg) or !empty($success)) {
 ?>

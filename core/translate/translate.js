@@ -145,30 +145,65 @@
 		}
 	});
 
-	// deactive tous les inputs sauf pour les langues choisies
+	// desactive tous les inputs sauf pour les langues choisies
 	document.forms[1].addEventListener('submit', function(event) {
-		const langNodes = event.target.elements['langs[]'];
-		var checked = false;
-		const noSubmits = [];
-		for(var i=0, iMax=langNodes.length; i<iMax; i++) {
-			if(langNodes[i].checked) {
-				checked = true;
-			} else {
-				noSubmits.push(langNodes[i].value);
-			}
-		}
-
-		if(!checked) {
-			alert('Aucune langue sélectionée');
-			event.preventDefault();
+		event.preventDefault();
+		const form = event.target;
+		const checkedLangs = Array.from(form.elements['langs[]'])
+			.filter(function(el) { return el.checked})
+			.map(function(el) { return el.value; });
+		if(checkedLangs.length == 0) {
+			alert('Aucune langue sélectionnée');
 			return false;
 		} else {
-			noSubmits.forEach(function(lang) {
-				const els = document.querySelectorAll('#translations-body input[name^="' + lang + '["]');
-				for(var j=0, jMax=els.length; j<jMax; j++) {
-					els[j].disabled = true;
+			const spinners = document.getElementsByClassName('spinner');
+			if(spinners.length > 0) {
+				spinners[0].classList.add('active');
+			}
+			// https://developer.mozilla.org/fr/docs/Web/API/FormData/Utilisation_objets_FormData
+			const xhr = new XMLHttpRequest();
+			xhr.langs = checkedLangs;
+			xhr.tokens = Array.from(form.elements).filter(function(el) { return el.name.match(/token\[\d+\]/)});
+			xhr.form = form;
+			xhr.process = function() {
+				if(this.langs.length > 0) {
+					const formData = new FormData();
+					formData.append('saveBtn', '');
+					this.tokens.forEach(function(el) {
+						formData.append(el.name, el.value);
+					});
+					console.log(this.tokens.length, 'tokens');
+					const lang = this.langs.pop();
+					formData.append('lang', lang);
+					const cible = this.form.elements.cible;
+					formData.append(cible.name, cible.value);
+					const cleanupEl = this.form.elements.cleanup;
+					if(cleanupEl.checked) {
+						formData.append(cleanupEl.name, cleanupEl.value);
+					}
+					const pattern = new RegExp(lang + '\\[\\d+\\]');
+					const translations = Array.from(form.elements).filter(function(el) { return pattern.test(el.name); });
+					console.log(translations.length, 'translations');
+					translations.forEach(function(el) {
+						formData.append(el.name, el.value);
+					});
+					this.send(formData);
 				}
-			});
+			};
+			xhr.onload = function() {
+				if(this.status == 200) {
+					if(this.langs.length > 0) {
+						this.process();
+					} else {
+						document.location.reload();
+					}
+				} else {
+					console.error(this.status, this.statusText, 'from', this.responseURL);
+					alert('Error ' + this.status + ': ' + this.statusText + '\nfrom ' + this.responseURL);
+				}
+			};
+			xhr.open('POST', form.action);
+			xhr.process();
 		}
 	});
 
