@@ -1205,6 +1205,7 @@ class plxUtils
      *
      * Noms de dossiers admis pour les langues: fr, de, pt-BR, pt-PT (norme ISO-639)
      * https://fr.wikipedia.org/wiki/Liste_des_codes_ISO_639-1#Liste_des_codes_ISO_639-1/2/3
+     * https://emojipedia.org/flags/
      *
      * @return    array
      * @author    J.P. Pourrez, Stephane F.
@@ -1217,8 +1218,10 @@ class plxUtils
 			'oc'	=> 'FR', # 🏴󠁦󠁲󠁯󠁣󠁣󠁿 '🏴frocc' . chr(127)
 			'co'	=> 'FR', # 🏴󠁦󠁲󠁣󠁯󠁲󠁿 '🏴frcor' . chr(127)
 			'br'	=> 'FR', # 🏴󠁦󠁲󠁣󠁯󠁲󠁿 '🏴frbre' . chr(127)
-			'gl'	=> 'ES', # 🏴󠁥󠁳󠁧󠁡󠁿 '🏴esga' . chr(127)
-			'ca'	=> 'ES', # 🏴󠁥󠁳󠁣󠁴󠁿 '🏴esct' . chr(127)
+			'gl'	=> 'ES', # 🏴󠁥󠁳󠁧󠁡󠁿 '🏴esga' . chr(127) galicien
+			'ca'	=> 'ES', # 🏴󠁥󠁳󠁣󠁴󠁿 '🏴esct' . chr(127) catalan
+			'eu'	=> 'ES', # 🏴󠁥󠁳󠁰󠁶󠁿 '🏴espv' . chr(127) #basque
+			'el'	=> 'GR',
 		);
 
         $result = array();
