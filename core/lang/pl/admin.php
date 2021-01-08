@@ -538,5 +538,4 @@ const L_THEMES_TITLE = 'Zarządzanie tematy';
 const L_HELP = 'Pomoc';
 const L_HELP_TITLE = 'Zobacz pomoc';
 const L_BACK_TO_THEMES = 'Powrót do tematów strony';
-const L_CONFIG_ADVANCED_SMTP_ACTIVATION = 'Włącz wysyłanie wiadomości e-mail przez serwer SMTP';
 

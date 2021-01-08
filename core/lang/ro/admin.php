@@ -538,6 +538,4 @@ const L_THEMES_TITLE = 'Gestionarea teme';
 const L_HELP = 'Ajutor';
 const L_HELP_TITLE = 'Vezi de ajutor';
 const L_BACK_TO_THEMES = 'Înapoi la subiectele paginii';
-const L_CONFIG_ADVANCED_SMTP_ACTIVATION = 'Activați e-mailurile trimise de un server SMTP';
-const L_MEDIAS_MAX_FILE_UPLOAD = 'Numărul maxim de fișiere permise prin încărcarea';
 

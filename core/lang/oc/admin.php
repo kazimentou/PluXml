@@ -1,10 +1,7 @@
 <?php
-
 const L_MENU = 'Menú';
 const L_UNKNOWN_ERROR = 'Error desconeguda';
 const L_CONFIRM_DELETE = 'Confirmar la supression de 999 elements ?';
-const L_CONFIRM_ACTIVATE = 'Confirmer l\'activation de 999 éléments ?'
-const L_CONFIRM_DEACTIVATE = 'Confirmer la désactivation de 999 éléments ?'
 const L_CONFIRM_OFFLINE = 'Confirmer la mise hors-ligne de 999 commentaires ?';
 const L_CONFIRM_ONLINE = 'Confirmer la mise en ligne de 999 commentaires ?';
 const L_SAVE_FILE = 'Salvagardar lo fichièr';
@@ -45,16 +42,6 @@ const L_ARTICLE_MODIFY_SUCCESSFUL = 'Article mes a jorn amb succès';
 const L_ARTICLE_SAVE_ERR = 'Error al temps de la salvagarda de l\'article';
 const L_ARTICLE_DELETE_ERR = 'Una error es subrevenguda pendent la supression de l\'article';
 const L_ERR_UNKNOWN_COMMENT = 'Lo comentari demandat existís pas o existís pas mai';
-const L_COMMENT_SAVE_SUCCESSFUL = 'Comentari modificat amb succès';
-const L_COMMENT_UPDATE_ERR = 'Error al temps de la mesa a jorn del comentari';
-const L_COMMENT_DELETE_ERR = 'Una error es subrevenguda pendent la supression';
-const L_COMMENT_VALIDATE_SUCCESSFUL = 'Validacion efectuada amb succès';
-const L_COMMENT_VALIDATE_ERR = 'Una error es subrevenguda pendent la validacion';
-const L_COMMENT_MODERATE_SUCCESSFUL = 'Moderacion efectuada amb succès';
-const L_COMMENT_MODERATE_ERR = 'Una error es subrevenguda al temps de la moderacion';
-const L_WATCH = 'Regarder';
-const L_SEND_MAIL = 'Envoyer un courriel';
-
 const L_ERR_URL_ALREADY_EXISTS = 'Url ja utilizada. Volgatz modificar la valor del camp \'Url\'';
 
 // class.plx.media.php
@@ -136,7 +123,6 @@ const L_LOGIN_PAGE = 'Connexion a la zòna d\'administracion';
 const L_LASTLOGIN_TIMESTAMP = 'Dernière date de connexion';
 const L_AUTH_LOGIN_FIELD = 'Identificant de connexion';
 const L_AUTH_LOST_FIELD = 'Identificant o adreça electronica';
-
 const L_SUBMIT_BUTTON = 'Validar';
 const L_ERR_WRONG_PASSWORD = 'Identificant e/o senhal incorrèct';
 const L_POWERED_BY = 'Generat per <a href="https://www.%s">PluXml</a>';
@@ -173,6 +159,7 @@ const L_NEW_CATEGORY = 'Novèla categoria';
 const L_FOR_SELECTION = 'Per la seleccion...';
 const L_CAT_APPLY_BUTTON = 'Modificar la lista de las categorias';
 const L_CAT_UNKNOWN = 'categoria desconeguda';
+const L_ERR_CATEGORY_ALREADY_EXISTS = 'Nom de categoria ja utilizat';
 
 // categorie.php
 
@@ -183,7 +170,7 @@ const L_TEMPLATE = 'Modèl';
 const L_BACK_TO_CATEGORIES = 'Tornar a la lista de las categorias';
 const L_EDITCAT_UPDATE = 'Metre a jorn aquesta categoria';
 
-// commentaire.php
+// comment.php
 
 const L_COMMENT_ORPHAN_STATUS = 'non visible (vos conselham de suprimir aqueste comentari)';
 const L_COMMENT_ARTICLE_LINKED_TITLE = 'Article estacat a-n aquel comentari';
@@ -206,14 +193,22 @@ const L_COMMENT_DELETE_CONFIRM = 'Suprimir aqueste comentari ?';
 const L_COMMENT_PUBLISH_BUTTON = 'Validar la publicacion';
 const L_COMMENT_UPDATE_BUTTON = 'Metre a jorn';
 const L_COMMENT_WRITTEN_BY = 'Redigit per';
-const L_ERR_CATEGORY_ALREADY_EXISTS = 'Nom de categoria ja utilizat';
+const L_COMMENT_SAVE_SUCCESSFUL = 'Comentari modificat amb succès';
+const L_COMMENT_UPDATE_ERR = 'Error al temps de la mesa a jorn del comentari';
+const L_COMMENT_DELETE_ERR = 'Una error es subrevenguda pendent la supression';
+const L_COMMENT_VALIDATE_SUCCESSFUL = 'Validacion efectuada amb succès';
+const L_COMMENT_VALIDATE_ERR = 'Una error es subrevenguda pendent la validacion';
+const L_COMMENT_MODERATE_SUCCESSFUL = 'Moderacion efectuada amb succès';
+const L_COMMENT_MODERATE_ERR = 'Una error es subrevenguda al temps de la moderacion';
+const L_WATCH = 'Regarder';
+const L_SEND_MAIL = 'Envoyer un courriel';
 
 // sous_navigation/commentaires.php
 
 const L_COMMENT_NEW_COMMENT_TITLE = 'Redigir un novèl comentari per aquel article';
 const L_COMMENT_NEW_COMMENT = 'Redigir un novèl comentari';
 
-// commentaire_new.php
+// comment_new.php
 
 const L_ERR_ANSWER_UNKNOWN_COMMENT = 'Lo comentari per lo qual temptatz de respondre existís pas o existís pas pus !';
 const L_ERR_ANSWER_OFFLINE_COMMENT = 'Lo comentari es fòra linha, impossible d\'i respondre !';
@@ -239,6 +234,7 @@ const L_COMMENTS_OFFLINE_LIST = 'Lista dels comentaris en espèra de validacion'
 const L_COMMENTS_ALL_LIST = 'Lista dels comentaris';
 const L_COMMENTS_ARTICLE = 'Liste des commentaires pour l\'article';
 const L_COMMENT_SET_ONLINE = 'Metre en linha';
+const L_BACK_TO_ARTICLE = 'Retour à l\'article';
 
 // index.php
 
@@ -269,6 +265,10 @@ const L_MEDIAS_BACK = 'Retorn a la lista dels mèdia';
 const L_MEDIAS_MAX_UPLOAD_FILE = 'Talha maxi dels fichièrs';
 const L_MEDIAS_MAX_UPLOAD_NBFILE = 'Nombre maxi de fichièrs per mandadís';
 const L_MEDIAS_MAX_POST_SIZE = 'Talha maxi de las donadas';
+const L_BROWSE = 'Parcourir';
+const L_DEPOSIT_FILES = 'Déposez vos fichiers ici';
+const L_FILES = 'fichiers';
+const L_BATCH_SIZE = 'Taille de l\'envoi';
 const L_MEDIAS_SUBMIT_FILE = 'Enviar';
 const L_MEDIAS_IMAGES = 'Imatges';
 const L_MEDIAS_DOCUMENTS = 'Documents';
@@ -301,6 +301,7 @@ const L_MEDIAS_RENAME = 'Renommar';
 const L_CONFIRM_THUMBNAIL = 'Confirmer la création de 999 vignettes';
 const L_CONFIRM_MOVE_MEDIAS = 'Confirmer le déplacement de 999 documents';
 const L_REQUIRED_OPTION = 'Vous devez sélectionner une option';
+const L_REQUIRED_TARGET = 'Sélectionnez une autre destination';
 
 // parametres_affichage.php
 
@@ -350,10 +351,10 @@ const L_CONFIG_ADVANCED_PLUGINS_FOLDER = 'Emplaçament dels plugins (dorsièr)';
 const L_CONFIG_ADVANCED_CONFIG_FOLDER = 'Emplaçament dels fichièrs de configuracion (dorsièr)';
 const L_CONFIG_ADVANCED_UPDATE = 'Modificar la configuracion avançada';
 const L_CONFIG_CUSTOM_CSSADMIN_PATH = 'Lòc e nom del fichièr css personal per personalizar l\'interfàcia d\'administracion (opcion)';
+const L_CONFIG_CUSTOM_CSSADMIN_PATH_HELP = 'Précisez le chemin complet depuis la racine du site';
 const L_CONFIG_ADVANCED_EMAIL_SENDING_TITLE = 'Mandadís dels corrièls';
 const L_CONFIG_ADVANCED_EMAIL_METHOD = 'Mòde de mandadís dels corrièls';
 const L_CONFIG_ADVANCED_SMTP_TITLE = 'Mandadís dels corrièls amb SMTP';
-const L_CONFIG_ADVANCED_SMTP_ACTIVATION = 'Activar los corrièls amb SMTP';
 const L_CONFIG_ADVANCED_SMTP_SERVER = 'Òste SMTP';
 const L_CONFIG_ADVANCED_SMTP_USERNAME = 'Nom d\'utilizaire de SMTP';
 const L_CONFIG_ADVANCED_SMTP_PASSWORD = 'Senhal SMTP';
@@ -364,14 +365,13 @@ const L_CONFIG_ADVANCED_SMTPOAUTH_CLIENTID = 'ID del client';
 const L_CONFIG_ADVANCED_SMTPOAUTH_SECRETKEY = 'Clau secreta del client';
 const L_CONFIG_ADVANCED_SMTPOAUTH_TOKEN = 'Geton';
 const L_CONFIG_ADVANCED_SMTPOAUTH_GETTOKEN = 'Generar un geton';
-const L_CONFIG_ADVANCED_EMAIL_SENDING_TITLE_HELP = 'Vos fa besonh d’ajuda : <a href="https://wiki.%s/personnaliser/personnalisation/#envoi-de-mails"> documentacion PluXml</a>&nbsp;(fr).';
+const L_CONFIG_ADVANCED_EMAIL_SENDING_TITLE_HELP = 'Vos fa besonh d’ajuda : <a href="https://wiki.%s/personnaliser/personnalisation/#envoi-de-mails"> documentacion PluXml</a> (fr).';
 const L_CONFIG_ADVANCED_EMAIL_METHOD_HELP = 'Pas cap de configuracion es requerida per sendmail.';
 const L_CONFIG_ADVANCED_SMTP_SERVER_HELP = 'Nom del servidor SMTP (exemple : ssl0.ovh.net)';
 const L_CONFIG_ADVANCED_SMTP_USERNAME_HELP = 'Nom d’utilizaire de l\'òste SMTP (exemple : pluxml@monserveursmtp.com)';
-const L_CONFIG_ADVANCED_SMTP_PASSWORD_HELP = 'Senhal de l’utilizaire sus l’òste ';
+const L_CONFIG_ADVANCED_SMTP_PASSWORD_HELP = 'Senhal de l’utilizaire sus l’òste';
 const L_CONFIG_ADVANCED_SMTP_PORT_HELP = 'Numèro de pòrt de l’òste SMTP (predeterminat : 465)';
-const L_CONFIG_ADVANCED_SMTPOAUTH_TITLE_HELP = 'PluXml permet de generar de fichièrs solament pel servici GOOGLE.
-Se vos cal d’ajuda per generar lo nom d’utilizaire e la clau secreta : WIKI.';
+const L_CONFIG_ADVANCED_SMTPOAUTH_TITLE_HELP = 'PluXml permet de générer des tokens uniquement pour le service  GOOGLE.nPour de l\'aide sur la clé secrète : WIKI.';
 const L_CONFIG_ADVANCED_SMTPOAUTH_CLIENTID_HELP = 'Identificant de client al servici OAUTH2 (exemple : 664335625964-uha1vop20qPluXml81ubjkkgfabbbj6d.apps.googleusercontent.com)';
 const L_CONFIG_ADVANCED_SMTPOAUTH_SECRETKEY_HELP = 'La clau de client del servici OAUTH2 (exemple : PrsvKp6aprKpoP8snnCoC8-x)';
 const L_CONFIG_ADVANCED_SMTPOAUTH_TOKEN_HELP = 'Enregistrar l’ID client e lo còdi secrèt per poder generar lo geton.';
@@ -486,6 +486,7 @@ const L_STATICS_UPDATE = 'Modificar la lista de las paginas estaticas';
 const L_ERR_STATIC_ALREADY_EXISTS = 'Títol de pagina estatica ja utilizat';
 
 // top.php
+
 const L_PROFIL_ADMIN = 'Administrator';
 const L_PROFIL_MANAGER = 'Gestionari';
 const L_PROFIL_MODERATOR = 'Moderator';
@@ -506,10 +507,10 @@ const L_MENU_CATEGORIES_TITLE = 'Crear, gerir, editar las categorias';
 const L_MENU_CONFIG_TITLE = 'Configurar PluXml';
 const L_MENU_CONFIG = 'Paramètres';
 const L_MENU_PROFIL_TITLE = 'Gerir vòstre perfil utilizaire';
-const L_WARNING_INSTALLATION_FILE = 'Lo fichièr install.php es present a la raiç de vòstre PluXml.
-Per de rasons de seguretat, es fòrtament conselhat d\'o <a class="lnkdelete" href="?del=install">suprimir</a>.';
+const L_WARNING_INSTALLATION_FILE = 'Le fichier install.php est présent à la racine de votre PluXml.nPour des raisons de sécurité, <a class="lnkdelete" href="?del=install">supprimez le</a> !';
 
 // user.php
+
 const L_USER_UNKNOWN = 'Utilizaire desconegut';
 const L_USER_LANG = 'Lenga utilizada dins l\'administracion';
 const L_USER_UPDATE = 'Metre a jorn aquel utilizaire';
@@ -533,4 +534,4 @@ const L_THEMES_TITLE = 'Gerir los themes';
 const L_HELP = 'Ajuda';
 const L_HELP_TITLE = 'Veire l\'ajuda';
 const L_BACK_TO_THEMES = 'Tornar a la lista dels tèmas';
-?>
+

@@ -538,6 +538,4 @@ const L_THEMES_TITLE = 'Gerenciando temas';
 const L_HELP = 'Ajuda';
 const L_HELP_TITLE = 'Vêr a ajuda';
 const L_BACK_TO_THEMES = 'Voltar para os temas da página';
-const L_CONFIG_ADVANCED_SMTP_ACTIVATION = 'Habilitar o envio de emails por um servidor SMTP';
-const L_MEDIAS_MAX_FILE_UPLOAD = 'Número máximo de ficheiros permitidos carregando';
 
