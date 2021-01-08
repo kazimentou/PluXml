@@ -12,6 +12,7 @@ include PLX_ROOT . 'core/lib/config.php';
 const PLX_LANGS = PLX_CORE .'lang/';
 const GOOGLE_TRANSLATOR_URL = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=#SL#&tl=#TL#&dt=t&q=#Q#';
 const MYMEMORY_TRANSLATOR_URL = 'https://api.mymemory.translated.net/get?q=#Q#&langpair=#SL#|#TL#';
+# see https://www.matecat.com/ (chromium requested !)
 
 const PATTERN = '@^(?:const\s+(\w+)\s*=\s*[\'"](.*)[\'"]\s*;|(?:#|//)\s*(.*))@';
 
