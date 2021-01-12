@@ -49,43 +49,21 @@ if(!empty($_POST['login'])) {
 		$unknown = true;
 		foreach ($plxAdmin->aUsers as $userid => $user) {
 			if($user['login'] == $_POST['login'] and $user['email'] == $_POST['email']) {
-				$new_password = plxUtils::charAleatoire();
 				$_SESSION['user'] = $userid;
+				$new_password = plxUtils::charAleatoire();
 				if($plxAdmin->editPassword(array(
 					'password1'		=> $new_password,
 					'password2'		=> $new_password,
 					'save_password'	=> true,
 				))) {
 					# Send $new_password by e-mail
-					foreach(array($user['lang'], $plxAdmin->aConf['default_lang'], 'en', 'fr', 'de', 'es') as $lang) {
-						$filename = PLX_CORE . 'lang/'. $lang . '/new_password.txt';
-						if(is_readable($filename)) {
-							break;
-						}
-					}
-					list($subject, $body) = explode(
-						'-----',
-						strtr(
-							file_get_contents($filename),
-							array(
-								'990'	=> $plxAdmin->aConf['title'],
-								'991'	=> $user['name'],
-								'992'	=> $user['login'],
-								'993'	=> $new_password,
-								'994'	=> L_PROFIL,
-								'995'	=> $_SERVER['REMOTE_ADDR'],
-								'996'	=> $_SERVER['HTTP_USER_AGENT'],
-								'997'	=> $_SERVER['HTTP_ACCEPT_LANGUAGE'],
-								'998'	=> $plxAdmin->aConf['racine'],
-							)
-						)
-					);
-
-					if(plxUtils::sendMail('', '', $user['email'], $subject, $body)) {
-						$msg = sprintf(L_MAIL_TEST_SENT_TO, $_POST['email']);
-					} else {
-						$msg = L_SENT_MAIL_FAILURE;
-					}
+					$msg = $plxAdmin->sendNewPassword(array(
+						'username'	=> $user['name'],
+						'email'		=> $user['email'],
+						'login'		=> $user['login'],
+						'password'	=> $new_password,
+						'lang'		=> $user['lang'],
+					));
 				};
 
 				unset($_SESSION['user']);

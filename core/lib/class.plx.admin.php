@@ -17,7 +17,7 @@ class plxAdmin extends plxMotor {
 		'description', 'thumbnail', 'thumbnail_title', 'thumbnail_alt',
 		'title_htmltag', 'meta_description', 'meta_keywords'
 	);
-	const EMPTY_FIELDS_USER = array('infos', 'password_token', 'password_token_expiry');
+	const EMPTY_FIELDS_USER = array('infos', 'password_token', 'password_token_expiry', 'old_password', 'timestamp');
 	const EMPTY_FIELD_STATIQUES = array('title_htmltag', 'meta_description', 'meta_keywords');
 
 	const STATIC_DATES = array('date_creation', 'date_update');
@@ -520,6 +520,44 @@ EOT;
 	}
 
 	/**
+	 * Send by E-email parameters for connection
+	 *
+	 * @author Jean-Pierre Pourrez "bazooka07"
+	 * */
+	public function sendNewPassword($user) {
+		# Send $new_password by e-mail as core/admin/auth.php
+		foreach(array($user['lang'], $this->aConf['default_lang'], 'en', 'fr', 'de', 'es') as $lang) {
+			$filename = PLX_CORE . 'lang/'. $lang . '/new_password.txt';
+			if(is_readable($filename)) {
+				break;
+			}
+		}
+		list($subject, $body) = explode(
+			'-----',
+			strtr(
+				file_get_contents($filename),
+				array(
+					'990'	=> $this->aConf['title'],
+					'991'	=> $user['username'],
+					'992'	=> $user['login'],
+					'993'	=> $user['password'],
+					'994'	=> L_PROFIL,
+					'995'	=> $_SERVER['REMOTE_ADDR'],
+					'996'	=> $_SERVER['HTTP_USER_AGENT'],
+					'997'	=> $_SERVER['HTTP_ACCEPT_LANGUAGE'],
+					'998'	=> $this->aConf['racine'],
+				)
+			)
+		);
+
+		if(plxUtils::sendMail('', '', $user['email'], $subject, $body)) {
+			return sprintf(L_MAIL_TEST_SENT_TO, $user['email']);
+		} else {
+			return L_SENT_MAIL_FAILURE;
+		}
+	}
+
+	/**
 	 * Méthode qui édite le fichier XML des utilisateurs
 	 *
 	 * @param	content	tableau les informations sur les utilisateurs
@@ -536,7 +574,7 @@ EOT;
 			if(eval($this->plxPlugins->callHook('plxAdminEditUsersBegin'))) return;
 		}
 
-		if(!empty($content['delete']) AND !empty($content['idUser'])) {
+		if(isset($content['delete']) AND !empty($content['idUser'])) {
 			# suppression
 			foreach($content['idUser'] as $user_id) {
 				if($user_id != '001') {
@@ -544,61 +582,70 @@ EOT;
 				}
 			}
 			$save = true;
-		} elseif(!empty($content['update'])) {
+		} elseif(isset($content['update'])) {
 			# mise à jour de la liste des utilisateurs
 			foreach($content['login'] as $user_id => $login) {
 				$username = trim($content['name'][$user_id]);
-				$password = trim($content['password'][$user_id]);
 				if($username != '' AND trim($login) != '') {
-					if(empty($password)) {
-						if(!array_key_exists($user_id, $this->aUsers)) {
-							# Mot de passe manquant pour un nouvel user
-							$this->aUsers = $archive;
-							return plxMsg::Error(L_ERR_PASSWORD_EMPTY . ' ('. L_CONFIG_USER . ' <em>' . $username . '</em>)');
-						} else {
-							$salt = $this->aUsers[$user_id]['salt'];
-							$password = $this->aUsers[$user_id]['password'];
-						}
-					} else {
-						# On crypte le nouveau mot de passe
-						$salt = plxUtils::charAleatoire(10);
-						$password = sha1($salt . md5($password));
-					}
-
-					# controle de l'adresse email
+					# contrôle de l'adresse email
 					$email = filter_var(trim($content['email'][$user_id]), FILTER_VALIDATE_EMAIL);
 					if(empty($email)) {
 						if(!array_key_exists($user_id, $this->aUsers)) {
-							return plxMsg::Error(L_ERR_INVALID_EMAIL);
+							return plxMsg::Error(sprintf(L_ERR_INVALID_EMAIL, $login));
 						} else {
 							$email = $this->aUsers[$user_id]['email'];
 						}
+					}
+
+					if(!array_key_exists($user_id, $this->aUsers)) {
+						# nouvel utilisateur
+						# On crypte le nouveau mot de passe
+						$new_password = plxUtils::charAleatoire();
+						$salt = plxUtils::charAleatoire(10);
+						$password = sha1($salt . md5($new_password));
+						$delete = 0;
+						$lang = $this->aConf['default_lang'];
+						# For sending password by email
+						$newUser = array(
+						   'username'      => $username,
+						   'email'         => $email,
+						   'login'         => $login,
+						   'password'      => $new_password,
+						   'lang'          => $lang,
+						);
+					} else {
+						$salt = $this->aUsers[$user_id]['salt'];
+						$password = $this->aUsers[$user_id]['password'];
+						$delete = $this->aUsers[$user_id]['delete'];
+						$lang = $this->aUsers[$user_id]['lang'];
 					}
 
 					if($user_id == '001') {
 						# Protect webmaster
 						$active = 1;
 						$profil = PROFIL_ADMIN;
+						$delete = 0;
 					} elseif(!empty($_SESSION['user']) && $_SESSION['user'] == $user_id) {
 						# Protect current user
 						$active = 1;
 						# no auto-promotion
 						$profil = $this->aUsers[$user_id]['profil'];
 					} else {
-						$active = plxUtils::getValue($content['active'][$user_id], 0);
+						$active = isset($content['active'][$user_id]) ? 1 : 0;
 						$profil = plxUtils::getValue($content['profil'][$user_id], PROFIL_WRITER);
 					}
-					$this->aUsers[$user_id] = array(
-						'login'					=> trim($login),
-						'name'					=> $username,
-						'active'				=> $active,
-						'profil'				=> $profil,
-						'password'				=> $password,
-						'salt'					=> $salt,
-						'email'					=> $email,
 
-						'delete'				=> ($user_id == '001') ? 0 : plxUtils::getValue($this->aUsers[$user_id]['delete'], 0),
-						'lang'					=> plxUtils::getValue($this->aUsers[$user_id]['lang'], $this->aConf['default_lang']),
+					$this->aUsers[$user_id] = array(
+						'login'			=> trim($login),
+						'name'			=> $username,
+						'active'		=> $active,
+						'profil'		=> $profil,
+						'password'		=> $password,
+						'salt'			=> $salt,
+						'email'			=> $email,
+
+						'delete'		=> $delete,
+						'lang'			=> $lang,
 					);
 					foreach(self::EMPTY_FIELDS_USER as $k) {
 						if(!array_key_exists($k, $this->aUsers[$user_id])) {
@@ -686,7 +733,12 @@ EOT;
 
 		# On écrit le fichier
 		if(plxUtils::write(XML_HEADER . ob_get_clean(), path('XMLFILE_USERS'))) {
-			return plxMsg::Info(L_SAVE_SUCCESSFUL);
+			if(!empty($newUser)) {
+				# envoi infos de connexion au nouvel utilisateur par courriel
+				return plxMsg::Info($this->sendNewPassword($newUser));
+			} else {
+				return plxMsg::Info(L_SAVE_SUCCESSFUL);
+			}
 		}
 
 		$this->aUsers = $archive;
