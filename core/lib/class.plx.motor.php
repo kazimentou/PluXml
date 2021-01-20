@@ -1047,6 +1047,7 @@ class plxMotor {
         # Informations obtenues en analysant le nom du fichier
         $tmp = $this->artInfoFromFilename($filename);
         if(!empty($tmp)) {
+			$nbComs = $this->getNbCommentaires('#^' . $tmp['artId'] . '\.\d{10,}-\d+.xml$#');
 			if(function_exists('simplexml_load_file')) {
 				$doc = simplexml_load_file($filename);
 				$art = array(
@@ -1072,7 +1073,7 @@ class plxMotor {
 	                'url'				=> $tmp['artUrl'],
 	                'date'				=> $tmp['artDate'], # For retro-compatibility. Must de deprecated.
 	                'date_publication'	=> $tmp['artDate'],
-	                'nb_com'			=> $this->getNbCommentaires('#^' . $tmp['artId'] . '.\d{10}\.\d+.xml$#'),
+	                'nb_com'			=> $nbComs,
 				);
 			} else {
 	            # Mise en place du parseur XML
@@ -1105,7 +1106,7 @@ class plxMotor {
 	                'categorie'			=> $tmp['catId'],
 	                'url'				=> $tmp['artUrl'],
 	                'date'				=> $tmp['artDate'], # For retro-compatibility. Must de deprecated.
-	                'nb_com'			=> $this->getNbCommentaires('#^' . $tmp['artId'] . '.\d{10}.\d+.xml$#'),
+	                'nb_com'			=> $nbComs,
 	                'date_creation'		=> plxUtils::getValue($values[$iTags['date_creation'][0]]['value'], $tmp['artDate']),
 	                'date_update'		=> plxUtils::getValue($values[$iTags['date_update'][0]]['value'], $tmp['artDate']),
 	                'date_publication'	=> $tmp['artDate'],
