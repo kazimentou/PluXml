@@ -854,7 +854,7 @@ class plxShow
                     # $this->plxMotor->cible est une fraction d'url.
                     # Il faut donc formater $tag avec plxUtils::urlify() avant les tests.
                     $tagUrl = plxUtils::urlify($tag);
-                    echo strtr($format, array(
+                    return strtr($format, array(
                         '#tag_url' => $this->plxMotor->urlRewrite('?tag/' . $tagUrl),
                         '#tag_name' => plxUtils::strCheck($tag),
                         '#tag_status' => ($this->plxMotor->mode == 'tags' && $this->plxMotor->cible == $tagUrl) ? 'active' : 'noactive'
