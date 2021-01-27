@@ -1530,35 +1530,38 @@ class plxMotor {
 			return $url;
 		}
 
-		if(!empty($url) and $url != '?' and preg_match('@^([\w./-]+)?(?:\?([\w./,&=%-]+))?(?:#(.*))?$@i', $url, $args)) {
-			if($this->aConf['urlrewriting']) {
-				$new_url  = strtr(is_string($args[1]) ? $args[1] : '', array(
-					'index.php'	=> '',
-					'feed.php'	=> 'feed/',
-				));
-				if(!empty($args[2])) {
-					$new_url .= preg_replace('@^(article|static|categorie)\d+@', '$1', $args[2]);
-				}
-				if(empty($new_url))	{
-					$new_url = $this->path_url;
-				}
-			} else {
-				if(empty($args[1]) AND !empty($args[2])) {
-					$args[1] = 'index.php';
-				}
-				$new_url  = !empty($args[1]) ? $args[1] : $this->path_url;
-				if(!empty($args[2])) {
-					$new_url .= '?' . $args[2];
-				}
-			}
+		if($url=='' OR $url=='?') return $this->racine;
 
-			if(!empty($args[3])) {
-				$new_url .= '#' . $args[3];
+		$args = parse_url($url);
+
+		if($this->aConf['urlrewriting']) {
+			$new_url = !empty($args['path']) ? strtr($args['path'], array(
+				'index.php' => '',
+				'feed.php' => 'feed/',
+			)) : '';
+			if(!empty($args['query'])) {
+				$new_url .= $args['query'];
 			}
-			return $this->racine . $new_url;
+			if(empty($new_url))	{
+				$new_url = $this->path_url;
+			}
+			if(!empty($args['fragment'])) {
+				$new_url .= '#'. $args['fragment'];
+			}
+		} else {
+			if(empty($args['path']) AND !empty($args['query'])) {
+				$args['path'] = 'index.php';
+			}
+			$new_url  = !empty($args['path']) ? $args['path'] : $this->path_url;
+			if(!empty($args['query'])) {
+				$new_url .= '?' . $args['query'];
+			}
+			if(!empty($args['fragment'])) {
+				$new_url .= '#' . $args['fragment'];
+			}
 		}
 
-		return $this->racine;
+		return $this->racine . $new_url;
 	}
 
 	/**
