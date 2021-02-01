@@ -39,8 +39,7 @@ a:hover {
 abbr {
 	border-bottom: none;
 	cursor: help;
-	-webkit-text-decoration: underline dotted;
-	        text-decoration: underline dotted;
+	text-decoration: underline dotted;
 }
 b,
 strong {
@@ -826,6 +825,10 @@ a.tooltip span {
 	visibility: hidden;
 	border-radius: 4px;
 	opacity: 0;
+	-webkit-transition: opacity 0.3s ease-in-out;
+	-moz-transition: opacity 0.3s ease-in-out;
+	-ms-transition: opacity 0.3s ease-in-out;
+	-o-transition: opacity 0.3s ease-in-out;
 	transition: opacity 0.3s ease-in-out;
 }
 a.tooltip span:after {
@@ -941,6 +944,7 @@ a:hover.tooltip-left span {
 }
 .sticky {
 	position: fixed;
+	position: -webkit-sticky;
 	position: sticky;
 	top: 0;
 }

@@ -60,6 +60,9 @@ body {
 }
 .bg {
 	background: url(../img/bg.jpg) no-repeat top left;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
 	background-size: cover;
 	height: var(--bg-height);
 }
