@@ -4,7 +4,7 @@
  * Classe plxAdmin responsable des modifications dans l'administration
  *
  * @package PLX
- * @author    Anthony GUÉRIN, Florent MONTHEL, Stephane F et Pedro "P3ter" CADETE
+ * @author  Anthony GUÉRIN, Florent MONTHEL, Stephane F et Pedro "P3ter" CADETE
  **/
 
 const PLX_ADMIN = true;
@@ -18,7 +18,7 @@ class plxAdmin extends plxMotor
         'description', 'thumbnail', 'thumbnail_title', 'thumbnail_alt',
         'title_htmltag', 'meta_description', 'meta_keywords'
     );
-    const EMPTY_FIELDS_USER = array('infos', 'password_token', 'password_token_expiry');
+    const EMPTY_FIELDS_USER = array('infos', 'password_token', 'password_token_expiry', 'old_password', 'timestamp');
     const EMPTY_FIELD_STATIQUES = array('title_htmltag', 'meta_description', 'meta_keywords');
 
     const STATIC_DATES = array('date_creation', 'date_update');
@@ -33,6 +33,7 @@ class plxAdmin extends plxMotor
     const URLREWRITING_TEMPLATE = <<< 'EOT'
 # BEGIN -- Pluxml
 Options -Multiviews
+
 <IfModule mod_rewrite.c>
 	RewriteEngine on
 	RewriteBase ##BASE##
@@ -40,13 +41,14 @@ Options -Multiviews
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteCond %{REQUEST_FILENAME} !-l
 	# Réécriture des urls
-	RewriteRule ^(?!feed)(.*)$ index.php?$1 [L]
+	RewriteRule ^(article\d*|categorie\d*|tag|archives|static\d*|page\d*|blog|telechargement|download)\b(.*)$ index.php?$1$2 [L]
 	RewriteRule ^feed\/(.*)$ feed.php?$1 [L]
+	RewriteRule ^(##CAT_URLS##)\b(.*)$ index.php?categorie/$1$2 [L]
 </IfModule>
 # END -- Pluxml
 EOT;
 
-    public $update_link = PLX_URL_REPO; // overwritten by self::checmMaj()
+    public $update_link = PLX_URL_REPO; // overwritten by self::checkMaj()
 
     /**
      * Méthode qui se charger de créer le Singleton plxAdmin
@@ -86,8 +88,8 @@ EOT;
      * @return    null
      * @author    Stéphane F
      **/
-    public function prechauffage($motif = '')
-    {
+    public function prechauffage($motif='')
+   {
         $this->mode = 'admin';
         $this->motif = $motif;
         $this->bypage = $this->aConf['bypage_admin'];
@@ -128,7 +130,7 @@ EOT;
      * @return    string
      * @author    Florent MONTHEL
      **/
-    public function editConfiguration($content = false)
+    public function editConfiguration($content=false)
     {
 
         if (isset($content['config_path'])) {
@@ -171,9 +173,9 @@ EOT;
         if (!empty($content)) {
             $oldValue = $this->aConf['urlrewriting'];
 
-            foreach ($content as $k => $v) {
-                if (!in_array($k, array('token', 'config_path'))) {
-                    # parametres à ne pas mettre dans le fichier
+            foreach ($content as $k=>$v) {
+                # parametres à ne pas mettre dans le fichier
+                if (!in_array($k, array('token', 'config_path', 'config-base', 'config-more'))) {
                     $this->aConf[$k] = $v;
                 }
             }
@@ -212,25 +214,25 @@ EOT;
 
         # Début du fichier XML
         ob_start();
-        ?>
-        <document>
-            <?php
-            foreach ($this->aConf as $k => $v) {
-                if ($k != 'racine') {
-                    $cdata = (preg_match(self::PATTERN_CONFIG_CDATA, $k) === 0);
+?>
+<document>
+<?php
+        foreach ($this->aConf as $k=>$v) {
+            if (!in_array($k, array('token', 'config_path', 'config-base', 'config-more', 'racine'))) {
+                $cdata = (preg_match(self::PATTERN_CONFIG_CDATA, $k) === 0);
 
-                    # Le chemin du dossier doit finir par "/"
-                    if (!empty($v) and preg_match(self::PATTERN_RACINES, $k) === 1 and substr($v, -1) != '/') {
-                        $v .= '/';
-                    }
-                    ?>
-                    <parametre name="<?= $k ?>"><?= plxUtils::cdataCheck($v, $cdata) ?></parametre>
-                    <?php
+                # Le chemin du dossier doit finir par "/"
+                if (!empty($v) and preg_match(self::PATTERN_RACINES, $k) === 1 and substr($v, -1) != '/') {
+                    $v .= '/';
                 }
+?>
+    <parametre name="<?= $k ?>"><?= plxUtils::cdataCheck($v, $cdata) ?></parametre>
+<?php
             }
-            ?>
-        </document>
-        <?php
+        }
+?>
+</document>
+<?php
 
         # Mise à jour du fichier parametres.xml
         if (!plxUtils::write(XML_HEADER . ob_get_clean(), path('XMLFILE_PARAMETERS')))
@@ -260,7 +262,7 @@ EOT;
      * @return    null
      * @author    Stephane F, Amaury Graillat
      **/
-    public function htaccess($action, $url = false)
+    public function htaccess($action, $url=false)
     {
 
         if (!function_exists('apache_get_modules') or !in_array('mod_rewrite', apache_get_modules())) {
@@ -277,7 +279,22 @@ EOT;
                 break;
             case '1': # activation
                 $base = parse_url(!empty($url) ? $url : $this->racine);
-                $plxhtaccess = PHP_EOL . str_replace('##BASE##', $base['path'], self::URLREWRITING_TEMPLATE) . PHP_EOL;
+                $catUrls = array_map(
+                    function($item) {
+                        return $item['url'];
+                    },
+                    array_filter(
+                        $this->aCats,
+                        function($item) {
+                            return !empty($item['active']);
+                        }
+                    )
+                );
+                arsort($catUrls); # on trie à l'inverse pour rechercher en premiers les mots les plus longs
+                $plxhtaccess = PHP_EOL . strtr(self::URLREWRITING_TEMPLATE,array(
+                    '##BASE##'        => $base['path'],
+                    '##CAT_URLS##'    => implode('|', array_values($catUrls)),
+                )) . PHP_EOL;
                 if (!empty($htaccess) and preg_match(self::URLREWRITING_PATTERN, $htaccess) === 1) {
                     $htaccess = preg_replace(self::URLREWRITING_PATTERN, $plxhtaccess, $htaccess);
                 } else
@@ -308,7 +325,7 @@ EOT;
      *
      * Pour recensement dans code : grep -n checkProfil *.php update/*.php core/{admin,lib}/*.php
      **/
-    public function checkProfil($profil, $redirect = true)
+    public function checkProfil($profil, $redirect=true)
     {
 
         if (!isset($_SESSION['profil']) or !is_numeric($_SESSION['profil'])) {
@@ -399,37 +416,45 @@ EOT;
      *
      * @param content    tableau contenant le nouveau mot de passe de l'utilisateur
      * @return    string
-     * @author    Stéphane F, PEdro "P3ter" CADETE
+     * @author    Stéphane F, PEdro "P3ter" CADETE, Jean-Pierre Pourrez "bazooka07"
      **/
     public function editPassword($content)
     {
+        if (!empty($content['auth']) and $content['auth'] == $this->aConf['clef']) {
+            # l'utilisateur vient de se connecter
+            if (!empty($content['restore'])) {
+                # on restaure l'ancien mot de passe
+                $this->aUsers[$_SESSION['user']]['password'] = $this->aUsers[$_SESSION['user']]['old_password'];
+            }
+            # on écrase l'ancien mot de passe pour les prochaines demandes
+            $this->aUsers[$_SESSION['user']]['old_password'] = '';
 
-        $token = '';
-        $action = false;
+            # on note l'heure de connection
+            $this->aUsers[$_SESSION['user']]['timestamp'] = time();
 
-        if (trim($content['password1']) == '' or trim($content['password1']) != trim($content['password2'])) {
+            $this->editUsers(null, true);
+            return;
+        }
+
+        if (
+            empty($content['password1']) or
+            empty($content['password2']) or
+            strlen(trim($content['password1'])) == 0 or
+            trim($content['password1']) != trim($content['password2'])
+        ) {
             return plxMsg::Error(L_ERR_PASSWORD_EMPTY_CONFIRMATION);
         }
 
-        if (!empty($token = $content['lostPasswordToken'])) {
-            foreach ($this->aUsers as $user_id => $user) {
-                if ($user['password_token'] == $token) {
-                    $salt = $this->aUsers[$user_id]['salt'];
-                    $this->aUsers[$user_id]['password'] = sha1($salt . md5($content['password1']));
-                    $this->aUsers[$user_id]['password_token'] = '';
-                    $this->aUsers[$user_id]['password_token_expiry'] = '';
-                    $action = true;
-                    break;
-                }
-            }
-        } else {
-            $salt = $this->aUsers[$_SESSION['user']]['salt'];
-            $this->aUsers[$_SESSION['user']]['password'] = sha1($salt . md5($content['password1']));
-            $action = true;
+        if (!empty($content['save_password']) and strlen(trim($this->aUsers[$_SESSION['user']]['old_password'])) == 0) {
+            # Overwrite old_password if empty
+            # password is encrypted !
+            $this->aUsers[$_SESSION['user']]['old_password'] = $this->aUsers[$_SESSION['user']]['password'];
         }
 
-        return $this->editUsers(null, $action);
+        $salt = $this->aUsers[$_SESSION['user']]['salt'];
+        $this->aUsers[$_SESSION['user']]['password'] = sha1($salt . md5($content['password1']));
 
+        return $this->editUsers(null, true);
     }
 
     /**
@@ -449,6 +474,7 @@ EOT;
                 }
 
                 if ($user['login'] == $loginOrMail or $user['email'] == $loginOrMail) {
+                    // Attention à l'unicité des logins !!!
                     // token and e-mail creation
                     $mail = array();
                     $tokenExpiry = 24;
@@ -464,7 +490,7 @@ EOT;
                     if (($mail ['body'] = $this->aTemplates[$templateName]->getTemplateGeneratedContent($placeholdersValues)) != '1') {
                         $mail['subject'] = $this->aTemplates[$templateName]->getTemplateEmailSubject();
 
-                        if (empty($this->aConf['email_method']) or $this->aConf['email_method'] == 'sendmail' or !method_exists(plxUtils::class, 'sendMailPhpMailer')) {
+                        if (empty($this->aConf['email_method']) or $this->aConf['email_method'] == 'sendmail' or !method_exists(plxUtils, 'sendMailPhpMailer')) {
                             # fonction mail() intrinsèque à PHP
                             $success = plxUtils::sendMail('', '', $user['email'], $mail['subject'], $mail['body']);
                         } else {
@@ -476,7 +502,7 @@ EOT;
                             }
                             $mail ['from'] = $this->aTemplates[$templateName]->getTemplateEmailFrom();
                             // send the e-mail and if it is OK store the token
-                            $success = plxUtils::sendMailPhpMailer($mail['name'], $mail['from'], $user['email'], $mail['subject'], $mail['body'], $this->aConf, false, false);
+                            $success = plxUtils::sendMailPhpMailer($mail['name'], $mail['from'], $user['email'], $mail['subject'], $mail['body'], false, $this->aConf, false);
                         }
 
                         if (!empty($success)) {
@@ -514,6 +540,44 @@ EOT;
     }
 
     /**
+     * Send by E-email parameters for connection
+     *
+     * @author Jean-Pierre Pourrez "bazooka07"
+     * */
+    public function sendNewPassword($user) {
+        # Send $new_password by e-mail as core/admin/auth.php
+        foreach (array($user['lang'], $this->aConf['default_lang'], 'en', 'fr', 'de', 'es') as $lang) {
+            $filename = PLX_CORE . 'lang/'. $lang . '/new_password.txt';
+            if (is_readable($filename)) {
+                break;
+            }
+        }
+        list($subject, $body) = explode(
+            '-----',
+            strtr(
+                file_get_contents($filename),
+                array(
+                    '990'    => $this->aConf['title'],
+                    '991'    => $user['username'],
+                    '992'    => $user['login'],
+                    '993'    => $user['password'],
+                    '994'    => L_PROFIL,
+                    '995'    => $_SERVER['REMOTE_ADDR'],
+                    '996'    => $_SERVER['HTTP_USER_AGENT'],
+                    '997'    => $_SERVER['HTTP_ACCEPT_LANGUAGE'],
+                    '998'    => $this->aConf['racine'],
+                )
+            )
+        );
+
+        if (plxUtils::sendMail('', '', $user['email'], $subject, $body)) {
+            return sprintf(L_MAIL_TEST_SENT_TO, $user['email']);
+        } else {
+            return L_SENT_MAIL_FAILURE;
+        }
+    }
+
+    /**
      * Méthode qui édite le fichier XML des utilisateurs
      *
      * @param content    tableau les informations sur les utilisateurs
@@ -521,7 +585,7 @@ EOT;
      * @return    string
      * @author    Stéphane F, Pedro "P3ter" CADETE, Jean-Pierre Pourrez "bazooka07"
      **/
-    public function editUsers($content, $save = false)
+    public function editUsers($content, $save=false)
     {
 
         $archive = $this->aUsers;
@@ -543,57 +607,66 @@ EOT;
             # mise à jour de la liste des utilisateurs
             foreach ($content['login'] as $user_id => $login) {
                 $username = trim($content['name'][$user_id]);
-                $password = trim($content['password'][$user_id]);
                 if ($username != '' and trim($login) != '') {
-                    if (empty($password)) {
-                        if (!array_key_exists($user_id, $this->aUsers)) {
-                            # Mot de passe manquant pour un nouvel user
-                            $this->aUsers = $archive;
-                            return plxMsg::Error(L_ERR_PASSWORD_EMPTY . ' (' . L_CONFIG_USER . ' <em>' . $username . '</em>)');
-                        } else {
-                            $salt = $this->aUsers[$user_id]['salt'];
-                            $password = $this->aUsers[$user_id]['password'];
-                        }
-                    } else {
-                        # On crypte le nouveau mot de passe
-                        $salt = plxUtils::charAleatoire(10);
-                        $password = sha1($salt . md5($password));
-                    }
-
-                    # controle de l'adresse email
+                    # contrôle de l'adresse email
                     $email = filter_var(trim($content['email'][$user_id]), FILTER_VALIDATE_EMAIL);
                     if (empty($email)) {
                         if (!array_key_exists($user_id, $this->aUsers)) {
-                            return plxMsg::Error(L_ERR_INVALID_EMAIL);
+                            return plxMsg::Error(sprintf(L_ERR_INVALID_EMAIL, $login));
                         } else {
                             $email = $this->aUsers[$user_id]['email'];
                         }
+                    }
+
+                    if (!array_key_exists($user_id, $this->aUsers)) {
+                        # nouvel utilisateur
+                        # On crypte le nouveau mot de passe
+                        $new_password = plxUtils::charAleatoire();
+                        $salt = plxUtils::charAleatoire(10);
+                        $password = sha1($salt . md5($new_password));
+                        $delete = 0;
+                        $lang = $this->aConf['default_lang'];
+                        # For sending password by email
+                        $newUser = array(
+                           'username'      => $username,
+                           'email'         => $email,
+                           'login'         => $login,
+                           'password'      => $new_password,
+                           'lang'          => $lang,
+                        );
+                    } else {
+                        $salt = $this->aUsers[$user_id]['salt'];
+                        $password = $this->aUsers[$user_id]['password'];
+                        $delete = $this->aUsers[$user_id]['delete'];
+                        $lang = $this->aUsers[$user_id]['lang'];
                     }
 
                     if ($user_id == '001') {
                         # Protect webmaster
                         $active = 1;
                         $profil = PROFIL_ADMIN;
+                        $delete = 0;
                     } elseif (!empty($_SESSION['user']) && $_SESSION['user'] == $user_id) {
                         # Protect current user
                         $active = 1;
                         # no auto-promotion
                         $profil = $this->aUsers[$user_id]['profil'];
                     } else {
-                        $active = plxUtils::getValue($content['active'][$user_id], 0);
+                        $active = isset($content['active'][$user_id]) ? 1 : 0;
                         $profil = plxUtils::getValue($content['profil'][$user_id], PROFIL_WRITER);
                     }
-                    $this->aUsers[$user_id] = array(
-                        'login' => trim($login),
-                        'name' => $username,
-                        'active' => $active,
-                        'profil' => $profil,
-                        'password' => $password,
-                        'salt' => $salt,
-                        'email' => $email,
 
-                        'delete' => ($user_id == '001') ? 0 : plxUtils::getValue($this->aUsers[$user_id]['delete'], 0),
-                        'lang' => plxUtils::getValue($this->aUsers[$user_id]['lang'], $this->aConf['default_lang']),
+                    $this->aUsers[$user_id] = array(
+                        'login'    => trim($login),
+                        'name'     => $username,
+                        'active'   => $active,
+                        'profil'   => $profil,
+                        'password' => $password,
+                        'salt'     => $salt,
+                        'email'    => $email,
+
+                        'delete'   => $delete,
+                        'lang'     => $lang,
                     );
                     foreach (self::EMPTY_FIELDS_USER as $k) {
                         if (!array_key_exists($k, $this->aUsers[$user_id])) {
@@ -622,68 +695,75 @@ EOT;
 
         # On génére le fichier XML
         ob_start();
-        ?>
-        <document>
-            <?php
-            foreach ($this->aUsers as $user_id => $user) {
-                # controle de l'unicité du nom de l'utilisateur
-                if (in_array($user['name'], $users_name)) {
-                    $this->aUsers = $archive;
-                    ob_clean();
-                    return plxMsg::Error(L_ERR_USERNAME_ALREADY_EXISTS . ' : ' . plxUtils::strCheck($user['name']));
-                } else if ($user['delete'] == 0) {
-                    $users_name[] = $user['name'];
-                }
-                # controle de l'unicité du login de l'utilisateur
-                if (in_array($user['login'], $users_login)) {
-                    $this->aUsers = $archive;
-                    ob_clean();
-                    return plxMsg::Error(L_ERR_LOGIN_ALREADY_EXISTS . ' : ' . plxUtils::strCheck($user['login']));
-                } else if ($user['delete'] == 0) {
-                    $users_login[] = $user['login'];
-                }
-                # controle de l'unicité de l'adresse e-mail
-                if (!empty($user['email'])) {
-                    if (in_array($user['email'], $users_email)) {
-                        $this->aUsers = $archive;
-                        ob_clean();
-                        return plxMsg::Error(L_ERR_EMAIL_ALREADY_EXISTS . ' : ' . plxUtils::strCheck($user['email']));
-                    } else if ($user['delete'] == 0) {
-                        $users_email[] = $user['email'];
-                    }
-                }
-                ?>
-                <user number="<?= $user_id ?>" active="<?= $user['active'] ?>" profil="<?= $user['profil'] ?>"
-                      delete="<?= $user['delete'] ?>">
-                    <login><?= plxUtils::cdataCheck($user['login']) ?></login>
-                    <name><?= plxUtils::cdataCheck($user['name']) ?></name>
-                    <infos><?= plxUtils::cdataCheck($user['infos']) ?></infos>
-                    <password><?= $user['password'] ?></password>
-                    <salt><?= $user['salt'] ?></salt>
-                    <email><?= plxUtils::cdataCheck($user['email']) ?></email>
-                    <lang><?= $user['lang'] ?></lang>
-                    <password_token><?= plxUtils::cdataCheck($user['password_token']) ?></password_token>
-                    <password_token_expiry><?= plxUtils::cdataCheck($user['password_token_expiry']) ?></password_token_expiry>
-                    <?php
-                    if (!empty($this->plxPlugins)) {
-                        # Hook plugins
-                        $xml = '';
-                        eval($this->plxPlugins->callHook('plxAdminEditUsersXml'));
-                        if (!empty($xml)) {
-                            echo $xml;
-                        }
-                    }
-                    ?>
-                </user>
-                <?php
+?>
+<document>
+<?php
+        foreach ($this->aUsers as $user_id => $user) {
+            # controle de l'unicité du nom de l'utilisateur
+            if (in_array($user['name'], $users_name)) {
+                $this->aUsers = $archive;
+                ob_clean();
+                return plxMsg::Error(L_ERR_USERNAME_ALREADY_EXISTS.' : '.plxUtils::strCheck($user['name']));
             }
-            ?>
-        </document>
-        <?php
+            else if ($user['delete'] == 0) {
+                $users_name[] = $user['name'];
+            }
+            # controle de l'unicité du login de l'utilisateur
+            if (in_array($user['login'], $users_login)) {
+                $this->aUsers = $archive;
+                ob_clean();
+                return plxMsg::Error(L_ERR_LOGIN_ALREADY_EXISTS.' : '.plxUtils::strCheck($user['login']));
+            }
+            else if ($user['delete'] == 0) {
+                $users_login[] = $user['login'];
+            }
+            # controle de l'unicité de l'adresse e-mail
+            if (!empty($user['email'])) {
+                if (in_array($user['email'], $users_email)) {
+                    $this->aUsers = $archive;
+                    ob_clean();
+                    return plxMsg::Error(L_ERR_EMAIL_ALREADY_EXISTS.' : '.plxUtils::strCheck($user['email']));
+                }
+                else if ($user['delete'] == 0) {
+                    $users_email[] = $user['email'];
+                }
+            }
+?>
+    <user number="<?= $user_id ?>" active="<?= $user['active'] ?>" profil="<?= $user['profil'] ?>" delete="<?= $user['delete'] ?>">
+        <login><?= plxUtils::cdataCheck($user['login']) ?></login>
+        <name><?= plxUtils::cdataCheck($user['name']) ?></name>
+        <email><?= plxUtils::cdataCheck($user['email']) ?></email>
+        <timestamp><?= $user['timestamp'] ?></timestamp>
+        <lang><?= $user['lang'] ?></lang>
+        <infos><?= plxUtils::cdataCheck($user['infos']) ?></infos>
+        <password><?= $user['password'] ?></password>
+        <old_password><?= $user['old_password'] ?></old_password>
+        <salt><?= $user['salt'] ?></salt>
+<?php
+            if (!empty($this->plxPlugins)) {
+                # Hook plugins
+                $xml = '';
+                eval($this->plxPlugins->callHook('plxAdminEditUsersXml'));
+                if (!empty($xml)) {
+                    echo $xml;
+                }
+            }
+?>
+    </user>
+<?php
+        }
+?>
+</document>
+<?php
 
         # On écrit le fichier
         if (plxUtils::write(XML_HEADER . ob_get_clean(), path('XMLFILE_USERS'))) {
-            return plxMsg::Info(L_SAVE_SUCCESSFUL);
+            if (!empty($newUser)) {
+                # envoi infos de connexion au nouvel utilisateur par courriel
+                return plxMsg::Info($this->sendNewPassword($newUser));
+            } else {
+                return plxMsg::Info(L_SAVE_SUCCESSFUL);
+            }
         }
 
         $this->aUsers = $archive;
@@ -741,7 +821,7 @@ EOT;
      * @return    boolean    true if success
      * @author    Stephane F, Pedro "P3ter" CADETE, sudwebdesign, J.P. Pourrez
      **/
-    public function editCategories($content, $save = false)
+    public function editCategories($content, $save=false)
     {
 
         $archive = $this->aCats;
@@ -783,13 +863,13 @@ EOT;
 
             $cat_id = $this->nextIdCategory();
             $this->aCats[$cat_id] = array(
-                'name' => $cat_name,
-                'url' => plxUtils::urlify($cat_name),
-                'tri' => $this->aConf['tri'],
-                'bypage' => $this->aConf['bypage'],
-                'menu' => 1,
-                'active' => 1,
-                'ordre' => 'asc',
+                'name'     => $cat_name,
+                'url'      => plxUtils::urlify($cat_name),
+                'tri'      => $this->aConf['tri'],
+                'bypage'   => $this->aConf['bypage'],
+                'menu'     => 1,
+                'active'   => 1,
+                'ordre'    => 'asc',
                 'homepage' => 1,
                 'template' => 'categorie.php',
             );
@@ -805,7 +885,7 @@ EOT;
             $save = true;
         } elseif (isset($content['update'])) {
             # mise à jour de la liste des catégories
-            foreach ($content['name'] as $cat_id => $cat_name) {
+            foreach ($content['name'] as $cat_id=>$cat_name) {
                 if (trim($cat_name) != '') {
                     $cat_url = plxUtils::urlify(plxUtils::getValue($content['url'][$cat_id], $cat_name));
                     if (empty($cat_url)) {
@@ -816,13 +896,13 @@ EOT;
                         $byPage = intval($this->aConf['bypage']);
                     }
                     $this->aCats[$cat_id] = array(
-                        'name' => $cat_name,
-                        'url' => $cat_url,
-                        'tri' => $content['tri'][$cat_id],
-                        'bypage' => $byPage,
-                        'menu' => plxUtils::getValue($content['menu'][$cat_id], 0),
-                        'active' => plxUtils::getValue($content['active'][$cat_id], 0),
-                        'ordre' => intval($content['order'][$cat_id]),
+                        'name'     => $cat_name,
+                        'url'      => $cat_url,
+                        'tri'      => $content['tri'][$cat_id],
+                        'bypage'   => $byPage,
+                        'menu'     => plxUtils::getValue($content['menu'][$cat_id], 0),
+                        'active'   => plxUtils::getValue($content['active'][$cat_id], 0),
+                        'ordre'    => intval($content['order'][$cat_id]),
                         'homepage' => plxUtils::getValue($this->aCats[$cat_id]['homepage'], 1),
                         'template' => plxUtils::getValue($this->aCats[$cat_id]['template'], 'categorie.php'),
                     );
@@ -844,7 +924,7 @@ EOT;
             if (sizeof($this->aCats) > 1) {
                 # Il faut trier les clés selon l'ordre choisi.
                 uasort($this->aCats, function ($a, $b) {
-                    return intval($a['ordre']) - intval($b['ordre']);
+                    return (intval($a['ordre']) - intval($b['ordre']));
                 });
             }
 
@@ -862,51 +942,49 @@ EOT;
 
         # On génére le fichier XML
         ob_start();
-        ?>
-        <document>
-            <?php
-            foreach ($this->aCats as $cat_id => $cat) {
+?>
+<document>
+<?php
+        foreach ($this->aCats as $cat_id => $cat) {
 
-                # controle de l'unicité du nom de la categorie
-                if (in_array($cat['name'], $cats_name)) {
-                    $this->aCats = $archive;
-                    return plxMsg::Error(L_ERR_CATEGORY_ALREADY_EXISTS . ' : ' . plxUtils::strCheck($cat['name']));
-                } else
-                    $cats_name[] = $cat['name'];
+            # controle de l'unicité du nom de la categorie
+            if (in_array($cat['name'], $cats_name)) {
+                $this->aCats = $archive;
+                return plxMsg::Error(L_ERR_CATEGORY_ALREADY_EXISTS . ' : ' . plxUtils::strCheck($cat['name']));
+            } else
+                $cats_name[] = $cat['name'];
 
-                # controle de l'unicité de l'url de la catégorie
-                if (in_array($cat['url'], $cats_url))
-                    return plxMsg::Error(L_ERR_URL_ALREADY_EXISTS . ' : ' . plxUtils::strCheck($cat['url']));
-                else
-                    $cats_url[] = $cat['url'];
-                ?>
-                <categorie number="<?= $cat_id ?>" active="<?= $cat['active'] ?>" homepage="<?= $cat['homepage'] ?>"
-                           tri="<?= $cat['tri'] ?>" bypage="<?= $cat['bypage'] ?>" menu="<?= $cat['menu'] ?>"
-                           url="<?= $cat['url'] ?>" template="<?= basename($cat['template']) ?>">
-                    <name><?= plxUtils::cdataCheck($cat['name']) ?></name>
-                    <description><?= plxUtils::cdataCheck($cat['description']) ?></description>
-                    <meta_description><?= plxUtils::cdataCheck($cat['meta_description']) ?></meta_description>
-                    <meta_keywords><?= plxUtils::cdataCheck($cat['meta_keywords']) ?></meta_keywords>
-                    <title_htmltag><?= plxUtils::cdataCheck($cat['title_htmltag']) ?></title_htmltag>
-                    <thumbnail><?= $cat['thumbnail'] ?></thumbnail>
-                    <thumbnail_alt><?= plxUtils::cdataCheck($cat['thumbnail_alt']) ?></thumbnail_alt>
-                    <thumbnail_title><?= plxUtils::cdataCheck($cat['thumbnail_title']) ?></thumbnail_title>
-                    <?php
-                    if (!empty($this->plxPlugins)) {
-                        # Hook plugins
-                        $xml = '';
-                        eval($this->plxPlugins->callHook('plxAdminEditCategoriesXml'));
-                        if (!empty($xml)) {
-                            echo $xml;
-                        }
-                    }
-                    ?>
-                </categorie>
-                <?php
+            # controle de l'unicité de l'url de la catégorie
+            if (in_array($cat['url'], $cats_url))
+                return plxMsg::Error(L_ERR_URL_ALREADY_EXISTS . ' : ' . plxUtils::strCheck($cat['url']));
+            else
+                $cats_url[] = $cat['url'];
+?>
+    <categorie number="<?= $cat_id ?>" active="<?= $cat['active'] ?>" homepage="<?= $cat['homepage'] ?>" tri="<?= $cat['tri'] ?>" bypage="<?= $cat['bypage'] ?>" menu="<?= $cat['menu'] ?>" url="<?= $cat['url'] ?>" template="<?= basename($cat['template']) ?>">
+        <name><?= plxUtils::cdataCheck($cat['name']) ?></name>
+        <description><?= plxUtils::cdataCheck($cat['description']) ?></description>
+        <meta_description><?= plxUtils::cdataCheck($cat['meta_description']) ?></meta_description>
+        <meta_keywords><?= plxUtils::cdataCheck($cat['meta_keywords']) ?></meta_keywords>
+        <title_htmltag><?= plxUtils::cdataCheck($cat['title_htmltag']) ?></title_htmltag>
+        <thumbnail><?= $cat['thumbnail'] ?></thumbnail>
+        <thumbnail_alt><?= plxUtils::cdataCheck($cat['thumbnail_alt']) ?></thumbnail_alt>
+        <thumbnail_title><?= plxUtils::cdataCheck($cat['thumbnail_title']) ?></thumbnail_title>
+<?php
+            if (!empty($this->plxPlugins)) {
+                # Hook plugins
+                $xml = '';
+                eval($this->plxPlugins->callHook('plxAdminEditCategoriesXml'));
+                if (!empty($xml)) {
+                    echo $xml;
+                }
             }
-            ?>
-        </document>
-        <?php
+?>
+    </categorie>
+<?php
+        }
+?>
+</document>
+<?php
         # On écrit le fichier
         if (plxUtils::write(XML_HEADER . ob_get_clean(), path('XMLFILE_CATEGORIES'))) {
             return plxMsg::Info(L_SAVE_SUCCESSFUL);
@@ -949,7 +1027,7 @@ EOT;
      * @return    string
      * @author    Stephane F.
      **/
-    public function editStatiques($content, $action = false)
+    public function editStatiques($content, $action=false)
     {
 
         $save = $this->aStats;
@@ -971,7 +1049,7 @@ EOT;
             }
         } else {
             # mise à jour de la liste des pages statiques
-            foreach ($content['name'] as $static_id => $stat_name) {
+            foreach ($content['name'] as $static_id=>$stat_name) {
                 if (!empty($stat_name)) {
                     $value = $content['url'][$static_id];
                     $url = !empty($value) ? plxUtils::urlify($value) : '';
@@ -990,13 +1068,13 @@ EOT;
                     }
 
                     $this->aStats[$static_id] = array(
-                        'group' => trim($content['group'][$static_id]),
-                        'name' => $stat_name,
-                        'url' => $stat_url,
-                        'active' => plxUtils::getValue($content['active'][$static_id], 0),
-                        'menu' => plxUtils::getValue($content['menu'][$static_id], 0),
-                        'ordre' => plxUtils::getValue($content['order'][$static_id], count($this->aStats)),
-                        'template' => plxUtils::getValue($save[$static_id]['template'], 'static.php'),
+                        'group'     => trim($content['group'][$static_id]),
+                        'name'      => $stat_name,
+                        'url'       => $stat_url,
+                        'active'    => plxUtils::getValue($content['active'][$static_id], 0),
+                        'menu'      => plxUtils::getValue($content['menu'][$static_id], 0),
+                        'ordre'     => plxUtils::getValue($content['order'][$static_id], count($this->aStats)),
+                        'template'  => plxUtils::getValue($save[$static_id]['template'], 'static.php'),
                     );
 
                     foreach (self::EMPTY_FIELD_STATIQUES as $k) {
@@ -1022,72 +1100,71 @@ EOT;
             # On va trier les clés selon l'ordre choisi
             if (sizeof($this->aStats) > 1) {
                 uasort($this->aStats, function ($a, $b) {
-                    return intval($a['ordre']) - intval($b['ordre']);
+                    return (intval($a['ordre']) - intval($b['ordre']));
                 });
             }
-
-            if (empty($action)) {
-                return;
-            }
-
-            # sauvegarde
-            $statics_name = array();
-            $statics_url = array();
-
-            # On génére le fichier XML
-            ob_start();
-            ?>
-            <document>
-                <?php
-                foreach ($this->aStats as $static_id => $static) {
-
-                    # controle de l'unicité du titre de la page
-                    if (in_array($static['name'], $statics_name))
-                        return plxMsg::Error(L_ERR_STATIC_ALREADY_EXISTS . ' : ' . plxUtils::strCheck($static['name']));
-                    else
-                        $statics_name[] = $static['name'];
-
-                    # controle de l'unicité de l'url de la page
-                    if (in_array($static['url'], $statics_url)) {
-                        $this->aStats = $save;
-                        return plxMsg::Error(L_ERR_URL_ALREADY_EXISTS . ' : ' . plxUtils::strCheck($static['url']));
-                    } else
-                        $statics_url[] = $static['url'];
-                    ?>
-                    <statique number="<?= $static_id ?>" active="<?= $static['active'] ?>" menu="<?= $static['menu'] ?>"
-                              url="<?= $static['url'] ?>" template="<?= basename($static['template']) ?>">
-                        <group><?= plxUtils::cdataCheck($static['group']) ?></group>
-                        <name><?= plxUtils::cdataCheck($static['name']) ?></name>
-                        <meta_description><?= plxUtils::cdataCheck($static['meta_description']) ?></meta_description>
-                        <meta_keywords><?= plxUtils::cdataCheck($static['meta_keywords']) ?></meta_keywords>
-                        <title_htmltag><?= plxUtils::cdataCheck($static['title_htmltag']) ?></title_htmltag>
-                        <date_creation><?= $static['date_creation'] ?></date_creation>
-                        <date_update><?= $static['date_update'] ?></date_update>
-                        <?php
-                        if (!empty($this->plxPlugins)) {
-                            # Hook plugins
-                            $xml = '';
-                            eval($this->plxPlugins->callHook('plxAdminEditStatiquesXml')); # Hook Plugins
-                            if (!empty($xml)) {
-                                echo $xml;
-                            }
-                        }
-                        ?>
-                    </statique>
-                    <?php
-                }
-                ?>
-            </document>
-            <?php
-            # On écrit le fichier si une action valide a été faite
-            if (plxUtils::write(XML_HEADER . ob_get_clean(), path('XMLFILE_STATICS'))) {
-                return plxMsg::Info(L_SAVE_SUCCESSFUL);
-            }
-
-            # Echec ! On récupère les anciennes valeurs.
-            $this->aStats = $save;
-            return plxMsg::Error(L_SAVE_ERR . ' ' . path('XMLFILE_STATICS'));
         }
+
+        if (empty($action)) {
+            return;
+        }
+
+        # sauvegarde
+        $statics_name = array();
+        $statics_url = array();
+
+        # On génére le fichier XML
+        ob_start();
+?>
+<document>
+<?php
+        foreach ($this->aStats as $static_id => $static) {
+
+            # controle de l'unicité du titre de la page
+            if (in_array($static['name'], $statics_name))
+                return plxMsg::Error(L_ERR_STATIC_ALREADY_EXISTS . ' : ' . plxUtils::strCheck($static['name']));
+            else
+                $statics_name[] = $static['name'];
+
+            # controle de l'unicité de l'url de la page
+            if (in_array($static['url'], $statics_url)) {
+                $this->aStats = $save;
+                return plxMsg::Error(L_ERR_URL_ALREADY_EXISTS . ' : ' . plxUtils::strCheck($static['url']));
+            } else
+                $statics_url[] = $static['url'];
+?>
+    <statique number="<?= $static_id ?>" active="<?= $static['active'] ?>" menu="<?= $static['menu'] ?>" url="<?= $static['url'] ?>" template="<?= basename($static['template']) ?>">
+        <group><?= plxUtils::cdataCheck($static['group']) ?></group>
+        <name><?= plxUtils::cdataCheck($static['name']) ?></name>
+        <meta_description><?= plxUtils::cdataCheck($static['meta_description']) ?></meta_description>
+        <meta_keywords><?= plxUtils::cdataCheck($static['meta_keywords']) ?></meta_keywords>
+        <title_htmltag><?= plxUtils::cdataCheck($static['title_htmltag']) ?></title_htmltag>
+        <date_creation><?= $static['date_creation'] ?></date_creation>
+        <date_update><?= $static['date_update'] ?></date_update>
+<?php
+            if (!empty($this->plxPlugins)) {
+                # Hook plugins
+                $xml = '';
+                eval($this->plxPlugins->callHook('plxAdminEditStatiquesXml')); # Hook Plugins
+                if (!empty($xml)) {
+                    echo $xml;
+                }
+            }
+?>
+    </statique>
+<?php
+        }
+?>
+</document>
+<?php
+        # On écrit le fichier si une action valide a été faite
+        if (plxUtils::write(XML_HEADER . ob_get_clean(), path('XMLFILE_STATICS'))) {
+            return plxMsg::Info(L_SAVE_SUCCESSFUL);
+        }
+
+        # Echec ! On récupère les anciennes valeurs.
+        $this->aStats = $save;
+        return plxMsg::Error(L_SAVE_ERR . ' ' . path('XMLFILE_STATICS'));
     }
 
     /**
@@ -1110,7 +1187,8 @@ EOT;
                 return $content;
             }
         }
-        return null;
+    return null;
+
     }
 
     /**
@@ -1141,7 +1219,7 @@ EOT;
             $now = date('YmdHi');
             $dates = array(
                 'date_creation' => $now,
-                'date_update' => $now
+                'date_update'   => $now
             );
         }
 
@@ -1162,6 +1240,17 @@ EOT;
         if (!empty($this->plxPlugins)) {
             # Hook plugins
             eval($this->plxPlugins->callHook('plxAdminEditStatique'));
+        } else {
+            # Installation de PluXml
+            $now = date('YmdHi');
+            $dates = array(
+                'date_creation' => $now,
+                'date_update'   => $now
+            );
+        }
+
+        if (!empty($content['template']) and preg_match('@^static(.*)\.php$@', $content['template'])) {
+            $this->aStats[$statId]['template'] = $content['template'];
         }
 
         if ($this->editStatiques(null, true)) {
@@ -1196,7 +1285,7 @@ EOT;
      * @param content    données saisies de l'article
      * @param    &id        retourne le numero de l'article
      * @return    string
-     * @author    Stephane F., Florent MONTHEL
+     * @author    Stephane F., Florent MONTHEL, Jean-Pierre Pourrez "bazooka07"
      **/
     public function editArticle($content, &$id)
     {
@@ -1269,34 +1358,34 @@ EOT;
         $thumbnail_alt = plxUtils::getValue($content['thumbnail_alt']);
         $thumbnail_title = plxUtils::getValue($content['thumbnail_title']);
         ob_start();
-        ?>
-        <document>
-            <title><?= plxUtils::cdataCheck(trim($content['title'])) ?></title>
-            <allow_com><?= $content['allow_com'] ?></allow_com>
-            <template><?= basename($content['template']) ?></template>
-            <chapo><?= plxUtils::cdataCheck(trim($content['chapo'])) ?></chapo>
-            <content><?= plxUtils::cdataCheck(trim($content['content'])) ?></content>
-            <tags><?= plxUtils::cdataCheck(trim($content['tags'])) ?></tags>
-            <meta_description><?= plxUtils::cdataCheck(trim($meta_description)) ?></meta_description>
-            <meta_keywords><?= plxUtils::cdataCheck(trim($meta_keywords)) ?></meta_keywords>
-            <title_htmltag><?= plxUtils::cdataCheck(trim($title_htmltag)) ?></title_htmltag>
-            <thumbnail><?= trim($thumbnail) ?></thumbnail>
-            <thumbnail_alt><?= plxUtils::cdataCheck(trim($thumbnail_alt)) ?></thumbnail_alt>
-            <thumbnail_title><?= plxUtils::cdataCheck(trim($thumbnail_title)) ?></thumbnail_title>
-            <date_creation><?= $date_creation ?></date_creation>
-            <date_update><?= $date_update ?></date_update>
-            <?php
-            if (!empty($this->plxPlugins)) {
-                # Hook plugins
-                $xml = '';
-                eval($this->plxPlugins->callHook('plxAdminEditArticleXml'));
-                if (!empty($xml)) {
-                    echo $xml;
-                }
+?>
+<document>
+    <title><?= plxUtils::cdataCheck(trim($content['title'])) ?></title>
+    <allow_com><?= isset($content['allow_com']) ? 1 : 0 ?></allow_com>
+    <template><?= basename($content['template']) ?></template>
+    <chapo><?= plxUtils::cdataCheck(trim($content['chapo'])) ?></chapo>
+    <content><?= plxUtils::cdataCheck(trim($content['content'])) ?></content>
+    <tags><?= plxUtils::cdataCheck(trim($content['tags'])) ?></tags>
+    <meta_description><?= plxUtils::cdataCheck(trim($meta_description)) ?></meta_description>
+    <meta_keywords><?= plxUtils::cdataCheck(trim($meta_keywords)) ?></meta_keywords>
+    <title_htmltag><?= plxUtils::cdataCheck(trim($title_htmltag)) ?></title_htmltag>
+    <thumbnail><?= trim($thumbnail) ?></thumbnail>
+    <thumbnail_alt><?= plxUtils::cdataCheck(trim($thumbnail_alt)) ?></thumbnail_alt>
+    <thumbnail_title><?= plxUtils::cdataCheck(trim($thumbnail_title)) ?></thumbnail_title>
+    <date_creation><?= $date_creation ?></date_creation>
+    <date_update><?= $date_update ?></date_update>
+<?php
+        if (!empty($this->plxPlugins)) {
+            # Hook plugins
+            $xml = '';
+            eval($this->plxPlugins->callHook('plxAdminEditArticleXml'));
+            if (!empty($xml)) {
+                echo $xml;
             }
-            ?>
-        </document>
-        <?php
+        }
+?>
+</document>
+<?php
         if (!empty($this->plxGlob_arts)) {
             # Recherche du nom du fichier correspondant à l'id
             $oldArt = $this->plxGlob_arts->query('/^_?' . $id . '\.(?:.*)\.xml$/', '', 'sort', 0, 1, 'all');
@@ -1601,18 +1690,17 @@ EOT;
         # Génération du fichier XML
         ksort($this->aTags);
         ob_start();
-        ?>
-        <document>
-            <?php
-            foreach ($this->aTags as $id => $tag) {
-                ?>
-                <article number="<?= $id ?>" date="<?= $tag['date'] ?>"
-                         active="<?= $tag['active'] ?>"><?= plxUtils::cdataCheck($tag['tags']) ?></article>
-                <?php
-            }
-            ?>
-        </document>
-        <?php
+?>
+<document>
+<?php
+        foreach ($this->aTags as $id => $tag) {
+?>
+    <article number="<?= $id ?>" date="<?= $tag['date'] ?>" active="<?= $tag['active'] ?>"><?= plxUtils::cdataCheck($tag['tags']) ?></article>
+<?php
+        }
+?>
+</document>
+<?php
         # On écrit le fichier
         plxUtils::write(XML_HEADER . ob_get_clean(), path('XMLFILE_TAGS'));
 
@@ -1627,14 +1715,17 @@ EOT;
     public function checkMaj()
     {
 
+        $useJS = false; # Use Javascript to check for a new version of PluXml
         $latest_version = false;
-        $updateLink = sprintf('%s : <a href="%s" download>%s</a>', L_PLUXML_UPDATE_AVAILABLE, PLX_URL_REPO, PLX_URL_REPO);
+        $updateLink = sprintf('<a href="%s/download/pluxml-latest.zip" download>%s</a>', PLX_URL_REPO, L_PLUXML_UPDATE_AVAILABLE);
 
-        # test avec allow_url_open ou file_get_contents ?
-        if (ini_get('allow_url_fopen')) {
-            $latest_version = @file_get_contents(PLX_URL_VERSION, false, null, 0, 16);
-            if ($latest_version === false) {
-                $latest_version = 'UNAVAILABLE';
+        if (!$useJS) {
+            # test avec allow_url_open ou file_get_contents ?
+            if (ini_get('allow_url_fopen')) {
+                $latest_version = @file_get_contents(PLX_URL_VERSION, false, null, 0, 16);
+                if ($latest_version === false) {
+                    $latest_version = 'UNAVAILABLE';
+                }
             }
         } # test avec curl
         elseif (function_exists('curl_init')) {
@@ -1652,7 +1743,7 @@ EOT;
             curl_close($ch);
         }
 
-        if (preg_match('@^\d+\.\d+(?:\.\d+)?@', $latest_version)) {
+        if (is_string($latest_version) and preg_match('@^\d+\.\d+(?:\.\d+)?@', $latest_version)) {
             if (version_compare(PLX_VERSION, $latest_version, ">=")) {
                 $msg = L_PLUXML_UPTODATE . ' (' . PLX_VERSION . ')';
                 $alert = 'success';
@@ -1666,20 +1757,20 @@ EOT;
             $alert = 'danger';
             $attrs = 'data-version="' . PLX_VERSION . '" data-url_version="' . PLX_URL_VERSION . '"';
         }
-        ?>
+?>
         <div id="latest-version" <?= $attrs ?>>
             <p class="alert--<?= $alert ?>"><?= $msg ?></p>
-            <?php
-            if ($alert == 'danger') {
-                # texte à afficher par script JS si on obtient la dernière version avec un objet XMLHttpRequest.
-                ?>
-                <p class="alert--success extra"><?= L_PLUXML_UPTODATE ?> (<?= PLX_VERSION ?>)</p>
-                <p class="alert--warning extra"><?= $updateLink ?></p>
-                <?php
-            }
-            ?>
+<?php
+        if ($alert == 'danger') {
+            # texte à afficher par script JS si on obtient la dernière version avec un objet XMLHttpRequest.
+?>
+            <p class="alert--success extra"><?= L_PLUXML_UPTODATE ?> (<?= PLX_VERSION ?>)</p>
+            <p class="alert--warning extra"><?= $updateLink ?></p>
+<?php
+        }
+?>
         </div>
-        <?php
+<?php
     }
 
     /*
@@ -1687,12 +1778,12 @@ EOT;
      *
      * Le dictionnaire pour la langue de l'utilisateur n'est pas encore chargé.
      *
-     * @param	$templatesStartsWith Début du nom du fichier de template (statitc, article, categorie, ...)
-     * @param	$missingMsg Titre à afficher si résultat null pour la recherche des templates
-     * @return 	tableau associatif des templates, sans chemin d'accès.	 *
-     * @author	Jean-Pierre Pourrez "bazooka07"
+     * @param    $templatesStartsWith Début du nom du fichier de template (statitc, article, categorie, ...)
+     * @param    $missingMsg Titre à afficher si résultat null pour la recherche des templates
+     * @return   tableau associatif des templates, sans chemin d'accès. *
+     * @author   Jean-Pierre Pourrez "bazooka07"
      * */
-    public function getTemplatesCurrentTheme($templatesStartsWith, $missingMsg = '-----')
+    public function getTemplatesCurrentTheme($templatesStartsWith, $missingMsg='-----')
     {
         $arBuff = array_map(
             function ($value) {
@@ -1717,4 +1808,49 @@ EOT;
 
         return $result;
     }
+
+    public function checkAccess() {
+        if (!function_exists('curl_exec')) {
+            return;
+        }
+
+        $targets = array(
+            PLX_CONFIG_PATH,
+            PLX_CONFIG_PATH . 'users.xml',
+            'config.php',
+            'core/lib/config.php',
+            '.htaccess',
+        );
+        if (!empty($this->aStats)) {
+            $statId = array_keys($this->aStats)[0];
+            $targets[] = $this->aConf['racine_statiques'] . implode('.', array(
+                $statId,
+                $this->aStats[$statId]['url'],
+                'php',
+            ));
+        }
+        if (!empty($this->plxGlob_arts) and !empty($this->plxGlob_arts->aFiles)) {
+            $targets[] = $this->aConf['racine_articles'] . array_values($this->plxGlob_arts->aFiles)[0];
+        }
+
+        $ch = curl_init();
+        foreach ($targets as $path1) {
+            $url = $this->aConf['racine'] . $path1;
+            curl_setopt_array($ch, array(
+                CURLOPT_URL                => $url,
+                CURLOPT_FOLLOWLOCATION    => true,
+                CURLOPT_HEADER            => true,
+                CURLOPT_NOBODY            => true,
+                CURLOPT_RETURNTRANSFER    => true,
+            ));
+            $head = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            if ($httpCode == 200) {
+                plxMsg::Error(sprintf(L_SECURITY_ACCESS, $path1));
+                break;
+            }
+        }
+        curl_close($ch);
+    }
+
 }

@@ -1,30 +1,23 @@
 <?php
 
-const L_LANGUE						= 'Pусский';
 
-const L_DATE_CREATION				= 'Дата создания';
-const L_DATE_UPDATE					= 'Дата обновляются';
 
 # common
 const L_PLUXML_VERSION				= 'PluXml версия';
 const L_WRONG_PHP_VERSION			= 'Для PluXml необходим PHP версии %s или выше.';
 const L_HOMEPAGE					= 'домашняя страница';
-const L_BACK_HOMEPAGE_TITLE			= 'Вернуться на главную страницу';
 const L_UNCLASSIFIED				= 'Без категории';
 const L_INFO_PHP_VERSION			= 'PHP версия';
 const L_INFO_CHARSET				= 'кодировка';
 const L_NONE1						= 'нет';
-const L_NONE2						= 'отсутствует';
 const L_PASSWORD					= 'Пароль';
 const L_TIMEZONE					= 'Часовой пояс';
 const L_SELECT_LANG					= 'Выберите ваш язык';
 const L_CONFIRM_PASSWORD			= 'Повторить пароль';
 const L_PROFIL_LOGIN				= 'Логин';
 const L_INPUT_CHANGE				= 'Изменить';
-const L_COMMENTS_CLOSED				= 'Комментарии запрещенны';
 const L_SITE_DESCRIPTION			= 'Блог или CMS на XML!';
 const L_SAVE_SUCCESSFUL				= 'Данные успешно сохранены';
-const L_ARTICLE_SAVE_SUCCESSFUL		= 'Статья успешно создана';
 const L_MAIL_ADDRESS				= 'Email адрес';
 
 # index.php
@@ -113,7 +106,6 @@ const L_BAD_PLUGIN_FOLDER			= 'Не удается переименовать п
 const L_HTTPENCODING				= 'Сжатие %s активированно';
 const L_ARCHIVES			= 'Архив';
 const L_TAG				= 'Тэги';
-const L_NO_CATEGORY					= 'без категории';
 const L_CATEGORY					= 'категория';
 const L_CATEGORIES					= 'категории';
 const L_NO_ARTICLE					= 'нет статьи';
@@ -160,3 +152,4 @@ const L_ART_NEXT					= 'следующий';
 const L_ART_LAST					= 'прошлой';
 const L_ART_UP						= 'подниматься';
 
+const L_SAVE_ERR = 'Ошибка при сохранении данных';

@@ -1,30 +1,23 @@
 <?php
 
-const L_LANGUE						= 'Polska';
 
-const L_DATE_CREATION				= 'Data utworzenia';
-const L_DATE_UPDATE					= 'Data zaktualizowane';
 
 # common
 const L_PLUXML_VERSION				= 'Wersja PluXml';
 const L_WRONG_PHP_VERSION			= 'PluXml wymaga PHP %s lub nowszego, do uruchomienia.';
 const L_HOMEPAGE					= 'Strona startowa';
-const L_BACK_HOMEPAGE_TITLE			= 'Przejdż do strony głównej';
 const L_UNCLASSIFIED				= 'Bez kategorii';
 const L_INFO_PHP_VERSION			= 'Wersja PHP';
 const L_INFO_CHARSET				= 'kodowanie';
 const L_NONE1						= 'brak';
-const L_NONE2						= 'brak';
 const L_PASSWORD					= 'Hasło';
 const L_TIMEZONE					= 'Strefa czasowa';
 const L_SELECT_LANG					= 'Wybierz język';
 const L_CONFIRM_PASSWORD			= 'Powtórz hasło';
 const L_PROFIL_LOGIN				= 'Zalogowany jako';
 const L_INPUT_CHANGE				= 'Zmień';
-const L_COMMENTS_CLOSED				= 'Komentarze zostały wyłączone';
 const L_SITE_DESCRIPTION			= 'Blog i CMS oparty na XML !';
 const L_SAVE_SUCCESSFUL				= 'Zapisywanie zakończone powodzeniem';
-const L_ARTICLE_SAVE_SUCCESSFUL		= 'Post został pomyślnie utworzony';
 const L_MAIL_ADDRESS				= 'Adres e-mail';
 
 # index.php
@@ -113,7 +106,6 @@ const L_BAD_PLUGIN_FOLDER			= 'nie można zmienić nazwy folderu dla wtyczki %s'
 const L_HTTPENCODING				= 'Kompresja %s aktywna';
 const L_ARCHIVES			= 'Archiwum';
 const L_TAG				= 'Tag';
-const L_NO_CATEGORY					= 'brak kategorii';
 const L_CATEGORY					= 'kategorii';
 const L_CATEGORIES					= 'kategorie';
 const L_NO_ARTICLE					= 'brak posta';
@@ -160,3 +152,4 @@ const L_ART_NEXT					= 'Kolejny';
 const L_ART_LAST					= 'Ostatni';
 const L_ART_UP						= 'Wzrastać';
 
+const L_SAVE_ERR = 'Wystąpił błąd podczas zapisywania';

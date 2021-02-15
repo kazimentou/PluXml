@@ -63,9 +63,10 @@ if(empty($plxMotor->style) or !is_dir(PLX_ROOT . $plxMotor->aConf['racine_themes
 }
 
 # On teste si le template existe
-if(!file_exists(PLX_ROOT.$plxMotor->aConf['racine_themes'].$plxMotor->style.'/'.$plxMotor->template)) {
+$filename = PLX_ROOT . $plxMotor->aConf['racine_themes'] . $plxMotor->style . '/' . $plxMotor->template;
+if(!file_exists($filename)) {
 	header('Content-Type: text/plain; charset='.PLX_CHARSET);
-	echo L_ERR_FILE_NOTFOUND.' ('.PLX_ROOT.$plxMotor->aConf['racine_themes'].$plxMotor->style.'/'.$plxMotor->template.') !';
+	echo L_ERR_FILE_NOTFOUND . ' (' . $filename . ') !';
 	exit;
 }
 

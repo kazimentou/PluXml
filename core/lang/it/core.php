@@ -1,30 +1,23 @@
 <?php
 
-const L_LANGUE						= 'Italiano';
 
-const L_DATE_CREATION				= 'Data di creazione';
-const L_DATE_UPDATE					= 'Data aggiornamento';
 
 # common
 const L_PLUXML_VERSION				= 'PluXml versione';
 const L_WRONG_PHP_VERSION			= 'PluXml richiede PHP %s o superiore per funzionare.';
 const L_HOMEPAGE					= 'Pagina principale';
-const L_BACK_HOMEPAGE_TITLE			= 'Ritorna al sito';
 const L_UNCLASSIFIED				= 'Non classificato';
 const L_INFO_PHP_VERSION			= 'Versione di php';
 const L_INFO_CHARSET				= 'encoding';
 const L_NONE1						= 'nessuno';
-const L_NONE2						= 'nessuna';
 const L_PASSWORD					= 'Password';
 const L_TIMEZONE					= 'Fuso orario';
 const L_SELECT_LANG					= 'Seleziona la lingua';
 const L_CONFIRM_PASSWORD			= 'Conferma la password';
 const L_PROFIL_LOGIN				= 'Nome utente';
 const L_INPUT_CHANGE				= 'Cambia';
-const L_COMMENTS_CLOSED				= 'Commenti bloccati';
 const L_SITE_DESCRIPTION			= 'Blog o Cms XML powered !';
 const L_SAVE_SUCCESSFUL				= 'Dati salvati con successo';
-const L_ARTICLE_SAVE_SUCCESSFUL		= 'Articolo creato con successo';
 const L_MAIL_ADDRESS				= 'Indirizzo email';
 
 # index.php
@@ -113,7 +106,6 @@ const L_BAD_PLUGIN_FOLDER			= 'impossibile rinominare la cartella per il plugin 
 const L_HTTPENCODING				= 'Compressione %s attivata';
 const L_ARCHIVES			= 'Archivio';
 const L_TAG				= 'Tag';
-const L_NO_CATEGORY					= 'nessuna categoria';
 const L_CATEGORY					= 'categoria';
 const L_CATEGORIES					= 'categorie';
 const L_NO_ARTICLE					= 'nessun articolo';
@@ -160,3 +152,4 @@ const L_ART_NEXT					= 'Il prossimo';
 const L_ART_LAST					= 'Scorso';
 const L_ART_UP						= 'Vai su';
 
+const L_SAVE_ERR = 'Errore durante il salvataggio dei dati';

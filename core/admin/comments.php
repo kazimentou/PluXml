@@ -32,25 +32,21 @@ if (isset($_GET['a']) and !preg_match('/^_?\d{4}$/', $_GET['a'])) {
     exit;
 }
 
-# Suppression des commentaires sélectionnés
-if (isset($_POST['selection']) and !empty($_POST['btn_ok']) and ($_POST['selection'] == 'delete') and isset($_POST['idCom'])) {
-    foreach ($_POST['idCom'] as $k => $v) {
-		$plxAdmin->delCommentaire($v);
+if(isset($_POST['idCom'])) {
+	if (isset($_POST['delete'])) {
+		# Suppression des commentaires sélectionnés
+	    foreach ($_POST['idCom'] as $k => $v) {
+			$plxAdmin->delCommentaire($v);
+		}
 	}
-    header('Location: comments.php' . (!empty($_GET['a']) ? '?a=' . $_GET['a'] : ''));
-    exit;
-} # Validation des commentaires sélectionnés
-elseif (isset($_POST['selection']) and !empty($_POST['btn_ok']) and ($_POST['selection'] == 'online') and isset($_POST['idCom'])) {
-    foreach ($_POST['idCom'] as $k => $v) {
-		$plxAdmin->modCommentaire($v, 'online');
+	elseif (isset($_POST['online']) or isset($_POST['offline'])) {
+		# Validation our mise hors-ligne des commentaires sélectionnés
+		$mode = isset($_POST['online']) ? 'online' : 'offline';
+	    foreach ($_POST['idCom'] as $k => $v) {
+			$plxAdmin->modCommentaire($v, $mode);
+		}
 	}
-    header('Location: comments.php' . (!empty($_GET['a']) ? '?a=' . $_GET['a'] : ''));
-    exit;
-} # Mise hors-ligne des commentaires sélectionnés
-elseif (isset($_POST['selection']) and !empty($_POST['btn_ok']) and ($_POST['selection'] == 'offline') and isset($_POST['idCom'])) {
-    foreach ($_POST['idCom'] as $k => $v) {
-		$plxAdmin->modCommentaire($v, 'offline');
-	}
+
     header('Location: comments.php' . (!empty($_GET['a']) ? '?a=' . $_GET['a'] : ''));
     exit;
 }
@@ -137,16 +133,22 @@ $selector = selector($comSel, 'id_selection');
 ?>
 
 <div class="adminheader">
-    <h2 class="h3-like"><?= L_COMMENTS_ALL_LIST ?></h2>
+	<div>
+	    <h2 class="h3-like"><?= !empty($aArt) ? L_COMMENTS_ARTICLE : L_COMMENTS_ALL_LIST ?></h2>
 <?php
 if (!empty($aArt)) {
 ?>
-	<h3><?= ucfirst(L_ARTICLE) ?> &laquo;<?= $aArt['title'] ?>&raquo;</h3>
+		<h3><?= ucfirst(L_ARTICLE) ?> &laquo;<?= $aArt['title'] ?>&raquo;</h3>
+<?php
+}
+
+if (!empty($_GET['a'])) {
+?>
+	    <a href="article.php?a=<?= $_GET['a'] ?>" class="icon-left-big"><?= L_BACK_TO_ARTICLE ?></a>
 <?php
 }
 ?>
-    <div>
-	    <ul>
+	    <ul class="unstyled">
 <?php
 # breadcrumb
 $commentCnts = array();
@@ -155,26 +157,39 @@ foreach(array(
 	'online'	=> L_COMMENT_ONLINE,
 	'offline'	=> L_COMMENT_OFFLINE,
 ) as $k=>$caption) {
-	$selected = ($k == $_SESSION['selCom']) ? 'class="selected"' : '';
 	$query = 'sel=' . $k . '&page=1';
 	if(!empty($_GET['a'])) {
 		$query .= '&a=' . $_GET['a'];
 	}
 	$commentCnts[$k] = $plxAdmin->nbComments($k, 'all', !empty($_GET['a']) ? $_GET['a'] : false);
-	$disabled = ($commentCnts[$k] == 0) ? 'disabled' : '';
+	if($commentCnts[$k] > 0) {
+		$active = $k == $_SESSION['selCom'];
 ?>
-			<li <?= $selected ?>>
-				<a href="comments.php?<?= $query ?>" <?= $disabled ?>><?= $caption ?></a>
+			<li <?= $active ? ' class="active"' : '' ?>>
+<?php
+		if($active) {
+?>
+				<span><?= $caption ?></span>
+<?php
+		} else {
+?>
+				<a href="comments.php?<?= $query ?>"><?= $caption ?></a>
+<?php
+		}
+?>
 				<span>(<?= $commentCnts[$k] ?>)</span>
 			</li>
 <?php
+	}
 }
 ?>
 	    </ul>
+    </div>
+    <div>
 <?php
 if (!empty($_GET['a'])) {
 ?>
-	    <a href="comment_new.php?a=<?= $_GET['a'] ?>" title="<?= L_COMMENT_NEW_COMMENT_TITLE ?>"><?= L_COMMENT_NEW_COMMENT ?></a>
+	    <a href="comment_new.php?a=<?= $_GET['a'] ?>" class="btn" title="<?= L_COMMENT_NEW_COMMENT_TITLE ?>"><?= L_CREATE_NEW_COMMENT ?></a>
 <?php
 }
 ?>
@@ -204,13 +219,20 @@ if (!empty($_GET['a'])) {
 			</button>
 <?php
 	}
+
+	switch($comSel) {
+		case 'offline': $colTitle = L_COMMENT_OFFLINE_FEEDS; break;
+		case 'online': $colTitle = L_COMMENT_ONLINE_FEEDS; break;
+		default: $colTitle = L_COMMENTS_ALL_LIST;
+
+	}
 ?>
         </div>
         <div class="scrollable-table">
-            <table id="comments-table" class="table mb0">
+            <table id="comments-table" class="table">
                 <thead>
 	                <tr>
-	                    <th class="checkbox"><input type="checkbox" /></th>
+	                    <th><input type="checkbox" /></th>
 	                    <th><?= L_DATE ?></th>
 <?php
 $all = ($_SESSION['selCom'] == 'all');
@@ -220,7 +242,7 @@ if($all) {
 <?php
 }
 ?>
-	                    <th class="w100"><?= L_COMMENTS_LIST_MESSAGE ?></th>
+	                    <th class="content"><?= $colTitle ?></th>
 	                    <th><?= L_AUTHOR ?></th>
 	                    <th><?= L_COMMENT_SITE_FIELD ?></th>
 	                    <th><?= L_ACTION ?></th>
@@ -259,9 +281,9 @@ if ($coms) {
 						<td class="author"><?= $author ?></td>
 						<td class="site"><?=  $site ?></td>
 						<td>
-							<button><a href="comment_new.php?c=<?= $id . (!empty($_GET['a']) ? '&a=' . $_GET['a'] : '') ?>" title="<?= L_COMMENT_ANSWER ?>"><i class="icon-reply-1"></i></a></button>
-							<button><a href="comment.php?c=<?= $id . (!empty($_GET['a']) ? '&a=' . $_GET['a'] : '') ?>" title="<?= L_COMMENT_EDIT_TITLE ?>"><i class="icon-pencil"></i></a></button>
-							<button><a href="article.php?a=<?= $artId ?>" title="<?= L_COMMENT_ARTICLE_LINKED_TITLE ?>"><i class="icon-doc-inv"></i></a></button>
+							<a href="comment_new.php?c=<?= $id . (!empty($_GET['a']) ? '&a=' . $_GET['a'] : '') ?>" title="<?= L_COMMENT_REPLY_TITLE ?>" class="btn"><i class="icon-reply-1"></i></a>
+							<a href="comment.php?c=<?= $id . (!empty($_GET['a']) ? '&a=' . $_GET['a'] : '') ?>" title="<?= L_COMMENT_EDIT_TITLE ?>" class="btn"><i class="icon-pencil"></i></a>
+							<a href="article.php?a=<?= $artId ?>" title="<?= L_COMMENT_ARTICLE_LINKED_TITLE ?>" class="btn"><i class="icon-doc-inv"></i></a>
 						</td>
 					</tr>
 <?php
@@ -279,10 +301,8 @@ if ($coms) {
             </table>
 		</div>
 <?php if ($coms): ?>
-        <div class="mts tablefooter has-pagination">
-			<div>
-				<button class="submit btn--warning" name="delete" data-lang="<?= L_CONFIRM_DELETE ?>" disabled><i class="icon-trash"></i><?= L_DELETE ?></button>
-			</div>
+        <div class="tablefooter has-pagination">
+			<button class="submit btn--warning" name="delete" data-lang="<?= L_CONFIRM_DELETE ?>" disabled><i class="icon-trash"></i><?= L_DELETE ?></button>
 			<div class="pagination right">
 <?php
 # Hook Plugins
@@ -300,12 +320,12 @@ if($coms) {
 
 <?php
 if (!empty($plxAdmin->aConf['clef'])) {
-	$href = $plxAdmin->racine . 'feed.php?admin' . $plxAdmin->aConf['clef'] . '/commentaires';
+	$href = $plxAdmin->racine . 'feed.php?admin' . $plxAdmin->aConf['clef'] . '/comments';
 ?>
 	<p><?= L_COMMENTS_PRIVATE_FEEDS ?> :</p>
-	<ul class="unstyled-list">
-		<li class="rss"><a href="<?= $href ?>/hors-ligne" title="<?= L_COMMENT_OFFLINE_FEEDS_TITLE ?>"><?= L_COMMENT_OFFLINE_FEEDS ?></a></li>
-		<li class="rss"><a href="<?= $href ?>/en-ligne" title="<?= L_COMMENT_ONLINE_FEEDS_TITLE ?>"><?= L_COMMENT_ONLINE_FEEDS ?></a></li>
+	<ul class="rss">
+		<li><a href="<?= $href ?>/offline" title="<?= L_COMMENT_OFFLINE_FEEDS_TITLE ?>"><?= L_COMMENT_OFFLINE_FEEDS ?></a></li>
+		<li><a href="<?= $href ?>/online" title="<?= L_COMMENT_ONLINE_FEEDS_TITLE ?>"><?= L_COMMENT_ONLINE_FEEDS ?></a></li>
 	</ul>
 <?php
 }

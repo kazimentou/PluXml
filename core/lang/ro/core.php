@@ -1,30 +1,23 @@
 <?php
 
-const L_LANGUE						= 'Română';
 
-const L_DATE_CREATION				= 'Data crearii';
-const L_DATE_UPDATE					= 'Data de actualizare';
 
 # common
 const L_PLUXML_VERSION				= 'Pluxml version';
 const L_WRONG_PHP_VERSION			= 'PluXml necesită PHP %s sau o versiune mai mare pentru a lucra.';
 const L_HOMEPAGE					= 'Pagina principala';
-const L_BACK_HOMEPAGE_TITLE			= 'Mergi la pagina principală';
 const L_UNCLASSIFIED				= 'Neclasificat';
 const L_INFO_PHP_VERSION			= 'Versiune php';
 const L_INFO_CHARSET				= 'encoding';
 const L_NONE1						= 'nu';
-const L_NONE2						= 'nimic';
 const L_PASSWORD					= 'Parola';
 const L_TIMEZONE					= 'Fus orar';
 const L_SELECT_LANG					= 'Alegeţi limba dorită';
 const L_CONFIRM_PASSWORD			= 'Confirmaţi parola';
 const L_PROFIL_LOGIN				= 'Login';
 const L_INPUT_CHANGE				= 'Schimbă';
-const COMMENTS_CLOSED				= 'Comentariile sunt &#238;nchise';
 const L_SITE_DESCRIPTION			= 'Site pe baza la Xml !';
 const L_SAVE_SUCCESSFUL				= 'Înregistrarea a fost efectuata cu succes';
-const L_ARTICLE_SAVE_SUCCESSFUL		= 'Articol creat cu succes';
 const L_MAIL_ADDRESS				= 'Adresa de email';
 
 # index.php
@@ -113,7 +106,6 @@ const L_BAD_PLUGIN_FOLDER			= 'incapabil să redenumească folderul pentru plugi
 const L_HTTPENCODING				= 'Compresie %s activata';
 const L_ARCHIVES			= 'Arhive';
 const L_TAG				= 'Tag';
-const L_NO_CATEGORY					= 'nicio categorie';
 const L_CATEGORY					= 'categoria';
 const L_CATEGORIES					= 'categorii';
 const L_NO_ARTICLE					= 'nici un articol';
@@ -160,3 +152,4 @@ const L_ART_NEXT					= 'Următor';
 const L_ART_LAST					= 'Ultimul';
 const L_ART_UP						= 'Urca';
 
+const L_SAVE_ERR = 'Eroare la înregistrare ';

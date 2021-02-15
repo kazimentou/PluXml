@@ -134,14 +134,19 @@ class plxDate
      **/
     public static function date2Array($date)
     {
+		switch(strlen($date)) {
+			case 4: $date .= '0101'; break;
+			case 6: $date .= '01'; break;
+		}
+		$date = str_pad($date, 12, '0');
         if (preg_match(self::PATTERN, $date, $capture)) {
             return array(
-                'year' => $capture[1],
-                'month' => $capture[2],
-                'day' => $capture[3],
-                'hour' => $capture[4],
-                'minute' => $capture[5],
-                'time' => $capture[4] . ':' . $capture[5],
+                'year'		=> $capture[1],
+                'month'		=> $capture[2],
+                'day'		=> $capture[3],
+                'hour'		=> $capture[4],
+                'minute'	=> $capture[5],
+                'time'		=> $capture[4] . ':' . $capture[5],
             );
         }
         return false;

@@ -17,21 +17,21 @@ if(version_compare(phpversion(), '7.3.1', '>=')) {
 	session_set_cookie_params(array(
 		'lifetime'	=> SESSION_LIFETIME,
 		'path'		=> $path1,
-		'domain'	=> $_SERVER['SERVER_NAME'],
-		'secure'	=> isset($_SERVER["HTTPS"]),
+		'domain'	=> $_SERVER['HTTP_HOST'],
+		'secure'	=> isset($_SERVER['HTTPS']),
 		'httponly'	=> true,
 		'samesite'	=> 'Strict',
 	));
 } else {
 	# No support for samesite option
-	session_set_cookie_params(SESSION_LIFETIME, $path1, $_SERVER['SERVER_NAME'], isset($_SERVER["HTTPS"]), true);
+	session_set_cookie_params(SESSION_LIFETIME, $path1, $_SERVER['HTTP_HOST'], isset($_SERVER["HTTPS"]), true);
 }
 # On démarre la session
 session_start();
 
-$session_domain = __DIR__ ;
+$session_domain = PLX_ADMIN_PATH;
 
-if(!defined('PLX_AUTHPAGE') OR PLX_AUTHPAGE !== true){ # si on n'est pas sur la page de login
+if(!defined('PLX_AUTHPAGE')){ # si on n'est pas sur la page de login
 	# Test sur le domaine et sur l'identification
 	if(empty($_SESSION['domain']) OR $_SESSION['domain'] != $session_domain OR empty($_SESSION['user'])) {
 		header('Location: auth.php?p='.htmlentities($_SERVER['REQUEST_URI']));
@@ -69,8 +69,8 @@ if(defined('PLX_AUTHPAGE')) {
 eval($plxAdmin->plxPlugins->callHook('AdminPrepend'));
 
 # Chargement des fichiers de langue en fonction du profil de l'utilisateur connecté
-loadLang(PLX_CORE.'lang/'.$lang.'/admin.php');
-loadLang(PLX_CORE.'lang/'.$lang.'/core.php');
+loadLang(PLX_CORE . 'lang/' . $lang . '/admin.php');
+loadLang(PLX_CORE . 'lang/' . $lang . '/core.php');
 
 # Tableau des profils
 const PROFIL_NAMES = array(
@@ -87,6 +87,26 @@ const DATE_TITLES = array(
 	'date_update'		=> L_DATE_UPDATE,
 );
 
+# Tableau de tris
+const TRI_ARTS = array(
+    'desc'		=> L_SORT_DESCENDING_DATE,
+    'asc'		=> L_SORT_ASCENDING_DATE,
+    'alpha'		=> L_SORT_ALPHABETICAL,
+    'ralpha'	=> L_SORT_REVERSE_ALPHABETICAL,
+    'random'	=> L_SORT_RANDOM,
+);
+
+const TRI_COMS = array(
+	'desc' => L_SORT_DESCENDING_DATE,
+	'asc' => L_SORT_ASCENDING_DATE,
+);
+
+const PLX_MEDIAS_MSG = array(
+	L_PLXMEDIAS_UPLOAD_SUCCESSFUL,
+	L_PLXMEDIAS_WRONG_FILESIZE,
+	L_PLXMEDIAS_WRONG_FILEFORMAT,
+	L_PLXMEDIAS_UPLOAD_ERR,
+);
 
 # Hook Plugins
 eval($plxAdmin->plxPlugins->callHook('AdminPrepend'));

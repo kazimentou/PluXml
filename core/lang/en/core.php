@@ -1,30 +1,23 @@
 <?php
 
-const L_LANGUE						= 'English';
 
-const L_DATE_CREATION				= 'Creation date';
-const L_DATE_UPDATE					= 'Date updated';
 
 # common
 const L_PLUXML_VERSION				= 'PluXml version';
 const L_WRONG_PHP_VERSION			= 'PluXml requires PHP %s or higher.';
 const L_HOMEPAGE					= 'Homepage';
-const L_BACK_HOMEPAGE_TITLE			= 'Back to homepage';
 const L_UNCLASSIFIED				= 'Uncategorized';
 const L_INFO_PHP_VERSION			= 'PHP version';
 const L_INFO_CHARSET				= 'charset';
 const L_NONE1						= 'none';
-const L_NONE2						= 'none';
 const L_PASSWORD					= 'Password';
 const L_TIMEZONE					= 'Timezone';
 const L_SELECT_LANG					= 'Choose your language';
 const L_CONFIRM_PASSWORD			= 'Confirm password';
 const L_PROFIL_LOGIN				= 'Login';
 const L_INPUT_CHANGE				= 'Change';
-const L_COMMENTS_CLOSED				= 'Comments are closed';
 const L_SITE_DESCRIPTION			= 'Blog or CMS, XML powered !';
 const L_SAVE_SUCCESSFUL				= 'Data was succesfully saved';
-const L_ARTICLE_SAVE_SUCCESSFUL		= 'Post was succesfully created';
 const L_MAIL_ADDRESS				= 'E-mail address';
 
 # index.php
@@ -113,7 +106,6 @@ const L_BAD_PLUGIN_FOLDER			= 'Unable to rename the folder for the %s plugin';
 const L_HTTPENCODING				= 'Compression %s activated';
 const L_ARCHIVES			= 'Archives';
 const L_TAG				= 'Tag';
-const L_NO_CATEGORY					= 'no categorie';
 const L_CATEGORY					= 'category';
 const L_CATEGORIES					= 'categories';
 const L_NO_ARTICLE					= 'no article';
@@ -160,3 +152,4 @@ const L_ART_NEXT					= 'Next';
 const L_ART_LAST					= 'Last';
 const L_ART_UP						= 'Up';
 
+const L_SAVE_ERR = 'Error while saving data';

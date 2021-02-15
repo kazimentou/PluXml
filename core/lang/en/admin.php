@@ -6,7 +6,6 @@ const L_CONFIRM_ACTIVATE = 'Confirm for enabling 999 items ?';
 const L_CONFIRM_DEACTIVATE = 'Confirm for disabling 999 items ?';
 const L_CONFIRM_OFFLINE = 'Confirm that 999 comments have been offline ?';
 const L_CONFIRM_ONLINE = 'Confirm the upload of 999 comments ?';
-const L_SAVE_FILE = 'Save the file';
 const L_SAVE_FILE_SUCCESSFULLY = 'File saved successfully';
 const L_SAVE_FILE_ERROR = 'Error while saving file';
 const L_FILE_REQUIRED = 'Please select a file';
@@ -31,7 +30,6 @@ const L_ERR_INVALID_DATE_UPDATE = 'Invalid date updated';
 
 // class.plx.admin.php
 
-const L_SAVE_ERR = 'Error while saving data';
 const L_NO_ENTRY = 'No entry';
 const L_ERR_USER_EMPTY = 'Please enter a username';
 const L_ERR_PASSWORD_EMPTY = 'Please enter a password';
@@ -89,23 +87,19 @@ const L_HEADLINE_FIELD = 'Headline (optional)';
 const L_CONTENT_FIELD = 'Content';
 const L_LINK_FIELD = 'Link to article';
 const L_LINK_ACCESS = 'Go to article';
-const L_LINK_VIEW = 'view';
 const L_ARTICLE_STATUS = 'Status';
 const L_DRAFT = 'Draft';
 const L_PUBLISHED = 'Published';
 const L_AWAITING = 'Awaiting validation';
 const L_ARTICLE_DATE = 'Article date';
 const L_NOW = 'now';
-const L_ARTICLE_CATEGORIES = 'Categories';
 const L_ARTICLE_TAGS_FIELD = 'Tags';
 const L_ARTICLE_TAGS_FIELD_TITLE = 'Separate tags with commas';
-const L_ARTICLE_TOGGLER_TITLE = 'Tag list';
 const L_NO_TAG = 'No tag';
 const L_ALLOW_COMMENTS = 'Allow comments';
 const L_ARTICLE_URL_FIELD_TITLE = 'URL field auto-fills when the article is created';
 const L_ARTICLE_MANAGE_COMMENTS = 'Manage comments';
 const L_ARTICLE_MANAGE_COMMENTS_TITLE = 'Manage comments on this article';
-const L_ARTICLE_NEW_COMMENT_TITLE = 'Write a comment about this article';
 const L_ARTICLE_DELETE_CONFIRM = 'Delete this article?';
 const L_ARTICLE_PREVIEW_BUTTON = 'Preview';
 const L_ARTICLE_DRAFT_BUTTON = 'Save draft';
@@ -116,23 +110,17 @@ const L_SAVE = 'Save';
 const L_ADD = 'Add';
 const L_META_DESCRIPTION = '"Description" Meta tag content (optional)';
 const L_META_KEYWORDS = '"Keywords" Meta tag content (optional)';
-const L_ARTICLE_CHAPO_HIDE = 'hide';
-const L_ARTICLE_CHAPO_DISPLAY = 'display';
 
 // auth.php
 
 const L_AUTH_PAGE_TITLE = 'Authentication page';
-const L_LOGOUT_SUCCESSFUL = 'Logout successful';
 const L_LOGIN_PAGE = 'Login to administration';
 const L_AUTH_LOGIN_FIELD = 'Login';
 const L_AUTH_LOST_FIELD = 'Login or email address';
 const L_SUBMIT_BUTTON = 'Submit';
 const L_ERR_WRONG_PASSWORD = 'Incorrect login or password';
-const L_POWERED_BY = 'Powered by <a href="https://www.%s">PluXml</a>';
 const L_ERR_MAXLOGIN = 'Too many failed login<br />Retry in % s minutes';
-const L_LOST_PASSWORD = 'Lost your password&nbsp;?';
 const L_LOST_PASSWORD_LOGIN = 'Log in';
-const L_LOST_PASSWORD_SUCCESS = 'An email has been sent to the user';
 const L_LOST_PASSWORD_ERROR = 'The link has expired';
 
 //
@@ -160,7 +148,6 @@ const L_HIDE = 'Hide';
 const L_OPTIONS = 'Options';
 const L_NEW_CATEGORY = 'New category';
 const L_FOR_SELECTION = 'Selected items...';
-const L_CAT_APPLY_BUTTON = 'Change categories list';
 const L_CAT_UNKNOWN = 'Unknown category';
 const L_ERR_CATEGORY_ALREADY_EXISTS = 'Category name already in use';
 
@@ -170,8 +157,6 @@ const L_EDITCAT_PAGE_TITLE = 'Edit category options';
 const L_EDITCAT_DESCRIPTION = 'Description';
 const L_EDITCAT_DISPLAY_HOMEPAGE = 'Show articles on the homepage';
 const L_TEMPLATE = 'Template';
-const L_EDITCAT_BACK_TO_PAGE = 'Back to categories';
-const L_EDITCAT_UPDATE = 'Update this category';
 
 // commentaire.php
 
@@ -185,7 +170,6 @@ const L_BACK_TO_COMMENTS = 'Back to comments';
 const L_COMMENT_EDITING = 'Comment edit';
 const L_AUTHOR = 'Author';
 const L_COMMENT_TYPE_FIELD = 'Comment type';
-const L_COMMENT_DATE_FIELD = 'Date and time of publication';
 const L_COMMENT_IP_FIELD = 'Ip';
 const L_COMMENT_SITE_FIELD = 'Site';
 const L_EMAIL = 'E-mail';
@@ -194,9 +178,7 @@ const L_COMMENT_LINKED_ARTICLE_FIELD = 'Linked article';
 const L_COMMENT_ARTICLE_FIELD = 'Comments';
 const L_COMMENT_DELETE_CONFIRM = 'Delete this comment?';
 const L_COMMENT_PUBLISH_BUTTON = 'Confirm publication';
-const L_COMMENT_ANSWER_BUTTON = 'Reply';
 const L_COMMENT_UPDATE_BUTTON = 'Update';
-const L_COMMENT_WRITTEN_BY = 'Written by';
 const L_COMMENT_SAVE_SUCCESSFUL = 'Comment was succesfully saved';
 const L_COMMENT_UPDATE_ERR = 'Error updating comment';
 const L_COMMENT_DELETE_ERR = 'An error occured in deletion of the comment';
@@ -210,7 +192,6 @@ const L_SEND_MAIL = 'To send an email';
 // sous_navigation/commentaires.php
 
 const L_COMMENT_NEW_COMMENT_TITLE = 'Write a new comment for this article';
-const L_COMMENT_NEW_COMMENT = 'Write a new comment';
 
 // commentaire_new.php
 
@@ -221,12 +202,9 @@ const L_ERR_CREATING_COMMENT = 'An error occured while creating the comment';
 const L_CREATING_COMMENT_SUCCESSFUL = 'Comment succesfully created';
 const L_CREATE_NEW_COMMENT = 'Write a comment';
 const L_ARTICLE_COMMENTS_LIST = 'Comments for this article (from most recent to the oldest)';
-const L_COMMENT_ANSWER = 'Answer';
 
 // comments.php
 
-const L_COMMENTS_GLOBAL_SCOPE = 'entire site';
-const L_COMMENTS_LIST_MESSAGE = 'Message';
 const L_COMMENT_EDIT_TITLE = 'Edit this comment';
 const L_COMMENT_OFFLINE_FEEDS_TITLE = 'Rss feed for offline comments';
 const L_COMMENT_OFFLINE_FEEDS = 'Offline comments';
@@ -250,10 +228,8 @@ const L_ARTICLES_FILTER_BUTTON = 'Filter';
 const L_SPECIFIC_CATEGORIES_TABLE = 'Spectific categories';
 const L_ALL_ARTICLES_CATEGORIES_TABLE = 'All articles';
 const L_ARTICLES_LIST = 'Articles list';
-const L_ARTICLE_LIST_CATEGORIES = 'Category';
 const L_ARTICLE_LIST_NBCOMS = 'Coms';
 const L_ARTICLE_VIEW_TITLE = 'View this article online';
-const L_EDIT = 'Edit';
 const L_ARTICLE_EDIT_TITLE = 'Edit this article';
 const L_NEW_COMMENTS_TITLE = 'Comments awaiting moderation';
 const L_VALIDATED_COMMENTS_TITLE = 'Published comments';
@@ -272,7 +248,6 @@ const L_MEDIAS_IMAGES = 'Pictures';
 const L_MEDIAS_DOCUMENTS = 'Documents';
 const L_MEDIAS_ADD_FILE = 'Add file';
 const L_MEDIAS_DELETE_FOLDER_CONFIRM = 'Delete folder %s and its content ?';
-const L_MEDIAS_FOLDER = 'Folder';
 const L_MEDIAS_NEW_FOLDER = 'New Folder';
 const L_MEDIAS_CREATE_FOLDER = 'Create folder';
 const L_MEDIAS_FILESIZE = 'Size';
@@ -320,7 +295,6 @@ const L_CONFIG_VIEW_BYPAGE_FEEDS = 'Count of Articles or comments in the Rss fee
 const L_CONFIG_VIEW_FEEDS_HEADLINE = 'Only display headlines in the Rss article feed';
 const L_CONFIG_VIEW_FEEDS_HEADLINE_HELP = 'Headline field is empty, content is displayed instead';
 const L_CONFIG_VIEW_FEEDS_FOOTER = 'Signature used in the end of every Rss feed\'s article';
-const L_CONFIG_VIEW_UPDATE = 'Save display settings';
 const L_CONFIG_VIEW_DISPLAY_EMPTY_CAT = 'Display categories without article';
 const L_CONFIG_HOMETEMPLATE = 'Template for the homepage';
 
@@ -346,7 +320,6 @@ const L_CONFIG_ADVANCED_STATS_FOLDER = 'Static page (folder) location';
 const L_CONFIG_ADVANCED_THEMES_FOLDER = 'Themes (folder) location';
 const L_CONFIG_ADVANCED_PLUGINS_FOLDER = 'Plugins (folder) location';
 const L_CONFIG_ADVANCED_CONFIG_FOLDER = 'Configuration files (folder) location';
-const L_CONFIG_ADVANCED_UPDATE = 'Save advanced configuration';
 const L_CONFIG_CUSTOM_CSSADMIN_PATH = 'Location and name of custom css file of the administration area (optional)';
 const L_CONFIG_ADVANCED_EMAIL_SENDING_TITLE = 'Email sending';
 const L_CONFIG_ADVANCED_EMAIL_METHOD = 'Email sending method';
@@ -362,7 +335,6 @@ const L_CONFIG_ADVANCED_SMTPOAUTH_SECRETKEY = 'Client secret key';
 const L_CONFIG_ADVANCED_SMTPOAUTH_TOKEN = 'Token';
 const L_CONFIG_ADVANCED_SMTPOAUTH_TOKEN_HELP = 'Your login for this service';
 const L_CONFIG_ADVANCED_SMTPOAUTH_GETTOKEN = 'Generate a token';
-const L_CONFIG_ADVANCED_EMAIL_SENDING_TITLE_HELP = 'Need help: <a href="https://wiki.%s/personnaliser/personnalisation/#envoi-de-mails">PluXml documentation</a>&nbsp;(fr).';
 const L_CONFIG_ADVANCED_EMAIL_METHOD_HELP = 'No configuration is required for sendmail.';
 const L_CONFIG_ADVANCED_SMTP_SERVER_HELP = 'SMTP server name (example: ssl0.ovh.net)';
 const L_CONFIG_ADVANCED_SMTP_USERNAME_HELP = 'User name on the SMTP host (example: pluxml@monserveursmtp.com)';
@@ -379,7 +351,6 @@ const L_CONFIG_BASE_SITE_SLOGAN = 'Subtitle / Site description';
 const L_CONFIG_BASE_DEFAULT_LANG = 'Default site language';
 const L_CONFIG_BASE_MODERATE_COMMENTS = 'Moderate comments when created';
 const L_CONFIG_BASE_MODERATE_ARTICLES = 'Moderate articles for Editor and Publisher profiles';
-const L_CONFIG_BASE_UPDATE = 'Save basic configuration';
 const L_CONFIG_META_DESCRIPTION = 'Content of "description" meta tag (optional)';
 const L_CONFIG_META_KEYWORDS = 'Content of "keywords" meta tag (optional)';
 const L_CONFIG_BASE_ENABLE_RSS = 'Display RSS feeds';
@@ -389,7 +360,6 @@ const L_CONFIG_BASE_ENABLE_RSS_COMMENT = 'Display RSS feeds for comments';
 
 const L_CONFIG_EDITTPL_ERROR_NOTHEME = 'There is no such theme!';
 const L_CONFIG_EDITTPL_TITLE = 'Theme edit';
-const L_CONFIG_EDITTPL_SELECT_FILE = 'Choose a file to edit:';
 const L_CONFIG_EDITTPL_LOAD = 'Load';
 
 // parametres_infos.php
@@ -399,7 +369,6 @@ const L_CONFIG_INFOS_DESCRIPTION = 'Information about your PluXml installation, 
 const L_CONFIG_INFOS_NB_CATS = 'Count of categories :';
 const L_CONFIG_INFOS_NB_STATICS = 'Count of static pages :';
 const L_CONFIG_INFOS_WRITER = 'User\'s name for this session :';
-const L_PLUXML_CHECK_VERSION = 'Checking version number on the official %s site';
 const L_PLUXML_UPDATE_UNAVAILABLE = 'Unable for checking updates as long as \'allow_url_fopen\' is disabled on this system';
 const L_PLUXML_UPDATE_ERR = 'Update check failed for an unknown reason';
 const L_PLUXML_UPTODATE = 'You are using PluXml\'s lastest version';
@@ -412,10 +381,8 @@ const L_MAIL_TEST_FAILURE = 'Issue for sending the test email';
 // parametres_users.php
 
 const L_CONFIG_USERS_TITLE = 'Manage users';
-const L_CONFIG_USER = 'User';
 const L_CONFIG_USERS_ACTIVE = 'Active';
 const L_CONFIG_USERS_NEW = 'New user';
-const L_CONFIG_USERS_UPDATE = 'Update the users\' list';
 const L_ERR_LOGIN_ALREADY_EXISTS = 'Login ID already used';
 const L_ERR_USERNAME_ALREADY_EXISTS = 'Username already in use';
 const L_ERR_EMAIL_ALREADY_EXISTS = 'Email address already in use';
@@ -436,16 +403,10 @@ const L_PLUGINS_TITLE = 'Manage plugins';
 const L_PLUGINS_VERSION = 'Version';
 const L_PLUGINS_ACTIVATE = 'Enable';
 const L_PLUGINS_DEACTIVATE = 'Disable';
-const L_PLUGINS_DELETE_ERROR = 'An error occured while deleting';
 const L_PLUGINS_CONFIG = 'Configuration';
 const L_PLUGINS_CONFIG_TITLE = 'Plugin\'s configuration';
-const L_PLUGINS_HELP_TITLE = 'See how to use the plugin';
-const L_PLUGINS_REQUIREMENTS = 'Requirements';
-const L_PLUGINS_REQUIREMENTS_HELP = 'Available and active plugins to activate this one';
-const L_PLUGINS_ALPHA_SORT = 'Sort alphabetically plugins';
 const L_PLUGINS_LOADING_SORT = 'Loading order';
 const L_ACTION = 'Action';
-const L_PLUGINS_APPLY_BUTTON = 'Update the plugins list';
 const L_PLUGINS_ACTIVE_LIST = 'Active plugins';
 const L_PLUGINS_INACTIVE_LIST = 'Inactive plugins';
 
@@ -455,9 +416,7 @@ const L_PROFIL_EDIT_TITLE = 'Profile edit';
 const L_PROFIL = 'Profile';
 const L_PROFIL_USER = 'Username';
 const L_INFOS = 'Information';
-const L_PROFIL_UPDATE = 'Save profile';
 const L_PROFIL_CHANGE_PASSWORD = 'Change password';
-const L_PROFIL_UPDATE_PASSWORD = 'Change password';
 
 // statique.php
 
@@ -466,7 +425,6 @@ const L_STATIC_UNKNOWN_PAGE = 'This static page doesn\'t exist!';
 const L_STATIC_TITLE = 'Edit static page\'s source code';
 const L_STATIC_VIEW_PAGE = 'View page';
 const L_STATIC_ON_SITE = 'on site';
-const L_STATIC_UPDATE = 'Save this page';
 const L_TITLE_HTMLTAG = 'Title tag contents (optional)';
 
 // statiques.php
@@ -475,11 +433,8 @@ const L_STATICS_PAGE_TITLE = 'Create and edit static pages';
 const L_STATICS_GROUP = 'Group';
 const L_STATICS_URL = 'Url';
 const L_STATICS_PAGE_HOME = 'Set as Homepage';
-const L_PAGE = 'Page';
-const L_VIEW = 'See';
 const L_STATICS_SRC_TITLE = 'Edit source code for this page';
 const L_STATICS_NEW_PAGE = 'New page';
-const L_STATICS_UPDATE = 'Update the static pages list';
 const L_ERR_STATIC_ALREADY_EXISTS = 'Title already used';
 
 // top.php
@@ -490,11 +445,7 @@ const L_PROFIL_MODERATOR = 'Moderator';
 const L_PROFIL_EDITOR = 'Editor';
 const L_PROFIL_WRITER = 'Writer';
 const L_ADMIN = 'Administration';
-const L_LOGIN = 'Connected as';
-const L_ADMIN_LOGOUT = 'Disconnect';
 const L_ADMIN_LOGOUT_TITLE = 'Leave administrator\'s session';
-const L_BACK_TO_BLOG = 'Blog';
-const L_BACK_TO_BLOG_TITLE = 'Back to blog';
 const L_MENU_ARTICLES = 'Articles';
 const L_MENU_ARTICLES_TITLE = 'List or Edit Articles';
 const L_MENU_STATICS_TITLE = 'List or Edit Static pages';
@@ -512,7 +463,6 @@ const L_WARNING_INSTALLATION_FILE = 'install.php file can still be found at the 
 
 const L_USER_UNKNOWN = 'Unknown user';
 const L_USER_LANG = 'User\'s language in back-office';
-const L_USER_UPDATE = 'Update this user';
 const L_USER_PAGE_TITLE = 'Edit user options';
 const L_USER_BACK_TO_PAGE = 'Back to users\' list';
 
@@ -533,4 +483,8 @@ const L_THEMES_TITLE = 'Manage themes';
 const L_HELP = 'Help';
 const L_HELP_TITLE = 'See help';
 const L_BACK_TO_THEMES = 'Back to themes';
-const L_CONFIG_THEME_UPDATE = 'Select this theme';
+const L_BACK_HOMEPAGE_TITLE			= 'Back to homepage';
+const L_DATE_CREATION				= 'Creation date';
+const L_DATE_UPDATE					= 'Date updated';
+const L_COMMENTS_CLOSED				= 'Comments are closed';
+const L_ARTICLE_SAVE_SUCCESSFUL		= 'Post was succesfully created';

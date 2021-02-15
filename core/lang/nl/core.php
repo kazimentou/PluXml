@@ -1,30 +1,23 @@
 <?php
 
-const L_LANGUE						= 'Nederlands';
 
-const L_DATE_CREATION				= 'Aanmaakdatum';
-const L_DATE_UPDATE					= 'Geactualiseerd';
 
 # common
 const L_PLUXML_VERSION				= 'PluXml versie';
 const L_WRONG_PHP_VERSION			= 'PluXml heeft PHP-versie %s of hoger nodig om te functioneren';
 const L_HOMEPAGE					= 'Startpagina';
-const L_BACK_HOMEPAGE_TITLE			= 'Terug naar home';
 const L_UNCLASSIFIED				= 'Niet geclassificeerd';
 const L_INFO_PHP_VERSION			= 'PHP-versie';
 const L_INFO_CHARSET				= 'codering';
 const L_NONE1						= 'geen';
-const L_NONE2						= 'geen';
 const L_PASSWORD					= 'Wachtwoord';
 const L_TIMEZONE					= 'Tijdzone';
 const L_SELECT_LANG					= 'Kies uw taal';
 const L_CONFIRM_PASSWORD			= 'Wachtwoord bevestigen';
 const L_PROFIL_LOGIN				= 'Kies uw loginnaam';
 const L_INPUT_CHANGE				= 'Verander';
-const L_COMMENTS_CLOSED				= 'Commentaren zijn afgesloten';
 const L_SITE_DESCRIPTION			= 'Blog of Cms in XML !';
 const L_SAVE_SUCCESSFUL				= 'Gegevens succesvol opgeslagen';
-const L_ARTICLE_SAVE_SUCCESSFUL		= 'Artikel succesvol aangemaakt';
 const L_MAIL_ADDRESS				= 'Emailadres';
 
 # index.php
@@ -113,7 +106,6 @@ const L_BAD_PLUGIN_FOLDER			= 'kan de map voor de %s plug-in niet hernoemen';
 const L_HTTPENCODING				= '%s compressie is geactiveerd';
 const L_ARCHIVES			= 'Archieven';
 const L_TAG				= 'Tag';
-const L_NO_CATEGORY					= 'geen categorie';
 const L_CATEGORY					= 'categorie';
 const L_CATEGORIES					= 'categorieën';
 const L_NO_ARTICLE					= 'geen artikel';
@@ -160,3 +152,4 @@ const L_ART_NEXT					= 'De volgende';
 const L_ART_LAST					= 'Laatste';
 const L_ART_UP						= 'Omhoog gaan';
 
+const L_SAVE_ERR = 'Fout bij het opslaan van de gegevens';

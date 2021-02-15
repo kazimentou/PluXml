@@ -51,12 +51,10 @@ include 'top.php';
     <div class="adminheader">
         <div>
             <h2 class="h3-like"><?= L_EDITCAT_PAGE_TITLE; ?> "<?= plxUtils::strCheck(trim($plxAdmin->aCats[$id]['name'])); ?>"</h2>
-            <p><a class="icon-left-big" href="categorie.php"><?= L_EDITCAT_BACK_TO_PAGE ?></a></p>
+            <p><a class="icon-left-big" href="categories.php"><?= L_BACK_TO_CATEGORIES ?></a></p>
         </div>
         <div>
-			<div>
-	            <input class="btn--primary" type="submit" value="<?= L_SAVE ?>"/>
-			</div>
+            <input class="btn--primary" type="submit" value="<?= L_SAVE ?>"/>
         </div>
     </div>
 
@@ -65,14 +63,14 @@ include 'top.php';
 eval($plxAdmin->plxPlugins->callHook('AdminCategoryTop'))
 ?>
     <fieldset>
-		<div class="label-expanded">
-			<label for="id_homepage"><?= L_EDITCAT_DISPLAY_HOMEPAGE ?></label>
+		<label class="caption-inside">
+			<span><?= L_EDITCAT_DISPLAY_HOMEPAGE ?></span>
 			<input  type="checkbox" name="homepage" value="1" class="switch" <?= !empty($plxAdmin->aCats[$id]['homepage']) ? ' checked' : '' ?> />
-		</div>
-		<div class="label-expanded">
-			<label for="id_template"><?= L_TEMPLATE ?></label>
+		</label>
+		<label class="caption-inside">
+			<span><?= L_TEMPLATE ?></span>
 <?php plxUtils::printSelect('template', $aTemplates, $plxAdmin->aCats[$id]['template']) ?>
-		</div>
+		</label>
 		<div>
 			<label for="id_content"><?= L_EDITCAT_DESCRIPTION ?></label>
 			<textarea name="content" rows="5" id="id_content"><?= plxUtils::strCheck($plxAdmin->aCats[$id]['description']) ?></textarea>
@@ -80,17 +78,8 @@ eval($plxAdmin->plxPlugins->callHook('AdminCategoryTop'))
 		<div>
 <?php plxUtils::printThumbnail($plxAdmin->aCats[$id]); ?>
 		</div>
-		<div>
-			<label for="id_title_htmltag"><?= L_TITLE_HTMLTAG ?></label>
-			<?php plxUtils::printInput('title_htmltag', plxUtils::strCheck($plxAdmin->aCats[$id]['title_htmltag']), 'text', '50-255'); ?>
-		</div>
-		<div>
-			<label for="id_meta_description"><?= L_META_DESCRIPTION ?></label>
-			<?php plxUtils::printInput('meta_description', plxUtils::strCheck($plxAdmin->aCats[$id]['meta_description']), 'text', '50-255') ?>
-		</div>
-		<div>
-			<label for="id_meta_keywords"><?= L_META_KEYWORDS ?></label>
-			<?php plxUtils::printInput('meta_keywords', plxUtils::strCheck($plxAdmin->aCats[$id]['meta_keywords']), 'text', '50-255') ?>
+		<div class="meta-tags">
+<?php plxUtils::printInputs_Metas_Title($plxAdmin->aCats[$id]); ?>
 		</div>
     </fieldset>
 <?php

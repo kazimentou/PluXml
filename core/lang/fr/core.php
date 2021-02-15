@@ -1,30 +1,22 @@
 <?php
 
-const L_LANGUE						= 'Français';
-
-const L_DATE_CREATION				= 'Date de création';
-const L_DATE_UPDATE					= 'Date de mise à jour';
 
 # common
 const L_PLUXML_VERSION				= 'PluXml version';
 const L_WRONG_PHP_VERSION			= 'PluXml requiert PHP %s ou supérieur pour fonctionner.';
 const L_HOMEPAGE					= 'Page d\'accueil';
-const L_BACK_HOMEPAGE_TITLE			= 'Retour à la page d\'accueil du site';
 const L_UNCLASSIFIED				= 'Non classé';
 const L_INFO_PHP_VERSION			= 'Version de PHP';
 const L_INFO_CHARSET				= 'encodage';
 const L_NONE1						= 'aucun';
-const L_NONE2						= 'aucune';
 const L_PASSWORD					= 'Mot de passe';
 const L_TIMEZONE					= 'Fuseau horaire';
 const L_SELECT_LANG					= 'Sélectionnez votre langue';
 const L_CONFIRM_PASSWORD			= 'Confirmation du mot de passe';
 const L_PROFIL_LOGIN				= 'Identifiant de connexion';
 const L_INPUT_CHANGE				= 'Changer';
-const L_COMMENTS_CLOSED				= 'Les commentaires sont fermés';
 const L_SITE_DESCRIPTION			= 'Blog ou Cms à l\'Xml.';
 const L_SAVE_SUCCESSFUL				= 'Enregistrement des données effectué avec succès';
-const L_ARTICLE_SAVE_SUCCESSFUL		= 'Article créé avec succès';
 const L_MAIL_ADDRESS				= 'Adresse courriel';
 
 # index.php
@@ -85,10 +77,8 @@ const L_WRITE_ACCESS				= '%s est accessible en écriture';
 const L_WRITE_NOT_ACCESS			= '%s n\'est pas accessible en écriture ou n\'existe pas';
 const L_MODREWRITE_AVAILABLE		= 'Module apache de réécriture d\'url mod_rewrite disponible';
 const L_MODREWRITE_NOT_AVAILABLE	= 'Module apache de réécriture d\'url mod_rewrite non disponible';
-const L_LIBGD_INSTALLED				= 'Bibliothèque GD installée';
-const L_LIBGD_NOT_INSTALLED			= 'Bibliothèque GD non installée';
-const L_LIBXML_INSTALLED			= 'Bibliothèque XML installée';
-const L_LIBXML_NOT_INSTALLED		= 'Bibliothèque XML non installée';
+const L_LIB_INSTALLED				= 'Bibliothèque %s installée';
+const L_LIB_NOT_INSTALLED			= 'Bibliothèque %s non installée';
 const L_MAIL_AVAILABLE				= 'Fonction d\'envoi de mail disponible';
 const L_MAIL_NOT_AVAILABLE			= 'Fonction d\'envoi de mail non disponible';
 
@@ -112,9 +102,8 @@ const L_BAD_PLUGIN_FOLDER			= 'Impossible de renommer le dossier du plugin %s';
 const L_HTTPENCODING				= 'Compression %s activée';
 const L_ARCHIVES					= 'Archives';
 const L_TAG							= 'Mot-clé';
-const L_NO_CATEGORY					= 'aucune catégorie';
 const L_CATEGORY					= 'catégorie';
-const L_CATEGORIES					= 'catégories';
+const L_CATEGORIES					= 'Catégories';
 const L_NO_ARTICLE					= 'aucun article';
 const L_ARTICLE						= 'article';
 const L_ARTICLES					= 'articles';
@@ -140,9 +129,7 @@ const L_PAGINATION_NEXT				= 'suivante';
 const L_PAGINATION_LAST_TITLE		= 'Aller à la dernière page';
 const L_PAGINATION_LAST				= '»';
 const L_PAGINATION					= 'page %s sur %s';
-
 const L_BLOG						= 'Blog';
-
 const L_YEAR						= 'année';
 const L_TOTAL						= 'total';
 
@@ -158,4 +145,6 @@ const L_ART_PREV					= 'Précèdent';
 const L_ART_NEXT					= 'Suivant';
 const L_ART_LAST					= 'Dernier';
 const L_ART_UP						= 'Remonter';
+const L_BACK_TO_BLOG_TITLE			= 'Retour à la page du blog';
 
+const L_SAVE_ERR = 'Erreur pendant l\'enregistrement des données';

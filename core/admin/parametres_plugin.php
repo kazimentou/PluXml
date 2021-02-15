@@ -31,9 +31,11 @@ if(!empty($plugin)) {
 		# On inclut le header
 		include 'top.php';
 ?>
-	<div>
-		<h2><?= plxUtils::strCheck($plugin) ?></h2>
-		<p><a class="back icon-left-big" href="parametres_plugins.php"><?= L_BACK_TO_PLUGINS ?></a></p>
+	<div class="adminheader">
+		<div>
+			<h2><?= plxUtils::strCheck($plugin) ?></h2>
+			<p><a class="back icon-left-big" href="parametres_plugins.php"><?= L_BACK_TO_PLUGINS ?></a></p>
+		</div>
 	</div>
 <?php
 

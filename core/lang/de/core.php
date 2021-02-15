@@ -1,30 +1,23 @@
 <?php
 
-const L_LANGUE					= 'Deutsch';
 
-const L_DATE_CREATION			= 'Erstellungsdatum';
-const L_DATE_UPDATE				= 'Datum der Aktualisierung';
 
 # common
 const L_PLUXML_VERSION			= 'Pluxml Version';
 const L_WRONG_PHP_VERSION		= 'PluXml benötigt mindestens PHP %s um zu funktionieren.';
 const L_HOMEPAGE				= 'Startseite';
-const L_BACK_HOMEPAGE_TITLE 	= 'Zurück zum startseite';
 const L_UNCLASSIFIED			= 'Nicht kategorisiert';
 const L_INFO_PHP_VERSION		= 'PHP Version';
 const L_INFO_CHARSET			= 'Kodierung';
 const L_NONE1					= 'kein';
-const L_NONE2					= 'keine';
 const L_PASSWORD				= 'Passwort';
 const L_TIMEZONE				= 'Zeitzone';
 const L_SELECT_LANG				= 'Wählen Sie Ihre Sprache';
 const L_CONFIRM_PASSWORD		= 'Neues Passwort wiederholen';
 const L_PROFIL_LOGIN			= 'Login';
 const L_INPUT_CHANGE			= 'Ändern';
-const L_COMMENTS_CLOSED			= 'Die Kommentare sind geschlossen';
 const L_SITE_DESCRIPTION		= 'Blog oder CMS basierend auf Xml!';
 const L_SAVE_SUCCESSFUL			= 'Daten erfolgreich gespeichert';
-const L_ARTICLE_SAVE_SUCCESSFUL = 'Artikel erfolgreich angelegt';
 const L_MAIL_ADDRESS			= 'E-Mail-Adresse';
 
 # index.php
@@ -113,7 +106,6 @@ const L_BAD_PLUGIN_FOLDER			= 'Der %s Plugin-Ordner kann nicht umbenannt werden'
 const L_HTTPENCODING			= 'Datenkompression %s aktiviert';
 const L_ARCHIVES		= 'Archive';
 const L_TAG			= 'Tag';
-const L_NO_CATEGORY				= 'keine Kategorie';
 const L_CATEGORY				= 'Kategorie';
 const L_CATEGORIES				= 'Kategorien';
 const L_NO_ARTICLE				= 'keine Artikel';
@@ -160,3 +152,4 @@ const L_ART_NEXT				= 'Nächste';
 const L_ART_LAST				= 'Letzte';
 const L_ART_UP					= 'Oben';
 
+const L_SAVE_ERR = 'Fehler während des Speicherns';

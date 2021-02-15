@@ -85,16 +85,20 @@ class plxRecord {
 	 * Utilisé pour les flux RSS
 	 * */
 	public function lastUpdated($field='date') {
-		$last = '197001010100';
-		for($i=0; $i<$this->size; $i++) {
-			if(array_key_exists($field, $this->result[$i])) {
-				$value = $this->result[$i][$field];
-				if(preg_match('@^\d{12,}$@', $value) and $last < $value) {
-					$last = $value;
+		return array_reduce(
+			$this->result,
+			function($carry, $record) use($field) {
+				if(array_key_exists($field, $record)) {
+					$value = $record[$field];
+					if(preg_match('@^\d{12,}$@', $value) and $carry < $value) {
+						return $value;
+					}
 				}
-			}
-		}
-		return $last;
+
+				return $carry;
+			},
+			'197001010100'
+		);
 	}
 
 }

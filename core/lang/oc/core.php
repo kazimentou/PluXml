@@ -1,30 +1,23 @@
 <?php
 
-const L_LANGUE						= 'Occitan';
 
-const L_DATE_CREATION				= 'Data de creacion';
-const L_DATE_UPDATE					= 'Data de misa a jorn';
 
 # common
 const L_PLUXML_VERSION				= 'Pluxml version';
 const L_WRONG_PHP_VERSION			= 'PluXml requerís PHP %s o superior per foncionar.';
 const L_HOMEPAGE					= 'Acuèlh';
-const L_BACK_HOMEPAGE_TITLE			= 'Tornar a la pagina d\'acuèlh del site';
 const L_UNCLASSIFIED				= 'Non classat';
 const L_INFO_PHP_VERSION			= 'Version de php';
 const L_INFO_CHARSET				= 'encodatge';
 const L_NONE1						= 'cap';
-const L_NONE2						= 'cap';
 const L_PASSWORD					= 'Senhal';
 const L_TIMEZONE					= 'Fus orari';
 const L_SELECT_LANG					= 'Seleccionatz vòstra lenga';
 const L_CONFIRM_PASSWORD			= 'Confirmacion del senhal';
 const L_PROFIL_LOGIN				= 'Identificant de connexion';
 const L_INPUT_CHANGE				= 'Cambiar';
-const L_COMMENTS_CLOSED				= 'Los comentaris son barrats';
 const L_SITE_DESCRIPTION			= 'Blòg o Cms a l\'Xml !';
 const L_SAVE_SUCCESSFUL				= 'Enregistrament de las donadas efectuat amb succès';
-const L_ARTICLE_SAVE_SUCCESSFUL		= 'Article creat amb succès';
 const L_MAIL_ADDRESS				= 'Adreça de corrièl';
 
 # index.php
@@ -113,7 +106,6 @@ const L_BAD_PLUGIN_FOLDER			= 'Unable to rename the folder for the %s plugin';
 const L_HTTPENCODING				= 'Compression %s activada';
 const L_ARCHIVES			= 'Archius';
 const L_TAG				= 'Tag';
-const L_NO_CATEGORY					= 'pas cap de categoria';
 const L_CATEGORY					= 'categoria';
 const L_CATEGORIES					= 'categorias';
 const L_NO_ARTICLE					= 'pas cap d\'article';
@@ -160,3 +152,4 @@ const L_ART_NEXT					= 'Suivant';
 const L_ART_LAST					= 'Dernier';
 const L_ART_UP						= 'Remonter';
 
+const L_SAVE_ERR = 'Error pendent l\'enregistrament de las donadas';

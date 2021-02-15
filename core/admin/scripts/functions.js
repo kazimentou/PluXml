@@ -34,7 +34,7 @@ function addText(where, open, close) {
 }
 
 (function() {
-	// gestion des cases à cocher dans un tableau pour envoi avec un formulaire
+	// gestion des cases à cocher dans un tableau pour envoi d'un formulaire
 	// les boutons avec attribut "data-lang" ou "data-select" seront désactivés si aucune case cochée.
 	const myForm = document.querySelector('form[data-chk]');
 
@@ -84,16 +84,39 @@ function addText(where, open, close) {
 					if('lang' in event.target.dataset) {
 						msg = event.target.dataset.lang;
 					} else if('select' in event.target.dataset) {
-						const select = document.getElementById(event.target.dataset.select);
+						const params = event.target.dataset.select.split('|');
+						const form = event.target.form;
+						const select = form.elements[params[0]];
 						if(select != null) {
 							const option = select.selectedOptions[0];
-							console.log(option.value);
+							// console.log(option.value);
+							const alerts = ('alert' in event.target.dataset) ? event.target.dataset.alert.split('|') : ['What ?'];
 							if(!option.value.match(/^\w/)) {
-								alert(('alert' in event.target.dataset) ? event.target.dataset.alert : 'What ?');
+								alert(alerts[0]);
 								return false;
 							}
+
+							var folderValue = '';
+							if(option.value == params[1]) {
+								// On déplace des medias
+								const folder = form.elements[params[2]];
+								if(folder == null) {
+									console.error('<input name="' + params[2] + '" is missing');
+									return false;
+								}
+								folderValue = folder.value.trim();
+								if(folderValue.length == 0 || folderValue == window.location.href.replace(/^.*path=/, '')) {
+									alert((alerts.length > 0) ? alerts[1] : alerts[0]);
+									return false;
+								}
+							}
+
 							if('lang' in option.dataset) {
 								msg = option.dataset.lang;
+							}
+
+							if(folderValue.length > 0) {
+								msg = msg + ' :\n' + folderValue;
 							}
 						}
 					}
@@ -258,15 +281,48 @@ function addText(where, open, close) {
 	}
 })();
 
-function insTag(where, tag) {
-	var formfield = document.getElementsByName(where)['0'];
-	var tags = formfield.value.split(', ');
-	if (tags.indexOf(tag) != -1) return;
-	if(formfield.value=='')
-		formfield.value=tag;
-	else
-		formfield.value = formfield.value+', '+tag;
-}
+// ---- article.php -------
+
+// ajoute un mot-clé pour l'article en cours d'édition. Remplace insTag()
+(function() {
+	const tagsList = document.getElementById('tags-list');
+	if(tagsList != null) {
+		var inputTags = null;
+		for(var i=0, iMax=document.forms.length; i<iMax; i++) {
+			if('tags' in document.forms[i].elements) {
+				inputTags = document.forms[i].tags;
+				break;
+			}
+		}
+
+		if(inputTags != null) {
+			tagsList.addEventListener('click', function(event) {
+				if(event.target.tagName == 'SPAN') {
+					event.preventDefault();
+					const textContent = event.target.textContent.trim();
+					if(inputTags.value.trim().length == 0) {
+						inputTags.value = textContent;
+					} else {
+						const pattern = new RegExp('\\b' + textContent + '\\b', 'iu');
+						if(!pattern.test(inputTags.value)) {
+							inputTags.value += ', ' + textContent;
+						} else {
+							return;
+						}
+					}
+
+					inputTags.focus();
+					if(typeof inputTags.setSelectionRange != 'undefiend') {
+						const atEnd = inputTags.value.length;
+						inputTags.setSelectionRange(atEnd, atEnd);
+					}
+				}
+			});
+		} else {
+			console.error('Document has no <input name="tags" /> in a form');
+		}
+	}
+})();
 
 (function() {
 	// animation du burger par Knacss. Récupérer le CSS et supprimer

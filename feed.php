@@ -52,7 +52,7 @@ switch($plxFeed->mode) {
 			$filename .= '-' . L_ARTICLE . '-' . $plxFeed->cible;
 		}
 		break;
-	case 'categorie'	: $filename = L_CATEGORIE . '-' . $plxFeed->cible; break;
+	case 'categorie'	: $filename = L_CATEGORY . '-' . $plxFeed->cible; break;
 	case 'tag'			: $filename = str_replace('-', '_', L_TAG) . '-' . $plxFeed->cible; break;
 	case 'admin'		:
 		$filename = L_COMMENTS . '-admin';

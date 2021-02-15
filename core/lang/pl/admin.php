@@ -6,7 +6,6 @@ const L_CONFIRM_ACTIVATE = 'Potwierdź włączenie 999 elementów ?';
 const L_CONFIRM_DEACTIVATE = 'Potwierdź wyłączenie 999 elementów ?';
 const L_CONFIRM_OFFLINE = 'Potwierdź, że 999 komentarzy było w trybie offline ?';
 const L_CONFIRM_ONLINE = 'Potwierdź przesłanie 999 komentarzy ?';
-const L_SAVE_FILE = 'Zapisz plik';
 const L_SAVE_FILE_SUCCESSFULLY = 'Plik został pomyślnie zapisany';
 const L_SAVE_FILE_ERROR = 'Wystąpił błąd podczas zapisywania pliku';
 const L_FILE_REQUIRED = 'Wybierz plik';
@@ -29,7 +28,6 @@ const L_ERR_INVALID_DATE_UPDATE = 'Nieprawidłowa data zaktualizowane';
 
 // class.plx.admin.php
 
-const L_SAVE_ERR = 'Wystąpił błąd podczas zapisywania';
 const L_NO_ENTRY = 'Dostęp zabroniony';
 const L_ERR_USER_EMPTY = 'Wpisz nazwę użytkownika';
 const L_ERR_PASSWORD_EMPTY = 'Wpisz hasło';
@@ -96,23 +94,19 @@ const L_HEADLINE_FIELD = 'Nagłówek (opcjonalnie)';
 const L_CONTENT_FIELD = 'Treść';
 const L_LINK_FIELD = 'Link do posta';
 const L_LINK_ACCESS = 'Przejdź do posta';
-const L_LINK_VIEW = 'podgląd';
 const L_ARTICLE_STATUS = 'Status';
 const L_DRAFT = 'Projekt';
 const L_PUBLISHED = 'Opublikowany';
 const L_AWAITING = 'Oczekiwanie na zatwierdzenie';
 const L_ARTICLE_DATE = 'Data publikacji';
 const L_NOW = 'teraz';
-const L_ARTICLE_CATEGORIES = 'Kategoria';
 const L_ARTICLE_TAGS_FIELD = 'Tagi';
 const L_ARTICLE_TAGS_FIELD_TITLE = 'Tagi oddzielaj przecinkami';
-const L_ARTICLE_TOGGLER_TITLE = 'Lista tagów';
 const L_NO_TAG = 'Brak tagów';
 const L_ALLOW_COMMENTS = 'Zezwól na komentarze';
 const L_ARTICLE_URL_FIELD_TITLE = 'URL automatycznie wypełni pole gdy post zostanie utworzony';
 const L_ARTICLE_MANAGE_COMMENTS = 'Zarządzaj komentarzami';
 const L_ARTICLE_MANAGE_COMMENTS_TITLE = 'Zarządzaj komentarzaami dla tego posta';
-const L_ARTICLE_NEW_COMMENT_TITLE = 'Napisz komentarz dla tego posta';
 const L_ARTICLE_DELETE_CONFIRM = 'Usuń ten post ?';
 const L_ARTICLE_PREVIEW_BUTTON = 'Podgląd';
 const L_ARTICLE_DRAFT_BUTTON = 'Zapisz projekt';
@@ -123,23 +117,17 @@ const L_SAVE = 'Zapisz';
 const L_ADD = "Dodaj";
 const L_META_DESCRIPTION = 'Zawartość tagu "opisu" (opcjonalnie)';
 const L_META_KEYWORDS = 'Zawartość tagu "słowa kluczowego" (opcjonalnie)';
-const L_ARTICLE_CHAPO_HIDE = 'ukryj';
-const L_ARTICLE_CHAPO_DISPLAY = 'pokaż';
 
 // auth.php
 
 const L_AUTH_PAGE_TITLE = 'administracja';
-const L_LOGOUT_SUCCESSFUL = 'Poprawne wylogowanie';
 const L_LOGIN_PAGE = 'Logowanie do panelu administracyjnego';
 const L_AUTH_LOGIN_FIELD = 'Login';
 const L_AUTH_LOST_FIELD = 'Login lub adres e-mail';
 const L_SUBMIT_BUTTON = 'Zaloguj';
 const L_ERR_WRONG_PASSWORD = 'Login i / lub hasło niepoprawne';
-const L_POWERED_BY = 'Silnik <a href="https://www.%s">PluXml</a>';
 const L_ERR_MAXLOGIN = 'Zbyt wielu nieudanych<br />ponownych prób logowania w% s minut';
-const L_LOST_PASSWORD = 'Zapomniałeś hasła?';
 const L_LOST_PASSWORD_LOGIN = 'Zaloguj Się';
-const L_LOST_PASSWORD_SUCCESS = 'E-mail został wysłany do użytkownika';
 const L_LOST_PASSWORD_ERROR = 'Link wygasł';
 
 //
@@ -167,7 +155,6 @@ const L_HIDE = 'Ukryj';
 const L_OPTIONS = 'Opcje';
 const L_NEW_CATEGORY = 'Nowa kategoria';
 const L_FOR_SELECTION = 'Wybrane pozycje...';
-const L_CAT_APPLY_BUTTON = 'Zapisz zmiany';
 const L_CAT_UNKNOWN = 'Nieznana kategoria';
 
 // categorie.php
@@ -176,8 +163,6 @@ const L_EDITCAT_PAGE_TITLE = 'Edycja opcji kategorii';
 const L_EDITCAT_DESCRIPTION = 'Opis';
 const L_EDITCAT_DISPLAY_HOMEPAGE = 'Pokaż artykuły z tej kategorii na stronie głównej';
 const L_TEMPLATE = 'Szablon';
-const L_EDITCAT_BACK_TO_PAGE = 'Przejdż do listy kategorii';
-const L_EDITCAT_UPDATE = 'Zapisz zmiany';
 
 // commentaire.php
 
@@ -191,7 +176,6 @@ const L_BACK_TO_COMMENTS = 'Przejdż do listy komentarzy';
 const L_COMMENT_EDITING = 'Edytuj komentarz';
 const L_AUTHOR = 'Autor';
 const L_COMMENT_TYPE_FIELD = 'Typ komentarza';
-const L_COMMENT_DATE_FIELD = 'Data i czas publikacji';
 const L_COMMENT_IP_FIELD = 'IP';
 const L_COMMENT_SITE_FIELD = 'Strona';
 const L_EMAIL = 'E-mail';
@@ -200,15 +184,12 @@ const L_COMMENT_LINKED_ARTICLE_FIELD = 'Dołączony artykuł';
 const L_COMMENT_ARTICLE_FIELD = 'Komentarz';
 const L_COMMENT_DELETE_CONFIRM = 'Usunąć ten komentarz ?';
 const L_COMMENT_PUBLISH_BUTTON = 'Zatwierdz';
-const L_COMMENT_ANSWER_BUTTON = 'Odpowiedź';
 const L_COMMENT_UPDATE_BUTTON = 'Zaktualizuj';
-const L_COMMENT_WRITTEN_BY = 'Napisane przez';
 const L_ERR_CATEGORY_ALREADY_EXISTS = 'Nazwa kategorii jest zajęta';
 
 // sous_navigation/commentaires.php
 
 const L_COMMENT_NEW_COMMENT_TITLE = 'Dodaj nowy komentarz do tego artykułu';
-const L_COMMENT_NEW_COMMENT = 'Dodaj nowy komentarz';
 
 // commentaire_new.php
 
@@ -219,12 +200,9 @@ const L_ERR_CREATING_COMMENT = 'Wystąpił błąd podczas tworzenia komentarza';
 const L_CREATING_COMMENT_SUCCESSFUL = 'Komentarz pomyślnie utworzono';
 const L_CREATE_NEW_COMMENT = 'Odpowiedź na komentarz';
 const L_ARTICLE_COMMENTS_LIST = 'Komentarze do tego artukułu';
-const L_COMMENT_ANSWER = 'Odpowiedź';
 
 // comments.php
 
-const L_COMMENTS_GLOBAL_SCOPE = 'cała strona';
-const L_COMMENTS_LIST_MESSAGE = 'Wiadomość';
 const L_COMMENT_EDIT_TITLE = 'Edytuj ten komentarz';
 const L_COMMENT_OFFLINE_FEEDS_TITLE = 'Kanał RSS dla komentarzy w trybie offline';
 const L_COMMENT_OFFLINE_FEEDS = 'Komentarze nieaktywne';
@@ -248,10 +226,8 @@ const L_ARTICLES_FILTER_BUTTON = 'Filtr';
 const L_SPECIFIC_CATEGORIES_TABLE = 'Konkretne kategorie';
 const L_ALL_ARTICLES_CATEGORIES_TABLE = 'Wszystkie posty';
 const L_ARTICLES_LIST = 'Lista postów';
-const L_ARTICLE_LIST_CATEGORIES = 'Kategoria';
 const L_ARTICLE_LIST_NBCOMS = 'Kom.';
 const L_ARTICLE_VIEW_TITLE = 'Zobacz ten post na stronie';
-const L_EDIT = 'Edytuj';
 const L_ARTICLE_EDIT_TITLE = 'Edytuj ten post';
 const L_NEW_COMMENTS_TITLE = 'Komentarze oczekujące na zatwierdzenie';
 const L_VALIDATED_COMMENTS_TITLE = 'Komentarze zatwierdzone';
@@ -270,7 +246,6 @@ const L_MEDIAS_IMAGES = 'Obrazowość';
 const L_MEDIAS_DOCUMENTS = 'Dokumenty';
 const L_MEDIAS_ADD_FILE = 'Dodawanie plików';
 const L_MEDIAS_DELETE_FOLDER_CONFIRM = 'Usuń folder %s i jego zawartość ?';
-const L_MEDIAS_FOLDER = 'Rekord';
 const L_MEDIAS_NEW_FOLDER = 'Nowy folder';
 const L_MEDIAS_CREATE_FOLDER = 'Tworzyć';
 const L_MEDIAS_FILESIZE = 'Rozmiar';
@@ -318,7 +293,6 @@ const L_CONFIG_VIEW_BYPAGE_FEEDS = 'Nombre d\'articles/commentaires affichés su
 const L_CONFIG_VIEW_FEEDS_HEADLINE = 'Afficher uniquement le chapô dans les flux Rss des articles';
 const L_CONFIG_VIEW_FEEDS_HEADLINE_HELP = 'Si le chapô est vide, le contenu est affiché';
 const L_CONFIG_VIEW_FEEDS_FOOTER = 'Texte à ajouter comme signature au bas de chaque flux Rss des articles';
-const L_CONFIG_VIEW_UPDATE = 'Modifier les options d\'affichage';
 const L_CONFIG_VIEW_DISPLAY_EMPTY_CAT = 'Afficher les catégories sans article';
 const L_CONFIG_HOMETEMPLATE = 'Template de la page d\'accueil';
 
@@ -344,7 +318,6 @@ const L_CONFIG_ADVANCED_STATS_FOLDER = 'Lokalizacja stron statycznych (folder)';
 const L_CONFIG_ADVANCED_THEMES_FOLDER = 'Lokalizacja motywów (folder)';
 const L_CONFIG_ADVANCED_PLUGINS_FOLDER = 'Lokalizacja wtyczek (folder)';
 const L_CONFIG_ADVANCED_CONFIG_FOLDER = 'Lokalizacja plików konfiguracyjnych (folder)';
-const L_CONFIG_ADVANCED_UPDATE = 'Zmień zaawansowaną konfigurację';
 const L_CONFIG_CUSTOM_CSSADMIN_PATH = 'Lokalizacja i nazwa osobistego pliku css do dostosowania interfejsu administracyjnego (opcjonalnie)';
 const L_CONFIG_ADVANCED_EMAIL_SENDING_TITLE = 'Wysyłanie wiadomości e-mail';
 const L_CONFIG_ADVANCED_EMAIL_METHOD = 'Metoda wysyłania wiadomości e-mail';
@@ -359,7 +332,6 @@ const L_CONFIG_ADVANCED_SMTPOAUTH_CLIENTID = 'ID klienta';
 const L_CONFIG_ADVANCED_SMTPOAUTH_SECRETKEY = 'Tajny klucz klienta';
 const L_CONFIG_ADVANCED_SMTPOAUTH_TOKEN = 'Token';
 const L_CONFIG_ADVANCED_SMTPOAUTH_GETTOKEN = 'Wygeneruj token';
-const L_CONFIG_ADVANCED_EMAIL_SENDING_TITLE_HELP = 'Necessitar ajuda : <a href="https://wiki.%s/personnaliser/personnalisation/#envoi-de-mails">PluXml documentation</a>&nbsp;(fr).';
 const L_CONFIG_ADVANCED_EMAIL_METHOD_HELP = 'No es requereix cap configuració per a sendmail.';
 const L_CONFIG_ADVANCED_SMTP_SERVER_HELP = 'Nom del servidor SMTP (exemple : ssl0.ovh.net)';
 const L_CONFIG_ADVANCED_SMTP_USERNAME_HELP = 'Nom d\'usuari de l\'amfitrió SMTP (exemple : pluxml@monserveursmtp.com)';
@@ -377,7 +349,6 @@ const L_CONFIG_BASE_SITE_SLOGAN = 'Opis / slogan strony';
 const L_CONFIG_BASE_DEFAULT_LANG = 'Domyślny język strony';
 const L_CONFIG_BASE_MODERATE_COMMENTS = 'Podstawowa konfiguracja edycji komentarzy';
 const L_CONFIG_BASE_MODERATE_ARTICLES = 'Podstawowa konfiguracja edycji postów';
-const L_CONFIG_BASE_UPDATE = 'Zapisz zmiany';
 const L_CONFIG_META_DESCRIPTION = 'Zawartość tagu "opisu" strony (opcjonalnie)';
 const L_CONFIG_META_KEYWORDS = 'Zawartość tagu "słowa kluczowego" strony (opcjonalnie)';
 const L_CONFIG_BASE_ENABLE_RSS = 'Wyświetl kanały RSS';
@@ -387,7 +358,6 @@ const L_CONFIG_BASE_ENABLE_RSS_COMMENT = 'Wyświetl kanały RSS komentarzy';
 
 const L_CONFIG_EDITTPL_ERROR_NOTHEME = 'Ten szablon nie istnieje!';
 const L_CONFIG_EDITTPL_TITLE = 'Edycja szablonu';
-const L_CONFIG_EDITTPL_SELECT_FILE = 'Wybierz plik, który ma być edytowany: ';
 const L_CONFIG_EDITTPL_LOAD = 'Zmień';
 
 // parametres_infos.php
@@ -397,7 +367,6 @@ const L_CONFIG_INFOS_DESCRIPTION = 'Informacje te informują o działaniu PluXml
 const L_CONFIG_INFOS_NB_CATS = 'Liczba kategorii:';
 const L_CONFIG_INFOS_NB_STATICS = 'Liczba stron statycznych:';
 const L_CONFIG_INFOS_WRITER = 'Nom du rédacteur en session :';
-const L_PLUXML_CHECK_VERSION = 'Sprawdzanie numeru wersji PluXml na oficjalnej stronie %s';
 const L_PLUXML_UPDATE_UNAVAILABLE = 'Nie można sprawdzić aktualizacji, gdy „allow_url_fopen” jest wyłączony w tym systemie';
 const L_PLUXML_UPDATE_ERR = 'Kontrola aktualizacji nie powiodła się z nieznanego powodu';
 const L_PLUXML_UPTODATE = 'Używasz najnowszej wersji PluXml';
@@ -410,10 +379,8 @@ const L_MAIL_TEST_FAILURE = 'Problem z wysłaniem e-maila testowego';
 // parametres_users.php
 
 const L_CONFIG_USERS_TITLE = 'Zarządzanie użytkownikami';
-const L_CONFIG_USER = 'użytkownik';
 const L_CONFIG_USERS_ACTIVE = 'Aktywny';
 const L_CONFIG_USERS_NEW = 'Nowy użytkownik';
-const L_CONFIG_USERS_UPDATE = 'Modifier la liste des utilisateurs';
 const L_ERR_LOGIN_ALREADY_EXISTS = 'Identyfikator połączenia jest już używany';
 const L_ERR_USERNAME_ALREADY_EXISTS = 'Nazwa użytkownika jest już w użyciu';
 const L_ERR_EMAIL_ALREADY_EXISTS = 'Adres mailowy już w użyciu';
@@ -434,16 +401,10 @@ const L_PLUGINS_TITLE = 'Zarządzanie wtyczkami';
 const L_PLUGINS_VERSION = 'Wersja';
 const L_PLUGINS_ACTIVATE = 'Aktywuj';
 const L_PLUGINS_DEACTIVATE = 'Dezaktywuj';
-const L_PLUGINS_DELETE_ERROR = 'Wystąpił błąd podczas usuwania';
 const L_PLUGINS_CONFIG = 'Konfiguracja';
 const L_PLUGINS_CONFIG_TITLE = 'Konfiguracja wtyczki';
-const L_PLUGINS_HELP_TITLE = 'Patrz Korzystanie z wtyczki';
-const L_PLUGINS_REQUIREMENTS = 'Warunki wstępne';
-const L_PLUGINS_REQUIREMENTS_HELP = 'Lista wtyczek obecnych i aktywnych w celu aktywacji tej wtyczki';
-const L_PLUGINS_ALPHA_SORT = 'Sortuj wtyczki alfabetycznie';
 const L_PLUGINS_LOADING_SORT = 'Ładowanie zamówienia';
 const L_ACTION = 'Akcja';
-const L_PLUGINS_APPLY_BUTTON = 'Zmodyfikuj listę wtyczek';
 const L_PLUGINS_ACTIVE_LIST = 'Aktywne wtyczki';
 const L_PLUGINS_INACTIVE_LIST = 'Nieaktywne wtyczki';
 
@@ -453,9 +414,7 @@ const L_PROFIL_EDIT_TITLE = 'Edytuj profil';
 const L_PROFIL = 'Profil';
 const L_PROFIL_USER = 'Nazwa użytkownika';
 const L_INFOS = 'Informacja';
-const L_PROFIL_UPDATE = 'Zapisz zmiany';
 const L_PROFIL_CHANGE_PASSWORD = 'Zmiana hasła';
-const L_PROFIL_UPDATE_PASSWORD = 'Zmień hasło';
 
 // statique.php
 
@@ -464,7 +423,6 @@ const L_STATIC_UNKNOWN_PAGE = 'Ta strona nie istnieje już !';
 const L_STATIC_TITLE = 'Edytuj kodu źródłowego';
 const L_STATIC_VIEW_PAGE = 'Przeglądnij';
 const L_STATIC_ON_SITE = 'strona';
-const L_STATIC_UPDATE = 'Zapisz zmiany';
 const L_TITLE_HTMLTAG = 'Zawartość tagu "tytułu" (opcjonalnie)';
 
 // statiques.php
@@ -473,11 +431,8 @@ const L_STATICS_PAGE_TITLE = 'Utwórz lub edytuj strone statyczną';
 const L_STATICS_GROUP = 'Grupa';
 const L_STATICS_URL = 'Url';
 const L_STATICS_PAGE_HOME = 'Ustaw jako stronę główną';
-const L_PAGE = 'strona';
-const L_VIEW = 'Podgląd';
 const L_STATICS_SRC_TITLE = 'Edytuj kod źródłowy strony';
 const L_STATICS_NEW_PAGE = 'Nowa strona';
-const L_STATICS_UPDATE = 'Zapisz zmiany';
 const L_ERR_STATIC_ALREADY_EXISTS = 'Strona o tym tytule już istnieje';
 
 // top.php
@@ -487,11 +442,7 @@ const L_PROFIL_MODERATOR = 'Moderator';
 const L_PROFIL_EDITOR = 'Edytor';
 const L_PROFIL_WRITER = 'Redaktor';
 const L_ADMIN = 'Administracja';
-const L_LOGIN = 'Login';
-const L_ADMIN_LOGOUT = 'Wyloguj';
 const L_ADMIN_LOGOUT_TITLE = 'Opuść panel administracyjny';
-const L_BACK_TO_BLOG = 'Blog';
-const L_BACK_TO_BLOG_TITLE = 'Przejdż do strony bloga';
 const L_MENU_ARTICLES = 'Artykuły';
 const L_MENU_ARTICLES_TITLE = 'Lista i edytor artykułów';
 const L_MENU_STATICS_TITLE = 'Lista i edytor stron statycznych';
@@ -508,7 +459,6 @@ const L_WARNING_INSTALLATION_FILE = 'Plik install.php znajduje się w katalogu g
 // user.php
 const L_USER_UNKNOWN = 'Nieznany użytkownik';
 const L_USER_LANG = 'Język używany w administracji';
-const L_USER_UPDATE = 'Zapisz zmiany';
 const L_USER_PAGE_TITLE = 'Edycja użytkownika';
 const L_USER_BACK_TO_PAGE = 'Przejdź do listy użytkowników';
 
@@ -529,4 +479,8 @@ const L_THEMES_TITLE = 'Zarządzanie tematy';
 const L_HELP = 'Pomoc';
 const L_HELP_TITLE = 'Zobacz pomoc';
 const L_BACK_TO_THEMES = 'Powrót do tematów strony';
-const L_CONFIG_THEME_UPDATE = 'Zmień styl';
+const L_BACK_HOMEPAGE_TITLE			= 'Przejdż do strony głównej';
+const L_DATE_CREATION				= 'Data utworzenia';
+const L_DATE_UPDATE					= 'Data zaktualizowane';
+const L_COMMENTS_CLOSED				= 'Komentarze zostały wyłączone';
+const L_ARTICLE_SAVE_SUCCESSFUL		= 'Post został pomyślnie utworzony';

@@ -51,15 +51,17 @@ class plxMsg {
 	        $icon = "icon-info-circled";
             $message = $_SESSION['info'];
         } else {
-			$class = $icon = $message = '';
+			$class = '';
+			$icon = '';
+			$message = '';
 		}
 	    if (!empty(trim($message))) {
 ?>
-                <section id="msg" class="notification <?= $class ?> active flex-container">
-                    <div class="ptm prm pbm">
-						<i class="<?= $icon ?>"></i><strong><?= $message ?></strong>
-					</div>
-                </section>
+<section id="msg" class="notification <?= $class ?>">
+	<div>
+		<i class="<?= $icon ?>"></i><strong><?= $message ?></strong>
+	</div>
+</section>
 <?php
 		}
 		unset($_SESSION['error']);

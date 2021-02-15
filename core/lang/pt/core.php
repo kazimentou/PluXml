@@ -1,30 +1,23 @@
 <?php
 
-const L_LANGUE						= 'Português';
 
-const L_DATE_CREATION				= 'Data de criação';
-const L_DATE_UPDATE					= 'Data atualizada';
 
 # common
 const L_PLUXML_VERSION				= 'Versão de Pluxml';
 const L_WRONG_PHP_VERSION			= 'PluXml exige a execução de PHP %s ou superior para poder funcionar.';
 const L_HOMEPAGE					= 'Pagina inicial';
-const L_BACK_HOMEPAGE_TITLE			= 'Voltar ao início';
 const L_UNCLASSIFIED				= 'Não categorizado;';
 const L_INFO_PHP_VERSION			= 'Versão de php';
 const L_INFO_CHARSET				= 'codagem';
 const L_NONE1						= 'nenhum';
-const L_NONE2						= 'nenhuma';
 const L_PASSWORD					= 'Senha';
 const L_TIMEZONE					= 'Fuso horário';
 const L_SELECT_LANG					= 'Seléccione o seu idioma';
 const L_CONFIRM_PASSWORD			= 'Confirmação da senha';
 const L_PROFIL_LOGIN				= 'Login de conexão';
 const L_INPUT_CHANGE				= 'Alterar';
-const L_COMMENTS_CLOSED				= 'Os coment&aacute;rios est&atilde;o fechados';
 const L_SITE_DESCRIPTION			= 'Blog ou Cms á Xml !';
 const L_SAVE_SUCCESSFUL				= 'Grabação dos dados efectuada com sucesso';
-const L_ARTICLE_SAVE_SUCCESSFUL		= 'Artigo criado com sucesso';
 const L_MAIL_ADDRESS				= 'Enderêco de e-mail';
 
 # index.php
@@ -113,7 +106,6 @@ const L_BAD_PLUGIN_FOLDER			= 'incapaz de renomear a pasta para o plugin %s';
 const L_HTTPENCODING				= 'Compressão %s activada';
 const L_ARCHIVES			= 'Arquivos';
 const L_TAG				= 'Tag';
-const L_NO_CATEGORY					= 'nenhuma categoria';
 const L_CATEGORY					= 'categoria';
 const L_CATEGORIES					= 'categorias';
 const L_NO_ARTICLE					= 'nenhum artigo';
@@ -160,3 +152,4 @@ const L_ART_NEXT					= 'Próximo';
 const L_ART_LAST					= 'Último';
 const L_ART_UP						= 'Suba';
 
+const L_SAVE_ERR = 'Ocorreu um erro durante o processo de grabação dos dados';

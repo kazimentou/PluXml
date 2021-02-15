@@ -51,11 +51,12 @@ include 'top.php';
 <form action="parametres_plugincss.php?p=<?= urlencode($plugin) ?>" method="post" id="form_file">
 	<?= plxToken::getTokenPostMethod() ?>
 
-	<div>
-		<h2><?= plxUtils::strCheck($plugin) ?></h2>
-		<p><a class="back icon-left-big" href="parametres_plugins.php"><?= L_BACK_TO_PLUGINS ?></a></p>
+	<div class="adminheader">
+		<div>
+			<h2><?= plxUtils::strCheck($plugin) ?></h2>
+			<p><a class="back icon-left-big" href="parametres_plugins.php"><?= L_BACK_TO_PLUGINS ?></a></p>
+		</div>
 	</div>
-
 	<fieldset>
 		<div class="grid">
 			<div class="col sml-12">

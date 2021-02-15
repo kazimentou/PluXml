@@ -25,7 +25,17 @@ class plxUtils
         'fr' => 'a|de?|des|du|e?n|la|le|une?|vers'
     );
     const DELTA_PAGINATION = 3;
-    const TEMPLATE_MSG = '<li><span style="color:#color">#symbol #message</span></li>' . PHP_EOL;
+    const TEMPLATE_MSG = '<li><span class="#color">#symbol #message</span></li>' . PHP_EOL;
+    const TEST_FUNCTIONS = array(
+          'mail'                    => array(L_MAIL_NOT_AVAILABLE, L_MAIL_AVAILABLE),
+          'imagecreatetruecolor'    => 'GD',
+          'simplexml_load_file'     => 'SIMPLEXML',
+          'xml_parser_create'       => 'XML',
+          'curl_exec'               => 'CURL',
+          'json_decode'             => 'JSON',
+    );
+    const CLASSNAMES = array('warning' ,'success');
+    const SYMBOLS = array('&#10007;', '&#10004;');
 
     /**
      * Méthode qui vérifie si une variable est définie.
@@ -37,7 +47,7 @@ class plxUtils
      */
     public static function getValue(&$var, $default = '')
     {
-        return isset($var) ? $var : $default;
+        return (isset($var) and !empty($var)) ? $var : $default;
     }
 
     /**
@@ -189,31 +199,31 @@ class plxUtils
             $className = trim($class);
         }
         $className = !empty($className) ? 'class="' . $className . '"' : '';
-        ?>
-        <select id="id_<?= $name ?>" name="<?= $name ?>" <?= $disabled . ' ' . $className ?>>
-            <?php
-            foreach ($array as $a => $b) {
-                if (is_array($b)) {
-                    ?>
-                    <optgroup label="<?= $a ?>">
-                        <?php
-                        foreach ($b as $c => $d) {
-                            ?>
-                            <option value="<?= $c ?>" <?= ($c == $selected) ? 'selected' : '' ?>><?= $d ?></option>
-                            <?php
-                        }
-                        ?>
-                    </optgroup>
-                    <?php
-                } else {
-                    ?>
-                    <option value="<?= $a ?>" <?= ($a == $selected) ? 'selected' : '' ?>><?= $b ?></option>
-                    <?php
-                }
+?>
+<select id="id_<?= $name ?>" name="<?= $name ?>" <?= $disabled . ' ' . $className ?>>
+<?php
+       foreach ($array as $a => $b) {
+            if (is_array($b)) {
+?>
+     <optgroup label="<?= $a ?>">
+<?php
+               foreach ($b as $c => $d) {
+?>
+          <option value="<?= $c ?>" <?= ($c == $selected) ? 'selected' : '' ?>><?= $d ?></option>
+<?php
+               }
+?>
+     </optgroup>
+<?php
+            } else {
+?>
+     <option value="<?= $a ?>" <?= ($a == $selected) ? 'selected' : '' ?>><?= $b ?></option>
+<?php
             }
-            ?>
-        </select>
-        <?php
+        }
+?>
+</select>
+<?php
     }
 
     /**
@@ -289,10 +299,9 @@ class plxUtils
         foreach ($array as $a => $b) {
             $checkedAttr = ($a == $checked) ? ' checked' : '';
             $id = $name . '-' . $b;
-            ?>
-            <div><input type="radio" value="<?= $a ?>" id="<?= $id ?>" <?= implode(' ', $params) ?><?= $checkedAttr ?>>&nbsp;<label
-                        for="<?= $id ?>"><?= $b ?></label></div>
-            <?php
+?>
+        <div><input type="radio" value="<?= $a ?>" id="<?= $id ?>" <?= implode(' ', $params) ?><?= $checkedAttr ?>>&nbsp;<label for="<?= $id ?>"><?= $b ?></label></div>
+<?php
         }
     }
 
@@ -356,14 +365,10 @@ class plxUtils
             // URL generation
             $artTitle = !empty($_GET['artTitle']) ? '&artTitle=' . urlencode($_GET['artTitle']) : '';
             // Display pagination links
-            ?>
-            <a href="<?php printf($urlTemplate, 1) ?>"
-               title="<?= L_PAGINATION_FIRST_TITLE ?>"<?= ($currentPage > 2) ? '' : ' disabled' ?>><span class="btn"><i
-                            class="icon-angle-double-left"></i></span></a>
-            <a href="<?php printf($urlTemplate, ($currentPage > 1) ? $currentPage - 1 : 1) ?>"
-               title="<?= L_PAGINATION_PREVIOUS_TITLE ?>"<?= ($currentPage > 1) ? '' : ' disabled' ?>><span class="btn"><i
-                            class="icon-angle-left"></i></span></a>
-            <?php
+?>
+            <a href="<?php printf($urlTemplate, 1) ?>" title="<?= L_PAGINATION_FIRST_TITLE ?>"<?= ($currentPage > 2) ? '' : ' disabled' ?> class="btn"><i class="icon-angle-double-left"></i></a>
+            <a href="<?php printf($urlTemplate, ($currentPage > 1) ? $currentPage - 1 : 1) ?>" title="<?= L_PAGINATION_PREVIOUS_TITLE ?>"<?= ($currentPage > 1) ? '' : ' disabled' ?> class="btn"><i class="icon-angle-left"></i></a>
+<?php
             # On boucle sur les pages
             if ($last_page <= 2 * self::DELTA_PAGINATION + 1) {
                 $iMin = 1;
@@ -378,23 +383,19 @@ class plxUtils
             }
             for ($i = $iMin; $i <= $iMax; $i++) {
                 if ($i != $currentPage) {
-                    ?>
-                    <a href="<?php printf($urlTemplate, $i); ?>"><span class="btn"><?= $i ?></span></a>
-                    <?php
-                } else {
-                    ?>
+?>
+                    <a href="<?php printf($urlTemplate, $i); ?>" class="btn"><?= $i ?></a>
+<?php
+             } else {
+?>
                     <span class="current btn--info"><?= $i ?></span>
-                    <?php
+<?php
                 }
             }
-            ?>
-            <a href="<?php printf($urlTemplate, $currentPage + 1); ?>"
-               title="<?= L_PAGINATION_NEXT_TITLE ?>"<?= ($currentPage < $last_page) ? '' : ' disabled' ?>><span
-                        class="btn"><i class="icon-angle-right"></i></span></a>
-            <a href="<?php printf($urlTemplate, $last_page); ?>" title="<?= L_PAGINATION_LAST_TITLE ?>"><span
-                        class="btn"<?= ($currentPage < $last_page - 1) ? '' : ' disabled' ?>><i
-                            class="icon-angle-double-right"></i></span></a>
-            <?php
+?>
+            <a href="<?php printf($urlTemplate, $currentPage + 1); ?>" title="<?= L_PAGINATION_NEXT_TITLE ?>"<?= ($currentPage < $last_page) ? '' : ' disabled' ?> class="btn"><i class="icon-angle-right"></i></a>
+            <a href="<?php printf($urlTemplate, $last_page); ?>" title="<?= L_PAGINATION_LAST_TITLE ?>" class="btn"<?= ($currentPage < $last_page - 1) ? '' : ' disabled' ?>><i class="icon-angle-double-right"></i></a>
+<?php
         }
     }
 
@@ -402,134 +403,146 @@ class plxUtils
      * Affiche les champs de saisie pour une vignette (image d'accroche).
      *
      * Utilise le gestionnaire de medias pour afficher les images disponibles
-     * @param	$datas tableau associatif contenant au moins les champs nécessaires à la vignette
-     * @param	$name racine des noms des champs de saisie
-     * @return	void
-     * @author	Jean-Pierre Pourrez "bazooka07"
+     * @param     $datas tableau associatif contenant au moins les champs nécessaires à la vignette
+     * @param     $name racine des noms des champs de saisie
+     * @return     void
+     * @author     Jean-Pierre Pourrez "bazooka07"
      * */
-    public static function printThumbnail($datas, $name = "thumbnail")
+    public static function printThumbnail($datas, $name="thumbnail")
     {
         if (!empty($datas) and (!isset($datas[$name]) or !defined('PLX_ROOT'))) {
             return;
         }
 
-        ?>
-        <div class="thumbnail-container">
-            <div id="<?= $name ?>-wrapper">
-                <?php
-                if (!empty($datas)) {
-                    $uri = $datas[$name];
-                    if (!empty($uri)) {
-                        if (preg_match('@^(?:https?|data):@', $uri)) {
-                            $src = $uri;
-                        } else {
-                            $src = PLX_ROOT . $uri;
-                            if (is_file($src)) {
-                                $imgSize = getimagesize($src);
-                            } else {
-                                $src = false;
-                            }
-                        }
-                    }
+?>
+               <div class="thumbnail-container">
+                    <div id="<?= $name ?>-wrapper">
+<?php
+        if (!empty($datas)) {
+            $uri = $datas[$name];
+            if (!empty($uri)) {
+                if (preg_match('@^(?:https?|data):@', $uri)) {
+                    $src = $uri;
                 } else {
-                    $src = false;
+                    $src = PLX_ROOT . $uri;
+                    if (is_file($src)) {
+                        $imgSize = getimagesize($src);
+                    } else {
+                        $src = false;
+                    }
                 }
+            } else {
+                $src = false;
+            }
 
-                if (!empty($src)) {
-                    ?>
+            if (!empty($src)) {
+?>
                     <img src="<?= $src ?>" title="<?= $name ?>" <?= !empty($imgSize) ? $imgSize[3] : '' ?> />
-                    <?php
-                } else {
-                    ?>
+<?php
+            } else {
+?>
                     <svg viewport="0 0 100 100">
-                        <line x1="0" y1="0" x2="100" y2="100" stroke-width=2/>
-                            <line x1="0" y1="100" x2="100" y2="0"/>
+                        <line x2="100" y2="100" stroke="#aaa" stroke-width="5" />
+                        <line y1="100" x2="100" stroke="#aaa" stroke-width="5" />
                     </svg>
-                    <?php
-                }
-                ?>
-            </div>
-            <div>
-                <div>
-                    <label for="id_<?= $name ?>"><?= L_THUMBNAIL ?></label>
-                    <i class="icon-picture" title="<?= L_THUMBNAIL_SELECTION ?>" data-preview="<?= $name ?>"></i>
-                    <input type="text" name="<?= $name ?>"
-                           value="<?= self::strCheck(self::getValue($datas[$name], '')) ?>" id="id_<?= $name ?>"
-                           onkeyup="refreshImg(this.value);"/>
-                </div>
-                <?php
-                foreach (array(
-                             '_alt' => L_THUMBNAIL_ALT,
-                             '_title' => L_THUMBNAIL_TITLE,
-                         ) as $k => $caption) {
-                    if (empty($datas) or isset($datas[$name . $k])) {
-                        $fieldname = $name . $k;
-                        ?>
-                        <div>
-                            <label for="id_<?= $fieldname ?>"><?= $caption ?></label>
-                            <input type="text" name="<?= $fieldname ?>"
-                                   value="<?= self::strCheck(self::getValue($datas[$fieldname], '')) ?>"
-                                   id="id_<?= $fieldname ?>"/>
-                        </div>
-                        <?php
-                    }
-                }
-                ?>
-            </div>
-        </div>
-        <?php
+<?php
+            }
+		}
+?>
+                    </div>
+                    <div>
+                         <div>
+                              <label for="id_<?= $name ?>"><?= L_THUMBNAIL ?></label>
+                              <i class="icon-picture" title="<?= L_THUMBNAIL_SELECTION ?>" data-preview="<?= $name ?>"></i>
+                              <input type="text" name="<?= $name ?>" value="<?= self::strCheck(self::getValue($datas[$name], '')) ?>" id="id_<?= $name ?>" onkeyup="refreshImg(this.value);" />
+                         </div>
+<?php
+          foreach(array(
+               '_title'     => L_THUMBNAIL_TITLE,
+               '_alt'       => L_THUMBNAIL_ALT,
+          ) as $k=>$caption) {
+               if(empty($datas) or isset($datas[$name . $k])) {
+                    $fieldname = $name . $k;
+?>
+                         <div>
+                              <input type="text" name="<?= $fieldname ?>" value="<?= self::strCheck(self::getValue($datas[$fieldname], '')) ?>" title="<?= $caption ?>" id="id_<?= $fieldname ?>" placeholder="<?= $caption ?>" />
+                         </div>
+<?php
+               }
+          }
+?>
+                    </div>
+               </div>
+<?php
     }
 
-    /*
-     * Affiche les champs de saisies d'une série de dates dans un formulaire.
-     *
-     * @param	$aDates tableau associatif des dates
-     * @return	void
-     * @author	Jean-Pierre Pourrez "bazooka07"
-     * */
-    public static function printDates($aDates)
-    {
+     /*
+      * Affiche les champs de saisies d'une série de dates dans un formulaire.
+      *
+      * @param     $aDates tableau associatif des dates
+      * @return     void
+      * @author     Jean-Pierre Pourrez "bazooka07"
+      * */
+    public static function printDates($aDates) {
         # HTML5 : on utilise <input type="date" /> et <input type="time" />
         # Requis ci-dessous : array_keys($dateTitles) == plxDate::ENTRIES
         # id="calendar" nécessaire pour gérer l'évènement "click" sur <i class="icon-calendar" />
-        ?>
-        <div id="calendar">
-            <?php
-            foreach ($aDates as $k => $infos) {
-                ?>
-                <div>
-                    <label><?= DATE_TITLES[$k] ?></label><br>
-                    <input type="date" name="<?= $k ?>[0]" value="<?= $infos[0] ?>"/>
-                    <input type="time" name="<?= $k ?>[1]" value="<?= $infos[1] ?>"/>
-                    <i class="icon-calendar" title="<?= L_NOW ?>" data-datetime5="<?= $k ?>"></i>
-                </div>
-                <?php
-            }
-            ?>
-        </div>
-        <?php
+?>
+            <div id="calendar">
+<?php
+          foreach($aDates as $k=>$infos) {
+?>
+               <div>
+                    <label><?= DATE_TITLES[$k] ?></label>
+                    <div>
+                         <input type="date" name="<?= $k ?>[0]" value="<?= $infos[0] ?>" />
+                         <input type="time" name="<?= $k ?>[1]" value="<?= $infos[1] ?>" />
+                         <i class="icon-calendar" title="<?= L_NOW ?>" data-datetime5="<?= $k ?>"></i>
+                    </div>
+               </div>
+<?php
+          }
+?>
+            </div>
+<?php
     }
+
+    public static function printInputs_Metas_Title($datas) {
+        if(!is_array($datas)) {
+            return;
+        }
+
+          foreach(array(
+              'title_htmltag'          => L_TITLE_HTMLTAG,
+              'meta_description'     => L_META_DESCRIPTION,
+              'meta_keywords'          => L_META_KEYWORDS,
+          ) as $field=>$caption) {
+               if(isset($datas[$field])) {
+?>
+                    <label class="caption-inside">
+                         <span><?= $caption ?></span>
+                         <input type="text" name="<?= $field ?>" value="<?= plxUtils::strCheck($datas[$field]) ?>" />
+                    </label>
+<?php
+               }
+          }
+     }
 
     /**
      * Méthode qui teste si un fichier est accessible en écriture
      *
-     * @param file        emplacement et nom du fichier à tester
+     * @param filename      emplacement et nom du fichier à tester
      * @param format        format d'affichage
      **/
-    public static function testWrite($file, $format = self::TEMPLATE_MSG)
+    public static function testWrite($filename, $format = self::TEMPLATE_MSG)
     {
 
-        if (is_writable($file)) {
-            $output = str_replace('#color', 'green', $format);
-            $output = str_replace('#symbol', '&#10004;', $output);
-            $output = str_replace('#message', sprintf(L_WRITE_ACCESS, $file), $output);
-            echo $output;
-        } else {
-            $output = str_replace('#color', 'red', $format);
-            $output = str_replace('#symbol', '&#10007;', $output);
-            $output = str_replace('#message', sprintf(L_WRITE_NOT_ACCESS, $file), $output);
-            echo $output;
-        }
+        $i = is_writable($filename) ? 1 : 0;
+          echo strtr($format, array(
+            '#color'     => self::CLASSNAMES[$i],
+            '#symbol'     => self::SYMBOLS[$i],
+            '#message'     => sprintf(($i == 1) ? L_WRITE_ACCESS : L_WRITE_NOT_ACCESS, $filename),
+          ));
     }
 
     /**
@@ -545,22 +558,39 @@ class plxUtils
 
         if (function_exists('apache_get_modules')) {
             $test = in_array("mod_rewrite", apache_get_modules());
-            if ($io == true) {
-                if ($test) {
-                    $output = str_replace('#color', 'green', $format);
-                    $output = str_replace('#symbol', '&#10004;', $output);
-                    $output = str_replace('#message', L_MODREWRITE_AVAILABLE, $output);
-                    echo $output;
-                } else {
-                    $output = str_replace('#color', 'red', $format);
-                    $output = str_replace('#symbol', '&#10007;', $output);
-                    $output = str_replace('#message', L_MODREWRITE_NOT_AVAILABLE, $output);
-                    echo $output;
-                }
+            if ($io) {
+                    echo strtr($format, array(
+                      '#color'     => self::CLASSNAMES[$test ? 1 : 0],
+                      '#symbol'     => self::SYMBOLS[$test ? 1 : 0],
+                      '#message'     => $test ? L_MODREWRITE_AVAILABLE : L_MODREWRITE_NOT_AVAILABLE,
+                    ));
             }
             return $test;
-        } else return true;
+        }
+
+        return true;
     }
+
+     public static function testLib($my_function='', $format=self::TEMPLATE_MSG) {
+          $i = 0;
+          $functions = !empty($my_function) ? array($my_function) : array_keys(self::TEST_FUNCTIONS);
+          foreach($functions as $f) {
+               if($f == 'mail') { continue; }
+
+               $i = function_exists($f) ? 1 : 0;
+               if(is_array(self::TEST_FUNCTIONS[$f])) {
+                    $message = self::TEST_FUNCTIONS[$f][$i];
+               } else {
+                    $message = sprintf(($i == 1) ? L_LIB_INSTALLED : L_LIB_NOT_INSTALLED, self::TEST_FUNCTIONS[$f]);
+               }
+               echo strtr($format, array(
+                 '#color'     => self::CLASSNAMES[$i],
+                 '#symbol'     => self::SYMBOLS[$i],
+                 '#message'     => $message,
+               ));
+          }
+          return ($i == 1);
+     }
 
     /**
      * Méthode qui teste si la fonction php mail est disponible
@@ -573,28 +603,16 @@ class plxUtils
     public static function testMail($io = true, $format = self::TEMPLATE_MSG)
     {
 
-        if ($return = function_exists('mail')) {
-            if (!empty($io)) {
-                echo strtr(
+        $return = function_exists('mail');
+          if (!empty($io)) {
+               echo strtr(
                     $format, array(
-                        '#color' => 'green',
-                        '#symbol' => '&#10004;',
-                        '#message' => L_MAIL_AVAILABLE
+                         '#color' => self::CLASSNAMES[$return ? 1 : 0],
+                         '#symbol' => self::SYMBOLS[$return ? 1 : 0],
+                         '#message' => self::TEST_FUNCTIONS['mail'][$return ? 1 : 0],
                     )
-                );
-            }
-        } else {
-            if (!empty($io)) {
-                echo strtr(
-                    $format, array(
-                        '#color' => 'red',
-                        '#symbol' => '&#10007;',
-                        '#message' => L_MAIL_NOT_AVAILABLE
-                    )
-                );
-            }
-        }
-
+               );
+          }
         return $return;
     }
 
@@ -609,9 +627,9 @@ class plxUtils
         if (function_exists('imagecreatetruecolor')) {
             if (is_string($format)) {
                 echo strtr($format, array(
-                    '#color' => 'green',
-                    '#symbol' => '&#10004;',
-                    '#message' => L_LIBGD_INSTALLED,
+                    '#color'     => 'green',
+                    '#symbol'    => '&#10004;',
+                    '#message'   => L_LIBGD_INSTALLED,
                 ));
             } else {
                 return true;
@@ -619,9 +637,9 @@ class plxUtils
         } else {
             if (is_string($format)) {
                 echo strtr($format, array(
-                    '#color' => 'red',
-                    '#symbol' => '&#10007;',
-                    '#message' => L_LIBGD_NOT_INSTALLED,
+                    '#color'     => 'red',
+                    '#symbol'    => '&#10007;',
+                    '#message'   => L_LIBGD_NOT_INSTALLED,
                 ));
             } else {
                 return false;
@@ -637,21 +655,21 @@ class plxUtils
      **/
     public static function testLibXml($format = self::TEMPLATE_MSG)
     {
-        if (function_exists('imagecreatetruecolor')) {
-            if (is_string($format)) {
-                echo strtr($format, array(
-                    '#color' => 'green',
-                    '#symbol' => '&#10004;',
-                    '#message' => L_LIBXML_INSTALLED,
-                ));
-            } else {
-                return true;
-            }
+        if (function_exists('xml_parser_create')) {
+               if(is_string($format)) {
+                    echo strtr($format, array(
+                         '#color'     => 'green',
+                         '#symbol'     => '&#10004;',
+                         '#message'     => L_LIBXML_INSTALLED,
+                    ));
+               } else {
+                    return true;
+               }
         } else {
             if (is_string($format)) {
                 echo strtr($format, array(
-                    '#color' => 'red',
-                    '#symbol' => '&#10007;',
+                    '#color'   => 'red',
+                    '#symbol'  => '&#10007;',
                     '#message' => L_LIBXML_NOT_INSTALLED,
                 ));
             } else {
@@ -1188,21 +1206,42 @@ class plxUtils
     /**
      * Méthode qui retourne la liste des langues disponibles dans un tableau
      *
+     * Noms de dossiers admis pour les langues: fr, de, pt-BR, pt-PT (norme ISO-639)
+     * https://fr.wikipedia.org/wiki/Liste_des_codes_ISO_639-1#Liste_des_codes_ISO_639-1/2/3
+     * https://emojipedia.org/flags/
+     *
      * @return    array
      * @author    J.P. Pourrez, Stephane F.
      **/
     public static function getLangs()
     {
+            # https://flagpedia.net/emoji
+          $lang2flag = array(
+               'en'     => 'GB',
+               'oc'     => 'FR', # 🏴󠁦󠁲󠁯󠁣󠁣󠁿 '🏴frocc' . chr(127)
+               'co'     => 'FR', # 🏴󠁦󠁲󠁣󠁯󠁲󠁿 '🏴frcor' . chr(127)
+               'br'     => 'FR', # 🏴󠁦󠁲󠁣󠁯󠁲󠁿 '🏴frbre' . chr(127)
+               'gl'     => 'ES', # 🏴󠁥󠁳󠁧󠁡󠁿 '🏴esga' . chr(127) galicien
+               'ca'     => 'ES', # 🏴󠁥󠁳󠁣󠁴󠁿 '🏴esct' . chr(127) catalan
+               'eu'     => 'ES', # 🏴󠁥󠁳󠁰󠁶󠁿 '🏴espv' . chr(127) #basque
+               'el'     => 'GR',
+          );
+
         $result = array();
         foreach (
             array_map(
-                function ($dir1) {
-                    return preg_replace('#.*/([a-z]{2})$#', '$1', $dir1);
+                function ($item) {
+                    return preg_replace('#.*/(\w{2,3}(?:[-_]\w+)?)/core\.php$#', '$1', $item);
                 },
-                glob(PLX_CORE . 'lang/*', GLOB_ONLYDIR)
+                glob(PLX_CORE . 'lang/*/core.php')
             ) as $lang
         ) {
-            $result[$lang] = $lang;
+               $flag = isset($lang2flag[$lang]) ? $lang2flag[$lang] : strtoupper($lang);
+               $emoji = '';
+               for($e=0, $eMax=strlen($flag); $e<$eMax; $e++) {
+                    $emoji .= sprintf('&#x1f1%x;', ord(substr($flag, $e)) + 165);
+               }
+            $result[$lang] = '<span>' . $emoji . '</span>&nbsp;&nbsp;' . $lang;
         }
         return $result;
     }
@@ -1370,10 +1409,13 @@ class plxUtils
         $page = basename($url_parts['path'], '.php');
         $id = pathinfo($page, PATHINFO_FILENAME);
         $page = rtrim($page, 's');
-        $script = rtrim(basename($_SERVER['SCRIPT_NAME'], '.php'), 's');
+        $script = ($href != PLX_ROOT) ? rtrim(basename($_SERVER['SCRIPT_NAME'], '.php'), 's') : 'homepage';
         $classList = array(
             'menu'
         );
+        if(strpos($href, 'plugin.php') === 0) {
+               $classList[] = 'plugin';
+          }
         if ($highlight) {
             switch ($script) {
                 case 'article' :
@@ -1384,6 +1426,11 @@ class plxUtils
                         $classList[] = 'active';
                     }
                     break;
+                case 'plugin' :
+                         if(preg_replace('@.*/(plugin.php.*?)$@', '$1', $_SERVER['REQUEST_URI']) == $href) {
+                        $classList[] = 'active';
+                         }
+                         break;
                 default:
                     if ($script == $page) {
                         $classList[] = 'active';
@@ -1393,16 +1440,26 @@ class plxUtils
         if (!empty($aClass)) {
             $classList[] = $aClass;
         }
-        $className = implode(' ', $classList);
 
-        $onclick = $onclick ? 'onclick="' . $onclick . '"' : '';
-        $title = $title ? 'title="' . $title . '"' : '';
-        $extra = ((!empty($extra))) ? ' ' . trim($extra) : '';
+          $attrs = array(
+               'class="' . implode(' ', $classList) . '"',
+          );
+          if(!empty($onclick)) {
+               $attrs[] = 'onclick="' . $onclick . '"';
+          }
+          if(!empty($title)) {
+               $attrs[] = 'title="' . $title . '"';
+          }
+        if(strpos($href, PLX_ROOT) === 0) {
+               $attrs[] = 'target="_blank"';
+          }
 
         $caption = ucfirst($caption);
-        return <<< EOT
-<a href="$href" id="mnu_$id" class="$className" $title $onclick>$caption$extra</a>
-EOT;
+        if(is_string($extra) and (!empty($extra))) {
+               $caption .= ' ' . trim($extra);
+          }
+
+        return '<a href="' . $href . '" id="mnu_' . $id . '" ' . implode(' ', $attrs) . '>' . $caption . '</a>';
     }
 
     /**
@@ -1652,11 +1709,11 @@ EOT;
      * @param integer $level niveau de profondeur dans l'arborescence des dossiers
      * @param string $prefixParent prefixe pour l'affichage de la valeur de l'option
      * @param string $choice1 sélection initiale de l'utilisateur. Utilisé seulement au niveau 0
-     * @param boolean $modeDir1 mode pour afficher uniquement les dossiers
+     * @param boolean $onlyDir mode pour afficher uniquement les dossiers
      * @return    void                    on envoie directemenr le code HTML en sortie
      * @author    J.P. Pourrez alias bazooka07
      * */
-    private static function _printSelectDir($root, $level, $prefixParent, $choice1 = '', $modeDir1 = true, $textOnly = true)
+    private static function _printSelectDir($root, $level, $prefixParent, $choice1 = '', $onlyDir = true, $textOnly = true)
     {
 
         static $firstRootLength = 0;
@@ -1667,8 +1724,8 @@ EOT;
         # initialisation des variables statiques
         if ($level == 0) {
             $firstRootLength = strlen($root);
-            $modeDir = $modeDir1;
-            if (!$modeDir1 and $textOnly) {
+            $modeDir = $onlyDir;
+            if (!$onlyDir and $textOnly) {
                 $extsText = 'php css html htm xml js json txt me md';
                 # self::debugJS($extsText, 'extsText');
             }
@@ -1718,19 +1775,19 @@ EOT;
 
                 if ($dirOk) { # pour un dossier
                     if ($modeDir) {
-                        echo <<<EOT
-                            <option value="$value/"$classAttr data-level="$dataLevel" $selected>$prefix$caption/</option>
-EOT;
+?>
+                              <option value="<?= $value ?>/"<?= $classAttr ?> data-level="<?= $dataLevel ?>" $selected><?= $prefix . $caption?>/</option>
+<?php
                     } else {
-                        echo <<<EOT
-                            <option disabled value=""$classAttr data-level="$dataLevel">$prefix${caption}/</option>
-EOT;
+?>
+                              <option disabled value=""<?= $classAttr ?> data-level="<?= $dataLevel ?>"><?= $prefix . $caption ?>/</option>
+<?php
                     }
                     self::_printSelectDir($root . $child . '/', $level, $prefixParent . $next);
                 } else { # pour un fichier
-                    echo <<<EOT
-                        <option value="$value"$classAttr data-level="$dataLevel"$selected>$prefix$caption</option>
-EOT;
+?>
+                        <option value="<?= $value ?>"<?= $classAttr ?> data-level="<?= $dataLevel ?>" <?= $selected ?>><?= $prefix. $caption ?></option>
+<?php
                 }
             }
         }
@@ -1743,36 +1800,36 @@ EOT;
      * @param string $currentValue sélection initiale de l'utilisateur
      * @param string $root dossier initial dans l'arborescence
      * @param string $class Classe css a appliquer au sélecteur #sudwebdesign
-     * @param boolean $modeDir évite l'affichage des fichiers (dans la gestion des médias, par Ex., à la différence d'un thème)
+     * @param boolean $onlyDir évite l'affichage des fichiers (dans la gestion des médias, par Ex., à la différence d'un thème)
      * @param bool $id
      * @return    void
      * @author    J.P. Pourrez alias bazooka07, T. Ingles @sudwebdesign
-     * $modeDir=true    pour ne choisir que les dossiers : voir plxMedias contentFolder()
-     * $modeDir=false    pour ne choisir que les fichiers du thème
+     * $onlyDir=true    pour ne choisir que les dossiers : voir plxMedias contentFolder()
+     * $onlyDir=false    pour ne choisir que les fichiers du thème
      */
-    public static function printSelectDir($name, $currentValue, $root, $class = '', $modeDir = true, $id = true)
+    public static function printSelectDir($name, $currentValue, $root, $class = '', $onlyDir = true, $id = true)
     {
         if (is_bool($id))
             $id = ($id ? ' id="id_' . $name . '"' : '');
         else
             $id = ($id != '' ? ' id="' . $id . '"' : '');
-
-        if (substr($root, -1) != '/')
+        if (substr($root, -1) != '/') {
             $root .= '/';
-        $value = ($modeDir) ? '.' : '';
+          }
+        $value = ($onlyDir) ? '.' : '';
         $selected = ($value == $currentValue) ? ' selected' : '';
         $caption = L_PLXMEDIAS_ROOT;
-        $data_files = (!$modeDir) ? ' data-files' : '';
-        $disabled = (!$modeDir) ? ' disabled' : '';
+        $data_files = (!$onlyDir) ? ' data-files' : '';
+        $disabled = (!$onlyDir) ? 'disabled' : '';
         $class = ($class ? $class . ' ' : '') . 'scan-folders fold' . $data_files;
-        echo <<< EOT
-        <select $id name="$name" class="$class">
-            <option$disabled value="$value"$selected>$caption/</option>
-EOT;
-        self::_printSelectDir($root, 0, str_repeat(' ', 3), $currentValue, $modeDir);
-        echo <<< EOT
+?>
+        <select $id name="<?= $name ?>" class="<?= $class ?>">
+            <option <?= $disabled ?> value="<?= $value ?>"<?= $selected ?>><?= $caption ?>/</option>
+<?php
+        self::_printSelectDir($root, 0, str_repeat(' ', 3), $currentValue, $onlyDir);
+?>
         </select>
-EOT;
+<?php
     }
 
     /**
@@ -1785,7 +1842,7 @@ EOT;
     public static function printLinkCss($file, $admin = false)
     {
 
-        if (empty($file)) {
+        if (empty($file) or !file_exists(PLX_ROOT . $file)) {
             return;
         }
 
@@ -1828,9 +1885,8 @@ EOT;
      *
      * @author Jean-Pierre Pourrez "bazooka07"
      * */
-    public static function nl2p($content)
-    {
-        $lines = explode(PHP_EOL, $content);
+    public static function nl2p($content) {
+        $lines = explode('\n', $content);
         return '<p>' . implode('</p>' . PHP_EOL . '<p>', $lines) . '</p>';
     }
 }

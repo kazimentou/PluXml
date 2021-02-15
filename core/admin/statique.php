@@ -65,76 +65,66 @@ $content = trim($plxAdmin->getFileStatique($id));
 $url = $plxAdmin->urlRewrite("?static" . intval($id) . "/" . $plxAdmin->aStats[$id]['url']);
 ?>
 
-    <form action="statique.php" method="post" id="form_static">
-        <?= plxToken::getTokenPostMethod() ?>
-        <input type="hidden" name="id" value="<?= $id ?>"/>
-        <div class="adminheader">
-            <div>
-                <h2><?= L_STATIC_TITLE ?> "<?= plxUtils::strCheck($plxAdmin->aStats[$id]['name']); ?>"</h2>
-                <p><a class="back icon-left-big" href="statiques.php"><?= L_STATIC_BACK_TO_PAGE ?></a></p>
-            </div>
-            <div>
-                <p><a href="<?= $url ?>" target="_blank"><?= L_STATIC_VIEW_PAGE . ' ' . L_STATIC_ON_SITE ?></a></p>
-                <div>
-                    <button type="submit" class="btn--primary"><?= L_SAVE ?></button>
-                </div>
-            </div>
+<form action="statique.php" method="post" id="form_static">
+    <?= plxToken::getTokenPostMethod() ?>
+    <input type="hidden" name="id" value="<?= $id ?>" />
+    <div class="adminheader">
+        <div>
+            <h2><?= L_STATIC_TITLE ?> "<?= plxUtils::strCheck($plxAdmin->aStats[$id]['name']); ?>"</h2>
+            <p><a class="back icon-left-big" href="statiques.php"><?= L_STATIC_BACK_TO_PAGE ?></a></p>
         </div>
-        <div class="admin">
-            <?php
-
-            # Hook Plugins
-            eval($plxAdmin->plxPlugins->callHook('AdminStaticTop'))
-
-            ?>
-            <fieldset>
-                <div class="has-textarea">
-                    <label for="id_content"><?= L_CONTENT_FIELD ?></label>
-                    <textarea name="content" rows="19" id="id_content"><?= plxUtils::strCheck($content) ?></textarea>
-                </div>
-                <div>
-                    <label class="fullwidth caption-inside">
-                        <span><?= L_TEMPLATE . PHP_EOL ?></span>
-                        <?php plxUtils::printSelect('template', $aTemplates, $plxAdmin->aStats[$id]['template']) ?>
-                    </label>
-                    <?php
-                    foreach (array(
-
-                                 'title_htmltag' => L_TITLE_HTMLTAG,
-                                 'meta_description' => L_META_DESCRIPTION,
-                                 'meta_keywords' => L_META_KEYWORDS,
-                             ) as $field => $caption) {
-                        ?>
-                        <label class="fullwidth caption-inside">
-                            <span><?= $caption ?></span>
-                            <input type="text" name="<?= $field ?>"
-                                   value="<?= plxUtils::strCheck($plxAdmin->aStats[$id][$field]) ?>"/>
-                        </label>
-                        <?php
-                    }
-                    ?>
-                </div>
-                <?php
-
-                $dates5 = plxDate::date2html5($plxAdmin->aStats[$id]); # récupère les dates - version PluXml >= 6.0.0
-                plxUtils::printDates($dates5);
-
-                ?>
-            </fieldset>
-            <?php
-
-            # Hook Plugins
-            eval($plxAdmin->plxPlugins->callHook('AdminStatic'));
-
-            ?>
+        <div>
+            <button type="submit" class="btn--primary"><?= L_SAVE ?></button>
+            <p><a href="<?= $url ?>" target="_blank"><?= L_STATIC_VIEW_PAGE . ' ' . L_STATIC_ON_SITE ?></a></p>
         </div>
-    </form>
+    </div>
+    <div class="admin">
+<?php
+
+# Hook Plugins
+eval($plxAdmin->plxPlugins->callHook('AdminStaticTop'))
+
+?>
+        <fieldset>
+			<div class="has-textarea">
+				<label for="id_content"><?= L_CONTENT_FIELD ?></label>
+				<textarea name="content" rows="19" id="id_content"><?= plxUtils::strCheck($content) ?></textarea>
+			</div>
+			<div class="meta-tags">
+<?php
+if(count($aTemplates) > 1) {
+	# Choix du template
+?>
+				<label class="caption-inside">
+					<span><?= L_TEMPLATE . PHP_EOL ?></span>
+<?php plxUtils::printSelect('template', $aTemplates, $plxAdmin->aStats[$id]['template']) ?>
+				</label>
+<?php
+}
+
+plxUtils::printInputs_Metas_Title($plxAdmin->aStats[$id]);
+
+?>
+			</div>
+<?php
+
+$dates5 = plxDate::date2html5($plxAdmin->aStats[$id]); # récupère les dates - version PluXml >= 6.0.0
+plxUtils::printDates($dates5);
+
+?>
+        </fieldset>
+<?php
+
+# Hook Plugins
+eval($plxAdmin->plxPlugins->callHook('AdminStatic'));
+
+?>
+    </div>
+</form>
 <?php
 
 # Hook Plugins
 eval($plxAdmin->plxPlugins->callHook('AdminStaticFoot'));
 
 # On inclut le footer
-
 include 'foot.php';
-?>
