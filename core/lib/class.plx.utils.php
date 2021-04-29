@@ -12,7 +12,10 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\OAuth;
 use League\OAuth2\Client\Provider\Google;
 
-require PLX_CORE.'vendor/autoload.php';
+$autoloader = PLX_CORE . 'vendor/autoload.php';
+if(file_exists($autoloader)) {
+	require $autoloader;
+}
 
 class plxUtils {
 
@@ -1027,6 +1030,10 @@ class plxUtils {
 	* @throws \PHPMailer\PHPMailer\Exception
 	**/
 	public static function sendMailPhpMailer($name, $from, $to, $subject, $body, $isHtml=false, $conf, $debug=false) {
+		if(!class_exists('PHPMailer')) {
+			return false;
+		}
+
 		$mail = new PHPMailer();
 		if ($debug) {
 			$mail->SMTPDebug = SMTP::DEBUG_SERVER;
