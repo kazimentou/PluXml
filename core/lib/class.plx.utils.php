@@ -34,12 +34,16 @@ class plxUtils {
 		return isset($var) ? $var : $default;
 	}
 
-	public static function getTagValue(&$tag, &$values, $default='') {
-		if(!isset($tag) or !is_array($tag) or empty($tag) or !isset($values) or !isset($values[$tag[0]]['value'])) {
+	public static function getTagIndexValue(&$tag, &$values, $index, $default='') {
+		if(!isset($tag) or !is_array($tag) or empty($tag) or !isset($values) or !isset($values[$tag[$index]]['value'])) {
 			return $default;
 		}
 
-		return $values[$tag[0]]['value'];
+		return $values[$tag[$index]]['value'];
+	}
+
+	public static function getTagValue(&$tag, &$values, $default='') {
+		return self::getTagIndexValue(&$tag, &$values, 0, $default);
 	}
 
 	/**
