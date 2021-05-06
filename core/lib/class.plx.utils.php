@@ -43,7 +43,7 @@ class plxUtils {
 	}
 
 	public static function getTagValue(&$tag, &$values, $default='') {
-		return self::getTagIndexValue(&$tag, &$values, 0, $default);
+		return self::getTagIndexValue($tag, $values, 0, $default);
 	}
 
 	/**
