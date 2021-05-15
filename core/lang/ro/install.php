@@ -37,4 +37,3 @@ $LANG = array(
 'L_PWD_GOOD'						=> 'Parolă bună',
 'L_PWD_STRONG'						=> 'Parolă puternică',
 );
-?>

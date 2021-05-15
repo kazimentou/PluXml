@@ -1,12 +1,14 @@
-<?php if(!defined('PLX_ROOT')) exit; ?>
+<?php if (!defined('PLX_ROOT')) {
+    exit;
+} ?>
 
-	<?php if($plxShow->plxMotor->plxRecord_coms): ?>
+	<?php if ($plxShow->plxMotor->plxRecord_coms): ?>
 
 		<h3 id="comments">
 			<?php echo $plxShow->artNbCom(); ?>
 		</h3>
 
-		<?php while($plxShow->plxMotor->plxRecord_coms->loop()): # On boucle sur les commentaires ?>
+		<?php while ($plxShow->plxMotor->plxRecord_coms->loop()): # On boucle sur les commentaires?>
 
 		<div id="<?php $plxShow->comId(); ?>" class="comment <?php $plxShow->comLevel(); ?>">
 
@@ -25,17 +27,17 @@
 
 			</div>
 
-			<?php if($plxShow->plxMotor->plxRecord_arts->f('allow_com') AND $plxShow->plxMotor->aConf['allow_com']): ?>
+			<?php if ($plxShow->plxMotor->plxRecord_arts->f('allow_com') and $plxShow->plxMotor->aConf['allow_com']): ?>
 			<a rel="nofollow" href="<?php $plxShow->artUrl(); ?>#form" onclick="replyCom('<?php $plxShow->comIndex() ?>')"><?php $plxShow->lang('REPLY'); ?></a>
 			<?php endif; ?>
 
 		</div>
 
-		<?php endwhile; # Fin de la boucle sur les commentaires ?>
+		<?php endwhile; # Fin de la boucle sur les commentaires?>
 
 	<?php endif; ?>
 
-	<?php if($plxShow->plxMotor->plxRecord_arts->f('allow_com') AND $plxShow->plxMotor->aConf['allow_com']): ?>
+	<?php if ($plxShow->plxMotor->plxRecord_arts->f('allow_com') and $plxShow->plxMotor->aConf['allow_com']): ?>
 
 	<h3>
 		<?php $plxShow->lang('WRITE_A_COMMENT') ?>
@@ -48,30 +50,30 @@
 			<div class="grid">
 				<div class="col sml-12">
 					<label for="id_name"><?php $plxShow->lang('NAME') ?>* :</label>
-					<input id="id_name" name="name" type="text" size="20" value="<?php $plxShow->comGet('name',''); ?>" maxlength="30" required="required" />
+					<input id="id_name" name="name" type="text" size="20" value="<?php $plxShow->comGet('name', ''); ?>" maxlength="30" required="required" />
 				</div>
 			</div>
 			<div class="grid">
 				<div class="col sml-12 lrg-6">
 					<label for="id_mail"><?php $plxShow->lang('EMAIL') ?> :</label>
-					<input id="id_mail" name="mail" type="text" size="20" value="<?php $plxShow->comGet('mail',''); ?>" />
+					<input id="id_mail" name="mail" type="text" size="20" value="<?php $plxShow->comGet('mail', ''); ?>" />
 				</div>
 				<div class="col sml-12 lrg-6">
 					<label for="id_site"><?php $plxShow->lang('WEBSITE') ?> :</label>
-					<input id="id_site" name="site" type="text" size="20" value="<?php $plxShow->comGet('site',''); ?>" />
+					<input id="id_site" name="site" type="text" size="20" value="<?php $plxShow->comGet('site', ''); ?>" />
 				</div>
 			</div>
 			<div class="grid">
 				<div class="col sml-12">
 					<div id="id_answer"></div>
 					<label for="id_content" class="lab_com"><?php $plxShow->lang('COMMENT') ?>* :</label>
-					<textarea id="id_content" name="content" cols="35" rows="6" required="required"><?php $plxShow->comGet('content',''); ?></textarea>
+					<textarea id="id_content" name="content" cols="35" rows="6" required="required"><?php $plxShow->comGet('content', ''); ?></textarea>
 				</div>
 			</div>
 
 			<?php $plxShow->comMessage('<p id="com_message" class="#com_class"><strong>#com_message</strong></p>'); ?>
 
-			<?php if($plxShow->plxMotor->aConf['capcha']): ?>
+			<?php if ($plxShow->plxMotor->aConf['capcha']): ?>
 
 			<div class="grid">
 				<div class="col sml-12">
@@ -85,7 +87,7 @@
 
 			<div class="grid">
 				<div class="col sml-12">
-					<input type="hidden" id="id_parent" name="parent" value="<?php $plxShow->comGet('parent',''); ?>" />
+					<input type="hidden" id="id_parent" name="parent" value="<?php $plxShow->comGet('parent', ''); ?>" />
 					<input class="blue" type="submit" value="<?php $plxShow->lang('SEND') ?>" />
 				</div>
 			</div>
@@ -112,7 +114,7 @@ var parent = document.getElementById('id_parent').value;
 if(parent!='') { replyCom(parent) }
 </script>
 
-	<?php $plxShow->comFeed('rss',$plxShow->artId(), '<p><a href="#feedUrl" title="#feedTitle">#feedName</a></p>'); ?>
+	<?php $plxShow->comFeed('rss', $plxShow->artId(), '<p><a href="#feedUrl" title="#feedTitle">#feedName</a></p>'); ?>
 
 	<?php else: ?>
 
@@ -120,4 +122,4 @@ if(parent!='') { replyCom(parent) }
 		<?php $plxShow->lang('COMMENTS_CLOSED') ?>.
 	</p>
 
-	<?php endif; # Fin du if sur l'autorisation des commentaires ?>
+	<?php endif; # Fin du if sur l'autorisation des commentaires?>

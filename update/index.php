@@ -7,9 +7,9 @@ include(PLX_CORE.'lib/config.php');
 const PLX_UPDATER = true;
 
 # On verifie que PluXml est installé
-if(!file_exists(path('XMLFILE_PARAMETERS'))) {
-	header('Location: '.PLX_ROOT.'install.php');
-	exit;
+if (!file_exists(path('XMLFILE_PARAMETERS'))) {
+    header('Location: '.PLX_ROOT.'install.php');
+    exit;
 }
 
 # On inclut les librairies nécessaires
@@ -28,24 +28,26 @@ include(PLX_ROOT.'update/class.plx.updater.php');
 
 # Chargement des langues
 $lang = (!empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) ? substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2) : DEFAULT_LANG;
-if(isset($_POST['default_lang'])) $lang=$_POST['default_lang'];
-if(!array_key_exists($lang, plxUtils::getLangs())) {
-	$lang = DEFAULT_LANG;
+if (isset($_POST['default_lang'])) {
+    $lang=$_POST['default_lang'];
+}
+if (!array_key_exists($lang, plxUtils::getLangs())) {
+    $lang = DEFAULT_LANG;
 }
 loadLang(PLX_CORE.'lang/'.$lang.'/core.php');
 loadLang(PLX_CORE.'lang/'.$lang.'/admin.php');
 loadLang(PLX_CORE.'lang/'.$lang.'/update.php');
 
 # On vérifie que PHP 5 ou superieur soit installé
-if(version_compare(PHP_VERSION, '5.0.0', '<')){
-	header('Content-Type: text/plain charset=UTF-8');
-	echo utf8_decode(L_WRONG_PHP_VERSION);
-	exit;
+if (version_compare(PHP_VERSION, '5.0.0', '<')) {
+    header('Content-Type: text/plain charset=UTF-8');
+    echo utf8_decode(L_WRONG_PHP_VERSION);
+    exit;
 }
 
 # Echappement des caractères
-if($_SERVER['REQUEST_METHOD'] == 'POST') {
-	$_POST = plxUtils::unSlash($_POST);
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $_POST = plxUtils::unSlash($_POST);
 }
 
 # Création de l'objet principal et lancement du traitement
@@ -86,8 +88,8 @@ plxToken::validateFormToken($_POST);
 
 			</header>
 
-			<?php if(empty($_POST['submit'])) : ?>
-				<?php if($plxUpdater->oldVersion==$plxUpdater->newVersion) : ?>
+			<?php if (empty($_POST['submit'])) : ?>
+				<?php if ($plxUpdater->oldVersion==$plxUpdater->newVersion) : ?>
 				<p><strong><?php echo L_UPDATE_UPTODATE ?></strong></p>
 				<p><?php echo L_UPDATE_NOT_AVAILABLE ?></p>
 				<p><a href="<?php echo PLX_ROOT; ?>" title="<?php echo L_UPDATE_BACK ?>"><?php echo L_UPDATE_BACK ?></a></p>
@@ -109,9 +111,9 @@ plxToken::validateFormToken($_POST);
 					</fieldset>
 					<fieldset>
 						<p><strong><?php echo L_UPDATE_WARNING1.' '.$plxUpdater->oldVersion ?></strong></p>
-						<?php if(empty($plxUpdater->oldVersion)) : ?>
+						<?php if (empty($plxUpdater->oldVersion)) : ?>
 						<p><?php echo L_UPDATE_SELECT_VERSION ?></p>
-						<p><?php plxUtils::printSelect('version',array_keys($versions),''); ?></p>
+						<p><?php plxUtils::printSelect('version', array_keys($versions), ''); ?></p>
 						<p><?php echo L_UPDATE_WARNING2 ?></p>
 						<?php endif; ?>
 						<p><?php printf(L_UPDATE_WARNING3, preg_replace('@^([^/]+).*@', '$1', $plxUpdater->plxAdmin->aConf['racine_articles'])); ?></p>
@@ -121,9 +123,9 @@ plxToken::validateFormToken($_POST);
 				<?php endif; ?>
 			<?php else: ?>
 			<?php
-			$version = isset($_POST['version']) ? $_POST['version'] : $plxUpdater->oldVersion;
-			$plxUpdater->startUpdate($version);
-			?>
+            $version = isset($_POST['version']) ? $_POST['version'] : $plxUpdater->oldVersion;
+            $plxUpdater->startUpdate($version);
+            ?>
 			<p><a href="<?php echo PLX_ROOT; ?>" title="<?php echo L_UPDATE_BACK ?>"><?php echo L_UPDATE_BACK ?></a></p>
 			<?php endif; ?>
 		</section>

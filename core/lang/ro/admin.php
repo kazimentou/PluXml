@@ -1,5 +1,6 @@
 <?php
-$LANG = array (
+
+$LANG = array(
 
 		'L_ID' => '#',
 		'L_MENU' => 'Meniu',
@@ -535,4 +536,3 @@ $LANG = array (
 		'L_ERR_INVALID_DATE_CREATION' => 'Data creării invalid',
 		'L_ERR_INVALID_DATE_UPDATE' => 'Data invalid actualizat'
 );
-?>

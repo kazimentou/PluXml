@@ -17,10 +17,10 @@ plxToken::validateFormToken($_POST);
 $plxAdmin->checkProfil(PROFIL_ADMIN);
 
 # On édite la configuration
-if(!empty($_POST)) {
-	$plxAdmin->editConfiguration($plxAdmin->aConf,$_POST);
-	header('Location: parametres_base.php');
-	exit;
+if (!empty($_POST)) {
+    $plxAdmin->editConfiguration($plxAdmin->aConf, $_POST);
+    header('Location: parametres_base.php');
+    exit;
 }
 
 # On inclut le header
@@ -35,7 +35,7 @@ include __DIR__ .'/top.php';
 		<input type="submit" value="<?php echo L_CONFIG_BASE_UPDATE ?>" />
 	</div>
 
-	<?php eval($plxAdmin->plxPlugins->callHook('AdminSettingsBaseTop')) # Hook Plugins ?>
+	<?php eval($plxAdmin->plxPlugins->callHook('AdminSettingsBaseTop')) # Hook Plugins?>
 
 	<fieldset class="config">
 		<div class="grid">
@@ -91,7 +91,7 @@ include __DIR__ .'/top.php';
 				<label for="id_allow_com"><?php echo L_CONFIG_BASE_ALLOW_COMMENTS ?>&nbsp;:</label>
 			</div>
 			<div class="col sml-12 med-7">
-				<?php plxUtils::printSelect('allow_com',array('1'=>L_YES,'0'=>L_NO), $plxAdmin->aConf['allow_com']); ?>
+				<?php plxUtils::printSelect('allow_com', array('1'=>L_YES,'0'=>L_NO), $plxAdmin->aConf['allow_com']); ?>
 			</div>
 		</div>
 		<div class="grid">
@@ -99,7 +99,7 @@ include __DIR__ .'/top.php';
 				<label for="id_mod_com"><?php echo L_CONFIG_BASE_MODERATE_COMMENTS ?>&nbsp;:</label>
 			</div>
 			<div class="col sml-12 med-7">
-				<?php plxUtils::printSelect('mod_com',array('1'=>L_YES,'0'=>L_NO), $plxAdmin->aConf['mod_com']); ?>
+				<?php plxUtils::printSelect('mod_com', array('1'=>L_YES,'0'=>L_NO), $plxAdmin->aConf['mod_com']); ?>
 			</div>
 		</div>
 		<div class="grid">
@@ -107,7 +107,7 @@ include __DIR__ .'/top.php';
 				<label for="id_mod_art"><?php echo L_CONFIG_BASE_MODERATE_ARTICLES ?>&nbsp;:</label>
 			</div>
 			<div class="col sml-12 med-7">
-				<?php plxUtils::printSelect('mod_art',array('1'=>L_YES,'0'=>L_NO), $plxAdmin->aConf['mod_art']); ?>
+				<?php plxUtils::printSelect('mod_art', array('1'=>L_YES,'0'=>L_NO), $plxAdmin->aConf['mod_art']); ?>
 			</div>
 		</div>
 		<div class="grid">
@@ -115,7 +115,7 @@ include __DIR__ .'/top.php';
 				<label for="id_enable_rss"><?php echo L_CONFIG_BASE_ENABLE_RSS ?>&nbsp;:</label>
 			</div>
 			<div class="col sml-12 med-7">
-				<?php plxUtils::printSelect('enable_rss',array('1'=>L_YES,'0'=>L_NO), $plxAdmin->aConf['enable_rss']); ?>
+				<?php plxUtils::printSelect('enable_rss', array('1'=>L_YES,'0'=>L_NO), $plxAdmin->aConf['enable_rss']); ?>
 			</div>
 		</div>
         <div class="grid">
@@ -123,11 +123,11 @@ include __DIR__ .'/top.php';
                 <label for="id_enable_rss_comment"><?php echo L_CONFIG_BASE_ENABLE_RSS_COMMENT ?>&nbsp;:</label>
             </div>
             <div class="col sml-12 med-7">
-                <?php plxUtils::printSelect('enable_rss_comment',array('1'=>L_YES,'0'=>L_NO), $plxAdmin->aConf['enable_rss_comment']); ?>
+                <?php plxUtils::printSelect('enable_rss_comment', array('1'=>L_YES,'0'=>L_NO), $plxAdmin->aConf['enable_rss_comment']); ?>
             </div>
         </div>
     </fieldset>
-	<?php eval($plxAdmin->plxPlugins->callHook('AdminSettingsBase')) # Hook Plugins ?>
+	<?php eval($plxAdmin->plxPlugins->callHook('AdminSettingsBase')) # Hook Plugins?>
 	<?php echo plxToken::getTokenPostMethod() ?>
 
 </form>

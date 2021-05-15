@@ -1,15 +1,19 @@
 <?php
+
 const PLX_DEBUG = true;
 const PLX_VERSION = '5.8.9';
 const PLX_URL_REPO = 'https://www.pluxml.org';
 const PLX_URL_VERSION = PLX_URL_REPO.'/download/latest-version.txt';
 
 # Gestion des erreurs PHP
-if(PLX_DEBUG) error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
+if (PLX_DEBUG) {
+    error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
+}
 
 # Fonction qui retourne le timestamp UNIX actuel avec les microsecondes
-function getMicrotime() {
-	$t = explode(' ',microtime());
+function getMicrotime()
+{
+    $t = explode(' ', microtime());
 	return $t[0]+$t[1];
 }
 
@@ -46,9 +50,9 @@ $img_thumb = array('50x50', '75x75', '100x100');
 if (ini_get('register_globals')) {
 	$array = array('_REQUEST', '_SESSION', '_SERVER', '_ENV', '_FILES');
 	foreach ($array as $value) {
-		if(isset($GLOBALS[$value]))  {
+        if (isset($GLOBALS[$value])) {
 			foreach ($GLOBALS[$value] as $key => $var) {
-				if (isset($GLOBALS[$key]) AND $var === $GLOBALS[$key]) {
+                if (isset($GLOBALS[$key]) and $var === $GLOBALS[$key]) {
 					unset($GLOBALS[$key]);
 				}
 			}
@@ -57,21 +61,27 @@ if (ini_get('register_globals')) {
 }
 
 # fonction de chargement d'un fichier de langue
-function loadLang($filename) {
-	if(file_exists($filename)) {
+function loadLang($filename)
+{
+    if (file_exists($filename)) {
 		$LANG = array();
 		include_once $filename;
-		foreach($LANG as $key => $value) {
-			if(!defined($key)) define($key,$value);
+        foreach ($LANG as $key => $value) {
+            if (!defined($key)) {
+                define($key, $value);
+            }
 		}
 	}
 }
 
 # fonction qui retourne ou change le chemin des fichiers xml de configuration
-function path($s, $newvalue='') {
+function path($s, $newvalue='')
+{
 	global $CONSTS;
-	if(!empty($newvalue))
+    if (!empty($newvalue)) {
 		$CONSTS[$s]=$newvalue;
-	if(isset($CONSTS[$s]))
+    }
+    if (isset($CONSTS[$s])) {
 		return $CONSTS[$s];
+    }
 }

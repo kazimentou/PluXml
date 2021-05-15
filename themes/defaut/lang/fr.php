@@ -52,5 +52,3 @@ $LANG = array(
 'CANCEL'				=> 'Annuler',
 
 );
-
-?>

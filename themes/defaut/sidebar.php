@@ -1,4 +1,6 @@
-<?php if(!defined('PLX_ROOT')) exit; ?>
+<?php if (!defined('PLX_ROOT')) {
+    exit;
+} ?>
 
 	<aside class="aside col sml-12 med-3">
 
@@ -7,7 +9,7 @@
 		</h3>
 
 		<ul class="cat-list unstyled-list">
-			<?php $plxShow->catList('','<li id="#cat_id"><a class="#cat_status" href="#cat_url" title="#cat_name">#cat_name</a> (#art_nb)</li>'); ?>
+			<?php $plxShow->catList('', '<li id="#cat_id"><a class="#cat_status" href="#cat_url" title="#cat_name">#cat_name</a> (#art_nb)</li>'); ?>
 		</ul>
 
 		<h3>

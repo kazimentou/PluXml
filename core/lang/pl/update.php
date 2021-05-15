@@ -59,4 +59,3 @@ $LANG = array(
 # PluXml 5.8.7
 'L_BUILD_CSS_PLUGINS_CACHE'			=> 'Tworzenie plików pamięci podręcznej admin.css i site.css dla wtyczek',
 );
-

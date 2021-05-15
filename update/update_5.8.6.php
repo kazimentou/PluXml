@@ -8,7 +8,6 @@
  **/
 class update_5_8_6 extends plxUpdate
 {
-
     # mise à jour fichier parametres.xml (récupération du mot de passe)
     public function step1()
     {

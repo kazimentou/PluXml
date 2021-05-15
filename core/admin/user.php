@@ -19,21 +19,20 @@ eval($plxAdmin->plxPlugins->callHook('AdminUserPrepend'));
 $plxAdmin->checkProfil(PROFIL_ADMIN);
 
 # On édite la page statique
-if(!empty($_POST) AND isset($plxAdmin->aUsers[ $_POST['id'] ])) {
-	$plxAdmin->editUser($_POST);
-	header('Location: user.php?p='.$_POST['id']);
-	exit;
-}
-elseif(!empty($_GET['p'])) { # On vérifie l'existence de l'utilisateur
-	$id = plxUtils::strCheck(plxUtils::nullbyteRemove($_GET['p']));
-	if(!isset($plxAdmin->aUsers[ $id ])) {
-		plxMsg::Error(L_USER_UNKNOWN);
-		header('Location: parametres_users.php');
-		exit;
-	}
+if (!empty($_POST) and isset($plxAdmin->aUsers[ $_POST['id'] ])) {
+    $plxAdmin->editUser($_POST);
+    header('Location: user.php?p='.$_POST['id']);
+    exit;
+} elseif (!empty($_GET['p'])) { # On vérifie l'existence de l'utilisateur
+    $id = plxUtils::strCheck(plxUtils::nullbyteRemove($_GET['p']));
+    if (!isset($plxAdmin->aUsers[ $id ])) {
+        plxMsg::Error(L_USER_UNKNOWN);
+        header('Location: parametres_users.php');
+        exit;
+    }
 } else { # Sinon, on redirige
-	header('Location: parametres_users.php');
-	exit;
+    header('Location: parametres_users.php');
+    exit;
 }
 
 # On inclut le header
@@ -49,7 +48,7 @@ include __DIR__ .'/top.php';
 		<input type="submit" value="<?php echo L_USER_UPDATE ?>"/>
 	</div>
 
-	<?php eval($plxAdmin->plxPlugins->callHook('AdminUserTop')) # Hook Plugins ?>
+	<?php eval($plxAdmin->plxPlugins->callHook('AdminUserTop')) # Hook Plugins?>
 
 	<fieldset>
 		<div class="grid">
@@ -72,11 +71,11 @@ include __DIR__ .'/top.php';
 		<div class="grid">
 			<div class="col sml-12">
 				<label for="id_content"><?php echo L_USER_INFOS ?>&nbsp;:</label>
-				<?php plxUtils::printArea('content',plxUtils::strCheck($plxAdmin->aUsers[$id]['infos']), 0, 8) ?>
+				<?php plxUtils::printArea('content', plxUtils::strCheck($plxAdmin->aUsers[$id]['infos']), 0, 8) ?>
 			</div>
 		</div>
 	</fieldset>
-	<?php eval($plxAdmin->plxPlugins->callHook('AdminUser')) # Hook Plugins ?>
+	<?php eval($plxAdmin->plxPlugins->callHook('AdminUser')) # Hook Plugins?>
 
 </form>
 

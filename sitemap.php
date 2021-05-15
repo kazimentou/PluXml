@@ -6,7 +6,7 @@ include(PLX_ROOT.'config.php');
 include(PLX_CORE.'lib/config.php');
 
 # On verifie que PluXml est installé
-if(!file_exists(path('XMLFILE_PARAMETERS'))) {
+if (!file_exists(path('XMLFILE_PARAMETERS'))) {
 	header('Location: '.PLX_ROOT.'install.php');
 	exit;
 }
@@ -31,7 +31,9 @@ $plxMotor = plxMotor::getInstance();
 $lang = $plxMotor->aConf['default_lang'];
 
 # Hook Plugins
-if(eval($plxMotor->plxPlugins->callHook('SitemapBegin'))) return;
+if (eval($plxMotor->plxPlugins->callHook('SitemapBegin'))) {
+    return;
+}
 
 # chargement du fichier de langue
 loadLang(PLX_CORE.'lang/'.$lang.'/core.php');
@@ -54,12 +56,12 @@ echo '<?xml version="1.0" encoding="'.strtolower(PLX_CHARSET).'" ?>'."\n";
 	</url>
 <?php
 # Les pages statiques
-foreach($plxMotor->aStats as $stat_num => $stat_info) {
-	if($stat_info['active']==1 AND $stat_num!=$plxMotor->aConf['homestatic']) {
+foreach ($plxMotor->aStats as $stat_num => $stat_info) {
+    if ($stat_info['active']==1 and $stat_num!=$plxMotor->aConf['homestatic']) {
 		echo "\n";
 		echo "\t<url>\n";
 		echo "\t\t<loc>".$plxMotor->urlRewrite("?static".intval($stat_num)."/".$stat_info['url'])."</loc>\n";
-		echo "\t\t<lastmod>".plxDate::formatDate($plxMotor->aStats[$stat_num]['date_update'],'#num_year(4)-#num_month-#num_day')."</lastmod>\n";
+        echo "\t\t<lastmod>".plxDate::formatDate($plxMotor->aStats[$stat_num]['date_update'], '#num_year(4)-#num_month-#num_day')."</lastmod>\n";
 		echo "\t\t<changefreq>monthly</changefreq>\n";
 		echo "\t\t<priority>0.8</priority>\n";
 		echo "\t</url>\n";
@@ -67,8 +69,8 @@ foreach($plxMotor->aStats as $stat_num => $stat_info) {
 }
 eval($plxMotor->plxPlugins->callHook('SitemapStatics')); # Hook Plugins
 # Les catégories
-foreach($plxMotor->aCats as $cat_num => $cat_info) {
-	if($cat_info['active']==1 AND $cat_info['menu']=='oui' AND ($cat_info['articles']!=0 OR $plxMotor->aConf['display_empty_cat'])) {
+foreach ($plxMotor->aCats as $cat_num => $cat_info) {
+    if ($cat_info['active']==1 and $cat_info['menu']=='oui' and ($cat_info['articles']!=0 or $plxMotor->aConf['display_empty_cat'])) {
 		echo "\n";
 		echo "\t<url>\n";
 		echo "\t\t<loc>".$plxMotor->urlRewrite("?categorie".intval($cat_num)."/".$cat_info['url'])."</loc>\n";
@@ -79,17 +81,17 @@ foreach($plxMotor->aCats as $cat_num => $cat_info) {
 }
 eval($plxMotor->plxPlugins->callHook('SitemapCategories')); # Hook Plugins
 # Les articles
-if($aFiles = $plxMotor->plxGlob_arts->query('/^[0-9]{4}.(?:[0-9]|home|,)*(?:'.$plxMotor->activeCats.'|home)(?:[0-9]|home|,)*.[0-9]{3}.[0-9]{12}.[a-z0-9-]+.xml$/','art','rsort', 0, false, 'before')) {
+if ($aFiles = $plxMotor->plxGlob_arts->query('/^[0-9]{4}.(?:[0-9]|home|,)*(?:'.$plxMotor->activeCats.'|home)(?:[0-9]|home|,)*.[0-9]{3}.[0-9]{12}.[a-z0-9-]+.xml$/', 'art', 'rsort', 0, false, 'before')) {
 	$plxRecord_arts = false;
 	$array=array();
-	foreach($aFiles as $k=>$v) { # On parcourt tous les fichiers
+    foreach ($aFiles as $k=>$v) { # On parcourt tous les fichiers
 		$array[ $k ] = $plxMotor->parseArticle(PLX_ROOT.$plxMotor->aConf['racine_articles'].$v);
 	}
 	# On stocke les enregistrements dans un objet plxRecord
 	$plxRecord_arts = new plxRecord($array);
-	if($plxRecord_arts) {
+    if ($plxRecord_arts) {
 		# On boucle sur nos articles
-		while($plxRecord_arts->loop()) {
+        while ($plxRecord_arts->loop()) {
 			$num = intval($plxRecord_arts->f('numero'));
 			echo "\n";
 			echo "\t<url>\n";

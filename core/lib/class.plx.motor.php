@@ -7,11 +7,12 @@
  * @author	Anthony GUÉRIN, Florent MONTHEL, Stéphane F, Pedro "P3ter" CADETE
  **/
 
-include_once PLX_CORE.'lib/class.plx.template.php';
+include_once PLX_CORE . 'lib/class.plx.template.php';
 
-class plxMotor {
-	const PLX_TEMPLATES = PLX_CORE . 'templates/';
-	const PLX_TEMPLATES_DATA = PLX_ROOT . 'data/templates/';
+class plxMotor
+{
+    public const PLX_TEMPLATES = PLX_CORE . 'templates/';
+    public const PLX_TEMPLATES_DATA = PLX_ROOT . 'data/templates/';
 
 	public $get = false; # Donnees variable GET
 	public $racine = false; # Url de PluXml
@@ -53,7 +54,8 @@ class plxMotor {
 	 * @return	self			return une instance de la classe plxMotor
 	 * @author	Stephane F
 	 **/
-	public static function getInstance(){
+    public static function getInstance()
+    {
 		if (empty(self::$instance)) {
 			self::$instance = new plxMotor(path('XMLFILE_PARAMETERS'));
 		}
@@ -68,7 +70,8 @@ class plxMotor {
 	 * @return	null
 	 * @author	Anthony GUÉRIN, Florent MONTHEL, Stéphane F
 	 **/
-	protected function __construct($filename) {
+    protected function __construct($filename)
+    {
 
 		# On parse le fichier de configuration
 		$this->getConfiguration($filename);
@@ -78,8 +81,8 @@ class plxMotor {
 		# gestion du timezone
 		date_default_timezone_set($this->aConf['timezone']);
 		# On vérifie s'il faut faire une mise à jour
-		if((!isset($this->aConf['version']) OR PLX_VERSION!=$this->aConf['version']) AND !defined('PLX_UPDATER')) {
-			header('Location: '.PLX_ROOT.'update/index.php');
+        if ((!isset($this->aConf['version']) or PLX_VERSION!=$this->aConf['version']) and !defined('PLX_UPDATER')) {
+            header('Location: ' . PLX_ROOT . 'update/index.php');
 			exit;
 		}
 		# Chargement des variables
@@ -101,8 +104,8 @@ class plxMotor {
 		# Hook plugins
 		eval($this->plxPlugins->callHook('plxMotorConstructLoadPlugins'));
 		# Traitement sur les répertoires des articles et des commentaires
-		$this->plxGlob_arts = plxGlob::getInstance(PLX_ROOT.$this->aConf['racine_articles'], false, true, 'arts');
-		$this->plxGlob_coms = plxGlob::getInstance(PLX_ROOT.$this->aConf['racine_commentaires'], false, true, 'commentaires');
+        $this->plxGlob_arts = plxGlob::getInstance(PLX_ROOT . $this->aConf['racine_articles'], false, true, 'arts');
+        $this->plxGlob_coms = plxGlob::getInstance(PLX_ROOT . $this->aConf['racine_commentaires'], false, true, 'commentaires');
 		# Récupération des données dans les autres fichiers xml
 		$this->getCategories(path('XMLFILE_CATEGORIES'));
 		$this->getStatiques(path('XMLFILE_STATICS'));
@@ -125,135 +128,138 @@ class plxMotor {
 	 * @return	null
 	 * @author	Anthony GUÉRIN, Florent MONTHEL, Stéphane F
 	 **/
-	public function prechauffage() {
+    public function prechauffage()
+    {
 
 		# Hook plugins
-		if(eval($this->plxPlugins->callHook('plxMotorPreChauffageBegin'))) return;
+        if (eval($this->plxPlugins->callHook('plxMotorPreChauffageBegin'))) {
+            return;
+        }
 
-		if(!empty($this->get) and !preg_match('#^(?:blog|article\d{1,4}/|static\d{1,3}/|categorie\d{1,3}/|archives/\d{4}(?:/\d{2})?|tag/\w|page\d|preview|telechargement|download)#', $this->get)) { $this->get = ''; }
+        if (!empty($this->get) and !preg_match('#^(?:blog|article\d{1,4}/|static\d{1,3}/|categorie\d{1,3}/|archives/\d{4}(?:/\d{2})?|tag/\w|page\d|preview|telechargement|download)#', $this->get)) {
+            $this->get = '';
+        }
 
-		if(!$this->get AND $this->aConf['homestatic']!='' AND isset($this->aStats[$this->aConf['homestatic']]) AND $this->aStats[$this->aConf['homestatic']]['active']) {
+        if (!$this->get and $this->aConf['homestatic']!='' and isset($this->aStats[$this->aConf['homestatic']]) and $this->aStats[$this->aConf['homestatic']]['active']) {
 			$this->mode = 'static'; # Mode static
 			$this->cible = $this->aConf['homestatic'];
 			$this->template = $this->aStats[ $this->cible ]['template'];
-		}
-		elseif(empty($this->get)
-				OR preg_match('#^(blog|blog\/page\d*|\/?page\d*)$#', $this->get)
-				AND !preg_match('#^(?:article|static|categorie|archives|tag|preview|telechargement|download)[\b\d/]+#', $this->get)) {
+        } elseif (empty($this->get)
+                or preg_match('#^(blog|blog\/page\d*|\/?page\d*)$#', $this->get)
+                and !preg_match('#^(?:article|static|categorie|archives|tag|preview|telechargement|download)[\b\d/]+#', $this->get)) {
 			$this->mode = 'home';
 			$this->template = $this->aConf['hometemplate'];
 			$this->bypage = $this->aConf['bypage']; # Nombre d'article par page
 			# On regarde si on a des articles en mode "home"
-			if($this->plxGlob_arts->query('#^\d{4}\.(home[0-9,]*)\.\d{3}\.\d{12}\.[\w-]+\.xml$#')) {
+            if ($this->plxGlob_arts->query('#^\d{4}\.(home[0-9,]*)\.\d{3}\.\d{12}\.[\w-]+\.xml$#')) {
 				$this->motif = '#^\d{4}.(home[0-9,]*).\d{3}.\d{12}.[\w-]+.xml$#';
 			} else { # Sinon on recupere tous les articles
-				$this->motif = '#^\d{4}.(?:\d|,)*(?:'.$this->homepageCats.')(?:\d|,)*.\d{3}.\d{12}.[\w-]+.xml$#';
+                $this->motif = '#^\d{4}.(?:\d|,)*(?:' . $this->homepageCats . ')(?:\d|,)*.\d{3}.\d{12}.[\w-]+.xml$#';
 			}
-		}
-		elseif($this->get AND preg_match('#^article(\d+)\/?([\w-]+)?#',$this->get,$capture)) {
+        } elseif ($this->get and preg_match('#^article(\d+)\/?([\w-]+)?#', $this->get, $capture)) {
 			$this->mode = 'article'; # Mode article
 			$this->template = 'article.php';
-			$this->cible = str_pad($capture[1],4,'0',STR_PAD_LEFT); # On complete sur 4 caracteres
-			$this->motif = '#^'.$this->cible.'.(?:\d|home|,)*(?:'.$this->activeCats.'|home)(?:\d|home|,)*.\d{3}.\d{12}.[\w-]+.xml$#'; # Motif de recherche
-			if($this->getArticles()) {
+            $this->cible = str_pad($capture[1], 4, '0', STR_PAD_LEFT); # On complete sur 4 caracteres
+            $this->motif = '#^' . $this->cible . '.(?:\d|home|,)*(?:' . $this->activeCats . '|home)(?:\d|home|,)*.\d{3}.\d{12}.[\w-]+.xml$#'; # Motif de recherche
+            if ($this->getArticles()) {
 				# Redirection 301
-				if(!isset($capture[2]) OR $this->plxRecord_arts->f('url')!=$capture[2]) {
-					$this->redir301($this->urlRewrite('?article'.intval($this->cible).'/'.$this->plxRecord_arts->f('url')));
+                if (!isset($capture[2]) or $this->plxRecord_arts->f('url')!=$capture[2]) {
+                    $this->redir301($this->urlRewrite('?article' . intval($this->cible) . '/' . $this->plxRecord_arts->f('url')));
 				}
 			} else {
 				$this->error404(L_UNKNOWN_ARTICLE);
 			}
-		}
-		elseif($this->get AND preg_match('#^static(\d+)\/?([\w-]+)?#',$this->get,$capture)) {
-			$this->cible = str_pad($capture[1],3,'0',STR_PAD_LEFT); # On complète sur 3 caractères
-			if(!isset($this->aStats[$this->cible]) OR !$this->aStats[$this->cible]['active']) {
+        } elseif ($this->get and preg_match('#^static(\d+)\/?([\w-]+)?#', $this->get, $capture)) {
+            $this->cible = str_pad($capture[1], 3, '0', STR_PAD_LEFT); # On complète sur 3 caractères
+            if (!isset($this->aStats[$this->cible]) or !$this->aStats[$this->cible]['active']) {
 				$this->error404(L_UNKNOWN_STATIC);
 			} else {
-				if(!empty($this->aConf['homestatic']) AND $capture[1]){
-					if($this->aConf['homestatic']==$this->cible){
+                if (!empty($this->aConf['homestatic']) and $capture[1]) {
+                    if ($this->aConf['homestatic']==$this->cible) {
 						$this->redir301($this->urlRewrite());
 					}
 				}
-				if($this->aStats[$this->cible]['url']==$capture[2]) {
+                if ($this->aStats[$this->cible]['url']==$capture[2]) {
 					$this->mode = 'static'; # Mode static
 					$this->template = $this->aStats[$this->cible]['template'];
 				} else {
-					$this->redir301($this->urlRewrite('?static'.intval($this->cible).'/'.$this->aStats[$this->cible]['url']));
+                    $this->redir301($this->urlRewrite('?static' . intval($this->cible) . '/' . $this->aStats[$this->cible]['url']));
 				}
 			}
-		}
-		elseif($this->get AND preg_match('#^categorie(\d+)\/?([\w-]+)?#',$this->get,$capture)) {
-			$this->cible = str_pad($capture[1],3,'0',STR_PAD_LEFT); # On complete sur 3 caracteres
-			if(!empty($this->aCats[$this->cible]) AND $this->aCats[$this->cible]['active'] AND $this->aCats[$this->cible]['url']==$capture[2]) {
+        } elseif ($this->get and preg_match('#^categorie(\d+)\/?([\w-]+)?#', $this->get, $capture)) {
+            $this->cible = str_pad($capture[1], 3, '0', STR_PAD_LEFT); # On complete sur 3 caracteres
+            if (!empty($this->aCats[$this->cible]) and $this->aCats[$this->cible]['active'] and $this->aCats[$this->cible]['url']==$capture[2]) {
 				$this->mode = 'categorie'; # Mode categorie
-				$this->motif = '#^\d{4}.((?:\d|home|,)*(?:'.$this->cible.')(?:\d|home|,)*).\d{3}.\d{12}.[\w-]+.xml$#'; # Motif de recherche
+                $this->motif = '#^\d{4}.((?:\d|home|,)*(?:' . $this->cible . ')(?:\d|home|,)*).\d{3}.\d{12}.[\w-]+.xml$#'; # Motif de recherche
 				$this->template = $this->aCats[$this->cible]['template'];
 				$this->tri = $this->aCats[$this->cible]['tri']; # Recuperation du tri des articles
 				$this->bypage = $this->aCats[$this->cible]['bypage'] > 0 ? $this->aCats[$this->cible]['bypage'] : $this->bypage;
-			}
-			elseif(isset($this->aCats[$this->cible])) { # Redirection 301
-				if($this->aCats[$this->cible]['url']!=$capture[2]) {
-					$this->redir301($this->urlRewrite('?categorie'.intval($this->cible).'/'.$this->aCats[$this->cible]['url']));
+            } elseif (isset($this->aCats[$this->cible])) { # Redirection 301
+                if ($this->aCats[$this->cible]['url']!=$capture[2]) {
+                    $this->redir301($this->urlRewrite('?categorie' . intval($this->cible) . '/' . $this->aCats[$this->cible]['url']));
 				}
 			} else {
 				$this->error404(L_UNKNOWN_CATEGORY);
 			}
-		}
-		elseif($this->get AND preg_match('#^archives\/(\d{4})[\/]?(\d{2})?[\/]?(\d{2})?#',$this->get,$capture)) {
+        } elseif ($this->get and preg_match('#^archives\/(\d{4})[\/]?(\d{2})?[\/]?(\d{2})?#', $this->get, $capture)) {
 			$this->mode = 'archives';
 			$this->template = 'archives.php';
 			$this->bypage = $this->aConf['bypage_archives'];
 			$this->cible = $search = $capture[1];
-			if(!empty($capture[2])) $this->cible = ($search .= $capture[2]);
-			else $search .= '\d{2}';
-			if(!empty($capture[3])) $search .= $capture[3];
-			else $search .= '\d{2}';
-			$this->motif = '#^\d{4}.(?:\d|home|,)*(?:'.$this->activeCats.'|home)(?:\d|home|,)*.\d{3}.'.$search.'\d{4}.[\w-]+.xml$#';
+            if (!empty($capture[2])) {
+                $this->cible = ($search .= $capture[2]);
+            } else {
+                $search .= '\d{2}';
 		}
-		elseif($this->get AND preg_match('#^tag\/([\w-]+)#',$this->get,$capture)) {
+            if (!empty($capture[3])) {
+                $search .= $capture[3];
+            } else {
+                $search .= '\d{2}';
+            }
+            $this->motif = '#^\d{4}.(?:\d|home|,)*(?:' . $this->activeCats . '|home)(?:\d|home|,)*.\d{3}.' . $search . '\d{4}.[\w-]+.xml$#';
+        } elseif ($this->get and preg_match('#^tag\/([\w-]+)#', $this->get, $capture)) {
 			$this->cible = $capture[1];
 			$ids = array();
 			$datetime = date('YmdHi');
-			foreach($this->aTags as $idart => $tag) {
-				if($tag['date']<=$datetime) {
+            foreach ($this->aTags as $idart => $tag) {
+                if ($tag['date']<=$datetime) {
 					$tags = array_map("trim", explode(',', $tag['tags']));
 					$tagUrls = array_map(array('plxUtils', 'urlify'), $tags);
-					if(in_array($this->cible, $tagUrls)) {
-						if(!isset($ids[$idart])) $ids[$idart] = $idart;
-						if(!isset($this->cibleName)) {
+                    if (in_array($this->cible, $tagUrls)) {
+                        if (!isset($ids[$idart])) {
+                            $ids[$idart] = $idart;
+                        }
+                        if (!isset($this->cibleName)) {
 							$key = array_search($this->cible, $tagUrls);
 							$this->cibleName=$tags[$key];
 						}
 					}
 				}
 			}
-			if(sizeof($ids)>0) {
+            if (sizeof($ids)>0) {
 				$this->mode = 'tags'; # Affichage en mode home
 				$this->template = 'tags.php';
-				$this->motif = '#('.implode('|', $ids).').(?:\d|home|,)*(?:'.$this->activeCats.'|home)(?:\d|home|,)*.\d{3}.\d{12}.[\w-]+.xml$#';
+                $this->motif = '#(' . implode('|', $ids) . ').(?:\d|home|,)*(?:' . $this->activeCats . '|home)(?:\d|home|,)*.\d{3}.\d{12}.[\w-]+.xml$#';
 				$this->bypage = $this->aConf['bypage_tags']; # Nombre d'article par page
 			} else {
 				$this->error404(L_ARTICLE_NO_TAG);
 			}
-		}
-		elseif($this->get AND preg_match('#^preview\/?#',$this->get) AND isset($_SESSION['preview'])) {
+        } elseif ($this->get and preg_match('#^preview\/?#', $this->get) and isset($_SESSION['preview'])) {
 			$this->mode = 'preview';
-		}
-		elseif($this->get AND preg_match('#^(telechargement|download)\/(.+)$#',$this->get,$capture)) {
-			if($this->sendTelechargement($capture[2])) {
+        } elseif ($this->get and preg_match('#^(telechargement|download)\/(.+)$#', $this->get, $capture)) {
+            if ($this->sendTelechargement($capture[2])) {
 				$this->mode = 'telechargement'; # Mode telechargement
 				$this->cible = $capture[2];
 			} else {
 				$this->error404(L_DOCUMENT_NOT_FOUND);
 			}
-		}
-		else {
+        } else {
 			$this->error404(L_ERR_PAGE_NOT_FOUND);
 		}
 
 		# On vérifie l'existence du template
 		$filename = $this->style . '/' . $this->template;
-		if(!file_exists(PLX_ROOT . $this->aConf['racine_themes'] . $filename)) {
+        if (!file_exists(PLX_ROOT . $this->aConf['racine_themes'] . $filename)) {
 			$this->error404(L_ERR_FILE_NOTFOUND . ' ( <i>' . $filename . '</i> )');
 		}
 
@@ -267,12 +273,13 @@ class plxMotor {
 	 * @return	null
 	 * @author	Stephane F
 	 **/
-	public function redir301($url) {
+    public function redir301($url)
+    {
 		# Hook plugins
 		eval($this->plxPlugins->callHook('plxMotorRedir301'));
 		# Redirection 301
 		header('Status: 301 Moved Permanently', false, 301);
-		header('Location: '.$url);
+        header('Location: ' . $url);
 		exit();
 	}
 
@@ -282,7 +289,8 @@ class plxMotor {
 	 * @return	null
 	 * @author	Stephane F
 	 **/
-	public function error404($msg) {
+    public function error404($msg)
+    {
 		header("Status: 404 Not Found");
 		header("HTTP/1.0 404 Not Found");
 		$this->plxErreur = new plxErreur($msg);
@@ -296,32 +304,34 @@ class plxMotor {
 	 * @return	null
 	 * @author	Florent MONTHEL, Stephane F
 	 **/
-	public function demarrage() {
+    public function demarrage()
+    {
 
 		# Hook plugins
-		if(eval($this->plxPlugins->callHook('plxMotorDemarrageBegin'))) return;
+        if (eval($this->plxPlugins->callHook('plxMotorDemarrageBegin'))) {
+            return;
+        }
 
-		if($this->mode == 'home' OR $this->mode == 'categorie' OR $this->mode == 'archives' OR $this->mode == 'tags') {
+        if ($this->mode == 'home' or $this->mode == 'categorie' or $this->mode == 'archives' or $this->mode == 'tags') {
 			$this->getPage(); # Recuperation du numéro de la page courante
-			if(!$this->getArticles()) { # Si aucun article
+            if (!$this->getArticles()) { # Si aucun article
 				$this->error404(L_NO_ARTICLE_PAGE);
 			}
-		}
-		elseif($this->mode == 'article') {
+        } elseif ($this->mode == 'article') {
 
 			# On a validé le formulaire commentaire
-			if(!empty($_POST) AND $this->plxRecord_arts->f('allow_com') AND $this->aConf['allow_com']) {
+            if (!empty($_POST) and $this->plxRecord_arts->f('allow_com') and $this->aConf['allow_com']) {
 				# On récupère le retour de la création
-				$retour = $this->newCommentaire($this->cible,plxUtils::unSlash($_POST));
+                $retour = $this->newCommentaire($this->cible, plxUtils::unSlash($_POST));
 				# Url de l'article
-				$url = $this->urlRewrite('?article'.intval($this->plxRecord_arts->f('numero')).'/'.$this->plxRecord_arts->f('url'));
+                $url = $this->urlRewrite('?article' . intval($this->plxRecord_arts->f('numero')) . '/' . $this->plxRecord_arts->f('url'));
 				eval($this->plxPlugins->callHook('plxMotorDemarrageNewCommentaire')); # Hook Plugins
-				if($retour[0] == 'c') { # Le commentaire a été publié
+                if ($retour[0] == 'c') { # Le commentaire a été publié
 					$_SESSION['msgcom'] = L_COM_PUBLISHED;
-					header('Location: '.$url.'#'.$retour);
-				} elseif($retour == 'mod') { # Le commentaire est en modération
+                    header('Location: ' . $url . '#' . $retour);
+                } elseif ($retour == 'mod') { # Le commentaire est en modération
 					$_SESSION['msgcom'] = L_COM_IN_MODERATION;
-					header('Location: '.$url.'#form');
+                    header('Location: ' . $url . '#form');
 				} else {
 					$_SESSION['msgcom'] = $retour;
 					$_SESSION['msg']['name'] = plxUtils::unSlash($_POST['name']);
@@ -330,20 +340,23 @@ class plxMotor {
 					$_SESSION['msg']['content'] = plxUtils::unSlash($_POST['content']);
 					$_SESSION['msg']['parent'] = plxUtils::unSlash($_POST['parent']);
 					eval($this->plxPlugins->callHook('plxMotorDemarrageCommentSessionMessage')); # Hook Plugins
-					header('Location: '.$url.'#form');
+                    header('Location: ' . $url . '#form');
 				}
 				exit;
 			}
 			# Récupération des commentaires
-			$this->getCommentaires('#^'.$this->cible.'.\d{10}-\d+.xml$#',$this->tri_coms);
+            $this->getCommentaires('#^' . $this->cible . '.\d{10}-\d+.xml$#', $this->tri_coms);
 			$this->template=$this->plxRecord_arts->f('template');
-			if($this->aConf['capcha']) $this->plxCapcha = new plxCapcha(); # Création objet captcha
-		}
-		elseif($this->mode == 'preview') {
+            if ($this->aConf['capcha']) {
+                $this->plxCapcha = new plxCapcha();
+            } # Création objet captcha
+        } elseif ($this->mode == 'preview') {
 			$this->mode='article';
 			$this->plxRecord_arts = new plxRecord($_SESSION['preview']);
 			$this->template=$this->plxRecord_arts->f('template');
-			if($this->aConf['capcha']) $this->plxCapcha = new plxCapcha(); # Création objet captcha
+            if ($this->aConf['capcha']) {
+                $this->plxCapcha = new plxCapcha();
+            } # Création objet captcha
 		}
 
 		# Hook plugins
@@ -358,17 +371,18 @@ class plxMotor {
 	 * @return	null
 	 * @author	Anthony GUÉRIN, Florent MONTHEL, Stéphane F
 	 **/
-	public function getConfiguration($filename) {
+    public function getConfiguration($filename)
+    {
 
 		# Mise en place du parseur XML
-		$data = implode('',file($filename));
+        $data = implode('', file($filename));
 		$parser = xml_parser_create(PLX_CHARSET);
-		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
-		xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,0);
-		xml_parse_into_struct($parser,$data,$values,$iTags);
+        xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
+        xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 0);
+        xml_parse_into_struct($parser, $data, $values, $iTags);
 		xml_parser_free($parser);
 		# On verifie qu'il existe des tags "parametre"
-		if(isset($iTags['parametre'])) {
+        if (isset($iTags['parametre'])) {
 			# On compte le nombre de tags "parametre"
 			$nb = sizeof($iTags['parametre']);
 			# On boucle sur $nb
@@ -381,29 +395,34 @@ class plxMotor {
 				}
 			}
 		}
+        }
 		# détermination automatique de la racine du site
 		$this->aConf['racine'] = plxUtils::getRacine();
 		# On gère la non régression en cas d'ajout de paramètres sur une version de pluxml déjà installée
-		$this->aConf['bypage_admin'] = plxUtils::getValue($this->aConf['bypage_admin'],10);
-		$this->aConf['tri_coms'] = plxUtils::getValue($this->aConf['tri_coms'],$this->aConf['tri']);
-		$this->aConf['bypage_admin_coms'] = plxUtils::getValue($this->aConf['bypage_admin_coms'],10);
-		$this->aConf['bypage_archives'] = plxUtils::getValue($this->aConf['bypage_archives'],5);
-		$this->aConf['bypage_tags'] = plxUtils::getValue($this->aConf['bypage_tags'],5);
-		$this->aConf['userfolders'] = plxUtils::getValue($this->aConf['userfolders'],0);
+        $this->aConf['bypage_admin'] = plxUtils::getValue($this->aConf['bypage_admin'], 10);
+        $this->aConf['tri_coms'] = plxUtils::getValue($this->aConf['tri_coms'], $this->aConf['tri']);
+        $this->aConf['bypage_admin_coms'] = plxUtils::getValue($this->aConf['bypage_admin_coms'], 10);
+        $this->aConf['bypage_archives'] = plxUtils::getValue($this->aConf['bypage_archives'], 5);
+        $this->aConf['bypage_tags'] = plxUtils::getValue($this->aConf['bypage_tags'], 5);
+        $this->aConf['userfolders'] = plxUtils::getValue($this->aConf['userfolders'], 0);
 		$this->aConf['meta_description'] = plxUtils::getValue($this->aConf['meta_description']);
 		$this->aConf['meta_keywords'] = plxUtils::getValue($this->aConf['meta_keywords']);
-		$this->aConf['default_lang'] = plxUtils::getValue($this->aConf['default_lang'],DEFAULT_LANG);
+        $this->aConf['default_lang'] = plxUtils::getValue($this->aConf['default_lang'], DEFAULT_LANG);
 		$this->aConf['racine_plugins'] = plxUtils::getValue($this->aConf['racine_plugins'], 'plugins/');
 		$this->aConf['racine_themes'] = plxUtils::getValue($this->aConf['racine_themes'], 'themes/');
-		$this->aConf['mod_art'] = plxUtils::getValue($this->aConf['mod_art'],0);
-		$this->aConf['display_empty_cat'] = plxUtils::getValue($this->aConf['display_empty_cat'],0);
-		$this->aConf['timezone'] = plxUtils::getValue($this->aConf['timezone'],@date_default_timezone_get());
+        $this->aConf['mod_art'] = plxUtils::getValue($this->aConf['mod_art'], 0);
+        $this->aConf['display_empty_cat'] = plxUtils::getValue($this->aConf['display_empty_cat'], 0);
+        $this->aConf['timezone'] = plxUtils::getValue($this->aConf['timezone'], @date_default_timezone_get());
 		$this->aConf['thumbs'] = isset($this->aConf['thumbs']) ? $this->aConf['thumbs'] : 1;
 		$this->aConf['hometemplate'] = isset($this->aConf['hometemplate']) ? $this->aConf['hometemplate'] : 'home.php';
 		$this->aConf['custom_admincss_file'] = plxUtils::getValue($this->aConf['custom_admincss_file']);
 		$this->aConf['medias'] = isset($this->aConf['medias']) ? $this->aConf['medias'] : 'data/images/';
-		if(!defined('PLX_PLUGINS')) define('PLX_PLUGINS', PLX_ROOT . $this->aConf['racine_plugins']);
-		if(!defined('PLX_PLUGINS_CSS_PATH')) define('PLX_PLUGINS_CSS_PATH', preg_replace('@^([^/]+/).*@', '$1', $this->aConf['medias']));
+        if (!defined('PLX_PLUGINS')) {
+            define('PLX_PLUGINS', PLX_ROOT . $this->aConf['racine_plugins']);
+        }
+        if (!defined('PLX_PLUGINS_CSS_PATH')) {
+            define('PLX_PLUGINS_CSS_PATH', preg_replace('@^([^/]+/).*@', '$1', $this->aConf['medias']));
+        }
 	}
 
 	/**
@@ -414,24 +433,26 @@ class plxMotor {
 	 * @return	null
 	 * @author	Stéphane F
 	 **/
-	public function getCategories($filename) {
-
-		if(!is_file($filename)) return;
+    public function getCategories($filename)
+    {
+        if (!is_file($filename)) {
+            return;
+        }
 
 		$activeCats = array();
 		$homepageCats = array();
 
 		# Mise en place du parseur XML
-		$data = implode('',file($filename));
+        $data = implode('', file($filename));
 		$parser = xml_parser_create(PLX_CHARSET);
-		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
-		xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,0);
-		xml_parse_into_struct($parser,$data,$values,$iTags);
+        xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
+        xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 0);
+        xml_parse_into_struct($parser, $data, $values, $iTags);
 		xml_parser_free($parser);
-		if(isset($iTags['categorie']) AND isset($iTags['name'])) {
+        if (isset($iTags['categorie']) and isset($iTags['name'])) {
 			$nb = sizeof($iTags['name']);
 			$size=ceil(sizeof($iTags['categorie'])/$nb);
-			for($i=0;$i<$nb;$i++) {
+            for ($i=0;$i<$nb;$i++) {
 				$attributes = $values[$iTags['categorie'][$i*$size]]['attributes'];
 				$number = $attributes['number'];
 				# Recuperation du nom de la catégorie
@@ -450,11 +471,11 @@ class plxMotor {
 				# Recuperation de l'url de la categorie
 				$this->aCats[$number]['url']=strtolower($attributes['url']);
 				# Recuperation du tri de la categorie si besoin est
-				$this->aCats[$number]['tri']=isset($attributes['tri'])?$attributes['tri']:$this->aConf['tri'];
+                $this->aCats[$number]['tri']=isset($attributes['tri']) ? $attributes['tri'] : $this->aConf['tri'];
 				# Recuperation du nb d'articles par page de la categorie si besoin est
 				$this->aCats[$number]['bypage']=isset($attributes['bypage'])?intval($attributes['bypage']):$this->bypage;
 				# Recuperation du fichier template
-				$this->aCats[$number]['template']=isset($attributes['template'])?$attributes['template']:'categorie.php';
+                $this->aCats[$number]['template']=isset($attributes['template']) ? $attributes['template'] : 'categorie.php';
 				# Récupération des informations de l'image représentant la catégorie
 				$thumbnail = plxUtils::getValue($iTags['thumbnail'][$i]);
 				$this->aCats[$number]['thumbnail']=plxUtils::getValue($values[$thumbnail]['value']);
@@ -463,18 +484,22 @@ class plxMotor {
 				$thumbnail_alt = plxUtils::getValue($iTags['thumbnail_alt'][$i]);
 				$this->aCats[$number]['thumbnail_alt']=plxUtils::getValue($values[$thumbnail_alt]['value']);
 				# Récuperation état affichage de la catégorie dans le menu
-				$this->aCats[$number]['menu']=isset($attributes['menu'])?$attributes['menu']:'oui';
+                $this->aCats[$number]['menu']=isset($attributes['menu']) ? $attributes['menu'] : 'oui';
 				# Récuperation état activation de la catégorie dans le menu
-				$this->aCats[$number]['active']=isset($attributes['active'])?$attributes['active']:'1';
-				if($this->aCats[$number]['active']) $activeCats[]=$number;
+                $this->aCats[$number]['active']=isset($attributes['active']) ? $attributes['active'] : '1';
+                if ($this->aCats[$number]['active']) {
+                    $activeCats[]=$number;
+                }
 				# Recuperation affichage en page d'accueil
 				$this->aCats[$number]['homepage'] = isset($attributes['homepage']) ? $attributes['homepage'] : 1;
-				$this->aCats[$number]['homepage'] = in_array($this->aCats[$number]['homepage'],array('0','1')) ? $this->aCats[$number]['homepage'] : 1;
-				if($this->aCats[$number]['active'] AND $this->aCats[$number]['homepage']) $homepageCats[]=$number;
+                $this->aCats[$number]['homepage'] = in_array($this->aCats[$number]['homepage'], array('0','1')) ? $this->aCats[$number]['homepage'] : 1;
+                if ($this->aCats[$number]['active'] and $this->aCats[$number]['homepage']) {
+                    $homepageCats[]=$number;
+                }
 				# Recuperation du nombre d'article de la categorie
 				$motif = "#^\d{4}\.(?:home,|\d{3},)*$number(?:,\d{3})*\.\d{3}\.\d{12}\.[\w-]+\.xml$#";
-				$arts = $this->plxGlob_arts->query($motif,'art','',0,false,'before');
-				$this->aCats[$number]['articles'] = ($arts?sizeof($arts):0);
+                $arts = $this->plxGlob_arts->query($motif, 'art', '', 0, false, 'before');
+                $this->aCats[$number]['articles'] = ($arts ? sizeof($arts) : 0);
 				# Hook plugins
 				eval($this->plxPlugins->callHook('plxMotorGetCategories'));
 			}
@@ -493,21 +518,23 @@ class plxMotor {
 	 * @return	null
 	 * @author	Stéphane F
 	 **/
-	public function getStatiques($filename) {
-
-		if(!is_file($filename)) return;
+    public function getStatiques($filename)
+    {
+        if (!is_file($filename)) {
+            return;
+        }
 
 		# Mise en place du parseur XML
-		$data = implode('',file($filename));
+        $data = implode('', file($filename));
 		$parser = xml_parser_create(PLX_CHARSET);
-		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
-		xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,0);
-		xml_parse_into_struct($parser,$data,$values,$iTags);
+        xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
+        xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 0);
+        xml_parse_into_struct($parser, $data, $values, $iTags);
 		xml_parser_free($parser);
-		if(isset($iTags['statique']) AND isset($iTags['name'])) {
+        if (isset($iTags['statique']) and isset($iTags['name'])) {
 			$nb = sizeof($iTags['name']);
 			$size=ceil(sizeof($iTags['statique'])/$nb);
-			for($i=0;$i<$nb;$i++) {
+            for ($i=0;$i<$nb;$i++) {
 				$attributes = $values[$iTags['statique'][$i*$size]]['attributes'];
 				$number = $attributes['number'];
 				# Récupération du nom de la page statique
@@ -528,9 +555,9 @@ class plxMotor {
 				# Récupération de l'etat de la page
 				$this->aStats[$number]['active']=intval($attributes['active']);
 				# On affiche la page statique dans le menu ?
-				$this->aStats[$number]['menu']=isset($attributes['menu'])?$attributes['menu']:'oui';
+                $this->aStats[$number]['menu']=isset($attributes['menu']) ? $attributes['menu'] : 'oui';
 				# Récupération du fichier template
-				$this->aStats[$number]['template']=isset($attributes['template'])?$attributes['template']:'static.php';
+                $this->aStats[$number]['template']=isset($attributes['template']) ? $attributes['template'] : 'static.php';
 				# Récupération de la date de création
 				$date_creation = plxUtils::getValue($iTags['date_creation'][$i]);
 				$this->aStats[$number]['date_creation']=plxUtils::getValue($values[$date_creation]['value']);
@@ -538,7 +565,7 @@ class plxMotor {
 				$date_update = plxUtils::getValue($iTags['date_update'][$i]);
 				$this->aStats[$number]['date_update']=plxUtils::getValue($values[$date_update]['value']);
 				# On verifie que la page statique existe bien
-				$file = PLX_ROOT.$this->aConf['racine_statiques'].$number.'.'.$attributes['url'].'.php';
+                $file = PLX_ROOT . $this->aConf['racine_statiques'] . $number . '.' . $attributes['url'] . '.php';
 				# On test si le fichier est lisible
 				$this->aStats[$number]['readable'] = (is_readable($file) ? 1 : 0);
 				# Hook plugins
@@ -554,22 +581,24 @@ class plxMotor {
 	 * @return	array		tableau des utilisateurs
 	 * @author	Stephane F
 	 **/
-	public function getUsers($filename) {
-
-		if(!is_file($filename)) return;
+    public function getUsers($filename)
+    {
+        if (!is_file($filename)) {
+            return;
+        }
 
 		# Mise en place du parseur XML
-		$data = implode('',file($filename));
+        $data = implode('', file($filename));
 		$parser = xml_parser_create(PLX_CHARSET);
-		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
-		xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,0);
-		xml_parse_into_struct($parser,$data,$values,$iTags);
+        xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
+        xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 0);
+        xml_parse_into_struct($parser, $data, $values, $iTags);
 		xml_parser_free($parser);
-		if(isset($iTags['user']) AND isset($iTags['login'])) {
+        if (isset($iTags['user']) and isset($iTags['login'])) {
 			$nb = sizeof($iTags['login']);
 			$size=ceil(sizeof($iTags['user'])/$nb);
 			# On boucle sur $nb
-			for($i = 0; $i < $nb; $i++) {
+            for ($i = 0; $i < $nb; $i++) {
 				$attributes = $values[$iTags['user'][$i*$size]]['attributes'];
 				$number = $attributes['number'];
 				$this->aUsers[$number]['active']=$attributes['active'];
@@ -583,7 +612,7 @@ class plxMotor {
 				$this->aUsers[$number]['infos']=plxUtils::getValue($values[$iTags['infos'][$i]]['value']);
 				$email = plxUtils::getValue($iTags['email'][$i]);
 				$this->aUsers[$number]['email']=plxUtils::getValue($values[$email]['value']);
-				$lang = isset($iTags['lang'][$i]) ? $values[$iTags['lang'][$i]]['value']:'';
+                $lang = isset($iTags['lang'][$i]) ? $values[$iTags['lang'][$i]]['value'] : '';
 				$this->aUsers[$number]['lang'] = $lang!='' ? $lang : $this->aConf['default_lang'];
 				$password_token = plxUtils::getValue($iTags['password_token'][$i]);
 				$this->aUsers[$number]['password_token']=plxUtils::getValue($values[$password_token]['value']);
@@ -602,21 +631,22 @@ class plxMotor {
 	 * @return	string
 	 * @author	Stéphane F.
 	 **/
-	protected function mapTri($tri) { /* obsolete ! 2017-12-03 */
+    protected function mapTri($tri)
+    { /* obsolete ! 2017-12-03 */
 
-		if($tri=='desc')
+        if ($tri=='desc') {
 			return 'rsort';
-		elseif($tri=='asc')
+        } elseif ($tri=='asc') {
 			return 'sort';
-		elseif($tri=='alpha')
+        } elseif ($tri=='alpha') {
 			return 'alpha';
-		elseif($tri=='ralpha')
+        } elseif ($tri=='ralpha') {
 			return 'ralpha';
-		elseif($tri=='random')
+        } elseif ($tri=='random') {
 			return 'random';
-		else
+        } else {
 			return 'rsort';
-
+        }
 	}
 
 	/**
@@ -625,14 +655,16 @@ class plxMotor {
 	 * @return	null
 	 * @author	Anthony GUÉRIN, Florent MONTHEL, Stephane F
 	 **/
-	protected function getPage() {
+    protected function getPage()
+    {
 
 		# On check pour avoir le numero de page
-		if(preg_match('#page(\d*)#',$this->get,$capture))
+        if (preg_match('#page(\d*)#', $this->get, $capture)) {
 			$this->page = $capture[1];
-		else
+        } else {
 			$this->page = 1;
 	}
+    }
 
     /**
      * Méthode qui récupere la liste des  articles
@@ -641,17 +673,18 @@ class plxMotor {
      * @return	boolean	vrai si articles trouvés, sinon faux
      * @author	Stéphane F, J.P. Pourrez (bazooka07)
      **/
-    public function getArticles($publi='before') {
+    public function getArticles($publi='before')
+    {
 
         # On calcule la valeur start
         $start = $this->bypage*($this->page-1);
         # On recupere nos fichiers (tries) selon le motif, la pagination, la date de publication
-        if($aFiles = $this->plxGlob_arts->query($this->motif,'art',$this->tri,$start,$this->bypage,$publi)) {
+        if ($aFiles = $this->plxGlob_arts->query($this->motif, 'art', $this->tri, $start, $this->bypage, $publi)) {
             # On analyse tous les fichiers
             $artsList = array();
-            foreach($aFiles as $v) {
+            foreach ($aFiles as $v) {
                 $art = $this->parseArticle(PLX_ROOT . $this->aConf['racine_articles'] . $v);
-                if(!empty($art)) {
+                if (!empty($art)) {
                     $artsList[] = $art;
                 }
             }
@@ -672,15 +705,16 @@ class plxMotor {
 	 * @return	array		information à récupérer
 	 * @author	Stephane F, J.P. Pourrez "bazooka07"
 	 **/
-	public function artInfoFromFilename($filename) {
+    public function artInfoFromFilename($filename)
+    {
 
 		# On effectue notre capture d'informations
-		if(preg_match('#^(_?\d{4})\.((?:\d{3},|draft,)*(?:home|\d{3})(?:,\d{3})*)\.(\d{3})\.(\d{12})\.(.*)\.xml$#', basename($filename), $capture)) {
+        if (preg_match('#^(_?\d{4})\.((?:\d{3},|draft,)*(?:home|\d{3})(?:,\d{3})*)\.(\d{3})\.(\d{12})\.(.*)\.xml$#', basename($filename), $capture)) {
 			$ids = array_merge(array_keys($this->aCats), array('home', 'draft'));
 			$artCats = array_filter(
 				explode(',', $capture[2]),
 				# on vérifie que les catégories de l'article existent
-				function($item) use($ids) {
+                function ($item) use ($ids) {
 					return in_array($item, $ids);
 				}
 			);
@@ -705,17 +739,18 @@ class plxMotor {
      * @return	array
      * @author	Anthony GUÉRIN, Florent MONTHEL, Stéphane F, J.P. Pourrez (bazooka07)
      **/
-    public function parseArticle($filename) {
+    public function parseArticle($filename)
+    {
 
         # Informations obtenues en analysant le nom du fichier
         $tmp = $this->artInfoFromFilename($filename);
-        if(!empty($tmp)) {
+        if (!empty($tmp)) {
             # Mise en place du parseur XML
-            $data = implode('',file($filename));
+            $data = implode('', file($filename));
             $parser = xml_parser_create(PLX_CHARSET);
-            xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
-            xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,0);
-            xml_parse_into_struct($parser,$data,$values,$iTags);
+            xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
+            xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 0);
+            xml_parse_into_struct($parser, $data, $values, $iTags);
             xml_parser_free($parser);
 
             $meta_description = plxUtils::getValue($iTags['meta_description'][0]);
@@ -752,7 +787,7 @@ class plxMotor {
             return $art;
         } else {
             # le nom du fichier article est incorrect !!
-            if(defined('PLX_ADMIN') and class_exists('plxMsg')) {
+            if (defined('PLX_ADMIN') and class_exists('plxMsg')) {
 				plxMsg::Error('Invalid filename "' . $filename . '" from plxMotor::parseArticle()');
 			}
             return false;
@@ -767,13 +802,14 @@ class plxMotor {
 	 * @return	integer
 	 * @author	Florent MONTHEL
 	 **/
-	public function getNbCommentaires($motif,$publi='before') {
-
-		if($coms = $this->plxGlob_coms->query($motif,'com','',0,false,$publi))
+    public function getNbCommentaires($motif, $publi='before')
+    {
+        if ($coms = $this->plxGlob_coms->query($motif, 'com', '', 0, false, $publi)) {
 			return sizeof($coms);
-		else
+        } else {
 			return 0;
 	}
+    }
 
 	/**
 	 * Méthode qui retourne les informations $output en analysant
@@ -783,14 +819,15 @@ class plxMotor {
 	 * @return	array		information à récupérer
 	 * @author	Stephane F
 	 **/
-	public function comInfoFromFilename($filename) {
+    public function comInfoFromFilename($filename)
+    {
 		# On effectue notre capture d'informations
-		if(preg_match('#([[:punct:]]?)(\d{4}).(\d{10})-(\d+).xml$#',$filename,$capture)) {
+        if (preg_match('#([[:punct:]]?)(\d{4}).(\d{10})-(\d+).xml$#', $filename, $capture)) {
 			return array(
 				'comStatus'	=> $capture[1],
 				'artId'		=> $capture[2],
 				'comDate'	=> plxDate::timestamp2Date($capture[3]),
-				'comId'		=> $capture[3].'-'.$capture[4],
+                'comId'		=> $capture[3] . '-' . $capture[4],
 				'comIdx'	=> $capture[4],
 
 			);
@@ -805,26 +842,28 @@ class plxMotor {
 	 * @return	array
 	 * @author	Florent MONTHEL
 	 **/
-	public function parseCommentaire($filename) {
+    public function parseCommentaire($filename)
+    {
 
 		# Mise en place du parseur XML
-		$data = implode('',file($filename));
+        $data = implode('', file($filename));
 		$parser = xml_parser_create(PLX_CHARSET);
-		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
-		xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,0);
-		xml_parse_into_struct($parser,$data,$values,$iTags);
+        xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
+        xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 0);
+        xml_parse_into_struct($parser, $data, $values, $iTags);
 		xml_parser_free($parser);
 		# Recuperation des valeurs de nos champs XML
 		$com['author'] = plxUtils::getValue($values[ $iTags['author'][0]]['value']);
-		if(isset($iTags['type']))
-			$com['type'] = plxUtils::getValue($values[ $iTags['type'][0]]['value'],'normal');
-		else
+        if (isset($iTags['type'])) {
+            $com['type'] = plxUtils::getValue($values[ $iTags['type'][0]]['value'], 'normal');
+        } else {
 			$com['type'] = 'normal';
+        }
 		$com['ip'] = plxUtils::getValue($values[$iTags['ip'][0]]['value']);
 		$com['mail'] = plxUtils::getValue($values[$iTags['mail'][0]]['value']);
 		$com['site'] = plxUtils::getValue($values[$iTags['site'][0]]['value']);
 		$com['content'] = trim($values[ $iTags['content'][0] ]['value']);
-		$com['parent'] = isset($iTags['parent'])?plxUtils::getValue($values[$iTags['parent'][0]]['value']):'';
+        $com['parent'] = isset($iTags['parent']) ? plxUtils::getValue($values[$iTags['parent'][0]]['value']) : '';
 		# Informations obtenues en analysant le nom du fichier
 		$tmp = $this->comInfoFromFilename(basename($filename));
 		$com['status'] = $tmp['comStatus'];
@@ -844,7 +883,8 @@ class plxMotor {
 	 * @return	array	liste des commentaires triés
 	 * @author	Stéphane F.
 	 **/
-	public function parentChildSort_r($idField, $parentField, $els, $parentID = 0, &$result = array(), &$level = 0){
+    public function parentChildSort_r($idField, $parentField, $els, $parentID = 0, &$result = array(), &$level = 0)
+    {
 		foreach ($els as $key => $value) {
 			if (intval($value[$parentField]) == $parentID) {
 				$value['level'] = $level;
@@ -853,7 +893,7 @@ class plxMotor {
 				$oldParent = $parentID;
 				$parentID = $value[$idField];
 				$level++;
-				$this->parentChildSort_r($idField,$parentField, $els, $parentID, $result, $level);
+                $this->parentChildSort_r($idField, $parentField, $els, $parentID, $result, $level);
 				$parentID = $oldParent;
 				$level--;
 			}
@@ -873,23 +913,23 @@ class plxMotor {
 	 * @return	bool	true if there is comments else false
 	 * @author	Florent MONTHEL, Stephane F, Pedro "P3ter" CADETE
 	 **/
-	public function getCommentaires($motif,$ordre='sort',$start=0,$limite=false,$publi='before') {
+    public function getCommentaires($motif, $ordre='sort', $start=0, $limite=false, $publi='before')
+    {
 
 		# On récupère les fichiers des commentaires
-		$aFiles = $this->plxGlob_coms->query($motif,'com',$ordre,$start,$limite,$publi);
-		if($aFiles) { # On a des fichiers
-			foreach($aFiles as $k=>$v) {
-				$array[$k] = $this->parseCommentaire(PLX_ROOT.$this->aConf['racine_commentaires'].$v);
+        $aFiles = $this->plxGlob_coms->query($motif, 'com', $ordre, $start, $limite, $publi);
+        if ($aFiles) { # On a des fichiers
+            foreach ($aFiles as $k=>$v) {
+                $array[$k] = $this->parseCommentaire(PLX_ROOT . $this->aConf['racine_commentaires'] . $v);
 			}
 
 			# hiérarchisation et indentation des commentaires seulement sur les écrans requis
-			if (!preg_match('#comments?\.php$#',basename($_SERVER['SCRIPT_NAME']))) {
+            if (!preg_match('#comments?\.php$#', basename($_SERVER['SCRIPT_NAME']))) {
 				$array = $this->parentChildSort_r('index', 'parent', $array);
 			}
 
 			# On stocke les enregistrements dans un objet plxRecord
 			$this->plxRecord_coms = new plxRecord($array);
-
 		}
 
 		return !empty($aFiles);
@@ -902,17 +942,18 @@ class plxMotor {
 	 * @return	string		id d'un nouveau commentaire
 	 * @author	Stephane F.
 	 **/
-	 public function nextIdArtComment($idArt) {
-
+    public function nextIdArtComment($idArt)
+    {
 		$ret = '0';
-		if($dh = opendir(PLX_ROOT.$this->aConf['racine_commentaires'])) {
+        if ($dh = opendir(PLX_ROOT . $this->aConf['racine_commentaires'])) {
 			$Idxs = array();
-			while(false !== ($file = readdir($dh))) {
-				if(preg_match("/_?".$idArt.".\d+-(\d+).xml/", $file, $capture)) {
-					if ($capture[1] > $ret)
+            while (false !== ($file = readdir($dh))) {
+                if (preg_match("/_?" . $idArt . ".\d+-(\d+).xml/", $file, $capture)) {
+                    if ($capture[1] > $ret) {
 						$ret = $capture[1];
 				}
 			}
+            }
 			closedir($dh);
 		}
 		return $ret+1;
@@ -926,14 +967,17 @@ class plxMotor {
 	 * @return	string
 	 * @author	Florent MONTHEL, Stéphane F, J.P. Pourrez
 	 **/
-	public function newCommentaire($artId, $content) {
+    public function newCommentaire($artId, $content)
+    {
 
 		# Hook plugins
-		if(eval($this->plxPlugins->callHook('plxMotorNewCommentaire'))) return;
+        if (eval($this->plxPlugins->callHook('plxMotorNewCommentaire'))) {
+            return;
+        }
 
-		if(
-			!empty($this->aConf['capcha']) AND (
-				empty($_SESSION['capcha_token']) OR
+        if (
+            !empty($this->aConf['capcha']) and (
+                empty($_SESSION['capcha_token']) or
 				empty($_POST['capcha_token']) or
 				($_SESSION['capcha_token'] != $_POST['capcha_token'])
 			)
@@ -942,38 +986,40 @@ class plxMotor {
 		}
 
 		# On vérifie que le capcha est correct
-		if($this->aConf['capcha'] == 0 OR $_SESSION['capcha'] == sha1($content['rep'])) {
-			if(!empty($content['name']) AND !empty($content['content'])) { # Les champs obligatoires sont remplis
+        if ($this->aConf['capcha'] == 0 or $_SESSION['capcha'] == sha1($content['rep'])) {
+            if (!empty($content['name']) and !empty($content['content'])) { # Les champs obligatoires sont remplis
 				$comment=array();
 				$comment['type'] = 'normal';
 				$comment['author'] = plxUtils::strCheck(trim($content['name']));
 				$comment['content'] = plxUtils::strCheck(trim($content['content']));
 				# On vérifie le mail
-				$comment['mail'] = (plxUtils::checkMail(trim($content['mail'])))?trim($content['mail']):'';
+                $comment['mail'] = (plxUtils::checkMail(trim($content['mail']))) ? trim($content['mail']) : '';
 				# On vérifie le site
-				$comment['site'] = (plxUtils::checkSite($content['site'])?$content['site']:'');
+                $comment['site'] = (plxUtils::checkSite($content['site']) ? $content['site'] : '');
 				# On récupère l'adresse IP du posteur
 				$comment['ip'] = plxUtils::getIp();
 				# index du commentaire
 				$idx = $this->nextIdArtComment($artId);
 				# Commentaire parent en cas de réponse
-				if(isset($content['parent']) AND !empty($content['parent'])) {
+                if (isset($content['parent']) and !empty($content['parent'])) {
 					$comment['parent'] = intval($content['parent']);
 				} else {
 					$comment['parent'] = '';
 				}
 				# On génère le nom du fichier
 				$time = time();
-				if($this->aConf['mod_com']) # On modère le commentaire => underscore
-					$comment['filename'] = '_'.$artId.'.'.$time.'-'.$idx.'.xml';
-				else # On publie le commentaire directement
-					$comment['filename'] = $artId.'.'.$time.'-'.$idx.'.xml';
+                if ($this->aConf['mod_com']) { # On modère le commentaire => underscore
+                    $comment['filename'] = '_' . $artId . '.' . $time . '-' . $idx . '.xml';
+                } else { # On publie le commentaire directement
+                    $comment['filename'] = $artId . '.' . $time . '-' . $idx . '.xml';
+                }
 				# On peut créer le commentaire
-				if($this->addCommentaire($comment)) { # Commentaire OK
-					if($this->aConf['mod_com']) # En cours de modération
+                if ($this->addCommentaire($comment)) { # Commentaire OK
+                    if ($this->aConf['mod_com']) { # En cours de modération
 						return 'mod';
-					else # Commentaire publie directement, on retourne son identifiant
-						return 'c'.$artId.'-'.$idx;
+                    } else { # Commentaire publie directement, on retourne son identifiant
+                        return 'c' . $artId . '-' . $idx;
+                    }
 				} else { # Erreur lors de la création du commentaire
 					return L_NEWCOMMENT_ERR;
 				}
@@ -992,24 +1038,27 @@ class plxMotor {
 	 * @return	boolean
 	 * @author	Anthony GUÉRIN, Florent MONTHEL et Stéphane F
 	 **/
-	public function addCommentaire($content) {
+    public function addCommentaire($content)
+    {
 		# Hook plugins
-		if(eval($this->plxPlugins->callHook('plxMotorAddCommentaire'))) return;
+        if (eval($this->plxPlugins->callHook('plxMotorAddCommentaire'))) {
+            return;
+        }
 		# On genere le contenu de notre fichier XML
-		$xml = "<?xml version='1.0' encoding='".PLX_CHARSET."'?>\n";
+        $xml = "<?xml version='1.0' encoding='" . PLX_CHARSET . "'?>\n";
 		$xml .= "<comment>\n";
-		$xml .= "\t<author><![CDATA[".plxUtils::cdataCheck($content['author'])."]]></author>\n";
-		$xml .= "\t<type>".$content['type']."</type>\n";
-		$xml .= "\t<ip>".$content['ip']."</ip>\n";
-		$xml .= "\t<mail><![CDATA[".plxUtils::cdataCheck($content['mail'])."]]></mail>\n";
-		$xml .= "\t<site><![CDATA[".plxUtils::cdataCheck($content['site'])."]]></site>\n";
-		$xml .= "\t<content><![CDATA[".plxUtils::cdataCheck($content['content'])."]]></content>\n";
-		$xml .= "\t<parent><![CDATA[".plxUtils::cdataCheck($content['parent'])."]]></parent>\n";
+        $xml .= "\t<author><![CDATA[" . plxUtils::cdataCheck($content['author']) . "]]></author>\n";
+        $xml .= "\t<type>" . $content['type'] . "</type>\n";
+        $xml .= "\t<ip>" . $content['ip'] . "</ip>\n";
+        $xml .= "\t<mail><![CDATA[" . plxUtils::cdataCheck($content['mail']) . "]]></mail>\n";
+        $xml .= "\t<site><![CDATA[" . plxUtils::cdataCheck($content['site']) . "]]></site>\n";
+        $xml .= "\t<content><![CDATA[" . plxUtils::cdataCheck($content['content']) . "]]></content>\n";
+        $xml .= "\t<parent><![CDATA[" . plxUtils::cdataCheck($content['parent']) . "]]></parent>\n";
 		# Hook plugins
 		eval($this->plxPlugins->callHook('plxMotorAddCommentaireXml'));
 		$xml .= "</comment>\n";
 		# On ecrit ce contenu dans notre fichier XML
-		return plxUtils::write($xml, PLX_ROOT.$this->aConf['racine_commentaires'].$content['filename']);
+        return plxUtils::write($xml, PLX_ROOT . $this->aConf['racine_commentaires'] . $content['filename']);
 	}
 
 	/**
@@ -1020,28 +1069,31 @@ class plxMotor {
 	 * @return	null
 	 * @author	Stephane F.
 	 **/
-	public function getTags($filename) {
-
-		if(!is_file($filename)) return;
+    public function getTags($filename)
+    {
+        if (!is_file($filename)) {
+            return;
+        }
 
 		# Mise en place du parseur XML
-		$data = implode('',file($filename));
+        $data = implode('', file($filename));
 		$parser = xml_parser_create(PLX_CHARSET);
-		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
-		xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,0);
-		xml_parse_into_struct($parser,$data,$values,$iTags);
+        xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
+        xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 0);
+        xml_parse_into_struct($parser, $data, $values, $iTags);
 		xml_parser_free($parser);
 		$array = array();
 		# On verifie qu'il existe des tags "file"
-		if(isset($iTags['article'])) {
+        if (isset($iTags['article'])) {
 			# On compte le nombre de tags "file"
 			$nb = sizeof($iTags['article']);
 			# On boucle sur $nb
-			for($i = 0; $i < $nb; $i++) {
-				if(isset($values[ $iTags['article'][$i] ]['value']))
+            for ($i = 0; $i < $nb; $i++) {
+                if (isset($values[ $iTags['article'][$i] ]['value'])) {
 					$array[ $values[ $iTags['article'][$i] ]['attributes']['number'] ]['tags'] = trim($values[ $iTags['article'][$i] ]['value']);
-				else
+                } else {
 					$array[ $values[ $iTags['article'][$i] ]['attributes']['number'] ]['tags'] = '';
+                }
 				$array[ $values[ $iTags['article'][$i] ]['attributes']['number'] ]['date'] = $values[ $iTags['article'][$i] ]['attributes']['date'];
 				$array[ $values[ $iTags['article'][$i] ]['attributes']['number'] ]['active'] = $values[ $iTags['article'][$i] ]['attributes']['active'];
 			}
@@ -1057,8 +1109,9 @@ class plxMotor {
 	 * @return	null
 	 * @author	Pedro "P3ter" CADETE
 	 **/
-	public function getTemplates($templateFolder) {
-		if(is_dir($templateFolder)) {
+    public function getTemplates($templateFolder)
+    {
+        if (is_dir($templateFolder)) {
 			$files = array_diff(scandir($templateFolder), array('..', '.'));
 			if (!empty($files)) {
 				foreach ($files as $file) {
@@ -1075,28 +1128,30 @@ class plxMotor {
 	 * @return	boolean
 	 * @author	Stephane F. et Florent MONTHEL
 	 **/
-	public function sendTelechargement($cible) {
+    public function sendTelechargement($cible)
+    {
 
 		# On décrypte le nom du fichier
-		$file = PLX_ROOT.$this->aConf['medias'].plxEncrypt::decryptId($cible);
+        $file = PLX_ROOT . $this->aConf['medias'] . plxEncrypt::decryptId($cible);
 		# Hook plugins
-		if(eval($this->plxPlugins->callHook('plxMotorSendDownload'))) return;
+        if (eval($this->plxPlugins->callHook('plxMotorSendDownload'))) {
+            return;
+        }
 		# On lance le téléchargement et on check le répertoire medias
-		if(file_exists($file) AND preg_match('#^'.str_replace('\\', '#', realpath(PLX_ROOT.$this->aConf['medias']).'#'), str_replace('\\', '/', realpath($file)))) {
+        if (file_exists($file) and preg_match('#^' . str_replace('\\', '#', realpath(PLX_ROOT . $this->aConf['medias']) . '#'), str_replace('\\', '/', realpath($file)))) {
 			header('Content-Description: File Transfer');
 			header('Content-Type: application/download');
-			header('Content-Disposition: attachment; filename='.basename($file));
+            header('Content-Disposition: attachment; filename=' . basename($file));
 			header('Content-Transfer-Encoding: binary');
 			header('Expires: 0');
 			header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 			header('Pragma: no-cache');
-			header('Content-Length: '.filesize($file));
+            header('Content-Length: ' . filesize($file));
 			readfile($file);
 			exit;
 		} else { # On retourne false
 			return false;
 		}
-
 	}
 
 	/**
@@ -1106,42 +1161,43 @@ class plxMotor {
 	 * @return	string	url réécrite
 	 * @author	Stéphane F, J.P. Pourrez
 	 **/
-	public function urlRewrite($url='') {
+    public function urlRewrite($url='')
+    {
 
 		# On teste si $url est une adresse absolue ou une image embarquée
-		if(!empty(trim($url)) and preg_match('@^(?:https?|data):@', $url)) {
+        if (!empty(trim($url)) and preg_match('@^(?:https?|data):@', $url)) {
 			return $url;
 		}
 
-		if($url=='' OR $url=='?') {
+        if ($url=='' or $url=='?') {
 			return $this->racine;
 		}
 
 		$args = parse_url($url);
 
-		if($this->aConf['urlrewriting']) {
+        if ($this->aConf['urlrewriting']) {
 			$new_url = !empty($args['path']) ? strtr($args['path'], array(
 				'index.php' => '',
 				'feed.php' => 'feed/',
 			)) : '';
-			if(!empty($args['query'])) {
+            if (!empty($args['query'])) {
 				$new_url .= $args['query'];
 			}
-			if(empty($new_url))	{
+            if (empty($new_url)) {
 				$new_url = $this->path_url;
 			}
-			if(!empty($args['fragment'])) {
-				$new_url .= '#'. $args['fragment'];
+            if (!empty($args['fragment'])) {
+                $new_url .= '#' . $args['fragment'];
 			}
 		} else {
-			if(empty($args['path']) AND !empty($args['query'])) {
+            if (empty($args['path']) and !empty($args['query'])) {
 				$args['path'] = 'index.php';
 			}
 			$new_url  = !empty($args['path']) ? $args['path'] : $this->path_url;
-			if(!empty($args['query'])) {
+            if (!empty($args['query'])) {
 				$new_url .= '?' . $args['query'];
 			}
-			if(!empty($args['fragment'])) {
+            if (!empty($args['fragment'])) {
 				$new_url .= '#' . $args['fragment'];
 			}
 		}
@@ -1160,20 +1216,22 @@ class plxMotor {
 	 * @scope	global
 	 * @author	Stephane F
 	 **/
-	public function nbArticles($select='all', $userId='\d{3}', $mod='_?', $publi='all') {
-
+    public function nbArticles($select='all', $userId='\d{3}', $mod='_?', $publi='all')
+    {
 		$nb = 0;
-		if($select == 'all')
+        if ($select == 'all') {
 			$motif = '[home|draft|0-9,]*';
-		elseif($select=='published')
+        } elseif ($select=='published') {
 			$motif = '[home|0-9,]*';
-		elseif($select=='draft')
+        } elseif ($select=='draft') {
 			$motif = '[\w,]*[draft][\w,]*';
-		else
+        } else {
 			$motif = $select;
+        }
 
-		if($arts = $this->plxGlob_arts->query('#^'.$mod.'\d{4}.('.$motif.').'.$userId.'.\d{12}.[\w-]+.xml$#', 'art', '', 0, false, $publi))
+        if ($arts = $this->plxGlob_arts->query('#^' . $mod . '\d{4}.(' . $motif . ').' . $userId . '.\d{12}.[\w-]+.xml$#', 'art', '', 0, false, $publi)) {
 			$nb = sizeof($arts);
+        }
 
 		return $nb;
 	}
@@ -1187,20 +1245,22 @@ class plxMotor {
 	 * @scope	global
 	 * @author	Stephane F
 	 **/
-	public function nbComments($select='online', $publi='all') {
-
+    public function nbComments($select='online', $publi='all')
+    {
 		$nb = 0;
-		if($select == 'all')
+        if ($select == 'all') {
 			$motif = '#[^[:punct:]?]\d{4}.(.*).xml$#';
-		elseif($select=='offline')
+        } elseif ($select=='offline') {
 			$motif = '#^_\d{4}.(.*).xml$#';
-		elseif($select=='online')
+        } elseif ($select=='online') {
 			$motif = '#^\d{4}.(.*).xml$#';
-		else
+        } else {
 			$motif = $select;
+        }
 
-		if($coms = $this->plxGlob_coms->query($motif,'com','',0,false,$publi))
+        if ($coms = $this->plxGlob_coms->query($motif, 'com', '', 0, false, $publi)) {
 			$nb = sizeof($coms);
+        }
 
 		return $nb;
 	}
@@ -1212,17 +1272,17 @@ class plxMotor {
 	 * @scope	global
 	 * @author	Stéphane F.
 	 **/
-	public function getActiveArts() {
-		if($this->plxGlob_arts->aFiles) {
+    public function getActiveArts()
+    {
+        if ($this->plxGlob_arts->aFiles) {
 			$datetime=date('YmdHi');
-			foreach($this->plxGlob_arts->aFiles as $filename) {
-				if(preg_match('#^(\d{4}).(?:\d|home|,)*(?:'.$this->activeCats.'|home)(?:\d|home|,)*.\d{3}.(\d{12}).[\w-]+.xml$#', $filename, $capture)) {
-					if($capture[2]<=$datetime) { # on ne prends que les articles publiés
+            foreach ($this->plxGlob_arts->aFiles as $filename) {
+                if (preg_match('#^(\d{4}).(?:\d|home|,)*(?:' . $this->activeCats . '|home)(?:\d|home|,)*.\d{3}.(\d{12}).[\w-]+.xml$#', $filename, $capture)) {
+                    if ($capture[2]<=$datetime) { # on ne prends que les articles publiés
 						$this->activeArts[$capture[1]]=1;
 					}
 				}
 			}
 		}
 	}
-
 }

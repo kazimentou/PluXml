@@ -17,13 +17,13 @@ plxToken::validateFormToken($_POST);
 
 $email = filter_var($plxAdmin->aUsers[$_SESSION['user']]['email'], FILTER_VALIDATE_EMAIL);
 $emailBuild = (is_string($email) and filter_has_var(INPUT_POST, 'sendmail-test'));
-if($emailBuild) {
-	# body of test e-mail starts here
-	ob_start();
+if ($emailBuild) {
+    # body of test e-mail starts here
+    ob_start();
 } else {
-	# direct output
-	# administration header
-	include __DIR__ .'/top.php';
+    # direct output
+    # administration header
+    include __DIR__ .'/top.php';
 }
 
 ?>
@@ -57,65 +57,65 @@ if($emailBuild) {
 	<?php plxUtils::testLibGD() ?>
 	<?php plxUtils::testLibXml() ?>
 	<?php
-	if(plxUtils::testMail() and is_string($email) and !$emailBuild) {
-?>
+    if (plxUtils::testMail() and is_string($email) and !$emailBuild) {
+        ?>
 		<form method="post">
 			<?php echo plxToken::getTokenPostMethod() ?>
 			<input type="submit" name="sendmail-test" value="<?= L_MAIL_TEST ?>" />
 		</form>
 <?php
-	}
+    }
 ?>
 </ul>
 <p><?php echo L_CONFIG_INFOS_NB_CATS ?> <?php echo sizeof($plxAdmin->aCats); ?></p>
 <p><?php echo L_CONFIG_INFOS_NB_STATICS ?> <?php echo sizeof($plxAdmin->aStats); ?></p>
 <p><?php echo L_CONFIG_INFOS_WRITER ?> <?php echo $plxAdmin->aUsers[$_SESSION['user']]['name'] ?></p>
 
-<?php eval($plxAdmin->plxPlugins->callHook('AdminSettingsInfos')) # Hook Plugins ?>
+<?php eval($plxAdmin->plxPlugins->callHook('AdminSettingsInfos')) # Hook Plugins?>
 
 <?php
-if($emailBuild) {
-	$content = ob_get_clean();
-	$head = <<< HEAD
+if ($emailBuild) {
+    $content = ob_get_clean();
+    $head = <<< HEAD
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="utf-8" />
 <title>sans titre</title>
 </head><body>
 HEAD;
-	$foot = '</body></html>';
-	$subject = sprintf(L_MAIL_TEST_SUBJECT, $plxAdmin->aConf['title']);
+    $foot = '</body></html>';
+    $subject = sprintf(L_MAIL_TEST_SUBJECT, $plxAdmin->aConf['title']);
 
-	// Webmaster
-	$name = $plxAdmin->aUsers['001']['name']; // Peut être vide pour PHPMailer
-	$from = $plxAdmin->aUsers['001']['email'];
+    // Webmaster
+    $name = $plxAdmin->aUsers['001']['name']; // Peut être vide pour PHPMailer
+    $from = $plxAdmin->aUsers['001']['email'];
 
-	if(empty($plxAdmin->aConf['email_method']) or $plxAdmin->aConf['email_method'] == 'sendmail' or !method_exists('plxUtils', 'sendMailPhpMailer')) {
-		# fonction mail() intrinséque à PHP
-		$method = '<p style="font-size: 80%;"><em>mail() function from PHP</em></p>';
-		$body = $head . $content . $method . $foot;
-		if(plxUtils::sendMail('', '', $email, $subject, $body, 'html')) {
-			plxMsg::Info(sprintf(L_MAIL_TEST_SENT_TO, $email));
-		} else {
-			plxMsg::Error(L_MAIL_TEST_FAILURE);
-		}
-	} else {
-		# module externe PHPMailer -
-		$method = '<p style="font-size: 80%;"><em>' . $plxAdmin->aConf['email_method'] . ' via PHPMailer</em></p>';
-		$body = $head . $content . $method . $foot;
+    if (empty($plxAdmin->aConf['email_method']) or $plxAdmin->aConf['email_method'] == 'sendmail' or !method_exists('plxUtils', 'sendMailPhpMailer')) {
+        # fonction mail() intrinséque à PHP
+        $method = '<p style="font-size: 80%;"><em>mail() function from PHP</em></p>';
+        $body = $head . $content . $method . $foot;
+        if (plxUtils::sendMail('', '', $email, $subject, $body, 'html')) {
+            plxMsg::Info(sprintf(L_MAIL_TEST_SENT_TO, $email));
+        } else {
+            plxMsg::Error(L_MAIL_TEST_FAILURE);
+        }
+    } else {
+        # module externe PHPMailer -
+        $method = '<p style="font-size: 80%;"><em>' . $plxAdmin->aConf['email_method'] . ' via PHPMailer</em></p>';
+        $body = $head . $content . $method . $foot;
 
-		if(plxUtils::sendMailPhpMailer($name, $from, $email, $subject, $head . $body . $foot, true, $plxAdmin->aConf)) {
-			plxMsg::Info(sprintf(L_MAIL_TEST_SENT_TO, $email));
-		} else {
-			plxMsg::Error(L_MAIL_TEST_FAILURE);
-		}
-	}
+        if (plxUtils::sendMailPhpMailer($name, $from, $email, $subject, $head . $body . $foot, true, $plxAdmin->aConf)) {
+            plxMsg::Info(sprintf(L_MAIL_TEST_SENT_TO, $email));
+        } else {
+            plxMsg::Error(L_MAIL_TEST_FAILURE);
+        }
+    }
 
-	header('Location: ' . basename(__FILE__));
-	exit;
+    header('Location: ' . basename(__FILE__));
+    exit;
 }
-if(preg_match('%class="[^"]*\bred\b[^"]*"%', $maj)) {
-	# checkMaj() has failed with curl or allow_url_fopen is off
+if (preg_match('%class="[^"]*\bred\b[^"]*"%', $maj)) {
+    # checkMaj() has failed with curl or allow_url_fopen is off
 ?>
 	<script type="text/javascript">
 		(function() {

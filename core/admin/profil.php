@@ -16,16 +16,15 @@ plxToken::validateFormToken($_POST);
 eval($plxAdmin->plxPlugins->callHook('AdminProfilPrepend'));
 
 # On édite la configuration
-if(!empty($_POST)) {
+if (!empty($_POST)) {
+    if (!empty($_POST['profil'])) {
+        $plxAdmin->editProfil($_POST);
+    } elseif (!empty($_POST['password'])) {
+        $plxAdmin->editPassword($_POST);
+    }
 
-	if(!empty($_POST['profil']))
-		$plxAdmin->editProfil($_POST);
-	elseif(!empty($_POST['password']))
-		$plxAdmin->editPassword($_POST);
-
-	header('Location: profil.php');
-	exit;
-
+    header('Location: profil.php');
+    exit;
 }
 
 # On inclut le header
@@ -42,7 +41,7 @@ $_profil = $plxAdmin->aUsers[$_SESSION['user']];
 		<input type="submit" name="profil" value="<?php echo L_PROFIL_UPDATE ?>" />
 	</div>
 
-	<?php eval($plxAdmin->plxPlugins->callHook('AdminProfilTop')) # Hook Plugins ?>
+	<?php eval($plxAdmin->plxPlugins->callHook('AdminProfilTop')) # Hook Plugins?>
 
 	<fieldset>
 		<div class="grid">
@@ -66,11 +65,11 @@ $_profil = $plxAdmin->aUsers[$_SESSION['user']];
 		<div class="grid">
 			<div class="col sml-12">
 				<label for="id_content"><?php echo L_PROFIL_INFOS ?>&nbsp;:</label>
-				<?php plxUtils::printArea('content',plxUtils::strCheck($_profil['infos']), 0, 5); ?>
+				<?php plxUtils::printArea('content', plxUtils::strCheck($_profil['infos']), 0, 5); ?>
 			</div>
 		</div>
 	</fieldset>
-	<?php eval($plxAdmin->plxPlugins->callHook('AdminProfil')) # Hook Plugins ?>
+	<?php eval($plxAdmin->plxPlugins->callHook('AdminProfil')) # Hook Plugins?>
 	<?php echo plxToken::getTokenPostMethod() ?>
 
 </form>

@@ -1,5 +1,6 @@
 <?php
-$LANG = array (
+
+$LANG = array(
 
 		'L_ID' => '#',
 		'L_MENU' => 'Menu',
@@ -534,4 +535,3 @@ $LANG = array (
 		'L_ERR_INVALID_DATE_UPDATE' => 'Data non valida aggiornato',
 		'L_CONFIG_THEME_UPDATE' => 'Cambia Aspetto'
 );
-?>

@@ -15,11 +15,11 @@ plxToken::validateFormToken($_POST);
 $plxAdmin->checkProfil(PROFIL_ADMIN);
 
 # On édite la configuration
-if(!empty($_POST)) {
-	$plxAdmin->editConfiguration($plxAdmin->aConf,$_POST);
-	unset($_SESSION['medias']); # réinit de la variable de session medias (pour medias.php) au cas si changmt de chemin medias
-	header('Location: parametres_avances.php');
-	exit;
+if (!empty($_POST)) {
+    $plxAdmin->editConfiguration($plxAdmin->aConf, $_POST);
+    unset($_SESSION['medias']); # réinit de la variable de session medias (pour medias.php) au cas si changmt de chemin medias
+    header('Location: parametres_avances.php');
+    exit;
 }
 
 # On inclut le header
@@ -35,7 +35,7 @@ include __DIR__ .'/top.php';
 		<input type="submit" value="<?php echo L_CONFIG_ADVANCED_UPDATE ?>" />
 	</div>
 
-	<?php eval($plxAdmin->plxPlugins->callHook('AdminSettingsAdvancedTop')) # Hook Plugins ?>
+	<?php eval($plxAdmin->plxPlugins->callHook('AdminSettingsAdvancedTop')) # Hook Plugins?>
 
 	<fieldset>
 		<div class="grid">
@@ -43,9 +43,9 @@ include __DIR__ .'/top.php';
 				<label for="id_urlrewriting"><?php echo L_CONFIG_ADVANCED_URL_REWRITE ?>&nbsp;:</label>
 			</div>
 			<div class="col sml-12 med-7">
-				<?php if(plxUtils::testModRewrite(false)) : ?>
-					<?php plxUtils::printSelect('urlrewriting',array('1'=>L_YES,'0'=>L_NO), $plxAdmin->aConf['urlrewriting']);?>
-					<?php if(is_file(PLX_ROOT.'.htaccess') AND $plxAdmin->aConf['urlrewriting']==0) { ?>
+				<?php if (plxUtils::testModRewrite(false)) : ?>
+					<?php plxUtils::printSelect('urlrewriting', array('1'=>L_YES,'0'=>L_NO), $plxAdmin->aConf['urlrewriting']);?>
+					<?php if (is_file(PLX_ROOT.'.htaccess') and $plxAdmin->aConf['urlrewriting']==0) { ?>
 						<br /><span class="text-red"><?php echo L_CONFIG_ADVANCED_URL_REWRITE_ALERT ?></span>
 					<?php } ?>
 				<?php else: ?>
@@ -58,7 +58,7 @@ include __DIR__ .'/top.php';
 				<label for="id_gzip"><?php echo L_CONFIG_ADVANCED_GZIP ?>&nbsp;:</label>
 			</div>
 			<div class="col sml-12 med-7">
-				<?php plxUtils::printSelect('gzip',array('1'=>L_YES,'0'=>L_NO), $plxAdmin->aConf['gzip']);?>
+				<?php plxUtils::printSelect('gzip', array('1'=>L_YES,'0'=>L_NO), $plxAdmin->aConf['gzip']);?>
 				<a class="hint"><span><?php echo L_CONFIG_ADVANCED_GZIP_HELP ?></span></a>
 			</div>
 		</div>
@@ -67,7 +67,7 @@ include __DIR__ .'/top.php';
 				<label for="id_lostpassword"><?php echo L_CONFIG_ADVANCED_LOSTPASSWORD ?>&nbsp;:</label>
 			</div>
 			<div class="col sml-12 med-7">
-				<?php plxUtils::printSelect('lostpassword',array('1'=>L_YES,'0'=>L_NO), $plxAdmin->aConf['lostpassword']);?>
+				<?php plxUtils::printSelect('lostpassword', array('1'=>L_YES,'0'=>L_NO), $plxAdmin->aConf['lostpassword']);?>
 			</div>
 		</div>
 		<div class="grid">
@@ -75,7 +75,7 @@ include __DIR__ .'/top.php';
 				<label for="id_capcha"><?php echo L_CONFIG_ADVANCED_CAPCHA ?>&nbsp;:</label>
 			</div>
 			<div class="col sml-12 med-7">
-				<?php plxUtils::printSelect('capcha',array('1'=>L_YES,'0'=>L_NO), $plxAdmin->aConf['capcha']);?>
+				<?php plxUtils::printSelect('capcha', array('1'=>L_YES,'0'=>L_NO), $plxAdmin->aConf['capcha']);?>
 			</div>
 		</div>
 		<div class="grid">
@@ -83,7 +83,7 @@ include __DIR__ .'/top.php';
 				<label for="id_userfolders"><?php echo L_CONFIG_ADVANCED_USERFOLDERS ?>&nbsp;:</label>
 			</div>
 			<div class="col sml-12 med-7">
-				<?php plxUtils::printSelect('userfolders',array('1'=>L_YES,'0'=>L_NO), $plxAdmin->aConf['userfolders']);?>
+				<?php plxUtils::printSelect('userfolders', array('1'=>L_YES,'0'=>L_NO), $plxAdmin->aConf['userfolders']);?>
 			</div>
 		</div>
 		<div class="grid">
@@ -263,13 +263,13 @@ include __DIR__ .'/top.php';
 			<div class="col sml-12 med-7">
 				<?php plxUtils::printInput('smtpOauth2_refreshToken', $plxAdmin->aConf['smtpOauth2_refreshToken'], 'text', '', true); ?>
 <?php
-	$disabled = (empty($plxAdmin->aConf['smtpOauth2_clientSecret']) AND empty($plxAdmin->aConf['smtpOauth2_clientId']) and empty($plxAdmin->aConf['smtpOauth2_emailAdress'])) ? 'disabled' : '';
+    $disabled = (empty($plxAdmin->aConf['smtpOauth2_clientSecret']) and empty($plxAdmin->aConf['smtpOauth2_clientId']) and empty($plxAdmin->aConf['smtpOauth2_emailAdress'])) ? 'disabled' : '';
 ?>
 				<a href="get_oauth_token.php?provider=Google"><button type="button" <?php echo $disabled ?>><?php echo L_CONFIG_ADVANCED_SMTPOAUTH_GETTOKEN ?></button></a>
 			</div>
 		</div>
 	</fieldset>
-	<?php eval($plxAdmin->plxPlugins->callHook('AdminSettingsAdvanced')) # Hook Plugins ?>
+	<?php eval($plxAdmin->plxPlugins->callHook('AdminSettingsAdvanced')) # Hook Plugins?>
 </form>
 
 <?php

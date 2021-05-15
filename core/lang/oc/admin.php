@@ -1,5 +1,6 @@
 <?php
-$LANG = array (
+
+$LANG = array(
 
 		'L_ID' => '#',
 		'L_MENU' => 'Menú',
@@ -614,4 +615,3 @@ $LANG = array (
 		'L_BACK_TO_THEMES' => 'Tornar a la lista dels tèmas',
 		'L_CONFIG_THEME_UPDATE' => 'Modificar del tèma'
 );
-?>
