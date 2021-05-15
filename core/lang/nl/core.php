@@ -151,4 +151,3 @@ $LANG = array(
 'L_FEED_WRITTEN_BY'				=> 'Geschreven door',
 
 );
-?>

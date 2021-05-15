@@ -13,7 +13,7 @@
 						<li><?php echo plxDate::formatDate($plxShow->plxMotor->cible, $plxShow->lang('ARCHIVES').' #month #num_year(4)') ?></li>
 					</ul>
 
-					<?php while($plxShow->plxMotor->plxRecord_arts->loop()): ?>
+					<?php while ($plxShow->plxMotor->plxRecord_arts->loop()): ?>
 
 					<article class="article" id="post-<?php echo $plxShow->artId(); ?>">
 
@@ -59,7 +59,7 @@
 						<?php $plxShow->pagination(); ?>
 					</nav>
 
-					<?php $plxShow->artFeed('rss',$plxShow->catId(), '<span><a href="#feedUrl" title="#feedTitle">#feedName</a></span>'); ?>
+					<?php $plxShow->artFeed('rss', $plxShow->catId(), '<span><a href="#feedUrl" title="#feedTitle">#feedName</a></span>'); ?>
 
 				</div>
 

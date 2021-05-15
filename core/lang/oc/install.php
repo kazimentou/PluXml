@@ -37,4 +37,3 @@ $LANG = array(
 'L_PWD_GOOD'						=> 'Senhal bon',
 'L_PWD_STRONG'						=> 'Senhal fòrt',
 );
-?>
