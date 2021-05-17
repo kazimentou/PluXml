@@ -43,8 +43,7 @@ use League\OAuth2\Client\Provider\Google;
 include __DIR__.'/prepend.php';
 
 if (!isset($_GET['code']) && !isset($_GET['provider'])) {
-	include __DIR__ .'/top.php';
-?>
+    include __DIR__ .'/top.php'; ?>
 	<div class="inline-form action-bar">
 		<h2><?php echo L_CONFIG_ADVANCED_DESC ?></h2>
 	</div>
@@ -122,7 +121,7 @@ if (!isset($_GET['code'])) {
     $tokenToStore['smtpOauth2_refreshToken'] = $token->getRefreshToken();
     // Store the token in the PluXMl configuration and redirect to the administration page
     if (!empty($tokenToStore)) {
-    	$plxAdmin->editConfiguration($plxAdmin->aConf, $tokenToStore);
+        $plxAdmin->editConfiguration($plxAdmin->aConf, $tokenToStore);
     }
     header('Location: '.htmlentities($plxAdmin->aConf['racine'].'core/admin/parametres_avances.php'));
 }

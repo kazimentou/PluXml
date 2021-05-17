@@ -153,4 +153,3 @@ $LANG = array(
 'L_FEED_WRITTEN_BY'				=> 'Scris de',
 
 );
-?>
