@@ -5,7 +5,7 @@
 	<footer class="footer">
 		<div class="container">
 			<p>
-				<?php $plxShow->mainTitle('link'); ?> - <span><?php $plxShow->subTitle(); ?></span> <span> - © <= date('Y', time() - 1296000) ?></span>
+				<?php $plxShow->mainTitle('link'); ?> - <span><?php $plxShow->subTitle(); ?></span> <span> - © <?= date('Y', time() - 1296000) ?></span>
 			</p>
 			<p>
 				<?php $plxShow->lang('POWERED_BY') ?>&nbsp;<a href="<?= PLX_URL_REPO?>" title="<?php $plxShow->lang('PLUXML_DESCRIPTION') ?>">PluXml</a>
