@@ -2,14 +2,14 @@
     exit;
 } ?>
 
-	<aside class="aside col sml-12 med-3">
+	<aside class="aside col med-3">
 
 		<h3>
 			<?php $plxShow->lang('CATEGORIES'); ?>
 		</h3>
 
 		<ul class="cat-list unstyled-list">
-			<?php $plxShow->catList('', '<li id="#cat_id"><a class="#cat_status" href="#cat_url" title="#cat_name">#cat_name</a> (#art_nb)</li>'); ?>
+			<?php $plxShow->catList('', '<li id="#cat_id"><a class="#cat_status" href="#cat_url" title="#cat_name">#cat_name</a><span>(#art_nb)</span></li>'); ?>
 		</ul>
 
 		<h3>
@@ -41,7 +41,7 @@
 		</h3>
 
 		<ul class="arch-list unstyled-list">
-			<?php $plxShow->archList('<li id="#archives_id"><a class="#archives_status" href="#archives_url" title="#archives_name">#archives_name</a> (#archives_nbart)</li>'); ?>
+			<?php $plxShow->archList('<li id="#archives_id"><a class="#archives_status" href="#archives_url" title="#archives_name">#archives_name</a> <span>(#archives_nbart)</span></li>'); ?>
 		</ul>
 
 	</aside>

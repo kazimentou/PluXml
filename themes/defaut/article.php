@@ -1,4 +1,4 @@
-<?php include __DIR__.'/header.php'; ?>
+<?php include 'header.php'; ?>
 
 	<main class="main">
 
@@ -6,7 +6,7 @@
 
 			<div class="grid">
 
-				<div class="content col sml-12 med-9">
+				<div class="content col <?= defined('FULL_WIDTH') ? '' : 'med-9' ?>">
 
 					<article class="article" id="post-<?php echo $plxShow->artId(); ?>">
 
@@ -40,19 +40,23 @@
 								</small>
 							</div>
 						</header>
-
-						<?php $plxShow->artThumbnail(); ?>
-						<?php $plxShow->artContent(); ?>
-
+						<main class="main-post">
+<?php $plxShow->artThumbnail(); ?>
+<?php $plxShow->artContent(); ?>
+						</main>
 					</article>
 
 					<?php $plxShow->artAuthorInfos('<div class="author-infos">#art_authorinfos</div>'); ?>
 
-					<?php include __DIR__.'/commentaires.php'; ?>
+					<?php include 'commentaires.php'; ?>
 
 				</div>
 
-				<?php include __DIR__.'/sidebar.php'; ?>
+<?php
+if (!defined('FULL_WIDTH')) {
+    include 'sidebar.php';
+}
+?>
 
 			</div>
 
@@ -60,4 +64,5 @@
 
 	</main>
 
-<?php include __DIR__.'/footer.php'; ?>
+<?php
+include 'footer.php';
