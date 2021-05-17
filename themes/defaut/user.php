@@ -1,23 +1,17 @@
-<?php
+<?php include __DIR__.'/header.php'; ?>
 
-const FULL_WIDTH = true;
+	<main class="main">
 
-<<<<<<< HEAD
-include 'categorie.php';
-=======
 		<div class="container">
 
 			<div class="grid">
 
-				<div class="content col sml-12">
+				<div class="content col sml-12 med-9">
 
 					<ul class="repertory menu breadcrumb">
 						<li><a href="<?php $plxShow->racine() ?>"><?php $plxShow->lang('HOME'); ?></a></li>
-						<li><?php $plxShow->catName(); ?></li>
+						<li><?php $plxShow->authorName(); ?></li>
 					</ul>
-
-					<p><?php $plxShow->catDescription('#cat_description'); ?></p>
-					<p><?php $plxShow->catThumbnail(); ?></p>
 
 					<?php while ($plxShow->plxMotor->plxRecord_arts->loop()): ?>
 
@@ -34,9 +28,6 @@ include 'categorie.php';
 							</h2>
 							<div>
 								<small>
-									<span class="written-by">
-										<?php $plxShow->lang('WRITTEN_BY'); ?> <?php $plxShow->artAuthor() ?>
-									</span>
 									<span class="art-nb-com">
 										<?php $plxShow->artNbCom(); ?>
 									</span>
@@ -65,9 +56,11 @@ include 'categorie.php';
 						<?php $plxShow->pagination(); ?>
 					</nav>
 
-					<?php $plxShow->artFeed('rss', $plxShow->catId(), '<span><a href="#feedUrl" title="#feedTitle">#feedName</a></span>'); ?>
+					<?php $plxShow->artFeed('rss', $plxShow->plxMotor->cible, '<span><a href="#feedUrl" title="#feedTitle">#feedName</a></span>'); ?>
 
 				</div>
+
+				<?php include __DIR__.'/sidebar.php'; ?>
 
 			</div>
 
@@ -76,4 +69,3 @@ include 'categorie.php';
 	</main>
 
 <?php include __DIR__.'/footer.php'; ?>
->>>>>>> plxShow-userlist

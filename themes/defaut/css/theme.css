@@ -205,8 +205,14 @@ ul.menu a.noactive{
 }
 
 .cat-list .active,
+<<<<<<< HEAD
 .classified-in .active {
 	background-color: var(--color1);
+=======
+.classified-in .active,
+.author-list .active {
+	background-color: #6aa6ce;
+>>>>>>> plxShow-userlist
 	color: #fff;
 }
 .aside a,
