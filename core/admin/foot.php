@@ -1,10 +1,12 @@
-<?php if(!defined('PLX_ROOT')) exit; ?>
+<?php if (!defined('PLX_ROOT')) {
+    exit;
+} ?>
 
 		</section>
 
 </main>
 
-<?php eval($plxAdmin->plxPlugins->callHook('AdminFootEndBody')) # Hook Plugins ?>
+<?php eval($plxAdmin->plxPlugins->callHook('AdminFootEndBody')) # Hook Plugins?>
 
 <script src="<?php echo PLX_CORE ?>lib/drag-and-drop.js"></script>
 <script>
