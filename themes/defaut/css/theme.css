@@ -5,7 +5,7 @@
 #
 # Package:		theme.css
 # Copyright (c) 2017-2019 PluXml
-# Authors		Stephane F., Pedro "P3ter" CADETE., Thomas "sudwebdesign" Ingles.
+# Authors		Stephane F., Pedro "P3ter" CADETE, Thomas "sudwebdesign" Ingles, Jean-Pierre Pourrez "bazooka07".
 # Licensed under the GPL license.
 # See http://www.gnu.org/licenses/gpl.html
 #
@@ -22,10 +22,60 @@
 	font-weight: normal;
 	font-style: normal;
 }
+
+@font-face {
+  font-family: 'fontello';
+  src: url('../fonts/fontello/font/fontello.eot?49327848');
+  src: url('../fonts/fontello/font/fontello.eot?49327848#iefix') format('embedded-opentype'),
+       url('../fonts/fontello/font/fontello.woff2?49327848') format('woff2'),
+       url('../fonts/fontello/font/fontello.woff?49327848') format('woff'),
+       url('../fonts/fontello/font/fontello.ttf?49327848') format('truetype'),
+       url('../fonts/fontello/font/fontello.svg?49327848#fontello') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* -------- hack against PluCSS ----------- */
+
+.container {
+	max-width: none;
+}
+
+/*
+.menu .group.active {
+	color: #444;
+}
+*/
+
+@media screen and (min-width: 1280px) {
+	html { background-color: #666; }
+	body {
+		position: relative;
+		max-width: 1280px;
+		margin: 0 auto;
+	}
+}
+
+a:active, a:hover {
+    color: var(--color1);
+}
+
+/* ---------------------------------------- */
+
 body {
 	--header-height: 7rem;
 	--header-padding-top: 1.3rem;
 	--bg-height: 250px;
+	/* --color1: #B65F02; */ /* Marigold */
+	/* --color1: #4778A9; */ /* Cerulean */
+	/* --color1: #B55A30; */ /* Rust */
+	/* --color1: #847306; */ /* Illuminating */
+	/* --color1: #0072B5; */ /* French Blue */
+	/* --color1: #338440; */ /* Green Ash */
+	/* --color1: #DA3725; */ /* Burnt Coral */
+	/* --color1: #00855D; */ /* Mint */
+	/* --color1: #8F66A3; */ /* Amethyst Orchid */
+	/* --color1: #D2386C; */ /* Raspberry Sorbet */
 	font-family: 'open_sansregular', sans-serif;
 	font-size: 1.7em;
 	line-height: 1.6em;
@@ -41,7 +91,8 @@ body {
 	background-color: #fff;
 	border-bottom: 1px solid #ddd;
 	padding-top: var(--header-padding-top);
-	height: var(--header-height);
+	padding-bottom: 1rem;
+	/* height: var(--header-height); */
 	z-index: 2;
 }
 .header a {
@@ -49,14 +100,6 @@ body {
 }
 .header a:hover {
 	text-decoration: none;
-}
-.logo {
-	background: url("../img/pluxml-logo-black.png") top left no-repeat;
-	height: calc(var(--header-height) + var(--bg-height) - var(--header-padding-top));
-	background-size: 6rem;
-	background-position: 5rem 0;
-	padding-left: 12rem;
-	margin-left: -5rem;
 }
 .bg {
 	background: url(../img/bg.jpg) no-repeat top left;
@@ -82,7 +125,8 @@ ul.menu {}
 	border-bottom: 3px solid transparent;
 }
 .menu a:hover {
-	border-bottom: 3px solid #222;
+	border-bottom: 3px solid;
+	border-radius: 1px;
 }
 .menu>li>span {
 	cursor: default;
@@ -127,7 +171,9 @@ ul.menu li.active a,
 ul.menu a.active,
 ul.menu li span:hover,
 ul.menu li a:hover {/* pluCss1.3.1 fix : plxMyshop 0.13.x, maybe more */
-	color: #000 !important;
+	/* color: #000 !important; */
+	color: #fff;
+	background-color: var(--color1);
 	text-decoration: none;
 }
 
@@ -137,10 +183,10 @@ ul.menu li a {/* pluCss1.3.1 fix : plxMyshop 0.13.x, maybe more */
 	padding-left: .35rem;
 	padding-right: .35rem;
 	width: 100%;
-/*	cursor: pointer;*/
-	background-color: rgba(255,255,255,.55);
+	/*	cursor: pointer;*/
+	/* background-color: rgba(255,255,255,.55); */
 	border-radius: 1px;
-	color: #258fd6;
+	color: var(--color1);
 	white-space: nowrap;
 }
 ul.menu li span a,
@@ -154,14 +200,18 @@ ul.menu li.noactive a,
 ul.menu a.noactive{
 /*	background-color: rgba(255,255,255,.55);*/
 	border-radius: 1px;
-	color: #258fd6;
+	color: var(--color1);
 
 }
 
 .cat-list .active,
 .classified-in .active {
-	background-color: #6aa6ce;
+	background-color: var(--color1);
 	color: #fff;
+}
+.aside a,
+.classified-in a {
+	padding: 0 0.5rem;
 }
 
 /* ---------- Main ---------- */
@@ -183,7 +233,7 @@ ul.menu a.noactive{
 }
 
 .pagination a {
-	background-color: #258fd6;
+	background-color: var(--color1);
 	border-radius: .3rem;
 	color: #fff;
 	padding: .9rem .7rem;
@@ -228,7 +278,7 @@ article:after {
 
 .article header h2,
 .article header h2 a {
-	color: #222;
+	color: var(--color1);
 	font-size: 3.2rem;
 	line-height: 1.2em;
 	letter-spacing: -1px;
@@ -237,7 +287,8 @@ article:after {
 }
 
 .article header h2 a:hover {
-	color: #111;
+	color: #fff;
+	background-color: var(--color1);
 	text-decoration: none;
 }
 
@@ -255,12 +306,7 @@ article:after {
 
 .article .art-date {
 	font-size: 1.5rem;
-	font-weight: bold;
 	color: #9EABB3;
-}
-
-.article .written-by {
-	font-weight: bold;
 }
 
 .article .written-by:after {
@@ -310,7 +356,7 @@ article:after {
 }
 
 .nbcom {
-	background-color: #258fd6;
+	background-color: var(--color1);
 	border-radius: .3rem;
 	color: #fff;
 	padding: .4rem .6rem;
@@ -402,17 +448,17 @@ article:after {
 
 .aside ul.tag-list li {
 	display: inline-block;
+	margin: 0.25rem 0.5rem;
 }
 
 .aside ul.tag-list li a {
-	padding: 0 0.5rem 0 0;
+	padding: 0 0.5rem;
 }
 
 .aside ul.tag-list li a.active {
 	font-weight: bold;
 	background-color: #68838b;
 	color: #fff;
-	padding: 0 0.5rem 0 0.5rem;
 }
 
 /* https://www.w3schools.com/colors/colors_trends.asp (The 10 Hottest Fall Colors for 2016) */
@@ -488,7 +534,7 @@ article:after {
 .footer {
 	background: #fff;
 	color: #666;
-	padding: 6rem 0;
+	padding: 2rem 0 0.5rem;
 	text-align: center;
 	font-size: 1.2rem;
 }
@@ -506,16 +552,22 @@ article:after {
 		padding-left: 15rem;
 		padding-right: 15rem;
 	}
-	.logo {
-		background: url("../img/pluxml-logo-black.png") top left no-repeat;
-		height: 12rem;
-		background-size: 12rem;
-		background-position: 6rem 0;
-		padding-left: 18rem;
-		margin-left: -12rem;
-	}
 	.heading-small {
 		font-size: 3rem;
+	}
+}
+
+@media screen and (min-width: 768px) {
+	body > .header {
+		position: sticky;
+		top: 0;
+	}
+
+	.nav {
+		position: absolute;
+		right: 2rem;
+		/* width: max-content !important; */
+		line-height: initial;
 	}
 }
 
@@ -531,11 +583,14 @@ article:after {
 }
 
 @media (max-width: 767px) {
+	.header .col {
+		float: none;
+	}
 	.header {
 		position: sticky;
 		top: 0;
 	}
-	.header:hover .grid {
+	.header-main:hover .grid {
 	overflow: unset
 	}
 	.header div.grid{
@@ -572,22 +627,31 @@ article:after {
 		top: 0;
 		z-index: 4; /* responsive slide is in 3 */
 		height: auto;
-		max-height: 80%;
+		max-height: 80vh;
+		width: min-content;
+		margin-left: auto;
+		margin-right: 1rem;
+		margin-top: 0;
 		overflow-y: auto;
 		text-align: left;
-		margin-top: 0;
 		z-index: 10;
-		border-radius: 1rem;
-		background-color: #fff;
 	}
-	.nav>.container {
+	.nav > .container {
 		padding: 0;
 	}
-	ul.menu {
-		padding: 0 15px 7.5px 15px;
+	.nav label[for="menu"] {
+		position: fixed;
+		top: 1rem;
+		right: 2rem;
+		width: min-content;
 	}
-	.menu li {
-		background: #efefef;
+	ul.menu {
+		padding: 0.5rem 1rem 0.5rem 2rem;
+		border: 1px solid #ddd;
+		border-radius: 1rem;
+	}
+	ul.menu, ul.sub-menu li {
+		background-color: #f8f8f8;
 	}
 	.menu li:hover {}
 	.menu>li span::before {/* sub menu icon */
@@ -612,15 +676,25 @@ article:after {
 	.menu>li ul li:hover {
 		background-color: #fff;
 	}
+	.responsive-menu ul li.active a, .responsive-menu ul li.active:hover {
+		background-color: transparent;
+		color: inherit;
+		font-weight: bold;
+	}
 	.menu>li ul li:hover a {
 /*		text-decoration: underline; */
 	}
+	/*
 	 ul.menu li.active a,
 	 ul.menu li.active:hover,
 	 ul.menu li,
 	 ul.menu li:hover {
 		background-color: #fff;
-/*		color: #000;*/
+		color: #000;
+	}
+	*/
+	.responsive-menu ul li:hover > .sub-menu {
+		display: block;
 	}
 	.comment {
 		background-image: none;
@@ -644,17 +718,6 @@ article:after {
 	}
 }
 @media (max-width: 463px) {
-	.header {
-		height: 7rem;
-	}
-	.logo {
-		background-position: 1rem 0;
-		padding-left: 2rem;
-		background-size: 4rem;
-		padding-left: 6rem;
-		margin-left: -1rem;
-		height: 5rem;
-	}
 	.heading-small {
 		font-size: 3rem;
 	}
@@ -679,4 +742,147 @@ article:after {
 	.static.menu a {
 		padding: 0;
 	}
+}
+
+/* ------- footnotes ---------- */
+
+.footnotes {
+	list-style: none;
+	padding-left: 0;
+	font-size: smaller;
+}
+
+/* -------- new-page ------------- */
+
+.article[id^="post-"] .art-nav .active {
+	color: yellow;
+}
+
+.article[id^="post-"] .art-nav > *:not(:first-of-type) {
+	margin-left: 1rem;
+}
+
+.article[id^="post-"] .new-page:not(.active) {
+	display: none;
+}
+
+
+/* -------- miscellanous --------- */
+
+body > .main {
+	padding-top: 0;
+}
+
+.article[id^="post-"] .main-post p:not(.more) {
+	text-align: justify;
+	text-indent: 2rem;
+}
+
+.article[id^="post-"] .main-post .more {
+	text-align: end;
+}
+
+.tag-list {
+	text-align: center;
+}
+
+.cat-list > li,
+.arch-list > li {
+	display: flex;
+	justify-content: space-between;
+}
+
+.comment {
+	display: grid;
+	grid-template-columns: auto 1fr auto;
+	gap: 1rem;
+	margin-top: 0;
+	padding-left: 0;
+	border-top: none;
+	background: none;
+}
+
+.comment::before {
+	font-family: fontello;
+	font-size: 200%;
+	content: '\f061';
+	padding-top: 0.5rem;
+	color: #888;
+}
+
+.brand {
+	display: flex;
+	gap: 1rem;
+}
+
+.brand::before {
+	content: ''; /* n'affiche rien mais indispensable */
+	width: 5rem;
+	background: url('../img/logo.png') no-repeat left center;
+	background-size: contain;
+}
+
+.logo {
+	background: none;
+	margin-left: 0;
+	padding-left: 0;
+	height: auto;
+}
+
+.article[id^="post-"] .tags a {
+	padding: 0 0.5rem;
+}
+
+.article[id^="post-"] .tags a.active {
+	background-color: var(--color1);
+	color: #fff;
+}
+
+.more > a::after {
+	font-family: fontello;
+	content: '\e802';
+	padding-left: 1rem;
+}
+
+.lastart-list > li,
+.lastcom-list > li {
+	overflow-x: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.cat-list .active, .classified-in .active,
+.article[id^="post-"] .tags a.active {
+    letter-spacing: 0.15rem;
+}
+
+body > .footer span {
+	white-space: nowrap;
+}
+
+/* --------- media print ----------- */
+
+@media print {
+	.header .grid > div:first-of-type {
+		width: 100%;
+	}
+	.header .grid > div:not(:first-of-type),
+	body > .footer,
+	.bg,
+   .no-print {
+		display: none;
+	}
+
+	.rss::after {
+		content: attr(href);
+		display: block;
+	}
+}
+
+/* ---------- rss ---------- */
+
+.rss::before {
+	font-family: fontello;
+	content: '\f143';
+	margin-right: 0.5rem;
 }

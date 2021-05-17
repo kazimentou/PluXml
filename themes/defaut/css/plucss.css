@@ -24,6 +24,7 @@ html {
 	font-size: 62.5%;
 }
 body {
+	--color1: #1F7AB7; /* ancienne valeur: #258fd6 - non conforme au WCAG AA */
 	font-family: sans-serif;
 	font-size: 1.5rem;
 	line-height: 1.5;
@@ -54,11 +55,6 @@ pre,
 samp {
 	font-family: monospace;
 	font-size: 1.5rem;
-}
-details,
-main,
-summary {
-	display: block;
 }
 dfn {
 	font-style: italic;
@@ -203,7 +199,7 @@ body {
 	color: #444;
 }
 a {
-	color: #258fd6;
+	color: var(--color1);
 	text-decoration: none;
 }
 a:active,
@@ -262,7 +258,7 @@ h6,
 	font-size: 4rem;
 }
 .text-blue {
-	color: #258fd6;
+	color: var(--color1);
 }
 .text-green {
 	color: #239c56;
@@ -354,7 +350,7 @@ textarea {
 input:focus,
 select:focus,
 textarea:focus {
-	border: 1px solid #258fd6;
+	border: 1px solid var(--color1);
 	transition-duration: .2s;
 }
 [type="file"] {
@@ -390,7 +386,7 @@ button.blue,
 input[type="button"].blue,
 input[type="reset"].blue,
 input[type="submit"].blue {
-	background-color: #258fd6;
+	background-color: var(--color1);
 	color: #eee;
 }
 button.blue:hover,
@@ -509,7 +505,7 @@ input[type="submit"].yellow:hover {
 }
 .menu.expanded li.active a,
 .menu.expanded li.active:hover {
-	background-color: #258fd6;
+	background-color: var(--color1);
 	color: #fff;
 }
 .responsive-menu label {
@@ -519,7 +515,7 @@ input[type="submit"].yellow:hover {
 	text-align: center;
 }
 #nav,/* fix old android browser (always open) */
-.responsive-menu label,.responsive-menu input[type=checkbox] { 
+.responsive-menu label,.responsive-menu input[type=checkbox] {
 	display: none;
 }
 .responsive-menu label {
@@ -529,7 +525,7 @@ input[type="submit"].yellow:hover {
 	padding-right: .7rem;
 }
 #nav:checked+ul#responsive-menu,/* fix old android browser */
-.responsive-menu input[type=checkbox]:checked+ul { 
+.responsive-menu input[type=checkbox]:checked+ul {
 	display: block;
 }
 
@@ -565,7 +561,7 @@ input[type="submit"].yellow:hover {
 	}
 	.responsive-menu ul li.active a,
 	.responsive-menu ul li.active:hover {
-		background-color: #258fd6;
+		background-color: var(--color1);
 		color: #fff;
 	}
 }
@@ -676,7 +672,7 @@ input[type="submit"].yellow:hover {
 }
 .alert.blue {
 	background-color: #dbedf9;
-	color: #258fd6;
+	color: var(--color1);
 }
 .alert.green {
 	background-color: #d3f5e2;
@@ -703,7 +699,7 @@ input[type="submit"].yellow:hover {
 	transition-duration: .2s;
 }
 .button.blue {
-	background-color: #258fd6;
+	background-color: var(--color1);
 	color: #eee;
 }
 .button.blue:hover {
@@ -745,7 +741,7 @@ input[type="submit"].yellow:hover {
 	width: 100%;
 }
 .progress span {
-	background-color: #258fd6;
+	background-color: var(--color1);
 	border-radius: .3rem;
 	color: #fff;
 	display: block;
@@ -762,7 +758,7 @@ input[type="submit"].yellow:hover {
 }
 .badge,
 .label {
-	background-color: #258fd6;
+	background-color: var(--color1);
 	border-radius: .3rem;
 	color: #fff;
 	display: inline-block;
@@ -774,7 +770,7 @@ input[type="submit"].yellow:hover {
 }
 .menu.expanded .active a .badge {
 	background-color: #fff;
-	color: #258fd6;
+	color: var(--color1);
 }
 .menu.vertical .badge {
 	float: right;
@@ -874,7 +870,7 @@ a.tooltip.tooltip-bottom span:after {
 	margin-left: -8px;
 	border-bottom: 8px solid #555;
 	border-right: 8px solid transparent;
-	border-left: 8px solid transparent;	
+	border-left: 8px solid transparent;
 }
 a:hover.tooltip-bottom span {
 	top: 30px;
