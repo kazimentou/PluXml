@@ -37,4 +37,3 @@ $LANG = array(
 'L_PWD_GOOD'						=> 'Dobre hasło',
 'L_PWD_STRONG'						=> 'Silne hasło',
 );
-?>

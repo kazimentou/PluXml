@@ -1,4 +1,5 @@
 <?php
+
 const PLX_ROOT = './';
 const PLX_CORE = PLX_ROOT .'core/';
 
@@ -6,9 +7,9 @@ include(PLX_ROOT.'config.php');
 include(PLX_CORE.'lib/config.php');
 
 # On verifie que PluXml est installé
-if(!file_exists(path('XMLFILE_PARAMETERS'))) {
-	header('Location: '.PLX_ROOT.'install.php');
-	exit;
+if (!file_exists(path('XMLFILE_PARAMETERS'))) {
+    header('Location: '.PLX_ROOT.'install.php');
+    exit;
 }
 
 # Autorise le cross-origin des flus rss/atom : Cross-Origin Resource Sharing
@@ -36,9 +37,9 @@ eval($plxFeed->plxPlugins->callHook('FeedBegin')); # Hook Plugins
 # Chargement du fichier de langue du core de PluXml
 loadLang(PLX_CORE.'lang/'.$lang.'/core.php');
 
-if(!$plxFeed->aConf['enable_rss']) {
-	header('Location: index.php');
-	exit;
+if (!$plxFeed->aConf['enable_rss']) {
+    header('Location: index.php');
+    exit;
 }
 
 # On démarre la bufferisation
@@ -56,4 +57,3 @@ eval($plxFeed->plxPlugins->callHook('FeedEnd')); # Hook Plugins
 # Restitution écran
 echo $output;
 exit;
-?>

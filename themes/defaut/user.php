@@ -13,7 +13,7 @@
 						<li><?php $plxShow->authorName(); ?></li>
 					</ul>
 
-					<?php while($plxShow->plxMotor->plxRecord_arts->loop()): ?>
+					<?php while ($plxShow->plxMotor->plxRecord_arts->loop()): ?>
 
 					<article class="article" id="post-<?php echo $plxShow->artId(); ?>">
 

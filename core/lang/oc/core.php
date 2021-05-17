@@ -152,4 +152,3 @@ $LANG = array(
 'L_FEED_OFFLINE_COMMENTS'		=> 'Comentaris fòra linha',
 'L_FEED_WRITTEN_BY'				=> 'Redigit per',
 );
-?>
