@@ -156,7 +156,11 @@ if (isset($_GET["del"]) and $_GET["del"]=="install") {
 	<section class="section col sml-12 med-9 med-offset-3 lrg-10 lrg-offset-2">
 
 <?php
-        if (is_file(PLX_ROOT.'install.php')) {
+        if (
+			$_SESSION['profil']==PROFIL_ADMIN and
+			is_file(PLX_ROOT.'install.php') and
+			preg_match('#^(?:parametres_|index)#', basename($_SERVER['SCRIPT_NAME'], '.php'))
+		) {
             echo '<p class="alert red">'.L_WARNING_INSTALLATION_FILE.'</p>'."\n";
         }
         plxMsg::Display();
