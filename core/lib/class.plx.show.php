@@ -2120,6 +2120,7 @@ class plxShow
 							'#user_id'		=> 'user-' . $userIdNum,
 							'#user_url'		=> $this->plxMotor->urlRewrite('?user' . $userIdNum . '/' . md5($author['name'])),
 							'#user_name'	=> plxUtils::strCheck($author['name']),
+                        '#user_status'	=> $actif ? 'active' : 'inactive',
                         '#user_infos'	=> plxUtils::strCheck($author['infos']),
                         '#art_nb'		=> $author['articles'],
 						));
@@ -2192,14 +2193,18 @@ class plxShow
             krsort($cumuls_ans);
 
             # Affichage pour la période en cours
-            $page_actuelle = ($this->plxMotor->mode == "archives") ? $this->plxMotor->cible : '';
+            switch($this->plxMotor->mode) {
+ 				case 'article' : $page_actuelle = $this->plxMotor->plxRecord_arts->f('date'); break;
+	            case 'archives' : $page_actuelle = $this->plxMotor->cible; break;
+	            default : $page_actuelle = '';
+			}
             # mb_internal_encoding('utf-8');
             $id = 0;
             foreach ($cumuls_mois as $m => $nbarts) {
                 $id++;
                 $mois = str_pad(($m % 12) + 1, 2, '0', STR_PAD_LEFT);
                 $annee = intval($m / 12);
-                $active = $page_actuelle == '' . $annee . $mois;
+                $active = preg_match('#^' . $annee . $mois . '#', $page_actuelle);
                 $nom_mois = plxDate::getCalendar('month', $mois);
                 echo strtr($format, array(
                     '#archives_id' => 'arch-month-' . str_pad($id, 2, '0', STR_PAD_LEFT),
@@ -2217,7 +2222,7 @@ class plxShow
             $id = 0;
             foreach ($cumuls_ans as $annee => $nbarts) {
                 $id++;
-                $active = $page_actuelle == '' . $annee;
+                $active = preg_match('#^' . $annee . '#', $page_actuelle);
                 echo strtr($format, array(
                     '#archives_id' => 'arch-year-' . str_pad($id, 2, '0', STR_PAD_LEFT),
                     '#archives_name' => L_YEAR . ' ' . $annee,
