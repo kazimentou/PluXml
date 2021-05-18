@@ -14,6 +14,26 @@ class plxMotor
     public const PLX_TEMPLATES = PLX_CORE . 'templates/';
     public const PLX_TEMPLATES_DATA = PLX_ROOT . 'data/templates/';
 
+    # On gère la non régression en cas d'ajout de paramètres sur une version de pluxml déjà installée
+    protected const DEFAULT_CONFIG = array(
+        'bypage_admin'			=> 10,
+        'bypage_admin_coms'		=> 10,
+        'bypage_archives'		=> 5,
+        'bypage_tags'			=> 5,
+        'userfolders'			=> 0,
+        'meta_description'		=> '',
+        'meta_keywords'			=> '',
+        'default_lang'			=> DEFAULT_LANG,
+        'racine_plugins'		=> 'plugins/',
+        'racine_themes'			=> 'themes/',
+        'mod_art'				=> 0,
+        'display_empty_cat'		=> 0,
+        'thumbs'				=> 1,
+        'hometemplate'			=> 'home.php',
+        'custom_admincss_file'	=> '',
+        'enable_rss_comment'	=> '',
+    );
+
 	public $get = false; # Donnees variable GET
 	public $racine = false; # Url de PluXml
 	public $path_url = false; # chemin de l'url du site
@@ -392,6 +412,9 @@ class plxMotor
     public function getConfiguration($filename)
     {
 
+        # valeurs par défaut si paramètres absents dans le fichier de configuration.
+        $this->aConf = self::DEFAULT_CONFIG;
+
 		# Mise en place du parseur XML
         $data = implode('', file($filename));
 		$parser = xml_parser_create(PLX_CHARSET);
@@ -414,30 +437,25 @@ class plxMotor
 			}
 		}
         }
+
 		# détermination automatique de la racine du site
 		$this->aConf['racine'] = plxUtils::getRacine();
+
 		# On gère la non régression en cas d'ajout de paramètres sur une version de pluxml déjà installée
-        $this->aConf['bypage_admin'] = plxUtils::getValue($this->aConf['bypage_admin'], 10);
-        $this->aConf['tri_coms'] = plxUtils::getValue($this->aConf['tri_coms'], $this->aConf['tri']);
-        $this->aConf['bypage_admin_coms'] = plxUtils::getValue($this->aConf['bypage_admin_coms'], 10);
-        $this->aConf['bypage_archives'] = plxUtils::getValue($this->aConf['bypage_archives'], 5);
-        $this->aConf['bypage_tags'] = plxUtils::getValue($this->aConf['bypage_tags'], 5);
-        $this->aConf['userfolders'] = plxUtils::getValue($this->aConf['userfolders'], 0);
-		$this->aConf['meta_description'] = plxUtils::getValue($this->aConf['meta_description']);
-		$this->aConf['meta_keywords'] = plxUtils::getValue($this->aConf['meta_keywords']);
-        $this->aConf['default_lang'] = plxUtils::getValue($this->aConf['default_lang'], DEFAULT_LANG);
-		$this->aConf['racine_plugins'] = plxUtils::getValue($this->aConf['racine_plugins'], 'plugins/');
-		$this->aConf['racine_themes'] = plxUtils::getValue($this->aConf['racine_themes'], 'themes/');
-        $this->aConf['mod_art'] = plxUtils::getValue($this->aConf['mod_art'], 0);
-        $this->aConf['display_empty_cat'] = plxUtils::getValue($this->aConf['display_empty_cat'], 0);
-        $this->aConf['timezone'] = plxUtils::getValue($this->aConf['timezone'], @date_default_timezone_get());
-		$this->aConf['thumbs'] = isset($this->aConf['thumbs']) ? $this->aConf['thumbs'] : 1;
-		$this->aConf['hometemplate'] = isset($this->aConf['hometemplate']) ? $this->aConf['hometemplate'] : 'home.php';
-		$this->aConf['custom_admincss_file'] = plxUtils::getValue($this->aConf['custom_admincss_file']);
-		$this->aConf['medias'] = isset($this->aConf['medias']) ? $this->aConf['medias'] : 'data/images/';
+        foreach (array(
+            'tri_coms'	=> $this->aConf['tri'],
+            'timezone'	=> @date_default_timezone_get(),
+            'medias'	=> preg_replace('#^([^/]+)/.*#', '$1/images/', PLX_CONFIG_PATH),
+        ) as $param=>$value) {
+            if (!isset($this->aConf[$param])) {
+                $this->aConf[$param] = $value;
+            }
+        }
+
         if (!defined('PLX_PLUGINS')) {
             define('PLX_PLUGINS', PLX_ROOT . $this->aConf['racine_plugins']);
         }
+
         if (!defined('PLX_PLUGINS_CSS_PATH')) {
             define('PLX_PLUGINS_CSS_PATH', preg_replace('@^([^/]+/).*@', '$1', $this->aConf['medias']));
         }
@@ -480,7 +498,7 @@ class plxMotor
 				# Recuperation de la balise title
                 $this->aCats[$number]['title_htmltag']=plxUtils::getTagIndexValue($iTags['title_htmltag'], $values, $i);
 				# Recuperation du meta description
-                $this->aCats[$number]['meta_description']=plxUtils::getValue($values[$iTags['meta_description'][$i]]['value']);
+                $this->aCats[$number]['meta_description']=plxUtils::getTagIndexValue($iTags['meta_description'], $values, $i);
 				# Recuperation du meta keywords
                 $this->aCats[$number]['meta_keywords']=plxUtils::getTagIndexValue($iTags['meta_keywords'], $values, $i);
 				# Recuperation de l'url de la categorie
@@ -765,8 +783,6 @@ class plxMotor
             xml_parse_into_struct($parser, $data, $values, $iTags);
             xml_parser_free($parser);
 
-            $meta_description = plxUtils::getValue($iTags['meta_description'][0]);
-            $meta_keywords = plxUtils::getValue($iTags['meta_keywords'][0]);
             $art = array(
                 'filename'		=> $filename,
                 # Recuperation des valeurs de nos champs XML
