@@ -2038,7 +2038,7 @@ class plxShow
     }
 
     /**
-     * @param string $format format du texte pour chaque catégorie (variable : #cat_id, #cat_status, #cat_url, #cat_name, #cat_description, #art_nb)
+     * @param string $format format du texte pour chaque auteur (variable : #user_id, #user_url, #user_name, #user_infos, #art_nb)
      * @param string $include liste des id des utilisateurs à afficher, séparés par un ou plusieurs caractères (exemple: '001 |003 5, 45|50')
      * @param string $exclude liste des id des utilisateurs à ne pas afficher
      * @sortMethod string nom méthode de tri des auteurs : name, lastname, hits ou vide. Par défaut tri selon la date de l'article leplus récent pour chaque auteur
@@ -2052,73 +2052,68 @@ class plxShow
             return;
         }
 
-        $motif = '#^\d{4}\.(?:home,|\d{3},)*(?:home|\d{3})(?:,\d{3})*\.\d{3}\.\d{12}\.[\w-]+\.xml$#';
-        # On trie les articles par date de publication
-        $arts = $this->plxMotor->plxGlob_arts->query($motif, 'art', 'desc', 0, false, 'before');
-        $nbArts = array();
-        array_walk($arts, function ($item) use (&$nbArts) {
-            if (preg_match('#.*\.(\d{3})\.(\d{12})\.[\w-]+\.xml$#', $item, $matches)) {
-                $userId = $matches[1];
-                if (!isset($nbArts[$userId])) {
-                    $nbArts[$userId] = 1;
-                } else {
-                    $nbArts[$userId]++;
-                }
+        $authors = array_filter(
+            $this->plxMotor->aUsers,
+            function ($value) {
+                return (empty($value['delete'] and !empty($value['active']) and $value['articles'] > 0));
             }
-        });
+        );
 
         # On trie les auteurs
         switch ($sortMethod) {
             case 'name':
                 # tri par prénom, nom des auteurs
-                $users = $this->plxMotor->aUsers;
-                uksort($nbArts, function ($a, $b) use ($users) {
-                    return strcasecmp($users[$a]['name'], $users[$b]['name']);
+                uasort($authors, function ($a, $b) {
+                    return strcasecmp($a['name'], $b['name']);
                 });
                 break;
             case 'lastname':
                 # tri par nom (lastname) des auteurs
-                $users = array_map(
-                    function ($item) {
-                        $item['lastname'] = preg_replace('#.*\s+(\w[\w-]*)$#', '$1', $item['name']);
+                $pattern = '#.*\s+(\w[\w-]*)$#';
+                array_walk(
+                    $authors,
+                    function ($item) use ($pattern) {
+                        $item['lastname'] = preg_replace($pattern, '$1', $item['name']);
                         return $item;
-                    },
-                    $this->plxMotor->aUsers
+                    }
                 );
-                uksort($nbArts, function ($a, $b) use ($users) {
+
+                uasort($authors, function ($a, $b) use ($pattern) {
                     return strcasecmp($users[$a]['lastname'], $users[$b]['lastname']);
                 });
                 break;
             case 'hits':
                 # les auteurs les plus productifs en premiers
-                arsort($nbArts);
+                uasort($authors, function ($b, $a) {
+                    return ($a['articles'] - $b['articles']);
+                });
                 break;
             default:
                 # les auteurs sont triés par date de publication de leur plus récent article
+                uasort($authors, function ($b, $a) {
+                    return strcasecmp($a['last_art_published'], $b['last_art_published']);
+                });
         }
 
-        foreach ($nbArts as $userId => $v) {
-            # On vérifie que cet auteur existe
-            if (array_key_exists($userId, $this->plxMotor->aUsers)) {
-                $userIdNum = intval($userId);
-                $pattern = '@\b0*' . $userIdNum . '\b@';
-                if (empty($include) or preg_match($pattern, $include)) {
-                    if (empty($exclude) || !preg_match($pattern, $exclude)) {
-                        # on a des articles pour cet auteur ou on affiche les catégories sans article
-                        # On modifie nos motifs
-                        $author = $this->plxMotor->aUsers[$userId];
-                        $actif = (
-                            ($this->plxMotor->mode == 'user' and $this->plxMotor->cible == $userId) or
-                            ($this->plxMotor->mode == 'article' and $this->plxMotor->plxRecord_arts->f('author') == $userId)
-                        );
-                        echo strtr($format, array(
-                            '#user_id'		=> 'user-' . $userIdNum,
-                            '#user_url'		=> $this->plxMotor->urlRewrite('?user' . $userIdNum . '/' . md5($author['name'])),
-                            '#user_name'	=> plxUtils::strCheck($author['name']),
-                            '#user_status'	=> $actif ? 'active' : 'noactive',
-                            '#art_nb'		=> $v,
-                        ));
-                    }
+        foreach ($authors as $userId => $v) {
+            $userIdNum = intval($userId);
+            $pattern = '@\b0*' . $userIdNum . '\b@';
+            if (empty($include) or preg_match($pattern, $include)) {
+                if (empty($exclude) || !preg_match($pattern, $exclude)) {
+                    # on a des articles pour cet auteur ou on affiche les catégories sans article
+                    # On modifie nos motifs
+                    $author = $this->plxMotor->aUsers[$userId];
+                    $actif = (
+                        ($this->plxMotor->mode == 'user' and $this->plxMotor->cible == $userId) or
+                        ($this->plxMotor->mode == 'article' and $this->plxMotor->plxRecord_arts->f('author') == $userId)
+                    );
+                    echo strtr($format, array(
+                        '#user_id'		=> 'user-' . $userIdNum,
+                        '#user_url'		=> $this->plxMotor->urlRewrite('?user' . $userIdNum . '/' . md5($author['name'])),
+                        '#user_name'	=> plxUtils::strCheck($author['name']),
+                        '#user_infos'	=> plxUtils::strCheck($author['infos']),
+                        '#art_nb'		=> $author['articles'],
+                    ));
                 }
             }
         }
