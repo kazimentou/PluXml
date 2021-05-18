@@ -16,13 +16,13 @@
 			</p>
 			<ul class="menu">
 <?php
-if ($plxShow->plxMotor->aConf['enable_rss']) {
+if (!empty($plxShow->plxMotor->aConf['enable_rss'])) {
     ?>
 				<li><a class="rss" href="<?php $plxShow->urlRewrite('feed.php?rss') ?>" title="<?php $plxShow->lang('ARTICLES_RSS_FEEDS'); ?>"><?php $plxShow->lang('ARTICLES'); ?></a></li>
 <?php
 }
 
-if ($plxShow->plxMotor->aConf['enable_rss_comment']) {
+if (!empty($plxShow->plxMotor->aConf['enable_rss_comment'])) {
     ?>
 				<li><a class="rss" href="<?php $plxShow->urlRewrite('feed.php?rss/commentaires'); ?>" title="<?php $plxShow->lang('COMMENTS_RSS_FEEDS') ?>"><?php $plxShow->lang('COMMENTS'); ?></a></li>
 <?php

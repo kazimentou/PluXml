@@ -443,20 +443,23 @@ article:after {
 /* --------- tags ---------- */
 
 .aside ul.tag-list {
-	list-style-type: none;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	align-items: center;
 	padding: 0;
+	list-style-type: none;
 }
 
 .aside ul.tag-list li {
-	display: inline-block;
-	margin: 0.25rem 0.5rem;
+	margin: 0.5rem;
 }
 
-.aside ul.tag-list li a {
+.aside ul.tag-list a {
 	padding: 0 0.5rem;
 }
 
-.aside ul.tag-list li a.active {
+.aside ul.tag-list a.active {
 	font-weight: bold;
 	background-color: #68838b;
 	color: #fff;
@@ -788,6 +791,7 @@ body > .main {
 }
 
 .cat-list > li,
+.author-list > li,
 .arch-list > li {
 	display: flex;
 	justify-content: space-between;

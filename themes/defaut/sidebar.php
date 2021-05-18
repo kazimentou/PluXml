@@ -1,6 +1,8 @@
-<?php if (!defined('PLX_ROOT')) {
+<?php
+if (!defined('PLX_ROOT')) {
     exit;
-} ?>
+}
+?>
 
 	<aside class="aside col med-3">
 
@@ -20,6 +22,9 @@
 			<?php $plxShow->lastArtList('<li><a class="#art_status" href="#art_url" title="#art_title">#art_title</a></li>'); ?>
 		</ul>
 
+<?php
+if ($plxShow->authorCount > 1) {
+    ?>
 		<h3>
 			<?php $plxShow->lang('AUTHORS'); ?>
 		</h3>
@@ -28,11 +33,14 @@
 <?php
 # Par défaut, tri selon la date de l'article le plus récent de chaque auteur
 $plxShow->authorList();
-# Sinon tri par name, lastname ou hits
+    # Sinon tri par name, lastname ou hits
 # $plxShow->authorList(plxShow::AUTHOR_PATTERN, false, false, 'hits');
 ?>
 		</ul>
 
+<?php
+}
+?>
 		<h3>
 			<?php $plxShow->lang('TAGS'); ?>
 		</h3>
