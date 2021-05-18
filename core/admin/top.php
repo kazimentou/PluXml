@@ -68,13 +68,13 @@ if (isset($_GET["del"]) and $_GET["del"]=="install") {
     echo L_PROFIL_ADMIN;
 } elseif ($_SESSION['profil']==PROFIL_MANAGER) {
                             echo L_PROFIL_MANAGER;
-                        } elseif ($_SESSION['profil']==PROFIL_MODERATOR) {
+} elseif ($_SESSION['profil']==PROFIL_MODERATOR) {
                             echo L_PROFIL_MODERATOR;
-                        } elseif ($_SESSION['profil']==PROFIL_EDITOR) {
+} elseif ($_SESSION['profil']==PROFIL_EDITOR) {
                             echo L_PROFIL_EDITOR;
-                        } else {
+} else {
                             echo L_PROFIL_WRITER;
-                        } ?>
+} ?>
 					</em>
 				</li>
 				<li><small><a class="version" title="PluXml" href="<?php echo PLX_URL_REPO ?>">PluXml <?php echo $plxAdmin->aConf['version'] ?></a></small></li>

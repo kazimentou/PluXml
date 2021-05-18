@@ -167,8 +167,8 @@ include 'top.php';
 			</div>
 		</div>
 <?php
-if(plxUtils::isPHPMailer()) {
-?>
+if (plxUtils::isPHPMailer()) {
+    ?>
 		<div>
 			<h2><?php echo L_CONFIG_ADVANCED_EMAIL_SENDING_TITLE ?>&nbsp;:</h2>
 			<p><small><?php echo L_CONFIG_ADVANCED_EMAIL_SENDING_TITLE_HELP ?></small></p>
@@ -266,8 +266,7 @@ if(plxUtils::isPHPMailer()) {
 			<div class="col sml-12 med-7">
 				<?php plxUtils::printInput('smtpOauth2_refreshToken', $plxAdmin->aConf['smtpOauth2_refreshToken'], 'text', '', true); ?>
 <?php
-    $disabled = (empty($plxAdmin->aConf['smtpOauth2_clientSecret']) and empty($plxAdmin->aConf['smtpOauth2_clientId']) and empty($plxAdmin->aConf['smtpOauth2_emailAdress'])) ? 'disabled' : '';
-?>
+    $disabled = (empty($plxAdmin->aConf['smtpOauth2_clientSecret']) and empty($plxAdmin->aConf['smtpOauth2_clientId']) and empty($plxAdmin->aConf['smtpOauth2_emailAdress'])) ? 'disabled' : ''; ?>
 				<a href="get_oauth_token.php?provider=Google"><button type="button" <?php echo $disabled ?>><?php echo L_CONFIG_ADVANCED_SMTPOAUTH_GETTOKEN ?></button></a>
 			</div>
 		</div>

@@ -16,22 +16,29 @@ class plxMotor
 
     # On gère la non régression en cas d'ajout de paramètres sur une version de pluxml déjà installée
     protected const DEFAULT_CONFIG = array(
+        'title'					=> 'PluXml',
         'bypage_admin'			=> 10,
         'bypage_admin_coms'		=> 10,
         'bypage_archives'		=> 5,
         'bypage_tags'			=> 5,
-        'userfolders'			=> 0,
-        'meta_description'		=> '',
-        'meta_keywords'			=> '',
         'default_lang'			=> DEFAULT_LANG,
         'racine_plugins'		=> 'plugins/',
         'racine_themes'			=> 'themes/',
-        'mod_art'				=> 0,
-        'display_empty_cat'		=> 0,
-        'thumbs'				=> 1,
         'hometemplate'			=> 'home.php',
-        'custom_admincss_file'	=> '',
-        'enable_rss_comment'	=> '',
+        'bypage'				=> 5,
+        'bypage_archives'		=> 5,
+        'bypage_tags'			=> 5,
+        'bypage_admin'			=> 10,
+        'bypage_admin_coms'		=> 10,
+        'bypage_feed'			=> 8,
+        'tri'					=> 'desc',
+        'images_l'				=> 800,
+        'images_h'				=> 600,
+        'miniatures_l'			=> 200,
+        'miniatures_h'			=> 100,
+        'email_method'			=> 'sendmail',
+        'smtp_port'				=> 465,
+        'smtp_security'			=> 'ssl',
     );
 
 	public $get = false; # Donnees variable GET
@@ -402,6 +409,34 @@ class plxMotor
 	}
 
 	/**
+     * Vérifie si le thème choisi existe.
+     * Sinon, on se rabat sur un autre thème si possible
+     *
+     * @author J.P. Pourrez "bazooka07"
+     * */
+    private function _checkStyle()
+    {
+        $themesRoot = PLX_ROOT . $this->aConf['racine_themes'];
+        if (
+            isset($this->aConf['style']) and
+            is_dir($themesRoot . $this->aConf['style'])
+        ) {
+            # Tout baigne
+            return;
+        }
+
+        $oldStyle = plxUtils::getValue($this->aConf['style']);
+        $this->aConf['style'] = 'defaut';
+        if (is_dir($themesRoot . $this->aConf['style'])) {
+            # On se replie sur le thème par défaut
+            return;
+        }
+
+        $folders = glob($themesRoot . '*', GLOB_ONLYDIR);
+        $this->aConf['style'] = !empty($folders) ? basename($folders[0]) : $oldStyle;
+    }
+
+    /**
 	 * Méthode qui parse le fichier de configuration et alimente
 	 * le tableau aConf
 	 *
@@ -414,6 +449,53 @@ class plxMotor
 
         # valeurs par défaut si paramètres absents dans le fichier de configuration.
         $this->aConf = self::DEFAULT_CONFIG;
+
+        # Certaines options sont actives par défaut
+        foreach (array(
+            'userfolders',
+            'thumbs',
+            'enable_rss_comment',
+            'allow_com',
+            'enable_rss',
+            'enable_rss_comment',
+            'capcha',
+            'lostpassword',
+        ) as $k) {
+            $this->aConf[$k] = 1;
+        }
+
+        # Certaines options sont désactivées ou nulles par défaut
+        foreach (array(
+            'meta_description',
+            'meta_keywords',
+            'custom_admincss_file',
+            'description',
+            'meta_description',
+            'meta_keywords',
+            'homestatic',
+            'custom_admincss_file',
+            'smtp_server',
+            'smtp_username',
+            'smtp_password',
+            'smtpOauth2_emailAdress',
+            'smtpOauth2_clientId',
+            'smtpOauth2_clientSecret',
+            'smtpOauth2_refreshToken',
+            # en principe, valeur égale à 0 ou à false pour les champs ci-dessous
+            'mod_art',
+            'display_empty_cat',
+            'mod_com',
+            'mod_art',
+            'thumbs',
+            'urlrewriting',
+            'gzip',
+            'feed_chapo',
+            'feed_footer',
+            'userfolders',
+            'display_empty_cat',
+        ) as $k) {
+            $this->aConf[$k] = '';
+        }
 
 		# Mise en place du parseur XML
         $data = implode('', file($filename));
@@ -442,15 +524,25 @@ class plxMotor
 		$this->aConf['racine'] = plxUtils::getRacine();
 
 		# On gère la non régression en cas d'ajout de paramètres sur une version de pluxml déjà installée
+        $dataRoot = preg_replace('#^([^/]+)/.*#', '$1/', PLX_CONFIG_PATH);
         foreach (array(
             'tri_coms'	=> $this->aConf['tri'],
             'timezone'	=> @date_default_timezone_get(),
-            'medias'	=> preg_replace('#^([^/]+)/.*#', '$1/images/', PLX_CONFIG_PATH),
+            'medias'				=> $dataRoot . 'images/',
+            'racine_articles'		=> $dataRoot . 'articles/',
+            'racine_commentaires'	=> $dataRoot . 'commentaires/',
+            'racine_statiques'		=> $dataRoot . 'statiques/',
+            'version'				=> PLX_VERSION,
+            'default_lang'			=> DEFAULT_LANG,
+            # 'clef'					=> plxUtils::charAleatoire(15),
         ) as $param=>$value) {
             if (!isset($this->aConf[$param])) {
                 $this->aConf[$param] = $value;
             }
         }
+
+        # On vérifie que le thème est valide
+        $this->_checkStyle();
 
         if (!defined('PLX_PLUGINS')) {
             define('PLX_PLUGINS', PLX_ROOT . $this->aConf['racine_plugins']);

@@ -13,7 +13,7 @@ use PHPMailer\PHPMailer\OAuth;
 use League\OAuth2\Client\Provider\Google;
 
 $autoload = PLX_CORE.'vendor/autoload.php';
-if(file_exists($autoload)) {
+if (file_exists($autoload)) {
 	require $autoload;
 }
 
@@ -1106,7 +1106,8 @@ class plxUtils
 	 * @return boolean
 	 * @author J.P. Pourrez "bazooka07"
 	 * */
-	public static function isPHPMailer() {
+    public static function isPHPMailer()
+    {
 		# grep -n PHP_VERSION *.php core/{admin,lib}/*.php
 		return (version_compare(phpversion(), '7.2.5', '<') or !class_exists('PHPMailer'));
 	}
@@ -1126,7 +1127,7 @@ class plxUtils
 	**/
 	public static function sendMailPhpMailer($name, $from, $to, $subject, $body, $isHtml, $conf, $debug=false) {
 		# grep -n PHP_VERSION *.php core/{admin,lib}/*.php
-		if(!self::isPHPMailer()) {
+        if (!self::isPHPMailer()) {
 			return self::sendMail('', '', $to, $subject, $body, $isHtml ? 'html' : 'text');
 		}
 
