@@ -40,10 +40,10 @@ namespace PHPMailer\PHPMailer;
 use League\OAuth2\Client\Provider\Google;
 
 // Include PluXml requirements
-include __DIR__.'/prepend.php';
+include 'prepend.php';
 
 if (!isset($_GET['code']) && !isset($_GET['provider'])) {
-    include __DIR__ .'/top.php'; ?>
+    include 'top.php'; ?>
 	<div class="inline-form action-bar">
 		<h2><?php echo L_CONFIG_ADVANCED_DESC ?></h2>
 	</div>

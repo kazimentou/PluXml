@@ -7,7 +7,7 @@
  * @author	Stephane F et Florent MONTHEL
  **/
 
-include __DIR__ .'/prepend.php';
+include 'prepend.php';
 
 # Control du token du formulaire
 if (!isset($_POST['preview'])) {
@@ -250,7 +250,7 @@ if (!empty($_POST)) { # Création, mise à jour, suppression ou aperçu
 }
 
 # On inclut le header
-include __DIR__ .'/top.php';
+include 'top.php';
 
 # On construit la liste des utilisateurs
 foreach ($plxAdmin->aUsers as $_userid => $_user) {
@@ -643,5 +643,5 @@ function refreshImg(dta) {
 # Hook Plugins
 eval($plxAdmin->plxPlugins->callHook('AdminArticleFoot'));
 # On inclut le footer
-include __DIR__ .'/foot.php';
+include 'foot.php';
 ?>

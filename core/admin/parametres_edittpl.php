@@ -5,7 +5,7 @@
  * @author	Stephane F
  **/
 
-include __DIR__ .'/prepend.php';
+include 'prepend.php';
 
 # Controle du token du formulaire
 plxToken::validateFormToken($_POST);
@@ -75,7 +75,7 @@ if (file_exists($filename) and filesize($filename) > 0) {
 }
 
 # On inclut le header
-include __DIR__ .'/top.php';
+include 'top.php';
 ?>
 <form action="parametres_edittpl.php" method="post" id="form_edittpl">
 
@@ -106,5 +106,5 @@ include __DIR__ .'/top.php';
 # Hook Plugins
 eval($plxAdmin->plxPlugins->callHook('AdminSettingsEdittplFoot'));
 # On inclut le footer
-include __DIR__ .'/foot.php';
+include 'foot.php';
 ?>
