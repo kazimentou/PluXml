@@ -511,7 +511,7 @@ class plxMotor
                 if ($this->aCats[$number]['active'] and $this->aCats[$number]['homepage']) {
                     $homepageCats[]=$number;
                 }
-				# Recuperation du nombre d'article de la categorie
+                # Recuperation du nombre d'articles publiés de la categorie
 				$motif = "#^\d{4}\.(?:home,|\d{3},)*$number(?:,\d{3})*\.\d{3}\.\d{12}\.[\w-]+\.xml$#";
                 $arts = $this->plxGlob_arts->query($motif, 'art', '', 0, false, 'before');
                 $this->aCats[$number]['articles'] = ($arts ? sizeof($arts) : 0);
@@ -633,6 +633,15 @@ class plxMotor
 				$this->aUsers[$number]['password_token']=plxUtils::getValue($values[$password_token]['value']);
 				$password_token_expiry = plxUtils::getValue($iTags['password_token_expiry'][$i]);
 				$this->aUsers[$number]['password_token_expiry']=plxUtils::getValue($values[$password_token_expiry]['value']);
+
+                if (empty($attributes['delete']) and !empty($attributes['active'])) {
+                    # Recupération du nombre d'articles publiés de l'utilisateur et triés par date de publication
+                    $motif = '#^\d{4}\.(?:home,|\d{3},)*(?:home|\d{3})\.' . $number . '\.\d{12}\.[\w-]+\.xml$#';
+                    $arts = $this->plxGlob_arts->query($motif, 'art', 'desc', 0, false, 'before');
+                    $this->aUsers[$number]['articles'] = $arts ? sizeof($arts) : 0;
+                    $this->aUsers[$number]['last_art_published'] = $arts ? preg_replace('#.*\.(\d{12})\..*\.xml$#', '$1', $arts[0]) : '';
+                }
+
 				# Hook plugins
 				eval($this->plxPlugins->callHook('plxMotorGetUsers'));
 			}
@@ -842,9 +851,8 @@ class plxMotor
 				'comStatus'	=> $capture[1],
 				'artId'		=> $capture[2],
 				'comDate'	=> plxDate::timestamp2Date($capture[3]),
-                'comId'		=> $capture[3] . '-' . $capture[4],
+                'comId'     => $capture[3].'-'.$capture[4],
 				'comIdx'	=> $capture[4],
-
 			);
 		}
 		return false;
