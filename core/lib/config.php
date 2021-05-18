@@ -1,7 +1,7 @@
 <?php
 
 const PLX_DEBUG = true;
-const PLX_VERSION = '5.8.9';
+const PLX_VERSION = '5.8.9-kazimentou';
 const PLX_URL_REPO = 'https://www.pluxml.org';
 const PLX_URL_VERSION = PLX_URL_REPO.'/download/latest-version.txt';
 

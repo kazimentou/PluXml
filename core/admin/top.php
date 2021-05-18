@@ -7,12 +7,9 @@ if (isset($_GET["del"]) and $_GET["del"]=="install") {
 		plxMsg::Info(L_DELETE_SUCCESSFUL);
     } else {
 		plxMsg::Error(L_DELETE_FILE_ERR.' install.php');
-<<<<<<< HEAD
-=======
     }
     header("Location: index.php");
     exit;
->>>>>>> 553bf1cf (Install PHP-CS-Fixer)
 }
 ?>
 <!DOCTYPE html>
@@ -163,12 +160,14 @@ if (isset($_GET["del"]) and $_GET["del"]=="install") {
 		<p class="alert red"><?= sprintf(L_WARNING_INSTALLATION_FILE, $urlDeleteInstall) ?></p>
 <?php endif; ?>
 <?php
-<<<<<<< HEAD
-=======
         if (is_file(PLX_ROOT.'install.php')) {
+        if (
+			$_SESSION['profil']==PROFIL_ADMIN and
+			is_file(PLX_ROOT.'install.php') and
+			preg_match('#^(?:parametres_|index)#', basename($_SERVER['SCRIPT_NAME'], '.php'))
+		) {
             echo '<p class="alert red">'.L_WARNING_INSTALLATION_FILE.'</p>'."\n";
         }
->>>>>>> 553bf1cf (Install PHP-CS-Fixer)
 	plxMsg::Display();
 	# Hook Plugins
 	eval($plxAdmin->plxPlugins->callHook('AdminTopBottom'));
