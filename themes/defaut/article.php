@@ -21,12 +21,14 @@
 							</h2>
 							<div>
 								<small>
-									<span class="written-by">
-										<?php $plxShow->lang('WRITTEN_BY'); ?> <?php $plxShow->artAuthor() ?>
-									</span>
-									<span class="art-nb-com">
-										<a href="#comments" title="<?php $plxShow->artNbCom(); ?>"><?php $plxShow->artNbCom(); ?></a>
-									</span>
+<?php
+if ($plxShow->authorCount > 1) {
+    ?>
+									<span class="written-by"><?php $plxShow->lang('WRITTEN_BY'); ?> <?php $plxShow->artAuthor() ?></span>
+<?php
+}
+?>
+									<span class="art-nb-com"><a href="#comments" title="<?php $plxShow->artNbCom(); ?>"><?php $plxShow->artNbCom(); ?></a></span>
 								</small>
 							</div>
 							<div>
