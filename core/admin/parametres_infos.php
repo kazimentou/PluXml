@@ -7,7 +7,7 @@
  * @author	Florent MONTHEL
  **/
 
-include __DIR__ .'/prepend.php';
+include 'prepend.php';
 
 # Control de l'accès à la page en fonction du profil de l'utilisateur connecté
 $plxAdmin->checkProfil(PROFIL_ADMIN);
@@ -23,7 +23,7 @@ if ($emailBuild) {
 } else {
     # direct output
     # administration header
-    include __DIR__ .'/top.php';
+    include 'top.php';
 }
 
 ?>
@@ -167,5 +167,5 @@ if (preg_match('%class="[^"]*\bred\b[^"]*"%', $maj)) {
 <?php
 }
 # On inclut le footer
-include __DIR__ .'/foot.php';
+include 'foot.php';
 ?>
