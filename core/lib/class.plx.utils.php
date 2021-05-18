@@ -13,8 +13,8 @@ use PHPMailer\PHPMailer\OAuth;
 use League\OAuth2\Client\Provider\Google;
 
 $autoload = PLX_CORE.'vendor/autoload.php';
-if(file_exists($autoload)) {
-	require $autoload;
+if (file_exists($autoload)) {
+    require $autoload;
 }
 
 class plxUtils
@@ -1099,17 +1099,18 @@ class plxUtils
         );
     }
 
-	/**
-	 * Checks if PHPMailer is enabled.
-	 *
-	 * Mininal required version for PHP: 7.2.5 and composer.
-	 * @return boolean
-	 * @author J.P. Pourrez "bazooka07"
-	 * */
-	public static function isPHPMailer() {
-		# grep -n PHP_VERSION *.php core/{admin,lib}/*.php
-		return (version_compare(phpversion(), '7.2.5', '<') or !class_exists('PHPMailer'));
-	}
+    /**
+     * Checks if PHPMailer is enabled.
+     *
+     * Mininal required version for PHP: 7.2.5 and composer.
+     * @return boolean
+     * @author J.P. Pourrez "bazooka07"
+     * */
+    public static function isPHPMailer()
+    {
+        # grep -n PHP_VERSION *.php core/{admin,lib}/*.php
+        return (version_compare(phpversion(), '7.2.5', '<') or !class_exists('PHPMailer'));
+    }
 
     /**
     * Send an e-mail with PhpMailer class
@@ -1126,10 +1127,10 @@ class plxUtils
     **/
     public static function sendMailPhpMailer($name, $from, $to, $subject, $body, $isHtml=false, $conf, $debug=false)
     {
-		# grep -n PHP_VERSION *.php core/{admin,lib}/*.php
-		if(!self::isPHPMailer()) {
-			return self::sendMail('', '', $to, $subject, $body, $isHtml ? 'html' : 'text');
-		}
+        # grep -n PHP_VERSION *.php core/{admin,lib}/*.php
+        if (!self::isPHPMailer()) {
+            return self::sendMail('', '', $to, $subject, $body, $isHtml ? 'html' : 'text');
+        }
 
         $mail = new PHPMailer();
         if ($debug) {

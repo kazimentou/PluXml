@@ -67,14 +67,14 @@ if (isset($_GET["del"]) and $_GET["del"]=="install") {
 						<?php if ($_SESSION['profil']==PROFIL_ADMIN) {
     echo L_PROFIL_ADMIN;
 } elseif ($_SESSION['profil']==PROFIL_MANAGER) {
-                            echo L_PROFIL_MANAGER;
-                        } elseif ($_SESSION['profil']==PROFIL_MODERATOR) {
-                            echo L_PROFIL_MODERATOR;
-                        } elseif ($_SESSION['profil']==PROFIL_EDITOR) {
-                            echo L_PROFIL_EDITOR;
-                        } else {
-                            echo L_PROFIL_WRITER;
-                        } ?>
+    echo L_PROFIL_MANAGER;
+} elseif ($_SESSION['profil']==PROFIL_MODERATOR) {
+    echo L_PROFIL_MODERATOR;
+} elseif ($_SESSION['profil']==PROFIL_EDITOR) {
+    echo L_PROFIL_EDITOR;
+} else {
+    echo L_PROFIL_WRITER;
+} ?>
 					</em>
 				</li>
 				<li><small><a class="version" title="PluXml" href="<?php echo PLX_URL_REPO ?>">PluXml <?php echo $plxAdmin->aConf['version'] ?></a></small></li>
@@ -157,10 +157,10 @@ if (isset($_GET["del"]) and $_GET["del"]=="install") {
 
 <?php
         if (
-			$_SESSION['profil']==PROFIL_ADMIN and
-			is_file(PLX_ROOT.'install.php') and
-			preg_match('#^(?:parametres_|index)#', basename($_SERVER['SCRIPT_NAME'], '.php'))
-		) {
+            $_SESSION['profil']==PROFIL_ADMIN and
+            is_file(PLX_ROOT.'install.php') and
+            preg_match('#^(?:parametres_|index)#', basename($_SERVER['SCRIPT_NAME'], '.php'))
+        ) {
             echo '<p class="alert red">'.L_WARNING_INSTALLATION_FILE.'</p>'."\n";
         }
         plxMsg::Display();
