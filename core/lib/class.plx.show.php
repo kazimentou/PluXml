@@ -2193,11 +2193,11 @@ class plxShow
             krsort($cumuls_ans);
 
             # Affichage pour la période en cours
-            switch($this->plxMotor->mode) {
- 				case 'article' : $page_actuelle = $this->plxMotor->plxRecord_arts->f('date'); break;
-	            case 'archives' : $page_actuelle = $this->plxMotor->cible; break;
-	            default : $page_actuelle = '';
-			}
+            switch ($this->plxMotor->mode) {
+                case 'article': $page_actuelle = $this->plxMotor->plxRecord_arts->f('date'); break;
+                case 'archives': $page_actuelle = $this->plxMotor->cible; break;
+                default: $page_actuelle = '';
+            }
             # mb_internal_encoding('utf-8');
             $id = 0;
             foreach ($cumuls_mois as $m => $nbarts) {

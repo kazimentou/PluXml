@@ -169,8 +169,8 @@ if ($_SESSION['profil'] < PROFIL_WRITER) {
         if (count($plxAdmin->aUsers) > 1) {
             $values = array_map(
                 function ($item) {
-                return $item['name'];
-            },
+                    return $item['name'];
+                },
                 $users
             );
             uasort($values, function ($a, $b) {
