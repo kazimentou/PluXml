@@ -12,7 +12,10 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\OAuth;
 use League\OAuth2\Client\Provider\Google;
 
-require PLX_CORE.'vendor/autoload.php';
+$autoload = PLX_CORE.'vendor/autoload.php';
+if(file_exists($autoload)) {
+	require $autoload;
+}
 
 class plxUtils
 {
@@ -1097,6 +1100,18 @@ class plxUtils
 	}
 
 	/**
+	 * Checks if PHPMailer is enabled.
+	 *
+	 * Mininal required version for PHP: 7.2.5 and composer.
+	 * @return boolean
+	 * @author J.P. Pourrez "bazooka07"
+	 * */
+	public static function isPHPMailer() {
+		# grep -n PHP_VERSION *.php core/{admin,lib}/*.php
+		return (version_compare(phpversion(), '7.2.5', '<') or !class_exists('PHPMailer'));
+	}
+
+    /**
 	* Send an e-mail with PhpMailer class
 	* @param string $name Sender's name
 	* @param string $from Sender's e-mail address
@@ -1110,6 +1125,11 @@ class plxUtils
 	* @throws \PHPMailer\PHPMailer\Exception
 	**/
 	public static function sendMailPhpMailer($name, $from, $to, $subject, $body, $isHtml, $conf, $debug=false) {
+		# grep -n PHP_VERSION *.php core/{admin,lib}/*.php
+		if(!self::isPHPMailer()) {
+			return self::sendMail('', '', $to, $subject, $body, $isHtml ? 'html' : 'text');
+		}
+
 		$mail = new PHPMailer();
 		if ($debug) {
 			$mail->SMTPDebug = SMTP::DEBUG_SERVER;
