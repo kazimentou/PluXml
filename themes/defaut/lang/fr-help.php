@@ -2,6 +2,7 @@
     exit;
 } ?>
 <<<<<<< HEAD
+<<<<<<< HEAD
 <div>
 	<h2>Préambule</h2>
 	<p>Le thème <strong>Default-enhanced</strong> est une version améliorée du thème Defaut livré avec la version 5.8.6 de <a href="https://www.pluxml.org">PluXml</a>.</p>
@@ -88,6 +89,9 @@ if ($page == $plxAdmin->aConf['style']) {
 }
 ?>
 </div>
+=======
+<p>Aucune aide disponible</p>
+>>>>>>> plxShow-userlist
 =======
 <p>Aucune aide disponible</p>
 >>>>>>> plxShow-userlist
