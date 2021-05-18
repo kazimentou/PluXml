@@ -205,6 +205,7 @@ ul.menu a.noactive{
 }
 
 .cat-list .active,
+.arch-list .active,
 .classified-in .active,
 .author-list .active {
 	background-color: var(--color1);
@@ -856,7 +857,9 @@ body > .main {
 	text-overflow: ellipsis;
 }
 
-.cat-list .active, .classified-in .active,
+.cat-list .active,
+.arch-list .active,
+.classified-in .active,
 .article[id^="post-"] .tags a.active {
     letter-spacing: 0.15rem;
 }
