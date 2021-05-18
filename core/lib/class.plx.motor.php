@@ -4,7 +4,7 @@
  * Classe plxMotor responsable du traitement global du script
  *
  * @package PLX
- * @author	Anthony GUÉRIN, Florent MONTHEL, Stéphane F, Pedro "P3ter" CADETE
+ * @author  Anthony GUÉRIN, Florent MONTHEL, Stéphane F, Pedro "P3ter" CADETE
  **/
 
 include_once PLX_CORE.'lib/class.plx.template.php';
@@ -51,8 +51,8 @@ class plxMotor
     /**
      * Méthode qui se charger de créer le Singleton plxMotor
      *
-     * @return	self			return une instance de la classe plxMotor
-     * @author	Stephane F
+     * @return  self            return une instance de la classe plxMotor
+     * @author  Stephane F
      **/
     public static function getInstance()
     {
@@ -66,9 +66,9 @@ class plxMotor
      * Constructeur qui initialise certaines variables de classe
      * et qui lance le traitement initial
      *
-     * @param	filename	emplacement du fichier XML de configuration
-     * @return	null
-     * @author	Anthony GUÉRIN, Florent MONTHEL, Stéphane F
+     * @param   filename    emplacement du fichier XML de configuration
+     * @return  null
+     * @author  Anthony GUÉRIN, Florent MONTHEL, Stéphane F
      **/
     protected function __construct($filename)
     {
@@ -125,8 +125,8 @@ class plxMotor
      * le mode à appliquer. Cette méthode alimente ensuite les variables
      * de classe adéquates
      *
-     * @return	null
-     * @author	Anthony GUÉRIN, Florent MONTHEL, Stéphane F
+     * @return  null
+     * @author  Anthony GUÉRIN, Florent MONTHEL, Stéphane F
      **/
     public function prechauffage()
     {
@@ -285,8 +285,8 @@ class plxMotor
     /**
      * Méthode qui fait une redirection de type 301
      *
-     * @return	null
-     * @author	Stephane F
+     * @return  null
+     * @author  Stephane F
      **/
     public function redir301($url)
     {
@@ -301,8 +301,8 @@ class plxMotor
     /**
      * Méthode qui retourne une erreur 404 Document non trouvé
      *
-     * @return	null
-     * @author	Stephane F
+     * @return  null
+     * @author  Stephane F
      **/
     public function error404($msg)
     {
@@ -316,8 +316,8 @@ class plxMotor
     /**
      * Méthode qui effectue le traitement selon le mode du moteur
      *
-     * @return	null
-     * @author	Florent MONTHEL, Stephane F
+     * @return  null
+     * @author  Florent MONTHEL, Stephane F
      **/
     public function demarrage()
     {
@@ -382,9 +382,9 @@ class plxMotor
      * Méthode qui parse le fichier de configuration et alimente
      * le tableau aConf
      *
-     * @param	filename	emplacement du fichier XML de configuration
-     * @return	null
-     * @author	Anthony GUÉRIN, Florent MONTHEL, Stéphane F
+     * @param   filename    emplacement du fichier XML de configuration
+     * @return  null
+     * @author  Anthony GUÉRIN, Florent MONTHEL, Stéphane F
      **/
     public function getConfiguration($filename)
     {
@@ -442,9 +442,9 @@ class plxMotor
      * Méthode qui parse le fichier des catégories et alimente
      * le tableau aCats
      *
-     * @param	filename	emplacement du fichier XML des catégories
-     * @return	null
-     * @author	Stéphane F
+     * @param   filename    emplacement du fichier XML des catégories
+     * @return  null
+     * @author  Stéphane F
      **/
     public function getCategories($filename)
     {
@@ -509,7 +509,7 @@ class plxMotor
                 if ($this->aCats[$number]['active'] and $this->aCats[$number]['homepage']) {
                     $homepageCats[]=$number;
                 }
-                # Recuperation du nombre d'article de la categorie
+                # Recuperation du nombre d'articles publiés de la categorie
                 $motif = "#^\d{4}\.(?:home,|\d{3},)*$number(?:,\d{3})*\.\d{3}\.\d{12}\.[\w-]+\.xml$#";
                 $arts = $this->plxGlob_arts->query($motif, 'art', '', 0, false, 'before');
                 $this->aCats[$number]['articles'] = ($arts ? sizeof($arts) : 0);
@@ -527,9 +527,9 @@ class plxMotor
      * Méthode qui parse le fichier des pages statiques et alimente
      * le tableau aStats
      *
-     * @param	filename	emplacement du fichier XML des pages statiques
-     * @return	null
-     * @author	Stéphane F
+     * @param   filename    emplacement du fichier XML des pages statiques
+     * @return  null
+     * @author  Stéphane F
      **/
     public function getStatiques($filename)
     {
@@ -590,9 +590,9 @@ class plxMotor
     /**
      * Méthode qui parse le fichier des utilisateurs
      *
-     * @param	filename	emplacement du fichier XML des passwd
-     * @return	array		tableau des utilisateurs
-     * @author	Stephane F
+     * @param   filename    emplacement du fichier XML des passwd
+     * @return  array       tableau des utilisateurs
+     * @author  Stephane F
      **/
     public function getUsers($filename)
     {
@@ -631,6 +631,15 @@ class plxMotor
                 $this->aUsers[$number]['password_token']=plxUtils::getValue($values[$password_token]['value']);
                 $password_token_expiry = plxUtils::getValue($iTags['password_token_expiry'][$i]);
                 $this->aUsers[$number]['password_token_expiry']=plxUtils::getValue($values[$password_token_expiry]['value']);
+
+                if (empty($attributes['delete']) and !empty($attributes['active'])) {
+                    # Recupération du nombre d'articles publiés de l'utilisateur et triés par date de publication
+                    $motif = '#^\d{4}\.(?:home,|\d{3},)*(?:home|\d{3})\.' . $number . '\.\d{12}\.[\w-]+\.xml$#';
+                    $arts = $this->plxGlob_arts->query($motif, 'art', 'desc', 0, false, 'before');
+                    $this->aUsers[$number]['articles'] = $arts ? sizeof($arts) : 0;
+                    $this->aUsers[$number]['last_art_published'] = $arts ? preg_replace('#.*\.(\d{12})\..*\.xml$#', '$1', $arts[0]) : '';
+                }
+
                 # Hook plugins
                 eval($this->plxPlugins->callHook('plxMotorGetUsers'));
             }
@@ -640,9 +649,9 @@ class plxMotor
     /**
      * Méthode qui selon le paramètre tri retourne sort ou rsort (tri PHP)
      *
-     * @param	tri	asc ou desc
-     * @return	string
-     * @author	Stéphane F.
+     * @param   tri asc ou desc
+     * @return  string
+     * @author  Stéphane F.
      **/
     protected function mapTri($tri)
     { /* obsolete ! 2017-12-03 */
@@ -665,8 +674,8 @@ class plxMotor
     /**
      * Méthode qui récupère le numéro de la page active
      *
-     * @return	null
-     * @author	Anthony GUÉRIN, Florent MONTHEL, Stephane F
+     * @return  null
+     * @author  Anthony GUÉRIN, Florent MONTHEL, Stephane F
      **/
     protected function getPage()
     {
@@ -682,9 +691,9 @@ class plxMotor
     /**
      * Méthode qui récupere la liste des  articles
      *
-     * @param	publi	before, after ou all => on récupère tous les fichiers (date) ?
-     * @return	boolean	vrai si articles trouvés, sinon faux
-     * @author	Stéphane F, J.P. Pourrez (bazooka07)
+     * @param   publi   before, after ou all => on récupère tous les fichiers (date) ?
+     * @return  boolean vrai si articles trouvés, sinon faux
+     * @author  Stéphane F, J.P. Pourrez (bazooka07)
      **/
     public function getArticles($publi='before')
     {
@@ -714,9 +723,9 @@ class plxMotor
      * Méthode qui retourne les informations $output en analysant
      * le nom du fichier de l'article $filename
      *
-     * @param	filename	fichier de l'article à traiter
-     * @return	array		information à récupérer
-     * @author	Stephane F, J.P. Pourrez "bazooka07"
+     * @param   filename    fichier de l'article à traiter
+     * @return  array       information à récupérer
+     * @author  Stephane F, J.P. Pourrez "bazooka07"
      **/
     public function artInfoFromFilename($filename)
     {
@@ -735,11 +744,11 @@ class plxMotor
                 $artCats[] = '000';
             }
             return array(
-                'artId'		=> $capture[1],
-                'catId'		=> !empty($artCats) ? implode(',', $artCats) : '000',
-                'usrId'		=> $capture[3],
-                'artDate'	=> $capture[4],
-                'artUrl'	=> $capture[5]
+                'artId'     => $capture[1],
+                'catId'     => !empty($artCats) ? implode(',', $artCats) : '000',
+                'usrId'     => $capture[3],
+                'artDate'   => $capture[4],
+                'artUrl'    => $capture[5]
             );
         }
         return false;
@@ -748,9 +757,9 @@ class plxMotor
     /**
      * Méthode qui parse l'article du fichier $filename
      *
-     * @param	filename	fichier de l'article à parser
-     * @return	array
-     * @author	Anthony GUÉRIN, Florent MONTHEL, Stéphane F, J.P. Pourrez (bazooka07)
+     * @param   filename    fichier de l'article à parser
+     * @return  array
+     * @author  Anthony GUÉRIN, Florent MONTHEL, Stéphane F, J.P. Pourrez (bazooka07)
      **/
     public function parseArticle($filename)
     {
@@ -769,28 +778,28 @@ class plxMotor
             $meta_description = plxUtils::getValue($iTags['meta_description'][0]);
             $meta_keywords = plxUtils::getValue($iTags['meta_keywords'][0]);
             $art = array(
-                'filename'		=> $filename,
+                'filename'      => $filename,
                 # Recuperation des valeurs de nos champs XML
-                'title'				=> plxUtils::getValue($values[$iTags['title'][0]]['value']),
-                'allow_com'			=> plxUtils::getValue($values[$iTags['allow_com'][0]]['value'], 0),
-                'template'			=> plxUtils::getValue($values[$iTags['template'][0]]['value'], 'article.php'),
-                'chapo'				=> plxUtils::getValue($values[$iTags['chapo'][0]]['value']),
-                'content'			=> plxUtils::getValue($values[$iTags['content'][0]]['value']),
-                'tags'				=> plxUtils::getValue($values[ $iTags['tags'][0] ]['value']),
-                'meta_description'	=> plxUtils::getValue($values[$meta_description]['value']),
-                'meta_keywords'		=> plxUtils::getValue($values[$meta_keywords]['value']),
-                'title_htmltag'		=> plxUtils::getValue($values[$iTags['title_htmltag'][0]]['value']),
-                'thumbnail'			=> plxUtils::getValue($values[$iTags['thumbnail'][0]]['value']),
-                'thumbnail_title'	=> plxUtils::getValue($values[$iTags['thumbnail_title'][0]]['value']),
-                'thumbnail_alt'		=> plxUtils::getValue($values[$iTags['thumbnail_alt'][0]]['value']),
-                'numero'			=> $tmp['artId'],
-                'author'			=> $tmp['usrId'],
-                'categorie'			=> $tmp['catId'],
-                'url'				=> $tmp['artUrl'],
-                'date'				=> $tmp['artDate'],
-                'nb_com'			=> $this->getNbCommentaires('#^' . $tmp['artId'] . '.\d{10}.\d+.xml$#'),
-                'date_creation'		=> plxUtils::getValue($values[$iTags['date_creation'][0]]['value'], $tmp['artDate']),
-                'date_update'		=> plxUtils::getValue($values[$iTags['date_update'][0]]['value'], $tmp['artDate']),
+                'title'             => plxUtils::getValue($values[$iTags['title'][0]]['value']),
+                'allow_com'         => plxUtils::getValue($values[$iTags['allow_com'][0]]['value'], 0),
+                'template'          => plxUtils::getValue($values[$iTags['template'][0]]['value'], 'article.php'),
+                'chapo'             => plxUtils::getValue($values[$iTags['chapo'][0]]['value']),
+                'content'           => plxUtils::getValue($values[$iTags['content'][0]]['value']),
+                'tags'              => plxUtils::getValue($values[ $iTags['tags'][0] ]['value']),
+                'meta_description'  => plxUtils::getValue($values[$meta_description]['value']),
+                'meta_keywords'     => plxUtils::getValue($values[$meta_keywords]['value']),
+                'title_htmltag'     => plxUtils::getValue($values[$iTags['title_htmltag'][0]]['value']),
+                'thumbnail'         => plxUtils::getValue($values[$iTags['thumbnail'][0]]['value']),
+                'thumbnail_title'   => plxUtils::getValue($values[$iTags['thumbnail_title'][0]]['value']),
+                'thumbnail_alt'     => plxUtils::getValue($values[$iTags['thumbnail_alt'][0]]['value']),
+                'numero'            => $tmp['artId'],
+                'author'            => $tmp['usrId'],
+                'categorie'         => $tmp['catId'],
+                'url'               => $tmp['artUrl'],
+                'date'              => $tmp['artDate'],
+                'nb_com'            => $this->getNbCommentaires('#^' . $tmp['artId'] . '.\d{10}.\d+.xml$#'),
+                'date_creation'     => plxUtils::getValue($values[$iTags['date_creation'][0]]['value'], $tmp['artDate']),
+                'date_update'       => plxUtils::getValue($values[$iTags['date_update'][0]]['value'], $tmp['artDate']),
             );
 
             # Hook plugins
@@ -810,10 +819,10 @@ class plxMotor
     /**
      * Méthode qui retourne le nombre de commentaires respectants le motif $motif et le paramètre $publi
      *
-     * @param	motif	motif de recherche des commentaires
-     * @param	publi	before, after ou all => on récupère tous les fichiers (date) ?
-     * @return	integer
-     * @author	Florent MONTHEL
+     * @param   motif   motif de recherche des commentaires
+     * @param   publi   before, after ou all => on récupère tous les fichiers (date) ?
+     * @return  integer
+     * @author  Florent MONTHEL
      **/
     public function getNbCommentaires($motif, $publi='before')
     {
@@ -828,20 +837,20 @@ class plxMotor
      * Méthode qui retourne les informations $output en analysant
      * le nom du fichier du commentaire $filename
      *
-     * @param	filename	fichier du commentaire à traiter
-     * @return	array		information à récupérer
-     * @author	Stephane F
+     * @param   filename    fichier du commentaire à traiter
+     * @return  array       information à récupérer
+     * @author  Stephane F
      **/
     public function comInfoFromFilename($filename)
     {
         # On effectue notre capture d'informations
         if (preg_match('#([[:punct:]]?)(\d{4}).(\d{10})-(\d+).xml$#', $filename, $capture)) {
             return array(
-                'comStatus'	=> $capture[1],
-                'artId'		=> $capture[2],
-                'comDate'	=> plxDate::timestamp2Date($capture[3]),
-                'comId'		=> $capture[3].'-'.$capture[4],
-                'comIdx'	=> $capture[4],
+                'comStatus' => $capture[1],
+                'artId'     => $capture[2],
+                'comDate'   => plxDate::timestamp2Date($capture[3]),
+                'comId'     => $capture[3].'-'.$capture[4],
+                'comIdx'    => $capture[4],
 
             );
         }
@@ -851,9 +860,9 @@ class plxMotor
     /**
      * Méthode qui parse le commentaire du fichier $filename
      *
-     * @param	filename	fichier du commentaire à parser
-     * @return	array
-     * @author	Florent MONTHEL
+     * @param   filename    fichier du commentaire à parser
+     * @return  array
+     * @author  Florent MONTHEL
      **/
     public function parseCommentaire($filename)
     {
@@ -893,8 +902,8 @@ class plxMotor
     /**
      * Méthode qui trie récursivement les commentaires d'un article en fonction des parents
      *
-     * @return	array	liste des commentaires triés
-     * @author	Stéphane F.
+     * @return  array   liste des commentaires triés
+     * @author  Stéphane F.
      **/
     public function parentChildSort_r($idField, $parentField, $els, $parentID = 0, &$result = array(), &$level = 0)
     {
@@ -918,13 +927,13 @@ class plxMotor
      * Méthode qui enregistre dans un objet plxRecord tous les commentaires
      * respectant le motif $motif et la limite $limite
      *
-     * @param	motif	motif de recherche des commentaires
-     * @param	ordre	ordre du tri : sort ou rsort
-     * @param	start	commencement
-     * @param	limite	nombre de commentaires à retourner
-     * @param	publi	before, after ou all => on récupère tous les fichiers (date) ?
-     * @return	bool	true if there is comments else false
-     * @author	Florent MONTHEL, Stephane F, Pedro "P3ter" CADETE
+     * @param   motif   motif de recherche des commentaires
+     * @param   ordre   ordre du tri : sort ou rsort
+     * @param   start   commencement
+     * @param   limite  nombre de commentaires à retourner
+     * @param   publi   before, after ou all => on récupère tous les fichiers (date) ?
+     * @return  bool    true if there is comments else false
+     * @author  Florent MONTHEL, Stephane F, Pedro "P3ter" CADETE
      **/
     public function getCommentaires($motif, $ordre='sort', $start=0, $limite=false, $publi='before')
     {
@@ -951,9 +960,9 @@ class plxMotor
     /**
      *  Méthode qui retourne le prochain id d'un commentaire pour un article précis
      *
-     * @param	idArt		id de l'article
-     * @return	string		id d'un nouveau commentaire
-     * @author	Stephane F.
+     * @param   idArt       id de l'article
+     * @return  string      id d'un nouveau commentaire
+     * @author  Stephane F.
      **/
     public function nextIdArtComment($idArt)
     {
@@ -975,10 +984,10 @@ class plxMotor
     /**
      * Méthode qui crée un nouveau commentaire pour l'article $artId
      *
-     * @param	artId	identifiant de l'article en question
-     * @param	content	tableau contenant les valeurs du nouveau commentaire
-     * @return	string
-     * @author	Florent MONTHEL, Stéphane F, J.P. Pourrez
+     * @param   artId   identifiant de l'article en question
+     * @param   content tableau contenant les valeurs du nouveau commentaire
+     * @return  string
+     * @author  Florent MONTHEL, Stéphane F, J.P. Pourrez
      **/
     public function newCommentaire($artId, $content)
     {
@@ -1047,9 +1056,9 @@ class plxMotor
     /**
      * Méthode qui crée physiquement le fichier XML du commentaire
      *
-     * @param	comment	array avec les données du commentaire à ajouter
-     * @return	boolean
-     * @author	Anthony GUÉRIN, Florent MONTHEL et Stéphane F
+     * @param   comment array avec les données du commentaire à ajouter
+     * @return  boolean
+     * @author  Anthony GUÉRIN, Florent MONTHEL et Stéphane F
      **/
     public function addCommentaire($content)
     {
@@ -1078,9 +1087,9 @@ class plxMotor
      * Méthode qui parse le fichier des tags et alimente
      * le tableau aTags
      *
-     * @param	filename	emplacement du fichier XML contenant les tags
-     * @return	null
-     * @author	Stephane F.
+     * @param   filename    emplacement du fichier XML contenant les tags
+     * @return  null
+     * @author  Stephane F.
      **/
     public function getTags($filename)
     {
@@ -1118,9 +1127,9 @@ class plxMotor
     /**
      * Méthode qui alimente le tableau aTemplate
      *
-     * @param	string	dossier contenant les templates
-     * @return	null
-     * @author	Pedro "P3ter" CADETE
+     * @param   string  dossier contenant les templates
+     * @return  null
+     * @author  Pedro "P3ter" CADETE
      **/
     public function getTemplates($templateFolder)
     {
@@ -1137,9 +1146,9 @@ class plxMotor
     /**
      * Méthode qui lance le téléchargement d'un document
      *
-     * @param	cible	cible de téléchargement cryptée
-     * @return	boolean
-     * @author	Stephane F. et Florent MONTHEL
+     * @param   cible   cible de téléchargement cryptée
+     * @return  boolean
+     * @author  Stephane F. et Florent MONTHEL
      **/
     public function sendTelechargement($cible)
     {
@@ -1170,9 +1179,9 @@ class plxMotor
     /**
      * Méthode qui réécrit les urls pour supprimer le ?
      *
-     * @param	url		url à réécrire
-     * @return	string	url réécrite
-     * @author	Stéphane F, J.P. Pourrez
+     * @param   url     url à réécrire
+     * @return  string  url réécrite
+     * @author  Stéphane F, J.P. Pourrez
      **/
     public function urlRewrite($url='')
     {
@@ -1221,13 +1230,13 @@ class plxMotor
     /**
      * Méthode qui comptabilise le nombre d'articles du site.
      *
-     * @param	select	critere de recherche: draft, published, all, n° categories séparés par un |
-     * @param	userid	filtre sur les articles d'un utilisateur donné
-     * @param	mod		filtre sur les articles en attente de validation
-     * @param	publi	selection en fonciton de la date du jour (all, before, after)
-     * @return	integer	nombre d'articles
-     * @scope	global
-     * @author	Stephane F
+     * @param   select  critere de recherche: draft, published, all, n° categories séparés par un |
+     * @param   userid  filtre sur les articles d'un utilisateur donné
+     * @param   mod     filtre sur les articles en attente de validation
+     * @param   publi   selection en fonciton de la date du jour (all, before, after)
+     * @return  integer nombre d'articles
+     * @scope   global
+     * @author  Stephane F
      **/
     public function nbArticles($select='all', $userId='\d{3}', $mod='_?', $publi='all')
     {
@@ -1252,11 +1261,11 @@ class plxMotor
     /**
      * Méthode qui comptabilise le nombre de commentaires du site
      *
-     * @param	select	critere de recherche des commentaires: all, online, offline
-     * @param	publi	type de sélection des commentaires: all, before, after
-     * @return	integer	nombre de commentaires
-     * @scope	global
-     * @author	Stephane F
+     * @param   select  critere de recherche des commentaires: all, online, offline
+     * @param   publi   type de sélection des commentaires: all, before, after
+     * @return  integer nombre de commentaires
+     * @scope   global
+     * @author  Stephane F
      **/
     public function nbComments($select='online', $publi='all')
     {
@@ -1281,9 +1290,9 @@ class plxMotor
     /**
      * Méthode qui recherche les articles appartenant aux catégories actives
      *
-     * @return	null
-     * @scope	global
-     * @author	Stéphane F.
+     * @return  null
+     * @scope   global
+     * @author  Stéphane F.
      **/
     public function getActiveArts()
     {
