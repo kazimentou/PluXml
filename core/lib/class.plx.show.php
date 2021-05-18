@@ -2055,7 +2055,7 @@ class plxShow
         $authors = array_filter(
             $this->plxMotor->aUsers,
             function ($value) {
-                return (empty($value['delete'] and !empty($value['active']) and $value['articles'] > 0));
+                return (empty($value['delete']) and !empty($value['active']) and $value['articles'] > 0);
 			}
         );
 
