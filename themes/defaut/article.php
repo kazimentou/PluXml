@@ -48,12 +48,22 @@ if ($plxShow->authorCount > 1) {
 						</main>
 					</article>
 
-					<?php $plxShow->artAuthorInfos('<div class="author-infos">#art_authorinfos</div>'); ?>
+		            <div class="art-navigation-overlay">
+		                <ul class="art-navigation">
+<?php $plxShow->artNavigation(); ?>
+		                </ul>
+<?php $plxShow->artNavigationRange(); ?>
+		            </div>
 
-					<?php include 'commentaires.php'; ?>
 
+<?php $plxShow->artAuthorInfos('<div class="author-infos">#art_authorinfos</div>'); ?>
+
+<?php
+if($plxShow->plxMotor->aConf['allow_com']) {
+	include 'commentaires.php';
+}
+?>
 				</div>
-
 <?php
 if (!defined('FULL_WIDTH')) {
     include 'sidebar.php';
