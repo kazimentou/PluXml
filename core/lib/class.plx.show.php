@@ -455,8 +455,11 @@ class plxShow
      **/
     public function catDescription($format = '<div class="infos">#cat_description</div>')
     {
+        if($this->plxMotor->mode != 'categorie') {
+			return;
+		}
         $desc = plxUtils::getValue($this->plxMotor->aCats[$this->plxMotor->cible]['description']);
-        if ($this->plxMotor->mode and $desc) {
+        if (!empty($desc)) {
             echo str_replace('#cat_description', $desc, $format);
         }
     }
@@ -2047,6 +2050,24 @@ class plxShow
 	}
 
 	/**
+     * Méthode qui affiche les informations sur un utilisateur
+     *
+     * @param format    format du texte à afficher (variable: #user_description)
+     * @scope    user
+     * @author   J.P. Pourrez "bazooka07"
+     **/
+    public function authorDescription($format = '<div class="infos">#user_description</div>')
+    {
+		if ($this->plxMotor->mode != 'user') {
+			return;
+		}
+        $infos = plxUtils::getValue($this->plxMotor->aUsers[$this->plxMotor->cible]['infos']);
+        if (!empty($infos)) {
+            echo str_replace('#user_description', $infos, $format);
+        }
+    }
+
+    /**
      * @param string $format format du texte pour chaque auteur (variable : #user_id, #user_url, #user_name, #user_infos, #art_nb)
 	 * @param string $include liste des id des utilisateurs à afficher, séparés par un ou plusieurs caractères (exemple: '001 |003 5, 45|50')
 	 * @param string $exclude liste des id des utilisateurs à ne pas afficher
