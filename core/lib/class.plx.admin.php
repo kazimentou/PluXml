@@ -161,6 +161,7 @@ class plxAdmin extends plxMotor
     /**
      * Méthode qui crée le fichier .htaccess en cas de réécriture d'urls
      *
+     * https://forum.pluxml.org/discussion/6921/resolu-problemes-avec-plxmysearch#latest#Comment_61455
      * @param	action	création (add) ou suppression (remove)
      * @param	url		url du site
      * @return	null
@@ -168,41 +169,45 @@ class plxAdmin extends plxMotor
      **/
     public function htaccess($action, $url)
     {
-        $capture = '';
-        $base = parse_url($url);
-
-        $plxhtaccess = '
-# BEGIN -- Pluxml
-Options -Multiviews
-<IfModule mod_rewrite.c>
-RewriteEngine on
-RewriteBase '.$base['path'].'
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} !-l
-# Réécriture des urls
-RewriteRule ^(?!feed)(.*)$ index.php?$1 [L]
-RewriteRule ^feed\/(.*)$ feed.php?$1 [L]
-</IfModule>
-# END -- Pluxml
-';
-
-        $htaccess = '';
-        if (is_file(PLX_ROOT.'.htaccess')) {
-            $htaccess = file_get_contents(PLX_ROOT.'.htaccess');
-        }
+        $filename = PLX_ROOT . '.htaccess';
+        $htaccess = is_file($filename) ? file_get_contents($filename) : '';
+        $pattern = '/^(.*)(# BEGIN -- Pluxml.*# END -- Pluxml)(.*)$/ms';
 
         switch ($action) {
             case '0': # désactivation
-                if (preg_match("/^(.*)(# BEGIN -- Pluxml.*# END -- Pluxml)(.*)$/ms", $htaccess, $capture)) {
-                    $htaccess = str_replace($capture[2], '', $htaccess);
+                if (!empty($htaccess)) {
+                    $htaccess = preg_replace($pattern, '$1$3', $htaccess);
                 }
                 break;
             case '1': # activation
-                if (preg_match("/^(.*)(# BEGIN -- Pluxml.*# END -- Pluxml)(.*)$/ms", $htaccess, $capture)) {
-                    $htaccess = trim($capture[1]).$plxhtaccess.trim($capture[3]);
+                $base = parse_url($url);
+                $langs = array_values(plxUtils::getLangs());
+                ob_start();
+?>
+# BEGIN -- Pluxml
+Options -Multiviews
+<IfModule mod_rewrite.c>
+	RewriteEngine on
+	RewriteBase <?= $base['path'] . PHP_EOL ?>
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteCond %{REQUEST_FILENAME} !-l
+	# Réécriture des urls
+	RewriteRule ^(art(?:icle)?\d*|cat(?:egorie)?\d*|tag|user\d*|arch(?:ives)?|stat(?:ic|ique)?\d*|blog|page\d*|telechargement|download)\b.*$ index.php?$0 [L]
+	# Multi-linguisme
+	RewriteRule ^(<?= implode('|', $langs) ?>)\b.*$ index.php?$0 [L]
+	# Plugins "officiels" plxMySearch, plxMyContact
+	RewriteRule ^(search|contact)\b.*$ index.php?$0 [L]
+	# régle plus laxiste à décommenter si besoin. Ecrase les règles précédentes
+	# RewriteRule ^([a-z][\w-]*)\b.*$ index.php?$0 [L]
+	RewriteRule ^feed\/(.*)$ feed.php?$1 [L]
+</IfModule>
+# END -- Pluxml
+<?php
+                if (preg_match($pattern, $htaccess, $capture)) {
+                    $htaccess = trim($capture[1]) . ob_get_clean() . trim($capture[3]);
                 } else {
-                    $htaccess .= $plxhtaccess;
+                    $htaccess .= ob_get_clean();
                 }
                 break;
         }
@@ -211,11 +216,11 @@ RewriteRule ^feed\/(.*)$ feed.php?$1 [L]
         eval($this->plxPlugins->callHook('plxAdminHtaccess'));
         # On écrit le fichier .htaccess à la racine de PluXml
         $htaccess = trim($htaccess);
-        if ($htaccess=='' and is_file(PLX_ROOT.'.htaccess')) {
-            unlink(PLX_ROOT.'.htaccess');
+        if ($htaccess=='' and is_file($filename)) {
+            unlink($filename);
             return true;
         } else {
-            return plxUtils::write($htaccess, PLX_ROOT.'.htaccess');
+            return plxUtils::write($htaccess, $filename);
         }
     }
 
