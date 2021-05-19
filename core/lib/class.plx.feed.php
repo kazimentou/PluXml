@@ -218,7 +218,7 @@ class plxFeed extends plxMotor
                         break;
                     default:
                         header('Location: index.php');
-                    exit;
+                        exit;
                 }
             }
             $this->getArticles(); # Récupération des articles (on les parse)
@@ -298,12 +298,12 @@ class plxFeed extends plxMotor
 
                 # On affiche le flux dans un buffer
                 $entry .= "\t<item>\n";
-                $entry .= "\t\t" . '<title>' . plxUtils::strCheck($this->plxRecord_arts->f('title')) . '</title> ' . "\n";
-                $entry .= "\t\t" . '<link>' . $this->urlRewrite('?article' . $artId . '/' . $this->plxRecord_arts->f('url')) . '</link>' . "\n";
-                $entry .= "\t\t" . '<guid>' . $this->urlRewrite('?article' . $artId . '/' . $this->plxRecord_arts->f('url')) . '</guid>' . "\n";
-                $entry .= "\t\t" . '<description>' . $thumb . plxUtils::strCheck(plxUtils::rel2abs($this->racine, $content)) . '</description>' . "\n";
-                $entry .= "\t\t" . '<pubDate>' . plxDate::dateIso2rfc822($this->plxRecord_arts->f('date')) . '</pubDate>' . "\n";
-                $entry .= "\t\t" . '<dc:creator>' . plxUtils::strCheck($author) . '</dc:creator>' . "\n";
+                $entry .= "\t\t" . '<title>' . plxUtils::strCheck($this->plxRecord_arts->f('title')) . '</title> ' . PHP_EOL;
+                $entry .= "\t\t" . '<link>' . $this->urlRewrite('?article' . $artId . '/' . $this->plxRecord_arts->f('url')) . '</link>' . PHP_EOL;
+                $entry .= "\t\t" . '<guid>' . $this->urlRewrite('?article' . $artId . '/' . $this->plxRecord_arts->f('url')) . '</guid>' . PHP_EOL;
+                $entry .= "\t\t" . '<description>' . $thumb . plxUtils::strCheck(plxUtils::rel2abs($this->racine, $content)) . '</description>' . PHP_EOL;
+                $entry .= "\t\t" . '<pubDate>' . plxDate::dateIso2rfc822($this->plxRecord_arts->f('date')) . '</pubDate>' . PHP_EOL;
+                $entry .= "\t\t" . '<dc:creator>' . plxUtils::strCheck($author) . '</dc:creator>' . PHP_EOL;
                 # Hook plugins
                 eval($this->plxPlugins->callHook('plxFeedRssArticlesXml'));
                 $entry .= "\t</item>\n";
@@ -312,19 +312,19 @@ class plxFeed extends plxMotor
 
         # On affiche le flux
         header('Content-Type: application/rss+xml; charset=' . PLX_CHARSET);
-        echo '<?xml version="1.0" encoding="' . PLX_CHARSET . '" ?>' . "\n";
-        echo '<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom">' . "\n";
-        echo '<channel>' . "\n";
-        echo "\t" . '<title>' . plxUtils::strCheck($title) . '</title>' . "\n";
-        echo "\t" . '<link>' . $link . '</link>' . "\n";
-        echo "\t" . '<language>' . $this->aConf['default_lang'] . '</language>' . "\n";
-        echo "\t" . '<description>' . plxUtils::strCheck($this->aConf['description']) . '</description>' . "\n";
-        echo "\t" . '<atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="self" type="application/rss+xml" href="' . $this->urlRewrite('feed.php?' . $this->get) . '" />' . "\n";
+        echo '<?xml version="1.0" encoding="' . PLX_CHARSET . '" ?>' . PHP_EOL;
+        echo '<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom">' . PHP_EOL;
+        echo '<channel>' . PHP_EOL;
+        echo "\t" . '<title>' . plxUtils::strCheck($title) . '</title>' . PHP_EOL;
+        echo "\t" . '<link>' . $link . '</link>' . PHP_EOL;
+        echo "\t" . '<language>' . $this->aConf['default_lang'] . '</language>' . PHP_EOL;
+        echo "\t" . '<description>' . plxUtils::strCheck($this->aConf['description']) . '</description>' . PHP_EOL;
+        echo "\t" . '<atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="self" type="application/rss+xml" href="' . $this->urlRewrite('feed.php?' . $this->get) . '" />' . PHP_EOL;
         $last_updated = plxDate::dateIso2rfc822($last_updated);
-        echo "\t" . '<lastBuildDate>' . $last_updated . '</lastBuildDate>' . "\n";
-        echo "\t" . '<generator>PluXml</generator>' . "\n";
+        echo "\t" . '<lastBuildDate>' . $last_updated . '</lastBuildDate>' . PHP_EOL;
+        echo "\t" . '<generator>PluXml</generator>' . PHP_EOL;
         echo $entry;
-        echo '</channel>' . "\n";
+        echo '</channel>' . PHP_EOL;
         echo '</rss>';
     }
 

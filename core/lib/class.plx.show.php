@@ -2442,7 +2442,7 @@ class plxShow
 			case 'user':
 				$id = $this->plxMotor->cible;
 				$idNum = intval($id);
-				return $this->urlRewrite('feed.php?rss/user' . $idNum . '/' . $this->plxMotor->aUsers[$id]['login']);
+                return $this->urlRewrite('feed.php?rss/user' . $idNum . '/' . md5($this->plxMotor->aUsers[$id]['name']));
                 break;
             case 'tags':
                 $tag = plxUtils::strCheck($this->plxMotor->cible);
