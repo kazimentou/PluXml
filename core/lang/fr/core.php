@@ -112,6 +112,7 @@ $LANG = array(
 'L_NO_CATEGORY'					=> 'aucune catégorie',
 'L_CATEGORY'					=> 'catégorie',
 'L_CATEGORIES'					=> 'catégories',
+'L_AUTHOR'						=> 'auteur',
 'L_NO_ARTICLE'					=> 'aucun article',
 'L_ARTICLE'						=> 'article',
 'L_ARTICLES'					=> 'articles',
@@ -144,6 +145,13 @@ $LANG = array(
 
 'L_YEAR'						=> 'année',
 'L_TOTAL'						=> 'total',
+
+#plxShow::artNavigation
+'L_ART_FIRST'					=> 'Premier',
+'L_ART_PREV'					=> 'Précèdent',
+'L_ART_NEXT'					=> 'Suivant',
+'L_ART_LAST'					=> 'Dernier',
+'L_ART_UP'						=> 'Remonter',
 
 # class.plx.feed.php
 'L_FEED_NO_PRIVATE_URL'			=> 'Les URLs privées n\'ont pas été initialisées dans vos paramètres d\'administration !',

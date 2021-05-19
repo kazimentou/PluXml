@@ -361,6 +361,12 @@ class plxMotor
             if (!$this->getArticles()) { # Si aucun article
 				$this->error404(L_NO_ARTICLE_PAGE);
 			}
+            $_SESSION['previous'] = array(
+               'mode'  => $this->mode,
+               'cible' => $this->cible,
+               'motif' => $this->motif,
+               'tri'   => $this->tri,
+			);
         } elseif ($this->mode == 'article') {
 
 			# On a validé le formulaire commentaire
@@ -394,6 +400,30 @@ class plxMotor
             if ($this->aConf['capcha']) {
                 $this->plxCapcha = new plxCapcha();
             } # Création objet captcha
+
+            # Gestion des articles précédent, suivant, dans le mode précèdent (home, categorie, archives, tags)
+            if(!empty($_SESSION['previous'])) {
+                # On récupère un tableau indexé des articles
+                $aFiles = $this->plxGlob_arts->query($_SESSION['previous']['motif'], 'art', $_SESSION['previous']['tri'], 0, false, 'before');
+                $artIds = array();
+                foreach($aFiles as $key=>$value) {
+                    if(substr($value, 0, 4) == $this->cible) {
+                        if($key > 0) {
+                            if($key > 1) { $artIds['first'] = $aFiles[0]; }
+                            $artIds['prev'] = $aFiles[$key - 1];
+                        }
+                        if($key < count($aFiles) - 1) {
+                            if($key < count($aFiles) - 2) { $artIds['last'] = $aFiles[count($aFiles) - 1]; }
+                            $artIds['next'] = $aFiles[$key + 1];
+                        }
+                        $_SESSION['previous']['position'] = $key + 1;
+                        $_SESSION['previous']['count'] = count($aFiles);
+                        break;
+                    }
+                }
+                $_SESSION['previous']['artIds'] = $artIds;
+            }
+
         } elseif ($this->mode == 'preview') {
 			$this->mode='article';
 			$this->plxRecord_arts = new plxRecord($_SESSION['preview']);
