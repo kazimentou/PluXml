@@ -456,8 +456,11 @@ class plxShow
      **/
     public function catDescription($format = '<div class="infos">#cat_description</div>')
     {
+        if($this->plxMotor->mode != 'categorie') {
+			return;
+		}
         $desc = plxUtils::getValue($this->plxMotor->aCats[$this->plxMotor->cible]['description']);
-        if ($this->plxMotor->mode and $desc) {
+        if (!empty($desc)) {
             echo str_replace('#cat_description', $desc, $format);
         }
     }
@@ -2043,6 +2046,24 @@ class plxShow
             } else {
                 echo $userName;
             }
+        }
+    }
+
+    /**
+     * Méthode qui affiche les informations sur un utilisateur
+     *
+     * @param format    format du texte à afficher (variable: #user_description)
+     * @scope    user
+     * @author   J.P. Pourrez "bazooka07"
+     **/
+    public function authorDescription($format = '<div class="infos">#user_description</div>')
+    {
+		if ($this->plxMotor->mode != 'user') {
+			return;
+		}
+        $infos = plxUtils::getValue($this->plxMotor->aUsers[$this->plxMotor->cible]['infos']);
+        if (!empty($infos)) {
+            echo str_replace('#user_description', $infos, $format);
         }
     }
 
