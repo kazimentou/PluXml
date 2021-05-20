@@ -558,8 +558,9 @@ class plxMotor
             return;
         }
 
-        $activeCats = array();
-        $homepageCats = array();
+        # categorie pour articles non classés
+        $activeCats = array('000');
+        $homepageCats = array('000');
 
         # Mise en place du parseur XML
         $data = implode('', file($filename));
@@ -568,57 +569,60 @@ class plxMotor
         xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 0);
         xml_parse_into_struct($parser, $data, $values, $iTags);
         xml_parser_free($parser);
-        if (isset($iTags['categorie']) and isset($iTags['name'])) {
-            $nb = sizeof($iTags['name']);
-            $size=ceil(sizeof($iTags['categorie'])/$nb);
-            for ($i=0;$i<$nb;$i++) {
-                $attributes = $values[$iTags['categorie'][$i*$size]]['attributes'];
-                $number = $attributes['number'];
-                # Recuperation du nom de la catégorie
-                $this->aCats[$number]['name']=plxUtils::getTagIndexValue($iTags['name'], $values, $i);
-                # Recuperation du nom de la description
-                $this->aCats[$number]['description']=plxUtils::getTagIndexValue($iTags['description'], $values, $i);
-                # Recuperation de la balise title
-                $this->aCats[$number]['title_htmltag']=plxUtils::getTagIndexValue($iTags['title_htmltag'], $values, $i);
-                # Recuperation du meta description
-                $this->aCats[$number]['meta_description']=plxUtils::getTagIndexValue($iTags['meta_description'], $values, $i);
-                # Recuperation du meta keywords
-                $this->aCats[$number]['meta_keywords']=plxUtils::getTagIndexValue($iTags['meta_keywords'], $values, $i);
-                # Recuperation de l'url de la categorie
-                $this->aCats[$number]['url']=strtolower($attributes['url']);
-                # Recuperation du tri de la categorie si besoin est
-                $this->aCats[$number]['tri']=isset($attributes['tri']) ? $attributes['tri'] : $this->aConf['tri'];
-                # Recuperation du nb d'articles par page de la categorie si besoin est
-                $this->aCats[$number]['bypage']=isset($attributes['bypage']) ? $attributes['bypage'] : $this->bypage;
-                # Recuperation du fichier template
-                $this->aCats[$number]['template']=isset($attributes['template']) ? $attributes['template'] : 'categorie.php';
-                # Récupération des informations de l'image représentant la catégorie
-                $this->aCats[$number]['thumbnail']=plxUtils::getTagIndexValue($iTags['thumbnail'], $values, $i);
-                $this->aCats[$number]['thumbnail_title']=plxUtils::getTagIndexValue($iTags['thumbnail_title'], $values, $i);
-                $this->aCats[$number]['thumbnail_alt']=plxUtils::getTagIndexValue($iTags['thumbnail_alt'], $values, $i);
-                # Récuperation état affichage de la catégorie dans le menu
-                $this->aCats[$number]['menu']=isset($attributes['menu']) ? $attributes['menu'] : 'oui';
-                # Récuperation état activation de la catégorie dans le menu
-                $this->aCats[$number]['active']=isset($attributes['active']) ? $attributes['active'] : '1';
-                if ($this->aCats[$number]['active']) {
-                    $activeCats[]=$number;
-                }
-                # Recuperation affichage en page d'accueil
-                $this->aCats[$number]['homepage'] = isset($attributes['homepage']) ? $attributes['homepage'] : 1;
-                $this->aCats[$number]['homepage'] = in_array($this->aCats[$number]['homepage'], array('0','1')) ? $this->aCats[$number]['homepage'] : 1;
-                if ($this->aCats[$number]['active'] and $this->aCats[$number]['homepage']) {
-                    $homepageCats[]=$number;
-                }
-                # Recuperation du nombre d'articles publiés de la categorie
-                $motif = "#^\d{4}\.(?:home,|\d{3},)*$number(?:,\d{3})*\.\d{3}\.\d{12}\.[\w-]+\.xml$#";
-                $arts = $this->plxGlob_arts->query($motif, 'art', '', 0, false, 'before');
-                $this->aCats[$number]['articles'] = ($arts ? sizeof($arts) : 0);
-                # Hook plugins
-                eval($this->plxPlugins->callHook('plxMotorGetCategories'));
+
+        $categorie = array_values(array_filter(
+            $values,
+            function ($value) {
+                return ($value['tag'] == 'categorie' and $value['type'] == 'open');
             }
+        ));
+        foreach ($categorie as $i=>$infos) {
+            # number, active, homepage, tri, bypage, menu, url, template
+            $cat = $infos['attributes'];
+
+            if (!isset($cat['number'])) {
+                # article invalide
+                continue;
+            }
+            $catId = str_pad($cat['number'], 3, '0', STR_PAD_LEFT);
+            unset($cat['number']);
+
+            # Children for categorie tag
+            foreach (
+                array(
+                    'name',
+                    'description',
+
+                    # for HTML header
+                    'meta_description',
+                    'meta_keywords',
+                    'title_htmltag',
+
+                    'thumbnail',
+                    'thumbnail_alt',
+                    'thumbnail_title',
+                ) as $child
+            ) {
+                $cat[$child] = plxUtils::getTagIndexValue($iTags[$child], $values, $i);
+            }
+
+            if (!empty($cat['active'])) {
+                $activeCats[] = $catId;
+                if (!empty($cat['homepage'])) {
+                    $homepageCats[] = $catId;
+                }
+            }
+
+            # Recuperation du nombre d'articles publiés de la categorie
+            $motif = '#^\d{4}\.(?:home,|\d{3},)*' . $catId . '(?:,\d{3})*\.\d{3}\.\d{12}\.[\w-]+\.xml$#';
+            $arts = $this->plxGlob_arts->query($motif, 'art', '', 0, false, 'before');
+            $cat['articles'] = !empty($arts) ? sizeof($arts) : 0;
+
+            $this->aCats[$catId] = $cat;
+            # Hook plugins
+            eval($this->plxPlugins->callHook('plxMotorGetCategories'));
         }
-        $homepageCats [] = '000'; # on rajoute la catégorie 'Non classée'
-        $activeCats[] = '000'; # on rajoute la catégorie 'Non classée'
+
         $this->homepageCats = implode('|', $homepageCats);
         $this->activeCats = implode('|', $activeCats);
     }
