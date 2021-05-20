@@ -455,7 +455,7 @@ class plxShow
      **/
     public function catDescription($format = '<div class="infos">#cat_description</div>')
     {
-        if($this->plxMotor->mode != 'categorie') {
+        if ($this->plxMotor->mode != 'categorie') {
 			return;
 		}
         $desc = plxUtils::getValue($this->plxMotor->aCats[$this->plxMotor->cible]['description']);
@@ -668,14 +668,14 @@ class plxShow
      *
      * @param echo si à VRAI affichage à l'écran
 	 * @param link affiche un lien vers tous les articles de l'auteur si vrai
-     * @scope    home,categorie,article,tags,archives
+     * @scope    home,categorie,user,article,tags,archives
 	 * @author    Anthony GUÉRIN, Florent MONTHEL, Stephane F, Jean-Pierre Pourrez "bazooka07"
      **/
 	public function artAuthor($echo = true, $link=true)
     {
-		$authorId = $this->plxMotor->plxRecord_arts->f('author');
+        $authorId = ($this->plxMotor->mode != 'user') ? $this->plxMotor->plxRecord_arts->f('author') : $this->plxMotor->cible;
 		if (isset($this->plxMotor->aUsers[$authorId]['name'])) {
-			$author = $this->plxMotor->aUsers[$this->plxMotor->plxRecord_arts->f('author')];
+            $author = $this->plxMotor->aUsers[$authorId];
 			$authorName = plxUtils::strCheck($author['name']);
 		} else {
 			$authorName = L_ARTAUTHOR_UNKNOWN;
@@ -697,12 +697,13 @@ class plxShow
     /**
      * Méthode qui affiche l'adresse email de l'auteur de l'article
      *
-     * @scope    home,categorie,article,tags,archives
-     * @author    Stephane F
+     * @scope    home,categorie, user, article, tags, archives
+     * @author    Stephane F, J.P. Pourrez "bazooka07"
      **/
     public function artAuthorEmail()
     {
-        if (isset($this->plxMotor->aUsers[$this->plxMotor->plxRecord_arts->f('author')]['email'])) {
+        $userId = ($this->plxMotor->mode != 'user') ? $this->plxMotor->plxRecord_arts->f('author') : $this->plxMotor->cible;
+        if (isset($this->plxMotor->aUsers[$userId]['email'])) {
             echo plxUtils::strCheck($this->plxMotor->aUsers[$this->plxMotor->plxRecord_arts->f('author')]['email']);
         }
     }
@@ -711,14 +712,15 @@ class plxShow
      * Méthode qui affiche les informations sur l'auteur de l'article
      *
      * @param format    format du texte à afficher (variable: #art_authorinfos, #art_author)
-     * @scope    home,categorie,article,tags,archives
-     * @author    Stephane F
+     * @scope    home,categorie,user,article,tags,archives
+     * @author    Stephane F, J.P. Pourrez "bazooka07"
      **/
 
     public function artAuthorInfos($format = '<div class="infos">#art_authorinfos</div>')
     {
-        $infos = plxUtils::getValue($this->plxMotor->aUsers[$this->plxMotor->plxRecord_arts->f('author')]['infos']);
-        if (trim($infos) != '') {
+        $userId = ($this->plxMotor->mode != 'user') ? $this->plxMotor->plxRecord_arts->f('author') : $this->plxMotor->cible;
+        $infos = trim(plxUtils::getValue($this->plxMotor->aUsers[$userId]['infos']));
+        if (!empty($infos)) {
 			echo strtr($format, array(
 				'#art_authorinfos'	=> $infos,
 				'#art_author'		=> $this->artAuthor(false),
@@ -2024,46 +2026,6 @@ class plxShow
                 );
                 echo str_replace(array_keys($replaces), array_values($replaces), $format);
             }
-        }
-    }
-
-    /**
-	 * Méthode qui affiche le nom de l'auteur (linké ou non)
-	 *
-	 * @param type	type d'affichage : link => sous forme de lien
-	 * @scope		users
-	 * @author		Jean-Pierre Pourrez "bazooka07"
-	 **/
-	public function authorName($type = '')
-	{
-		if ($this->plxMotor->mode == 'user' and isset($this->plxMotor->aUsers[$this->plxMotor->cible])) {
-			$id = plxUtils::strCheck($this->plxMotor->cible);
-			$userName = $this->plxMotor->aUsers[$id]['name'];
-			# On effectue l'affichage
-			if ($type == 'link') {
-				$href = 'index.php?user' . $id . '/' . md5($userName);
-				echo '<a href="' . $this->plxMotor->urlRewrite($href) . '" title="' . $userName . '">' . $userName . '</a>';
-			} else {
-				echo $userName;
-			}
-		}
-	}
-
-	/**
-     * Méthode qui affiche les informations sur un utilisateur
-     *
-     * @param format    format du texte à afficher (variable: #user_description)
-     * @scope    user
-     * @author   J.P. Pourrez "bazooka07"
-     **/
-    public function authorDescription($format = '<div class="infos">#user_description</div>')
-    {
-		if ($this->plxMotor->mode != 'user') {
-			return;
-		}
-        $infos = plxUtils::getValue($this->plxMotor->aUsers[$this->plxMotor->cible]['infos']);
-        if (!empty($infos)) {
-            echo str_replace('#user_description', $infos, $format);
         }
     }
 

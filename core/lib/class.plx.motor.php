@@ -176,10 +176,10 @@ class plxMotor
 			$this->template = $this->aStats[ $this->cible ]['template'];
         } elseif (empty($this->get)
                 or preg_match('#^(blog|blog\/page\d*|\/?page\d*)$#', $this->get)
-                and !preg_match('#^(?:article|static|categorie|archives|tag|preview|telechargement|download)[\b\d/]+#', $this->get)) {
+                and !preg_match('#^(?:article|static|categorie|archives|tag|preview|telechargement|download)[\b\d/]+#', $this->get)
+            ) {
 			$this->mode = 'home';
 			$this->template = $this->aConf['hometemplate'];
-			$this->bypage = $this->aConf['bypage']; # Nombre d'article par page
 			# On regarde si on a des articles en mode "home"
             if ($this->plxGlob_arts->query('#^\d{4}\.(home[0-9,]*)\.\d{3}\.\d{12}\.[\w-]+\.xml$#')) {
 				$this->motif = '#^\d{4}.(home[0-9,]*).\d{3}.\d{12}.[\w-]+.xml$#';
@@ -223,7 +223,7 @@ class plxMotor
                 $this->motif = '#^\d{4}.((?:\d|home|,)*(?:' . $this->cible . ')(?:\d|home|,)*).\d{3}.\d{12}.[\w-]+.xml$#'; # Motif de recherche
 				$this->template = $this->aCats[$this->cible]['template'];
 				$this->tri = $this->aCats[$this->cible]['tri']; # Recuperation du tri des articles
-				$this->bypage = $this->aCats[$this->cible]['bypage'] > 0 ? $this->aCats[$this->cible]['bypage'] : $this->bypage;
+                $this->bypage = $this->aCats[$this->cible]['bypage'];
             } elseif (isset($this->aCats[$this->cible])) { # Redirection 301
                 if ($this->aCats[$this->cible]['url']!=$capture[2]) {
                     $this->redir301($this->urlRewrite('?categorie' . intval($this->cible) . '/' . $this->aCats[$this->cible]['url']));
@@ -235,10 +235,9 @@ class plxMotor
             $this->cible = str_pad($capture[1], 3, '0', STR_PAD_LEFT); # On complete sur 3 caracteres
             if (!empty($this->aUsers[$this->cible]) and $this->aUsers[$this->cible]['active'] and md5($this->aUsers[$this->cible]['name']) == $capture[2]) {
 				$this->mode = 'user'; # Mode user
-				$this->motif = '#^\d{4}.(?:\d{3},|home,)*(?:home|\d{3})(?:,\d{3}|,home)*.' . $this->cible . '.\d{12}.[\w-]+.xml$#'; # Motif de recherche
+                $this->motif = '#^\d{4}\.(?:\d{3},)*(?:home|\d{3})(?:,\d{3})*\.' . $this->cible . '\.\d{12}\.[\w-]+\.xml$#'; # Motif de recherche
 				$this->template = 'user.php';
 				// $this->tri = $this->aCats[$this->cible]['tri']; # Recuperation du tri des articles
-				// $this->bypage = $this->aCats[$this->cible]['bypage'] > 0 ? $this->aCats[$this->cible]['bypage'] : $this->bypage;
             } elseif (isset($this->aUser[$this->cible])) { # Redirection 301
                 if ($this->aCats[$this->cible]['url']!=$capture[2]) {
 					$this->redir301($this->urlRewrite('?user'.intval($this->cible).'/'.$this->aCats[$this->cible]['login']));
@@ -797,9 +796,16 @@ class plxMotor
      **/
     public function getArticles($publi='before')
     {
+        # valeurs par défaut
+        if (empty($this->bypage)) {
+            $this->bypage = $this->aConf['bypage'];
+        }
+        if (empty($this->tri)) {
+            $this->tri = $this->aConf['tri'];
+        }
 
         # On calcule la valeur start
-        $start = $this->bypage*($this->page-1);
+        $start = $this->bypage * ($this->page-1);
         # On recupere nos fichiers (tries) selon le motif, la pagination, la date de publication
         if ($aFiles = $this->plxGlob_arts->query($this->motif, 'art', $this->tri, $start, $this->bypage, $publi)) {
             # On analyse tous les fichiers
