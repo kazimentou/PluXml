@@ -566,8 +566,9 @@ class plxMotor
             return;
         }
 
-		$activeCats = array();
-		$homepageCats = array();
+        # categorie pour articles non classés
+        $activeCats = array('000');
+        $homepageCats = array('000');
 
 		# Mise en place du parseur XML
         $data = implode('', file($filename));
@@ -611,22 +612,54 @@ class plxMotor
                 if ($this->aCats[$number]['active']) {
                     $activeCats[]=$number;
                 }
-				# Recuperation affichage en page d'accueil
-				$this->aCats[$number]['homepage'] = isset($attributes['homepage']) ? $attributes['homepage'] : 1;
-                $this->aCats[$number]['homepage'] = in_array($this->aCats[$number]['homepage'], array('0','1')) ? $this->aCats[$number]['homepage'] : 1;
-                if ($this->aCats[$number]['active'] and $this->aCats[$number]['homepage']) {
-                    $homepageCats[]=$number;
+        ));
+        foreach ($categorie as $i=>$infos) {
+            # number, active, homepage, tri, bypage, menu, url, template
+            $cat = $infos['attributes'];
+
+            if (!isset($cat['number'])) {
+                # article invalide
+                continue;
                 }
+            $catId = str_pad($cat['number'], 3, '0', STR_PAD_LEFT);
+            unset($cat['number']);
+
+            # Children for categorie tag
+            foreach (
+                array(
+                    'name',
+                    'description',
+
+                    # for HTML header
+                    'meta_description',
+                    'meta_keywords',
+                    'title_htmltag',
+
+                    'thumbnail',
+                    'thumbnail_alt',
+                    'thumbnail_title',
+                ) as $child
+            ) {
+                $cat[$child] = plxUtils::getTagIndexValue($iTags[$child], $values, $i);
+            }
+
+            if (!empty($cat['active'])) {
+                $activeCats[] = $catId;
+                if (!empty($cat['homepage'])) {
+                    $homepageCats[] = $catId;
+                }
+            }
+
                 # Recuperation du nombre d'articles publiés de la categorie
-				$motif = "#^\d{4}\.(?:home,|\d{3},)*$number(?:,\d{3})*\.\d{3}\.\d{12}\.[\w-]+\.xml$#";
+            $motif = '#^\d{4}\.(?:home,|\d{3},)*' . $catId . '(?:,\d{3})*\.\d{3}\.\d{12}\.[\w-]+\.xml$#';
                 $arts = $this->plxGlob_arts->query($motif, 'art', '', 0, false, 'before');
-                $this->aCats[$number]['articles'] = ($arts ? sizeof($arts) : 0);
+            $cat['articles'] = !empty($arts) ? sizeof($arts) : 0;
+
+            $this->aCats[$catId] = $cat;
 				# Hook plugins
 				eval($this->plxPlugins->callHook('plxMotorGetCategories'));
 			}
-		}
-		$homepageCats [] = '000'; # on rajoute la catégorie 'Non classée'
-		$activeCats[] = '000'; # on rajoute la catégorie 'Non classée'
+
 		$this->homepageCats = implode('|', $homepageCats);
 		$this->activeCats = implode('|', $activeCats);
 	}
