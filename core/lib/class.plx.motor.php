@@ -613,6 +613,10 @@ class plxMotor
                     $activeCats[]=$number;
                 }
         ));
+
+        $children = array_keys($iTags);
+        unset($children['document']);
+        unset($children['categorie']);
         foreach ($categorie as $i=>$infos) {
             # number, active, homepage, tri, bypage, menu, url, template
             $cat = $infos['attributes'];
@@ -625,21 +629,7 @@ class plxMotor
             unset($cat['number']);
 
             # Children for categorie tag
-            foreach (
-                array(
-                    'name',
-                    'description',
-
-                    # for HTML header
-                    'meta_description',
-                    'meta_keywords',
-                    'title_htmltag',
-
-                    'thumbnail',
-                    'thumbnail_alt',
-                    'thumbnail_title',
-                ) as $child
-            ) {
+            foreach ($children as $child) {
                 $cat[$child] = plxUtils::getTagIndexValue($iTags[$child], $values, $i);
             }
 
