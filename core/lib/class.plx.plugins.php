@@ -50,6 +50,7 @@ class plxPlugins
     /**
      * Méthode qui charge le fichier plugins.xml
      *
+     * Pas d'enfant pour la balise <plugin>.
      * @return	null
      * @author	Stephane F
      **/
@@ -59,8 +60,6 @@ class plxPlugins
             return;
         }
 
-        $updAction = false;
-
         # Mise en place du parseur XML
         $data = implode('', file(path('XMLFILE_PLUGINS')));
         $parser = xml_parser_create(PLX_CHARSET);
@@ -68,54 +67,60 @@ class plxPlugins
         xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 0);
         xml_parse_into_struct($parser, $data, $values, $iTags);
         xml_parser_free($parser);
-        # On verifie qu'il existe des tags "plugin"
-        if (isset($iTags['plugin'])) {
-            # On compte le nombre de tags "plugin"
-            $nb = sizeof($iTags['plugin']);
-            # On boucle sur $nb
-            for ($i = 0; $i < $nb; $i++) {
-                $attributes = $values[ $iTags['plugin'][$i] ]['attributes'];
-                $name = $attributes['name'];
-                $scope = (!empty($attributes['scope'])) ? $attributes['scope'] : '';
+        if (!isset($iTags['plugin'])) {
+            return;
+        }
+
+        $updAction = false;
+        foreach ($iTags['plugin'] as $k) {
+            if (!isset($values[$k]['attributes'])) {
+                continue;
+            }
+
+            $attributes = $values[$k]['attributes'];
+            $name = $attributes['name'];
+            $filename = PLX_PLUGINS . $name . '/' . $name . '.php';
+            if (!is_readable($filename)) {
+                continue;
+            }
+
+            $scope = plxUtils::getValue($attributes['scope']);
+            if (
+                defined('PLX_ADMIN') or
+                empty($scope) or # retro-compatibilité pour plugin sans balise <scope>
+                ($scope == 'site')
+            ) {
                 if (
-                    defined('PLX_ADMIN') or
-                    empty($scope) or # retro-compatibilité pour plugin sans balise <scope>
-                    ($scope == 'site')
+                    empty($scope) or
+                    (defined('PLX_ADMIN') and $scope == 'admin') or
+                    (!defined('PLX_ADMIN') and $scope == 'site')
                 ) {
-                    if (
-                        empty($scope) or
-                        (defined('PLX_ADMIN') and $scope == 'admin') or
-                        (!defined('PLX_ADMIN') and $scope == 'site')
-                    ) {
-                        if ($instance = $this->getInstance($name)) {
-                            $this->aPlugins[$name] = $instance;
-                            $this->aHooks = array_merge_recursive($this->aHooks, $instance->getHooks());
-                            # Si le plugin a une méthode pour des actions de mises à jour
-                            if (method_exists($instance, 'onUpdate')) {
-                                if (is_file(PLX_PLUGINS.$name.'/update')) {
-                                    # on supprime le fichier update pour eviter d'appeler la methode onUpdate
-                                    # à chaque chargement du plugin
-                                    chmod(PLX_PLUGINS.$name.'/update', 0644);
-                                    unlink(PLX_PLUGINS.$name.'/update');
-                                    $updAction = $instance->onUpdate();
-                                }
+                    if ($instance = $this->getInstance($name)) {
+                        $this->aPlugins[$name] = $instance;
+                        $this->aHooks = array_merge_recursive($this->aHooks, $instance->getHooks());
+                        # Si le plugin a une méthode pour des actions de mises à jour
+                        if (method_exists($instance, 'onUpdate')) {
+                            if (is_file(PLX_PLUGINS.$name.'/update')) {
+                                # on supprime le fichier update pour eviter d'appeler la methode onUpdate
+                                # à chaque chargement du plugin
+                                chmod(PLX_PLUGINS.$name.'/update', 0644);
+                                unlink(PLX_PLUGINS.$name.'/update');
+                                $updAction = $instance->onUpdate();
                             }
                         }
-                    } else {
-                        # Si PLX_ADMIN, on vérifie que le plugin existe et on le recense pour les styles CSS, sans charger sa class.
-                        if (is_file(PLX_PLUGINS."$name/$name.php")) {
-                            $this->aPlugins[$name] = false;
-                        }
+                    }
+                } else {
+                    # Si PLX_ADMIN, on vérifie que le plugin existe et on le recense pour les styles CSS, sans charger sa class.
+                    if (is_file(PLX_PLUGINS."$name/$name.php")) {
+                        $this->aPlugins[$name] = false;
                     }
                 }
             }
         }
 
-        if ($updAction) {
-            if (isset($updAction['cssCache']) and $updAction['cssCache']==true) {
-                $this->cssCache('admin');
-                $this->cssCache('site');
-            }
+        if (!empty($updAction['cssCache'])) {
+            $this->cssCache('admin');
+            $this->cssCache('site');
         }
     }
 
