@@ -675,43 +675,43 @@ class plxMotor
         xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 0);
         xml_parse_into_struct($parser, $data, $values, $iTags);
 		xml_parser_free($parser);
-        if (isset($iTags['statique']) and isset($iTags['name'])) {
+        if (!isset($iTags['statique']) or !isset($iTags['name'])) {
+            return;
+        }
+
+        $children = array_keys($iTags);
+        unset($children['document']);
+        unset($children['statique']);
+
 			$nb = sizeof($iTags['name']);
-			$size=ceil(sizeof($iTags['statique'])/$nb);
-            for ($i=0;$i<$nb;$i++) {
-				$attributes = $values[$iTags['statique'][$i*$size]]['attributes'];
-				$number = $attributes['number'];
-				# Récupération du nom de la page statique
-                $this->aStats[$number]['name']=plxUtils::getTagIndexValue($iTags['name'], $values, $i);
-				# Récupération de la balise title
-                $this->aStats[$number]['title_htmltag']=plxUtils::getTagIndexValue($iTags['title_htmltag'], $values, $i);
-				# Récupération du meta description
-                $this->aStats[$number]['meta_description']=plxUtils::getTagIndexValue($iTags['meta_description'], $values, $i);
-				# Récupération du meta keywords
-                $this->aStats[$number]['meta_keywords']=plxUtils::getTagIndexValue($iTags['meta_keywords'], $values, $i);
-				# Récupération du groupe de la page statique
-                $this->aStats[$number]['group']=plxUtils::getTagIndexValue($iTags['group'], $values, $i);
-				# Récupération de l'url de la page statique
-				$this->aStats[$number]['url']=strtolower($attributes['url']);
-				# Récupération de l'etat de la page
-				$this->aStats[$number]['active']=intval($attributes['active']);
-				# On affiche la page statique dans le menu ?
-                $this->aStats[$number]['menu']=isset($attributes['menu']) ? $attributes['menu'] : 'oui';
-				# Récupération du fichier template
-                $this->aStats[$number]['template']=isset($attributes['template']) ? $attributes['template'] : 'static.php';
-				# Récupération de la date de création
-                $this->aStats[$number]['date_creation']=plxUtils::getTagIndexValue($iTags['date_creation'], $values, $i);
-				# Récupération de la date de mise à jour
-                $this->aStats[$number]['date_update']=plxUtils::getTagIndexValue($iTags['date_update'], $values, $i);
-				# On verifie que la page statique existe bien
-                $file = PLX_ROOT . $this->aConf['racine_statiques'] . $number . '.' . $attributes['url'] . '.php';
-				# On test si le fichier est lisible
-				$this->aStats[$number]['readable'] = (is_readable($file) ? 1 : 0);
+        $step = ceil(sizeof($iTags['statique']) / $nb);
+        for ($i=0; $i<$nb; $i++) {
+            $node = $values[$iTags['statique'][$i * $step]];
+            $statique = $node['attributes'];
+
+            if (!isset($statique['number'])) {
+                continue;
+            }
+            $statId = $statique['number'];
+            unset($statique['number']);
+
+            foreach ($children as $child) {
+                $statique[$child] = plxUtils::getTagIndexValue($iTags[$child], $values, $i);
+            }
+
+            # On verifie que le fichier de page statique est lisible
+            if (!isset($statique['url'])) {
+                continue;
+            }
+            $filename = PLX_ROOT . $this->aConf['racine_statiques'] . $statId. '.' . $statique['url'] . '.php';
+            $statique['readable'] = is_readable($filename) ? 1 : 0;
+
+            $this->aStats[$statId] = $statique;
+
 				# Hook plugins
 				eval($this->plxPlugins->callHook('plxMotorGetStatiques'));
 			}
 		}
-	}
 
 	/**
 	 * Méthode qui parse le fichier des utilisateurs
