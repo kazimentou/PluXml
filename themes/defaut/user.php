@@ -10,7 +10,7 @@
 
 					<ul class="repertory menu breadcrumb">
 						<li><a href="<?php $plxShow->racine() ?>"><?php $plxShow->lang('HOME'); ?></a></li>
-						<li><?php $plxShow->authorName(); ?></li>
+						<li><?php $plxShow->artAuthor(); ?></li>
 					</ul>
 
 					<?php while ($plxShow->plxMotor->plxRecord_arts->loop()): ?>
