@@ -569,6 +569,9 @@ class plxMotor
         xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 0);
         xml_parse_into_struct($parser, $data, $values, $iTags);
         xml_parser_free($parser);
+        if (!isset($iTags['categorie'])) {
+            return;
+        }
 
         $categorie = array_values(array_filter(
             $values,
@@ -576,6 +579,10 @@ class plxMotor
                 return ($value['tag'] == 'categorie' and $value['type'] == 'open');
             }
         ));
+
+        $children = array_keys($iTags);
+        unset($children['document']);
+        unset($children['categorie']);
         foreach ($categorie as $i=>$infos) {
             # number, active, homepage, tri, bypage, menu, url, template
             $cat = $infos['attributes'];
@@ -588,21 +595,7 @@ class plxMotor
             unset($cat['number']);
 
             # Children for categorie tag
-            foreach (
-                array(
-                    'name',
-                    'description',
-
-                    # for HTML header
-                    'meta_description',
-                    'meta_keywords',
-                    'title_htmltag',
-
-                    'thumbnail',
-                    'thumbnail_alt',
-                    'thumbnail_title',
-                ) as $child
-            ) {
+            foreach ($children as $child) {
                 $cat[$child] = plxUtils::getTagIndexValue($iTags[$child], $values, $i);
             }
 
