@@ -497,7 +497,7 @@ class plxMotor
         }
 
         # Mise en place du parseur XML
-        $data = implode('', file($filename));
+        $data = file_get_contents($filename);
         $parser = xml_parser_create(PLX_CHARSET);
         xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
         xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 0);
@@ -558,12 +558,8 @@ class plxMotor
             return;
         }
 
-        # categorie pour articles non classés
-        $activeCats = array('000');
-        $homepageCats = array('000');
-
         # Mise en place du parseur XML
-        $data = implode('', file($filename));
+        $data = file_get_contents($filename);
         $parser = xml_parser_create(PLX_CHARSET);
         xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
         xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 0);
@@ -573,13 +569,16 @@ class plxMotor
             return;
         }
 
+        # categorie pour articles non classés
+        $activeCats = array('000');
+        $homepageCats = array('000');
+
         $categorie = array_values(array_filter(
             $values,
             function ($value) {
                 return ($value['tag'] == 'categorie' and $value['type'] == 'open');
             }
         ));
-
         $children = array_keys($iTags);
         unset($children['document']);
         unset($children['categorie']);
@@ -635,7 +634,7 @@ class plxMotor
         }
 
         # Mise en place du parseur XML
-        $data = implode('', file($filename));
+        $data = file_get_contents($filename);
         $parser = xml_parser_create(PLX_CHARSET);
         xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
         xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 0);
@@ -693,7 +692,7 @@ class plxMotor
         }
 
         # Mise en place du parseur XML
-        $data = implode('', file($filename));
+        $data = file_get_contents($filename);
         $parser = xml_parser_create(PLX_CHARSET);
         xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
         xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 0);
@@ -871,7 +870,7 @@ class plxMotor
         $tmp = $this->artInfoFromFilename($filename);
         if (!empty($tmp)) {
             # Mise en place du parseur XML
-            $data = implode('', file($filename));
+            $data = file_get_contents($filename);
             $parser = xml_parser_create(PLX_CHARSET);
             xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
             xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 0);
@@ -969,7 +968,7 @@ class plxMotor
     {
 
         # Mise en place du parseur XML
-        $data = implode('', file($filename));
+        $data = file_get_contents($filename);
         $parser = xml_parser_create(PLX_CHARSET);
         xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
         xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 0);
@@ -1199,13 +1198,13 @@ class plxMotor
         }
 
         # Mise en place du parseur XML
-        $data = implode('', file($filename));
+        $data = file_get_contents($filename);
         $parser = xml_parser_create(PLX_CHARSET);
         xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
         xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 0);
         xml_parse_into_struct($parser, $data, $values, $iTags);
         xml_parser_free($parser);
-        # On verifie qu'il existe des tags "file"
+        # On verifie qu'il existe des balises "article"
         if (!isset($iTags['article'])) {
             return;
         }
