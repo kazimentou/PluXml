@@ -1240,24 +1240,23 @@ class plxMotor
         xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 0);
         xml_parse_into_struct($parser, $data, $values, $iTags);
 		xml_parser_free($parser);
-		$array = array();
 		# On verifie qu'il existe des tags "file"
-        if (isset($iTags['article'])) {
-			# On compte le nombre de tags "file"
-			$nb = sizeof($iTags['article']);
-			# On boucle sur $nb
-            for ($i = 0; $i < $nb; $i++) {
-                if (isset($values[ $iTags['article'][$i] ]['value'])) {
-					$array[ $values[ $iTags['article'][$i] ]['attributes']['number'] ]['tags'] = trim($values[ $iTags['article'][$i] ]['value']);
-                } else {
-					$array[ $values[ $iTags['article'][$i] ]['attributes']['number'] ]['tags'] = '';
+        if (!isset($iTags['article'])) {
+            return;
                 }
-				$array[ $values[ $iTags['article'][$i] ]['attributes']['number'] ]['date'] = $values[ $iTags['article'][$i] ]['attributes']['date'];
-				$array[ $values[ $iTags['article'][$i] ]['attributes']['number'] ]['active'] = $values[ $iTags['article'][$i] ]['attributes']['active'];
+
+        foreach ($iTags['article'] as $k) {
+            if (!empty($values[$k]['value'])) {
+                $tag = $values[$k]['attributes'];
+                if (!isset($tag['number'])) {
+                    continue;
 			}
+                $artId = $tag['number'];
+                unset($tag['number']);
+                $tag['tags'] = trim($values[$k]['value']);
+            }
+            $this->aTags[$artId] = $tag;
 		}
-		# Mémorisation de la liste des tags
-		$this->aTags = $array;
 	}
 
 	/**
