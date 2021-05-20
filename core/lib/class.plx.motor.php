@@ -743,40 +743,48 @@ class plxMotor
         xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 0);
         xml_parse_into_struct($parser, $data, $values, $iTags);
 		xml_parser_free($parser);
-        if (isset($iTags['user']) and isset($iTags['login'])) {
+        if (!isset($iTags['user']) or !isset($iTags['login'])) {
+            return;
+        }
+
+        $children = array_keys($iTags);
+        unset($children['document']);
+        unset($children['user']);
 			$nb = sizeof($iTags['login']);
-			$size=ceil(sizeof($iTags['user'])/$nb);
+        $step = ceil(sizeof($iTags['user'])/$nb);
 			# On boucle sur $nb
             for ($i = 0; $i < $nb; $i++) {
-				$attributes = $values[$iTags['user'][$i*$size]]['attributes'];
-				$number = $attributes['number'];
-				$this->aUsers[$number]['active']=$attributes['active'];
-				$this->aUsers[$number]['delete']=$attributes['delete'];
-				$this->aUsers[$number]['profil']=$attributes['profil'];
-                $this->aUsers[$number]['login']=plxUtils::getTagIndexValue($iTags['login'], $values, $i);
-                $this->aUsers[$number]['name']=plxUtils::getTagIndexValue($iTags['name'], $values, $i);
-                $this->aUsers[$number]['password']=plxUtils::getTagIndexValue($iTags['password'], $values, $i);
-                $this->aUsers[$number]['salt']=plxUtils::getTagIndexValue($iTags['salt'], $values, $i);
-                $this->aUsers[$number]['infos']=plxUtils::getTagIndexValue($iTags['infos'], $values, $i);
-                $this->aUsers[$number]['email']=plxUtils::getTagIndexValue($iTags['email'], $values, $i);
-                $lang = plxUtils::getTagIndexValue($iTags['lang'], $values, $i);
-                $this->aUsers[$number]['lang'] = empty($lang) ? $lang : $this->aConf['default_lang'];
-                $this->aUsers[$number]['password_token']=plxUtils::getTagIndexValue($iTags['password_token'], $values, $i);
-                $this->aUsers[$number]['password_token_expiry']=plxUtils::getTagIndexValue($iTags['password_token_expiry'], $values, $i);
-
-                if (empty($attributes['delete']) and !empty($attributes['active'])) {
-                    # Recupération du nombre d'articles publiés de l'utilisateur et triés par date de publication
-                    $motif = '#^\d{4}\.(?:home,|\d{3},)*(?:home|\d{3})\.' . $number . '\.\d{12}\.[\w-]+\.xml$#';
-                    $arts = $this->plxGlob_arts->query($motif, 'art', 'desc', 0, false, 'before');
-                    $this->aUsers[$number]['articles'] = $arts ? sizeof($arts) : 0;
-                    $this->aUsers[$number]['last_art_published'] = $arts ? preg_replace('#.*\.(\d{12})\..*\.xml$#', '$1', $arts[0]) : '';
+            $node = $values[$iTags['user'][$i * $step]];
+            $user = $node['attributes'];
+            if (!isset($user['number'])) {
+                # user w/o id
+                continue;
                 }
+            $userId = $user['number'];
+            unset($user['number']);
+
+            foreach ($children as $child) {
+                $user[$child] = plxUtils::getTagIndexValue($iTags[$child], $values, $i);
+            }
+
+            if (!isset($user['lang'])) {
+                $user['lang'] = $this->aConf['default_lang'];
+            }
+
+            if (empty($user['delete']) and !empty($user['active'])) {
+                # Recupération du nombre d'articles publiés de l'utilisateur et triés par date de publication
+                $motif = '#^\d{4}\.(?:\d{3},)*(?:home|\d{3})(?:,\d{3})*\.' . $userId . '\.\d{12}\.[\w-]+\.xml$#';
+                $arts = $this->plxGlob_arts->query($motif, 'art', 'desc', 0, false, 'before');
+                $user['articles'] = $arts ? sizeof($arts) : 0;
+                $user['last_art_published'] = $arts ? preg_replace('#.*\.(\d{12})\..*\.xml$#', '$1', $arts[0]) : '';
+            }
+
+            $this->aUsers[$userId] = $user;
 
 				# Hook plugins
 				eval($this->plxPlugins->callHook('plxMotorGetUsers'));
 			}
 		}
-	}
 
 	/**
 	 * Méthode qui selon le paramètre tri retourne sort ou rsort (tri PHP)
