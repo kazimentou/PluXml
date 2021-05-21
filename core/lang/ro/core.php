@@ -107,7 +107,7 @@ $LANG = array(
 # class.plx.show.php
 
 'L_HTTPENCODING'				=> 'Compresie %s activata',
-'L_PAGETITLE_ARCHIVES'			=> 'Arhive',
+'L_ARCHIVES'			=> 'Arhive',
 'L_PAGETITLE_TAG'				=> 'Tag',
 'L_NO_CATEGORY'					=> 'nicio categorie',
 'L_CATEGORY'					=> 'categoria',
