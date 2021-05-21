@@ -23,7 +23,7 @@ class plxShow
     public const AUTHOR_PATTERN = '<li id="#user_id"><a href="#user_url" class="#user_status" title="#user_name">#user_name</a> (#art_nb)</li>';
     public $plxMotor = false; # Objet plxMotor
     public $authorCount = 0;
-    private $lang; # fichier de traduction du theme
+    private $_lang; # fichier de traduction du theme
 
     private static $instance = null;
 
@@ -56,7 +56,7 @@ class plxShow
         $langfile = PLX_ROOT . $this->plxMotor->aConf['racine_themes'] . $this->plxMotor->style . '/lang/' . $this->plxMotor->aConf['default_lang'] . '.php';
         if (is_file($langfile)) {
             include $langfile;
-            $this->lang = $LANG; # $LANG = tableau contenant les traductions présentes dans le fichier de langue
+            $this->_lang = $LANG; # $LANG = tableau contenant les traductions présentes dans le fichier de langue
         }
 
         $authors = array_filter(
@@ -248,7 +248,7 @@ class plxShow
 				$year = !empty($captures[1]) ? ' ' . $captures[1] : '';
 				$month = !empty($captures[2]) ? ' ' . plxDate::getCalendar('month', $captures[2]) : '';
 				$day = !empty($captures[3]) ? ' ' . plxDate::getCalendar('day', $captures[3]) : '';
-            $title = L_PAGETITLE_ARCHIVES . $day . $month . $year;
+                $title = L_ARCHIVES . $day . $month . $year;
 				break;
 			case 'erreur':
             $title = $this->plxMotor->plxErreur->getMessage();
@@ -2468,8 +2468,8 @@ class plxShow
      **/
     public function lang($key = '')
     {
-        if (isset($this->lang[$key])) {
-            echo $this->lang[$key];
+        if (isset($this->_lang[$key])) {
+            echo $this->_lang[$key];
         } else {
             echo $key;
         }
@@ -2485,8 +2485,8 @@ class plxShow
      **/
     public function getLang($key = '')
     {
-        if (isset($this->lang[$key])) {
-            return $this->lang[$key];
+        if (isset($this->_lang[$key])) {
+            return $this->_lang[$key];
         } else {
             return $key;
         }

@@ -57,21 +57,19 @@ class plxThemes
 
     public function getImgPreview($theme)
     {
-        $img='';
-        if (is_file($this->racineTheme . $theme . '/preview.png')) {
-            $img=$this->racineTheme . $theme . '/preview.png';
-        } elseif (is_file($this->racineTheme . $theme . '/preview.jpg')) {
-            $img=$this->racineTheme . $theme . '/preview.jpg';
-        } elseif (is_file($this->racineTheme . $theme . '/preview.gif')) {
-            $img=$this->racineTheme . $theme . '/preview.gif';
-        }
+		# Image par défaut
+		$img = PLX_CORE . 'admin/theme/images/theme.png';
 
-        $current = $theme == $this->activeTheme ? ' current' : '';
-        if ($img=='') {
-            return '<img class="img-preview' . $current . '" src="' . PLX_CORE . 'admin/theme/images/theme.png" alt="" />';
-        } else {
-            return '<img class="img-preview' . $current . '" src="' . $img . '" alt="" />';
-        }
+        foreach(array('png', 'jpg', 'jpeg', 'gif') as $ext) {
+			$filename = $this->racineTheme . $theme . '/preview.' . $ext;
+			if(file_exists($filename)) {
+				$img = $filename;
+				break;
+			}
+		}
+
+        $current = ($theme == $this->activeTheme) ? ' current' : '';
+        return '<img class="img-preview' . $current . '" src="' . $img . '" alt="" />';
     }
 
     public function getInfos($theme)
@@ -79,20 +77,22 @@ class plxThemes
         $aInfos = array();
         $filename = $this->racineTheme . $theme . '/infos.xml';
         if (is_file($filename)) {
-            $data = implode('', file($filename));
+            $data = file_get_contents($filename);
             $parser = xml_parser_create(PLX_CHARSET);
             xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
             xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 0);
             xml_parse_into_struct($parser, $data, $values, $iTags);
             xml_parser_free($parser);
-            $aInfos = array(
-                'title'			=> (isset($iTags['title']) and isset($values[$iTags['title'][0]]['value'])) ? $values[$iTags['title'][0]]['value'] : '',
-                'author'		=> (isset($iTags['author']) and isset($values[$iTags['author'][0]]['value'])) ? $values[$iTags['author'][0]]['value'] : '',
-                'version'		=> (isset($iTags['version']) and isset($values[$iTags['version'][0]]['value'])) ? $values[$iTags['version'][0]]['value'] : '',
-                'date'			=> (isset($iTags['date']) and isset($values[$iTags['date'][0]]['value'])) ? $values[$iTags['date'][0]]['value'] : '',
-                'site'			=> (isset($iTags['site']) and isset($values[$iTags['site'][0]]['value'])) ? $values[$iTags['site'][0]]['value'] : '',
-                'description'	=> (isset($iTags['description']) and isset($values[$iTags['description'][0]]['value'])) ? $values[$iTags['description'][0]]['value'] : '',
-            );
+            foreach(array(
+                'title',
+                'author',
+                'version',
+                'date',
+                'site',
+                'description',
+            ) as $k) {
+                $aInfos[$k] = plxUtils::getTagValue($iTags[$k], $values);
+			}
         }
         return $aInfos;
     }
@@ -129,30 +129,39 @@ $plxThemes = new plxThemes(PLX_ROOT . $plxAdmin->aConf['racine_themes'], $plxAdm
 				<?php
                 if ($plxThemes->aThemes) {
                     $num=0;
-                    foreach ($plxThemes->aThemes as $theme) {
+                    foreach ($plxThemes->aThemes as $i=>$theme) {
+						$id = 'preview-' . $i;
                         echo '<tr>';
                         # radio
                         $checked = $theme==$plxAdmin->aConf['style'] ? ' checked="checked"' : '';
-                        echo '<td><input' . $checked . ' type="radio" name="style" value="' . $theme . '" /></td>';
+                        echo '<td><input id="' . $id . '"'.$checked.' type="radio" name="style" value="'.$theme.'" /></td>';
                         # img preview
-                        echo '<td>' . $plxThemes->getImgPreview($theme) . '</td>';
+                        echo '<td><label for="' . $id . '">' . $plxThemes->getImgPreview($theme) . '</label></td>';
                         # theme infos
-                        echo '<td class="wrap" style="vertical-align:top">';
+                        echo '<td class="wrap" style="vertical-align:top; padding-top: 1rem;"><div>';
                         if ($aInfos = $plxThemes->getInfos($theme)) {
-                            echo '<strong>' . $aInfos['title'] . '</strong><br />';
-                            echo 'Version : <strong>' . $aInfos['version'] . '</strong> - (' . $aInfos['date'] . ')<br />';
-                            echo L_PLUGINS_AUTHOR . ' : ' . $aInfos['author'] . ' - <a href="' . $aInfos['site'] . '" title="">' . $aInfos['site'] . '</a>';
-                            echo '<br />' . $aInfos['description'] . '<br />';
+                            echo '<div><strong>'.$aInfos['title'].'</strong></div>';
+                            echo '<div style="margin-top: 2rem;">Version : <strong>'.$aInfos['version'].'</strong>';
+                            if(!empty($aInfos['date'])) {
+								echo  ' (' . $aInfos['date'] . ')';
+							}
+                            echo '<br />' . L_PLUGINS_AUTHOR.' : ' . $aInfos['author'];
+                            if(!empty($aInfos['site'])) {
+								echo ' - <a href="' . $aInfos['site'] . '" target="_blank">' . $aInfos['site'] . '</a>';
+							}
+                            if(!empty($aInfos['description'])) {
+								echo '<br />' . preg_replace('#(https?://[^\s]*)#', '<a href="$1" target="_blank">$1</a>', $aInfos['description']);
+							}
+							echo '</div>';
                         } else {
-                            echo '<strong>' . $theme . '</strong>';
+                            echo '<div><strong>' . $theme . '</strong></div>';
                         }
+                        
                         # lien aide
                         if (is_file(PLX_ROOT . $plxAdmin->aConf['racine_themes'] . $theme . '/lang/' . $plxAdmin->aConf['default_lang'] . '-help.php')) {
                             echo '<a title="' . L_HELP_TITLE . '" href="parametres_help.php?help=theme&amp;page=' . urlencode($theme) . '">' . L_HELP . '</a>';
-                        }
 
-                        echo '</td>';
-                        echo '</tr>';
+                        echo '</div></td></tr>';
                     }
                 } else {
                     echo '<tr><td colspan="2" class="center">' . L_NONE1 . '</td></tr>';
