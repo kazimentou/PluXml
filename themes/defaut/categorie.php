@@ -1,13 +1,5 @@
 <?php include 'header.php'; ?>
-
-	<main class="main">
-
-		<div class="container">
-
-			<div class="grid">
-
-				<div class="content col <?= defined('FULL_WIDTH') ? '' : 'med-9' ?>">
-
+<!-- begin of categorie.php -->
 					<ul class="repertory menu breadcrumb">
 						<li><a href="<?php $plxShow->racine() ?>"><?php $plxShow->lang('HOME'); ?></a></li>
 						<li><?php $plxShow->catName(); ?></li>
@@ -20,19 +12,7 @@
 
 					<?php $plxShow->artFeed('rss', $plxShow->catId(), '<span><a class="rss" href="#feedUrl" title="#feedTitle">#feedName</a></span>'); ?>
 
-				</div>
-
-<?php
-if (!defined('FULL_WIDTH')) {
-    include 'sidebar.php';
-}
-?>
-
-			</div>
-
-		</div>
-
-	</main>
+<!-- end of categorie.php -->
 
 <?php
 include 'footer.php';

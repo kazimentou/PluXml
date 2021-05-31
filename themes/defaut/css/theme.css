@@ -1,4 +1,5 @@
-/*
+
+--height: 100vh;/*
 # ------------------ BEGIN LICENSE BLOCK ------------------
 #
 # This file is part of PluXml : https://www.pluxml.org
@@ -65,6 +66,7 @@ a:active, a:hover {
 body {
 	--header-height: 7rem;
 	--header-padding-top: 1.3rem;
+	--height-gallery: 5rem;
 	--bg-height: 250px;
 	/* --color1: #B65F02; */ /* Marigold */
 	/* --color1: #4778A9; */ /* Cerulean */
@@ -78,10 +80,20 @@ body {
 	/* --color1: #D2386C; */ /* Raspberry Sorbet */
 	font-family: 'open_sansregular', sans-serif;
 	font-size: 1.7em;
-	line-height: 1.6em;
+	line-height: 1.6;
 	color: #3A4145;
 	background-color: #fff;
+	--bgfigure: #f2efef;
 }
+
+textarea {
+	resize: vertical;
+}
+
+table {
+	width: 100%;
+}
+
 /* ---------- Header ---------- */
 
 .heading-small {
@@ -164,7 +176,8 @@ ul.menu {}
 	content: '\25bc';
 	padding-right: 0.5rem;
 }
-ul.menu .noactive:hover,
+
+ul.menu .noactive:hover a,
 ul.menu .active span,
 ul.menu span.active,
 ul.menu li.active a,
@@ -180,8 +193,7 @@ ul.menu li a:hover {/* pluCss1.3.1 fix : plxMyshop 0.13.x, maybe more */
 ul.menu li span,
 ul.menu li a {/* pluCss1.3.1 fix : plxMyshop 0.13.x, maybe more */
 	display: inline-block;
-	padding-left: .35rem;
-	padding-right: .35rem;
+	padding: .35rem 1rem 0;
 	width: 100%;
 	/*	cursor: pointer;*/
 	/* background-color: rgba(255,255,255,.55); */
@@ -281,8 +293,9 @@ article:after {
 .article header h2,
 .article header h2 a {
 	color: var(--color1);
-	font-size: 3.2rem;
-	line-height: 1.2em;
+	/* font-size: 3.2rem; */
+	font-size: 2.5rem;
+	line-height: 1.2;
 	letter-spacing: -1px;
 	font-weight: bold;
 	margin: 0;
@@ -339,10 +352,7 @@ article:after {
 }
 
 .comment {
-	background-image: url('../img/user.png');
-	background-repeat: no-repeat;
 	margin-bottom: 2.5rem;
-	padding-left: 6rem;
 	border-top: 100px solid transparent;
 	margin-top: -100px;
 }
@@ -370,28 +380,28 @@ article:after {
 	text-decoration: none;
 }
 
-.level-0 {
+.comment .level-0 {
 	margin-left: 0;
 }
 
-.level-1 {
+.comment .level-1 {
 	margin-left: 5rem;
 }
 
-.level-2 {
+.comment .level-2 {
 	margin-left: 10rem
 }
 
-.level-3 {
+.comment .level-3 {
 	margin-left: 15rem;
 }
 
-.level-4 {
+.comment .level-4 {
 	margin-left: 20rem;
 }
 
-.level-5,
-.level-max {
+.comment .level-5,
+.comment .level-max {
 	margin-left: 25rem;
 }
 
@@ -401,6 +411,14 @@ article:after {
 	border: 1px solid #eee;
 	width: 100%;
 	background: #fafafa;
+}
+
+#comment-wrapper:not(.active) #id_answer {
+	display: none;
+}
+
+#comment-wrapper.active > h3 > span:first-of-type,
+#comment-wrapper:not(.active) > h3 > span:last-of-type {
 	display: none;
 }
 
@@ -426,7 +444,7 @@ article:after {
 /* ------- Sidebar ------- */
 
 .aside {
-	padding: 0 2rem 0 2rem;
+	padding: 0 1rem;
 }
 
 .aside h3 {
@@ -552,34 +570,317 @@ article:after {
 	text-decoration: none;
 }
 
-@media (min-width: 128rem) {
-	.container {
-		padding-left: 15rem;
-		padding-right: 15rem;
-	}
+}
+
+/* -------- static-gallery .php (slideshow) --------------- */
+
+div[data-gallery] figure {
+	padding: 0.5rem;
+	background-color: var(--bg-menu);
+	text-align: center;
+	border-radius: 0.5rem;
+}
+
+body.slideshow {
+	overflow: hidden;
+}
+
+.mode-static img[src*=".tb."],
+.mode-article img[src*=".tb."] {
+	cursor: zoom-in;
+}
+
+div[data-gallery] {
+	display: flex;
+	width: 100%;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	gap: 1rem;
+}
+
+div[data-gallery] a {
+	display: inline-block !important;
+	margin: 0;
+}
+
+div[data-gallery] figure {
+	margin: 0;
+	padding: 0.5rem;
+	max-width: 20rem;
+	background-color: var(--bgcolor1) /* var(--bgfigure) */;
+	text-align: center;
+	border: 1px solid var(--brcolor1);
+	border-radius: 0.5rem;
+}
+div[data-gallery].no-caption a { margin: 0.5rem 0.5rem; }
+
+body.slideshow #slideshow {
+	display: grid;
+	grid-template-rows: 1fr auto;
+	align-items: center;
+}
+
+#slideshow {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100vh;
+	display: none;
+	z-index: 99;
+	transition: opacity ease 1.4s;
+}
+
+#slideshow .overlay {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	background-color: rgb(63,63,63,0.85);
+}
+
+#slideshow figure {
+	justify-self: center;
+	margin: 0;
+	padding: 0.3rem;
+	text-align: center;
+	background-color: var(--bgfigure);
+	border-radius: 0.5rem;
+}
+
+body.slideshow #slideshow.no-gallery {
+	grid-template-rows: 1fr;
+}
+
+#slideshow .gallery {
+	padding: 0.2rem;
+	text-align: center;
+}
+#slideshow figure,
+#slideshow .gallery {
+	z-index: 100; /* more than #slideshow */
+}
+#slideshow .gallery {
+	display: none;
+	background-color: var(--bgfigure);
+	overflow-x: hidden;
+}
+#slideshow.with-gallery .gallery {
+	display: flex;
+	justify-content: space-between;
+}
+#slideshow-gallery {
+	white-space: nowrap;
+	overflow: hidden;
+}
+#slideshow-gallery img {
+	height: 100%;
+	margin: 0 0.1rem;
+	border: 2px solid transparent
+}
+#slideshow-gallery img.active {
+	border-color: red;
+}
+#slideshow .gallery { /* hack against PluCss */
+	margin: 0;
+}
+
+#slideshow .button {
+	font-size: 2rem;
+	padding: 0 0.6rem;
+}
+#slideshow .button,
+#slideshow-gallery {
+	height: var(--height-gallery);
+}
+#slideshow-gallery img {
+	cursor: zoom-in;
+}
+#slideshow .button,
+#slideshow-close {
+	cursor: pointer;
+}
+#slideshow-prev { left: 0.2rem; }
+#slideshow-next { right: 0.2rem; }
+#slideshow-close {
+	padding: 0 0.3rem;
+	color: red;
+	font-weight: bold;
+}
+#slideshow-close:hover {
+	background-color: #ccc;
+}
+#slideshow-img {
+	max-height: calc(100vh - var(--height-gallery) - 6rem);
+	max-width: calc(100vw - 2rem);
+	border: 2px inset var(--bgcolor2);
+	border-radius: 0.4rem;
+	transition:  width ease 1.5s, height ease 1.5s;
+}
+#slideshow figcaption {
+	display: flex;
+}
+#slideshow-caption {
+	flex-grow: 1;
+	text-transform: capitalize;
+}
+#slideshow-counter {
+	padding: 0 0.3rem;
+}
+
+.art-main figure {
+	margin: 1rem auto;
+	text-align: center;
+}
+
+.art-main figcaption span {
+	word-wrap: nowrap;
+}
+
+
+/* ----------- static-search.php ----------- */
+
+/*
+#frm-search .extra,
+#frm-search .dates {
+	display: flex;
+	justify-content: space-between;
+	gap: 1rem;
+}
+
+#frm-search .dates {
+	justify-content: space-around;
+}
+* */
+
+/* -------------- static-sitemap.php -------------- */
+
+.sitemap {
+	--height: 100vh;
+	display: grid;
+	grid-template-rows: auto 1fr;
+	height: var(--height);
+}
+
+.sitemap ul {
+	list-style: none;
+}
+
+.sitemap label {
+	display: initial;
+}
+
+.tabs-container .toggle,
+.tabs-container .toggle:not(:checked) ~ .tabs-container,
+.tabs-container .toggle:not(:checked) ~ .tab-content {
+	display: none;
+}
+
+.sitemap main > div > .tabs-container {
+	position: relative;
+	--tabs-container-offset: 3rem;
+}
+
+/* hack against PluCss */
+.tabs-container h3,
+.tabs-container h4,
+.tabs-container h5 {
+	margin: 0;
+	line-height: inherit;
+}
+
+.tabs-container,
+.tabs-container ul {
+	margin: 0;
+	padding: 0;
+}
+
+.tabs-container ul {
+	padding-top: 1rem;
+}
+
+.tabs-container .tabs-container {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: var(--tabs-container-offset);
+	bottom: 0;
+}
+
+.tabs-container > li {
+	display: inline-block;
+}
+
+.tab-content {
+	position: absolute;
+	left: 0;
+	right: 0;
+	padding: 1rem 0 0;
+	white-space: nowrap;
+	overflow-x: auto;
+}
+
+.tab-content ul {
+	max-height: calc(var(--height) - var(--tabs-container-offset) - 16rem);
+	overflow-y: scroll;
+	width: max-content;
+}
+
+.tab-content li {
+	display: flex;
+	justify-content: space-between;
+	gap: 1rem;
+}
+
+.sitemap h4 + ul {
+	overflow-x: auto;
+	white-space: nowrap;
+	padding-bottom: 1rem;
+}
+
+.sitemap .toggle + * label {
+	background-color: var(--bgcolor1);
+	padding: 0.5rem 1rem;
+	white-space: nowrap;
+}
+
+.sitemap .toggle:checked + * label {
+	background-color: var(--color1);
+	color: #fff;
+}
+
+/* ============== Responsive design ========= */
+
+@media (max-width: 666px) {
 	.heading-small {
 		font-size: 3rem;
 	}
-}
-
-@media screen and (min-width: 768px) {
-	body > .header {
-		position: sticky;
-		top: 0;
-	}
-
 	.nav {
-		position: absolute;
-		right: 2rem;
-		/* width: max-content !important; */
-		line-height: initial;
+		padding-top: 0rem;
+	}
+	ul.menu {
+		margin: 0 2px .5px 2px;
+		border-radius: 15px;
+	}
+
+	.header h1 * {
+		font-size: 1.23rem;
+	}
+	.header h2 {
+		font-size: 1rem;
+	}
+	.bg {
+		height: 100px;
+	}
+	.static.group,
+	.static.menu a {
+		padding: 0;
 	}
 }
 
-@media (min-width: 64rem) {
+@media (min-width: 667px) { /* IPHONE paysage */
 	.container {
-		padding-left: 5rem;
-		padding-right: 5rem;
+		padding-left: 2rem;
+		padding-right: 2rem;
 	}
 
 	.heading-small {
@@ -650,6 +951,8 @@ article:after {
 		right: 2rem;
 		width: min-content;
 	}
+
+/*
 	ul.menu {
 		padding: 0.5rem 1rem 0.5rem 2rem;
 		border: 1px solid #ddd;
@@ -658,7 +961,10 @@ article:after {
 	ul.menu, ul.sub-menu li {
 		background-color: #f8f8f8;
 	}
-	.menu li:hover {}
+*/
+
+	.menu li:hover {	
+	}
 	.menu>li span::before {/* sub menu icon */
 		margin-left: -1.5rem;
 	}
@@ -722,30 +1028,47 @@ article:after {
 		margin-left: 5rem;
 	}
 }
-@media (max-width: 463px) {
-	.heading-small {
-		font-size: 3rem;
+
+@media screen and (min-width: 768px) { /* IPAD  portrait */
+	body {
+		display: grid;
+		grid-template-rows: auto auto 1fr auto;
+		min-height: 100vh;
 	}
-	.nav {
-		padding-top: 0rem;
-	}
-	ul.menu {
-		margin: 0 2px .5px 2px;
-		border-radius: 15px;
+	body > .header {
+		position: sticky;
+		top: 0;
 	}
 
-	.header h1 * {
-		font-size: 1.23rem;
+	.header .container > div {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin: 0;
 	}
-	.header h2 {
-		font-size: 1rem;
+
+	.nav {
+		/*
+		position: absolute;
+		right: 2rem;
+		width: max-content !important;
+		 */
+		line-height: initial;
 	}
-	.bg {
-		height: 100px;
+}
+
+@media (max-width: 1023px) {
+}
+
+@media (min-width: 10240px) { /* IPAD paysage */
+}
+
+@media (min-width: 1280px) {
+	.container {
+		padding: 0 5rem;
 	}
-	.static.group,
-	.static.menu a {
-		padding: 0;
+	.heading-small {
+		font-size: 3rem;
 	}
 }
 
@@ -796,9 +1119,10 @@ body > .main {
 .arch-list > li {
 	display: flex;
 	justify-content: space-between;
+	margin: 0.25rem 0;
 }
 
-.comment {
+.comment > div {
 	display: grid;
 	grid-template-columns: auto 1fr auto;
 	gap: 1rem;
@@ -808,7 +1132,7 @@ body > .main {
 	background: none;
 }
 
-.comment::before {
+.comment > div::before {
 	font-family: fontello;
 	font-size: 200%;
 	content: '\f061';

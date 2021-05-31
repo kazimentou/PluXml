@@ -1,6 +1,22 @@
-<?php if (!defined('PLX_ROOT')) {
+<?php
+if (!defined('PLX_ROOT')) {
     exit;
-} ?>
+}
+?>
+<!-- begin of footer.php -->
+				</div>
+
+<?php
+if (!defined('FULL_WIDTH')) {
+    include 'sidebar.php';
+}
+?>
+
+			</div>
+
+		</div>
+
+	</main>
 
 	<footer class="footer">
 		<div class="container">
@@ -16,13 +32,13 @@
 			</p>
 			<ul class="menu">
 <?php
-if (!empty($plxShow->plxMotor->aConf['enable_rss'])) {
+if (!empty($plxMotor->aConf['enable_rss'])) {
     ?>
 				<li><a class="rss" href="<?php $plxShow->urlRewrite('feed.php?rss') ?>" title="<?php $plxShow->lang('ARTICLES_RSS_FEEDS'); ?>"><?php $plxShow->lang('ARTICLES'); ?></a></li>
 <?php
 }
 
-if (!empty($plxShow->plxMotor->aConf['enable_rss_comment'])) {
+if (!empty($plxMotor->aConf['allow_com']) and !empty($plxMotor->aConf['enable_rss_comment'])) {
     ?>
 				<li><a class="rss" href="<?php $plxShow->urlRewrite('feed.php?rss/commentaires'); ?>" title="<?php $plxShow->lang('COMMENTS_RSS_FEEDS') ?>"><?php $plxShow->lang('COMMENTS'); ?></a></li>
 <?php
@@ -33,8 +49,35 @@ if (!empty($plxShow->plxMotor->aConf['enable_rss_comment'])) {
 		</div>
 	</footer>
 
-	<script src="<?php $plxShow->template(); ?>/script.js"></script>
+<?php
+if (defined('THEME_SLIDESHOW') or $plxShow->mode() == 'article') {
+    ?>
+	<div id="slideshow" data-interval="5000">
+		<div class="overlay"></div>
+		<figure>
+			<img id="slideshow-img" />
+			<figcaption>
+				<span id="slideshow-counter"></span>
+				<span id="slideshow-caption"></span>
+				<span id="slideshow-close">❌</span>
+			</figcaption>
+		</figure>
+		<div class="gallery">
+			<div>
+				<button id="slideshow-prev" class="button">◀</button>
+			</div>
+			<div id="slideshow-gallery"></div>
+			<div>
+				<button id="slideshow-next" class="button">▶</button>
+			</div>
+		</div>
+	</div>
+<?php
+}
+?>
+	<script src="<?php $plxShow->template(); ?>/js/script.js"></script>
 
 </body>
 
 </html>
+<!-- end of footer.php -->

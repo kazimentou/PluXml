@@ -1,24 +1,17 @@
-<?php include 'header.php'; ?>
+<?php
+if (!defined('PLX_ROOT')) {
+    exit;
+}
 
-	<main class="main">
-
-		<div class="container">
-
-			<div class="grid">
-
-				<div class="content col <?= defined('FULL_WIDTH') ? '' : 'med-9' ?>">
-
+include 'header.php';
+?>
+<!-- begin of article.php -->
 					<article class="article" id="post-<?php echo $plxShow->artId(); ?>">
-
 						<header>
 							<span class="art-date">
-								<time datetime="<?php $plxShow->artDate('#num_year(4)-#num_month-#num_day'); ?>">
-									<?php $plxShow->artDate('#num_day #month #num_year(4)'); ?>
-								</time>
+								<time datetime="<?php $plxShow->artDate('#num_year(4)-#num_month-#num_day'); ?>"><?php $plxShow->artDate('#num_day #month #num_year(4)'); ?></time>
 							</span>
-							<h2>
-								<?php $plxShow->artTitle(); ?>
-							</h2>
+							<h2><?php $plxShow->artTitle(); ?></h2>
 							<div>
 								<small>
 <?php
@@ -33,12 +26,8 @@ if ($plxShow->authorCount > 1) {
 							</div>
 							<div>
 								<small>
-									<span class="classified-in">
-										<?php $plxShow->lang('CLASSIFIED_IN') ?> : <?php $plxShow->artCat() ?>
-									</span>
-									<span class="tags">
-										<?php $plxShow->lang('TAGS') ?> : <?php $plxShow->artTags() ?>
-									</span>
+									<span class="classified-in"><?php $plxShow->lang('CLASSIFIED_IN') ?> : <?php $plxShow->artCat() ?></span>
+									<span class="tags"><?php $plxShow->lang('TAGS') ?> : <?php $plxShow->artTags() ?></span>
 								</small>
 							</div>
 						</header>
@@ -49,32 +38,21 @@ if ($plxShow->authorCount > 1) {
 					</article>
 
 		            <div class="art-navigation-overlay">
-		                <ul class="art-navigation">
+		                <ul class="art-navigation unstyled-list">
 <?php $plxShow->artNavigation(); ?>
 		                </ul>
 <?php $plxShow->artNavigationRange(); ?>
 		            </div>
 
-
 <?php $plxShow->artAuthorInfos('<div class="author-infos">#art_authorinfos</div>'); ?>
 
 <?php
-if($plxShow->plxMotor->aConf['allow_com']) {
-	include 'commentaires.php';
+$allowedComs = ($plxMotor->plxRecord_arts->f('allow_com') and $plxMotor->aConf['allow_com']);
+if ($allowedComs or $plxMotor->plxRecord_coms) {
+    include 'commentaires.php';
 }
 ?>
-				</div>
-<?php
-if (!defined('FULL_WIDTH')) {
-    include 'sidebar.php';
-}
-?>
-
-			</div>
-
-		</div>
-
-	</main>
+<!-- end of article.php -->
 
 <?php
 include 'footer.php';
