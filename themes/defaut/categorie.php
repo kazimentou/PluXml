@@ -5,8 +5,10 @@
 						<li><?php $plxShow->catName(); ?></li>
 					</ul>
 
-					<p><?php $plxShow->catDescription('#cat_description'); ?></p>
-					<p><?php $plxShow->catThumbnail(); ?></p>
+					<div class="cat-description">
+						<?php $plxShow->catThumbnail(); ?>
+						<?php $plxShow->catDescription(); ?>
+					</div>
 
 <?php include 'posts.php'; ?>
 

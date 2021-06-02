@@ -108,7 +108,7 @@ $LANG = array(
 
 'L_HTTPENCODING'				=> 'Compression %s activée',
 'L_ARCHIVES'			=> 'Archives',
-'L_PAGETITLE_TAG'				=> 'Tag',
+'L_PAGETITLE_TAG'				=> 'Mot-clé',
 'L_NO_CATEGORY'					=> 'aucune catégorie',
 'L_CATEGORY'					=> 'catégorie',
 'L_CATEGORIES'					=> 'catégories',
@@ -139,7 +139,7 @@ $LANG = array(
 'L_PAGINATION_NEXT'				=> 'suivante',
 'L_PAGINATION_LAST_TITLE'		=> 'Aller à la dernière page',
 'L_PAGINATION_LAST'				=> '»',
-'L_PAGINATION'					=> 'page %s sur %s',
+'L_PAGINATION'					=> 'page %s / %s',
 
 'L_PAGEBLOG_TITLE'				=> 'Blog',
 

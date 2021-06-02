@@ -2,6 +2,9 @@
 if (!defined('PLX_ROOT')) {
     exit;
 }
+
+const ART_THUMBNAIL_TEMPLATE = '<a href="#art_url" class="art_thumbnail"><img src="#img_thumb_url" alt="#img_alt" title="#img_title" /></a>';
+
 ?>
 <!-- begin of posts.php -->
 		<div class="posts"> 
@@ -36,7 +39,7 @@ if ($plxShow->authorCount > 1) {
 					</div>
 				</header>
 				<main class="main-post">
-<?php $plxShow->artThumbnail(); ?>
+<?php $plxShow->artThumbnail(ART_THUMBNAIL_TEMPLATE); ?>
 <?php $plxShow->artChapo($plxShow->getLang('READ_MORE')); ?>
 				</main>
 
@@ -49,4 +52,3 @@ if ($plxShow->authorCount > 1) {
 <?php $plxShow->pagination(); ?>
 		</nav>
 <!-- end of posts.php -->
-

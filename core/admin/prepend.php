@@ -69,8 +69,11 @@ if (isset($_SESSION['user'])) {
 eval($plxAdmin->plxPlugins->callHook('AdminPrepend'));
 
 # Chargement des fichiers de langue en fonction du profil de l'utilisateur connecté
-loadLang(PLX_CORE.'lang/'.$lang.'/admin.php');
-loadLang(PLX_CORE.'lang/'.$lang.'/core.php');
+$langRoot = PLX_CORE . 'lang/' . $lang . '/';
+foreach (array('core.php', 'admin.php') as $f) {
+    loadLang($langRoot . $f);
+}
+unset($langRoot);
 
 # on stocke la langue utilisée pour l'affichage de la zone d'administration en variable de session
 # nb: la langue peut etre modifiée par le hook AdminPrepend via des plugins

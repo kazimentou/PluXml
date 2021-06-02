@@ -11,7 +11,7 @@ include 'header.php';
 							<span class="art-date">
 								<time datetime="<?php $plxShow->artDate('#num_year(4)-#num_month-#num_day'); ?>"><?php $plxShow->artDate('#num_day #month #num_year(4)'); ?></time>
 							</span>
-							<h2><?php $plxShow->artTitle(); ?></h2>
+							<h2><span><?php $plxShow->artTitle(); ?></span></h2>
 							<div>
 								<small>
 <?php
@@ -36,14 +36,17 @@ if ($plxShow->authorCount > 1) {
 <?php $plxShow->artContent(); ?>
 						</main>
 					</article>
+<?php
 
-		            <div class="art-navigation-overlay">
-		                <ul class="art-navigation unstyled-list">
-<?php $plxShow->artNavigation(); ?>
-		                </ul>
-<?php $plxShow->artNavigationRange(); ?>
+if (method_exists($plxShow, 'artNavigation')) {
+    ?>
+		            <div id="art-navigation">
+<?php $plxShow->artNavigation('<li><a href="#url" rel="#dir" title="#title">#emoji</a></li>'); ?>
 		            </div>
+<?php
+}
 
+?>
 <?php $plxShow->artAuthorInfos('<div class="author-infos">#art_authorinfos</div>'); ?>
 
 <?php
