@@ -1,5 +1,5 @@
 
---height: 100vh;/*
+/*
 # ------------------ BEGIN LICENSE BLOCK ------------------
 #
 # This file is part of PluXml : https://www.pluxml.org
@@ -47,15 +47,6 @@
 	color: #444;
 }
 */
-
-@media screen and (min-width: 1280px) {
-	html { background-color: #666; }
-	body {
-		position: relative;
-		max-width: 1280px;
-		margin: 0 auto;
-	}
-}
 
 a:active, a:hover {
     color: var(--color1);
@@ -273,6 +264,13 @@ ul.menu a.noactive{
 	display: inline-block;
 }
 
+/* ------- categorie ------- */
+
+.cat-description {
+	display: flex;
+	gap: 1rem;
+	flex-wrap: wrap;
+}
 
 /* ------- Article ------- */
 
@@ -290,20 +288,28 @@ article:after {
 	margin: 0;
 }
 
-.article header h2,
-.article header h2 a {
-	color: var(--color1);
-	/* font-size: 3.2rem; */
-	font-size: 2.5rem;
-	line-height: 1.2;
-	letter-spacing: -1px;
-	font-weight: bold;
+.article header h2 {
 	margin: 0;
+	padding-bottom: 0.75rem;
+	color: var(--color1);
+	font-weight: bold;
+	font-size: 2.5rem;
+	line-height: inherit;
+	white-space: nowrap;
+	overflow-x: auto;
+	/* font-size: 3.2rem; */
 }
 
-.article header h2 a:hover {
+.posts .article header h2 a {
+	color: inherit;
+}
+
+.posts .article header h2:hover {
 	color: #fff;
 	background-color: var(--color1);
+}
+
+.posts .article header h2:hover a{
 	text-decoration: none;
 }
 
@@ -334,9 +340,9 @@ article:after {
 	padding-left: 0;
 }
 
-.article img.art_thumbnail {
-	padding: 30px 15px 15px 0;
+.article .art_thumbnail {
 	float: left;
+	padding: 0.75rem 1rem 0.5rem 0;
 }
 
 .page.mode-article .article footer {
@@ -614,12 +620,6 @@ div[data-gallery] figure {
 }
 div[data-gallery].no-caption a { margin: 0.5rem 0.5rem; }
 
-body.slideshow #slideshow {
-	display: grid;
-	grid-template-rows: 1fr auto;
-	align-items: center;
-}
-
 #slideshow {
 	position: fixed;
 	top: 0;
@@ -629,6 +629,12 @@ body.slideshow #slideshow {
 	display: none;
 	z-index: 99;
 	transition: opacity ease 1.4s;
+}
+
+body.slideshow #slideshow {
+	display: grid;
+	grid-template-rows: 1fr auto;
+	align-items: center;
 }
 
 #slideshow .overlay {
@@ -752,6 +758,22 @@ body.slideshow #slideshow.no-gallery {
 }
 * */
 
+/* -------- plxShow::artNavigation() ------ */
+
+#art-navigation ul {
+	display: flex;
+	justify-content: space-around;
+	gap: 1rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#art-navigation ul a {
+	padding: 0;
+	font-size: 200%;
+}
+
 /* -------------- static-sitemap.php -------------- */
 
 .sitemap {
@@ -778,6 +800,13 @@ body.slideshow #slideshow.no-gallery {
 .sitemap main > div > .tabs-container {
 	position: relative;
 	--tabs-container-offset: 3rem;
+}
+
+/* -------------- static-download.php -------------- */
+
+[data-download] table {
+	white-space: nowrap;
+	margin-bottom: 1rem;
 }
 
 /* hack against PluCss */
@@ -814,21 +843,27 @@ body.slideshow #slideshow.no-gallery {
 	position: absolute;
 	left: 0;
 	right: 0;
-	padding: 1rem 0 0;
+	padding: 1rem 0;
 	white-space: nowrap;
 	overflow-x: auto;
 }
 
 .tab-content ul {
 	max-height: calc(var(--height) - var(--tabs-container-offset) - 16rem);
-	overflow-y: scroll;
+	overflow-y: auto;
 	width: max-content;
+	min-width: 100%;
 }
 
 .tab-content li {
 	display: flex;
 	justify-content: space-between;
 	gap: 1rem;
+}
+
+.tab-content .articles li:not(:last-of-type) {
+	border-bottom: 1px solid #bbb;
+	transition-duration: .2s;
 }
 
 .sitemap h4 + ul {
@@ -875,6 +910,10 @@ body.slideshow #slideshow.no-gallery {
 	.static.menu a {
 		padding: 0;
 	}
+
+	#art-navigation {
+		text-align: center;
+	}
 }
 
 @media (min-width: 667px) { /* IPHONE paysage */
@@ -885,6 +924,11 @@ body.slideshow #slideshow.no-gallery {
 
 	.heading-small {
 		font-size: 2.5rem;
+	}
+	#art-navigation {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
 	}
 }
 
@@ -963,7 +1007,7 @@ body.slideshow #slideshow.no-gallery {
 	}
 */
 
-	.menu li:hover {	
+	.menu li:hover {
 	}
 	.menu>li span::before {/* sub menu icon */
 		margin-left: -1.5rem;
@@ -1027,6 +1071,11 @@ body.slideshow #slideshow.no-gallery {
 	.level-max {
 		margin-left: 5rem;
 	}
+
+	.tab-content .articles {
+		padding-right: 1rem;
+	}
+
 }
 
 @media screen and (min-width: 768px) { /* IPAD  portrait */
@@ -1060,10 +1109,13 @@ body.slideshow #slideshow.no-gallery {
 @media (max-width: 1023px) {
 }
 
-@media (min-width: 10240px) { /* IPAD paysage */
-}
-
-@media (min-width: 1280px) {
+@media screen and (min-width: 1280px) { /* IPAD paysage */
+	html { background-color: #666; }
+	body {
+		position: relative;
+		max-width: 1280px;
+		margin: 0 auto;
+	}
 	.container {
 		padding: 0 5rem;
 	}
@@ -1071,6 +1123,7 @@ body.slideshow #slideshow.no-gallery {
 		font-size: 3rem;
 	}
 }
+
 
 /* ------- footnotes ---------- */
 

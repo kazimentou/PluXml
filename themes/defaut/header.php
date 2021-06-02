@@ -59,6 +59,11 @@ function printCapcha()
 ?>
 	<link rel="alternate" type="application/rss+xml" title="<?php $plxShow->lang('ARTICLES_RSS_FEEDS') ?>" href="<?php $plxShow->urlPostsRssFeed($plxShow->plxMotor->mode) ?>" />
 	<link rel="alternate" type="application/rss+xml" title="<?php $plxShow->lang('COMMENTS_RSS_FEEDS') ?>" href="<?php $plxShow->urlRewrite('feed.php?rss/commentaires') ?>" />
+<?php
+if (method_exists($plxShow, 'canonical')) {
+    $plxShow->canonical();
+}
+?>
 </head>
 
 <body id="top" class="page mode-<?php $plxShow->mode(true) ?>">
@@ -107,4 +112,3 @@ function printCapcha()
 
 				<div class="content col <?= defined('FULL_WIDTH') ? '' : 'med-9' ?>">
 <!-- end of header.php -->
-

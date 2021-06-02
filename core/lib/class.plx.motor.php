@@ -366,6 +366,7 @@ class plxMotor
                'cible' => $this->cible,
                'motif' => $this->motif,
                'tri'   => $this->tri,
+               'artIds'   => false, # sera actualisé en mode article
 			);
         } elseif ($this->mode == 'article') {
 
@@ -384,16 +385,19 @@ class plxMotor
                     header('Location: ' . $url . '#form');
 				} else {
 					$_SESSION['msgcom'] = $retour;
-					$_SESSION['msg']['name'] = plxUtils::unSlash($_POST['name']);
-					$_SESSION['msg']['site'] = plxUtils::unSlash($_POST['site']);
-					$_SESSION['msg']['mail'] = plxUtils::unSlash($_POST['mail']);
-					$_SESSION['msg']['content'] = plxUtils::unSlash($_POST['content']);
-					$_SESSION['msg']['parent'] = plxUtils::unSlash($_POST['parent']);
+                    $_SESSION['msg'] = array(
+                        'name'		=> plxUtils::unSlash($_POST['name']),
+                        'site'		=> plxUtils::unSlash($_POST['site']),
+                        'mail'		=> plxUtils::unSlash($_POST['mail']),
+                        'content'	=> plxUtils::unSlash($_POST['content']),
+                        'parent'	=> plxUtils::unSlash($_POST['parent']),
+                    );
 					eval($this->plxPlugins->callHook('plxMotorDemarrageCommentSessionMessage')); # Hook Plugins
                     header('Location: ' . $url . '#form');
 				}
 				exit;
 			}
+
 			# Récupération des commentaires
             $this->getCommentaires('#^' . $this->cible . '.\d{10}-\d+.xml$#', $this->tri_coms);
 			$this->template=$this->plxRecord_arts->f('template');
@@ -402,31 +406,49 @@ class plxMotor
             } # Création objet captcha
 
             # Gestion des articles précédent, suivant, dans le mode précèdent (home, categorie, archives, tags)
-            if (!empty($_SESSION['previous'])) {
+            if (!empty($_SESSION['previous']) and isset($_SESSION['previous']['motif'])) {
                 # On récupère un tableau indexé des articles
+                if (empty($_SESSION['previous']['artIds'])) {
+                    # On récupère tous les ids d'articles de la page précèdente
                 $aFiles = $this->plxGlob_arts->query($_SESSION['previous']['motif'], 'art', $_SESSION['previous']['tri'], 0, false, 'before');
-                $artIds = array();
-                foreach ($aFiles as $key=>$value) {
-                    if (substr($value, 0, 4) == $this->cible) {
+                    $_SESSION['previous']['artIds'] = array_map(
+                        function ($item) {
+                            return preg_replace('#^_?(\d+).*#', '$1', $item);
+                        },
+                        $aFiles
+                    );
+                }
+
+                $_SESSION['previous']['buttons'] = false;
+                $key = array_search($this->cible, $_SESSION['previous']['artIds']);
+                if (is_integer($key)) {
                         if ($key > 0) {
+                        # les tris avec plxGlob::query() sont inutiles car on retourne un tableau avec un seul élément
                             if ($key > 1) {
-                                $artIds['first'] = $aFiles[0];
+                            $filenames = $this->plxGlob_arts->query('#^_?' . $_SESSION['previous']['artIds'][0] . '\.#', 'art');
+                            $buttons['first'] = $filenames[0];
                             }
-                            $artIds['prev'] = $aFiles[$key - 1];
+
+                        $filenames = $this->plxGlob_arts->query('#^_?' . $_SESSION['previous']['artIds'][$key - 1] . '\.#', 'art');
+                        $buttons['prev'] = $filenames[0];
                         }
-                        if ($key < count($aFiles) - 1) {
-                            if ($key < count($aFiles) - 2) {
-                                $artIds['last'] = $aFiles[count($aFiles) - 1];
+
+                    $lastKey = count($_SESSION['previous']['artIds']) - 1;
+                    if ($key < $lastKey) {
+                        $filenames = $this->plxGlob_arts->query('#^_?' . $_SESSION['previous']['artIds'][$key + 1] . '\.#', 'art');
+                        $buttons['next'] = $filenames[0];
+
+                        if ($key < $lastKey - 1) {
+                            $filenames = $this->plxGlob_arts->query('#^_?' . $_SESSION['previous']['artIds'][$lastKey] . '\.#', 'art');
+                            $buttons['last'] = $filenames[0];
                             }
-                            $artIds['next'] = $aFiles[$key + 1];
                         }
                         $_SESSION['previous']['position'] = $key + 1;
-                        $_SESSION['previous']['count'] = count($aFiles);
-                        break;
+                    $_SESSION['previous']['buttons'] = $buttons;
+                } else {
+                    $_SESSION['previous'] = false;
                     }
                 }
-                $_SESSION['previous']['artIds'] = $artIds;
-            }
         } elseif ($this->mode == 'preview') {
 			$this->mode='article';
 			$this->plxRecord_arts = new plxRecord($_SESSION['preview']);
@@ -575,6 +597,11 @@ class plxMotor
 
         # On vérifie que le thème est valide
         $this->_checkStyle();
+
+        # On vérifie qu'on a un fichier .htaccess si redirection du site et serveur Apache
+        if (preg_match('#\bapache#i', $_SERVER['SERVER_SOFTWARE']) and !file_exists(PLX_ROOT . '.htaccess')) {
+            $this->aConf['urlrewriting'] = false;
+        }
 
         if (!defined('PLX_PLUGINS')) {
             define('PLX_PLUGINS', PLX_ROOT . $this->aConf['racine_plugins']);

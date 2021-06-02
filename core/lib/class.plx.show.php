@@ -545,25 +545,18 @@ class plxShow
      **/
     public function catThumbnail($format = '<a href="#img_url"><img class="cat_thumbnail" src="#img_thumb_url" alt="#img_alt" title="#img_title" /></a>', $echo = true)
     {
-        $filename = plxUtils::getValue($this->plxMotor->aCats[$this->plxMotor->cible]['thumbnail']);
+        $catId = $this->plxMotor->cible;
+        $filename = plxUtils::getValue($this->plxMotor->aCats[$catId]['thumbnail']);
         if (!empty($filename)) {
             $img_url = $this->plxMotor->urlRewrite($filename);
             $img_thumb = plxUtils::thumbName($filename);
-            $result = str_replace(
-                array(
-                    '#img_url',
-                    '#img_thumb_url',
-                    '#img_title',
-                    '#img_alt'
-                ),
-                array(
-                    $img_url, # #img_url
-                    (file_exists(PLX_ROOT . $img_thumb)) ? $this->plxMotor->urlRewrite($img_thumb) : $img_url, # #img_thumb_url
-                    plxUtils::strCheck(plxUtils::getValue($this->plxMotor->aCats[$this->plxMotor->cible]['thumbnail_title'])), # #img_title
-                    plxUtils::strCheck(plxUtils::getValue($this->plxMotor->aCats[$this->plxMotor->cible]['thumbnail_alt'])) # #img_alt
-                ),
-                $format
-            );
+            $result = strtr($format, array(
+                    '#img_url'			=> $img_url,
+                    '#img_thumb_url'	=> (file_exists(PLX_ROOT . $img_thumb)) ? $this->plxMotor->urlRewrite($img_thumb) : $img_url,
+                    '#img_title'		=> plxUtils::strCheck(plxUtils::getValue($this->plxMotor->aCats[$this->plxMotor->cible]['thumbnail_title'])),
+                    '#img_alt'			=> plxUtils::strCheck(plxUtils::getValue($this->plxMotor->aCats[$this->plxMotor->cible]['thumbnail_alt'])),
+                    '#cat_url'			=> $this->catUrl($catId),
+            ));
 
             if ($echo) {
                 echo $result;
@@ -631,7 +624,7 @@ class plxShow
     /**
      * Méthode qui affiche l'image d'accroche d'un article avec un lien vers l'article ou vers l'image
      *
-     * @param string $format format d'affichage (variables: #img_url, #img_thumb_url, #img_alt, #img_title)
+     * @param string $format format d'affichage (variables: #img_url, #img_thumb_url, #img_alt, #img_title, #art_url)
      * @param bool $echo si à VRAI affichage à l'écran
      * @param bool $article si vrai, #img_url pointe sur l'article à la place de l'image
      * @return    bool|string
@@ -662,7 +655,8 @@ class plxShow
             '#img_url' => $url,
             '#img_thumb_url' => (!empty($imgThumb) and file_exists(PLX_ROOT . $imgThumb)) ? $this->plxMotor->urlRewrite($imgThumb) : $imgUrl,
             '#img_title' => plxUtils::strCheck($this->plxMotor->plxRecord_arts->f('thumbnail_title')),
-            '#img_alt' => $this->plxMotor->plxRecord_arts->f('thumbnail_alt')
+            '#img_alt'			=> $this->plxMotor->plxRecord_arts->f('thumbnail_alt'),
+            '#art_url'			=> $this->artUrl(false),
         ));
 
         if ($echo) {
@@ -1817,18 +1811,18 @@ class plxShow
 
             # On effectue l'affichage
             if ($this->plxMotor->page > 2) { # Si la page active > 2 on affiche un lien 1ere page
-                echo '<span class="p_first"><a href="' . $f_url . '" title="' . L_PAGINATION_FIRST_TITLE . '">' . L_PAGINATION_FIRST . '</a></span>' . PHP_EOL;
+                echo '<span class="p_first"><a href="' . $f_url . '" title="' . L_PAGINATION_FIRST_TITLE . '">⏪</a></span>' . PHP_EOL;
             }
             if ($this->plxMotor->page > 1) { # Si la page active > 1 on affiche un lien page precedente
-                echo '<span class="p_prev"><a href="' . $p_url . '" title="' . L_PAGINATION_PREVIOUS_TITLE . '">' . L_PAGINATION_PREVIOUS . '</a></span>' . PHP_EOL;
+                echo '<span class="p_prev"><a href="' . $p_url . '" title="' . L_PAGINATION_PREVIOUS_TITLE . '">◀️</a></span>' . PHP_EOL;
             }
             # Affichage de la page courante
             printf('<span class="p_page p_current">' . L_PAGINATION . '</span>', $this->plxMotor->page, $last_page);
             if ($this->plxMotor->page < $last_page) { # Si la page active < derniere page on affiche un lien page suivante
-                echo '&nbsp;<span class="p_next"><a href="' . $n_url . '" title="' . L_PAGINATION_NEXT_TITLE . '">' . L_PAGINATION_NEXT . '</a></span>' . PHP_EOL;
+                echo '&nbsp;<span class="p_next"><a href="' . $n_url . '" title="' . L_PAGINATION_NEXT_TITLE . '">▶️</a></span>' . PHP_EOL;
             }
             if (($this->plxMotor->page + 1) < $last_page) { # Si la page active++ < derniere page on affiche un lien derniere page
-                echo '&nbsp;<span class="p_last"><a href="' . $l_url . '" title="' . L_PAGINATION_LAST_TITLE . '">' . L_PAGINATION_LAST . '</a></span>' . PHP_EOL;
+                echo '&nbsp;<span class="p_last"><a href="' . $l_url . '" title="' . L_PAGINATION_LAST_TITLE . '">⏩</a></span>' . PHP_EOL;
             }
         }
     }
@@ -1840,7 +1834,7 @@ class plxShow
      * @param string $buttons buttons list to display
      * @author Jean-Pierre Pourrez "bazooka07", sudwevdesign
      */
-    public function artNavigation($format = '<li><a href="#url" rel="#dir" title="#title">#icon</a></li>', $buttons = 'first prev next last up')
+    public function artNavigation($format = '<li><a class="button" href="#url" rel="#dir" title="#title">#icon</a></li>', $buttons = 'first prev next last up', $asBar=true)
     {
 
         # Hook Plugins
@@ -1850,54 +1844,81 @@ class plxShow
 
         if (
             empty($_SESSION['previous']) or
-            !array_key_exists('artIds', $_SESSION['previous']) or
+            empty($_SESSION['previous']['buttons']) or
             preg_match_all('@\b(?:' . implode('|', array_keys(self::ART_DIRECTIONS)) . ')\b@', $buttons, $matches) == 0
         ) {
             return;
         }
 
+        # On affiche la barre de navigation ou on a un bouton "up" pour remonter au niveau supérieur
+        if ($asBar or in_array('up', $matches[0])) {
+                    $mode = $_SESSION['previous']['mode'];
+            $backQuery = '?' . $mode;
+            $cible = $_SESSION['previous']['cible'];
+                    switch ($mode) {
+                        case 'categorie':
+                    $backQuery .= intval($cible) . '/' . $this->plxMotor->aCats[$cible]['url'];
+                    $backLabel = ucfirst(L_CATEGORY);
+                    $backTitle = $this->plxMotor->aCats[$cible]['name'];
+                            $bypage = $this->plxMotor->aCats[$cible]['bypage'];
+                            break;
+                        case 'user':
+                    $backQuery .= intval($cible) . '/' . md5($this->plxMotor->aUsers[$cible]['name']);
+                    $backLabel = ucfirst(L_AUTHOR);
+                    $backTitle = $this->plxMotor->aUsers[$cible]['name'];
+                            $bypage = $this->plxMotor->bypage;
+                            break;
+                        case 'tags':
+                    $backQuery = '?tag/' . $cible;
+                    $backLabel = ucfirst(L_PAGETITLE_TAG);
+                    $backTitle = $cible;
+                            $bypage = $this->plxMotor->aConf['bypage_tags'];
+                            break;
+                        case 'archives':
+                    $backQuery .= '/' . substr($cible, 0, 4);
+                            if (strlen($cible) > 4) {
+                        $backQuery .= '/' . substr($cible, 4);
+                            }
+                    $backLabel = ucfirst(L_ARCHIVES);
+                    $backTitle = $cible;
+                            $bypage = $this->plxMotor->aConf['bypage_archives'];
+                            break;
+                        default: # home
+                    $backHomepage = ($mode == 'home');
+                    $backQuery = '';
+                    $backLabel = '';
+                    $backTitle = L_HOMEPAGE;
+                            $bypage = $this->plxMotor->bypage;
+                    }
+        }
+
+        if ($asBar) {
+            ?>
+<div>
+	<a href="<?= $this->plxMotor->racine ?>"><?= L_HOMEPAGE ?></a>
+<?php
+            if (!empty($backLabel)) {
+                ?>
+	> <strong><?= $backLabel ?></strong> : <a href="<?= $this->plxMotor->urlRewrite($backQuery) ?>"><?= $backTitle ?></a>
+<?php
+            } ?>	
+</div>
+<ul>
+<?php
+        }
+
         foreach ($matches[0] as $direction) {
-            if (!empty($_SESSION['previous']['artIds'][$direction]) or $direction == 'up') {
+            if (!empty($_SESSION['previous']['buttons'][$direction]) or $direction == 'up') {
                 if ($direction != 'up') {
                     # Get the article for the given direction
-                    $filename = PLX_ROOT . $this->plxMotor->aConf['racine_articles'] . $_SESSION['previous']['artIds'][$direction];
+                    $filename = PLX_ROOT . $this->plxMotor->aConf['racine_articles'] . $_SESSION['previous']['buttons'][$direction];
                     $art = $this->plxMotor->parseArticle($filename);
                     $query = '?article' . intval($art['numero']) . '/' . $art['url'];
                     $title = $art['title'];
                 } else {
                     # Get the articles list for the given mode
-                    $cible = $_SESSION['previous']['cible'];
-                    $mode = $_SESSION['previous']['mode'];
-                    $query = '?' . $mode;
-                    switch ($mode) {
-                        case 'categorie':
-                            $query .= intval($cible) . '/' . $this->plxMotor->aCats[$cible]['url'];
-                            $title = ucfirst(L_CATEGORY) . ' ' . $this->plxMotor->aCats[$cible]['name'];
-                            $bypage = $this->plxMotor->aCats[$cible]['bypage'];
-                            break;
-                        case 'user':
-                            $query .= intval($cible) . '/' . md5($this->plxMotor->aUsers[$cible]['name']);
-                            $title = ucfirst(L_AUTHOR) . ' ' . $this->plxMotor->aUsers[$cible]['name'];
-                            $bypage = $this->plxMotor->bypage;
-                            break;
-                        case 'tags':
-                            $query = '?tag/' . $cible;
-                            $title = ucfirst(L_TAG) . ' ' . $cible;
-                            $bypage = $this->plxMotor->aConf['bypage_tags'];
-                            break;
-                        case 'archives':
-                            $query .= '/' . substr($cible, 0, 4);
-                            if (strlen($cible) > 4) {
-                                $query .= '/' . substr($cible, 4);
-                            }
-                            $title = ucfirst(L_ARCHIVES) . ' ' . $cible;
-                            $bypage = $this->plxMotor->aConf['bypage_archives'];
-                            break;
-                        default: # home
-                            $query = '';
-                            $title = L_HOMEPAGE;
-                            $bypage = $this->plxMotor->bypage;
-                    }
+                    $query = $backQuery;
+                    $title = (!empty($backLabel) ? $backLabel . ' ' . $backTitle : $backTitle);
 
                     if (strpos($format, '<link') === false) {
                         if ($bypage <= 0) {
@@ -1905,7 +1926,7 @@ class plxShow
                         }
                         $page = intval(ceil($_SESSION['previous']['position'] / $bypage));
                         if ($page > 1) {
-                            $query .= (($mode != 'home') ? '/page' : '?page') . $page;
+                            $query .= (!empty($backHomepage) ? '?page' : '/page') . $page;
                         }
                     }
 
@@ -1931,6 +1952,15 @@ class plxShow
                     )) . PHP_EOL;
             }
         }
+
+        if ($asBar) {
+            ?>
+</ul>
+<div>
+	<?php $this->artNavigationRange(); ?>
+</div>
+<?php
+        }
     }
 
     /**
@@ -1940,11 +1970,11 @@ class plxShow
      */
     public function artNavigationRange()
     {
-        if (empty($_SESSION['previous']) or $_SESSION['previous']['count'] == 0) {
+        if (empty($_SESSION['previous']) or empty($_SESSION['previous']['artIds'])) {
             return;
         }
 
-        echo ucfirst(L_ARTICLE) . ' : ' . $_SESSION['previous']['position'] . '/' . $_SESSION['previous']['count'];
+        echo ucfirst(L_ARTICLE) . ' : ' . $_SESSION['previous']['position'] . '/' . count($_SESSION['previous']['artIds']);
     }
 
     /**

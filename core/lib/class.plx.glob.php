@@ -77,7 +77,7 @@ class plxGlob
                 $dirname = $this->onlyfilename ? '' : $this->dir;
                 # Pour chaque entree du repertoire
                 while (false !== ($file = readdir($dh))) {
-                    if ($file[0]!='.') {
+                    if ($file[0] != '.') {
                         $dir = is_dir($this->dir . '/' . $file);
                         if ($this->rep and $dir) {
                             # On collecte uniquement les dossiers (plugins, themes, ...)
@@ -124,58 +124,61 @@ class plxGlob
      * @param	tri				type de tri (sort, rsort, alpha, ralpha)
      * @param	publi			recherche des fichiers avant ou après la date du jour
      * @return	array ou false
-     * @author	Anthony GUÉRIN, Florent MONTHEL et Stephane F
+     * @author	Anthony GUÉRIN, Florent MONTHEL et Stephane F, Jean-Pierre Pourrez "bazooka07"
      **/
-    private function search($motif, $type, $tri, $publi)
+    private function search($motif, $type='', $tri='', $publi='')
     {
-        $array=array();
-        $this->count = 0;
+        if (empty($this->aFiles)) {
+            $this->count = 0;
+            return false;
+        }
 
-        if ($this->aFiles) {
+        # On filtre les fichiers du repertoire
+        $resp = array_filter($this->aFiles, function ($item) use ($motif) {
+            return preg_match($motif, $item);
+        });
 
-            # Pour chaque entree du repertoire
-            foreach ($this->aFiles as $file) {
-                if (preg_match($motif, $file)) {
-                    if ($type === 'art') { # Tri selon les dates de publication (article)
-                        # On decoupe le nom du fichier
-                        $index = explode('.', $file);
-                        # On cree un tableau associatif en choisissant bien nos cles et en verifiant la date de publication
-                        $key = ($tri === 'alpha' or $tri === 'ralpha') ? $index[4] . '~' . $index[0] : $index[3] . $index[0];
-                        if ($publi === 'before' and $index[3] <= date('YmdHi')) {
-                            $array[$key] = $file;
-                        } elseif ($publi === 'after' and $index[3] >= date('YmdHi')) {
-                            $array[$key] = $file;
-                        } elseif ($publi === 'all') {
-                            $array[$key] = $file;
-                        }
-                        # On verifie que l'index existe
-                        if (isset($array[$key])) {
-                            $this->count++;
-                        } # On incremente le compteur
-                    } elseif ($type === 'com') { # Tri selon les dates de publications (commentaire)
-                        # On decoupe le nom du fichier
-                        $index = explode('.', $file);
-                        # On cree un tableau associatif en choisissant bien nos cles et en verifiant la date de publication
-                        if ($publi === 'before' and $index[1] <= time()) {
-                            $array[ $index[1] . $index[0] ] = $file;
-                        } elseif ($publi === 'after' and $index[1] >= time()) {
-                            $array[ $index[1] . $index[0] ] = $file;
-                        } elseif ($publi === 'all') {
-                            $array[ $index[1] . $index[0] ] = $file;
-                        }
-                        # On verifie que l'index existe
-                        if (isset($array[ $index[1] . $index[0] ])) {
-                            $this->count++;
-                        } # On incremente le compteur
-                    } else { # Aucun tri
-                        $array[] = $file;
-                        # On incremente le compteur
-                        $this->count++;
+        if (empty($type) or $tri == 'random') {
+            # Pas de tri
+            $this->count = count($resp);
+            return $resp;
+        }
+
+        # Il faut créer un tableau associatif pour trier
+        $array = array();
+        foreach ($resp as $file) {
+            # On decoupe le nom du fichier
+            $parts = explode('.', $file);
+
+            switch ($type) {
+                case 'art': # Tri selon les dates de publication (article)
+                    # On cree un tableau associatif en choisissant bien nos cles et en verifiant la date de publication
+                    $key = ($tri === 'alpha' or $tri === 'ralpha') ? $parts[4] . '~' . $parts[0] : $parts[3] . $parts[0];
+                    if (
+                        ($publi === 'before' and $parts[3] <= date('YmdHi')) or
+                        ($publi === 'after' and $parts[3] >= date('YmdHi')) or
+                        $publi === 'all'
+                    ) {
+                        $array[$key] = $file;
                     }
-                }
+                    break;
+                case 'com':  # Tri selon les dates de publications (commentaire)
+                    # On cree un tableau associatif en choisissant bien nos cles et en verifiant la date de publication
+                    if (
+                        ($publi === 'before' and $parts[1] <= time()) or
+                        ($publi === 'after' and $parts[1] >= time()) or
+                        $publi === 'all'
+                    ) {
+                        $key = $parts[1] . $parts[0];
+                        $array[$key] = $file;
+                    }
+                    break;
+                default:  # Aucun tri
+                    $array[] = $file;
             }
         }
 
+        $this->count = count($array);
         # On retourne le tableau si celui-ci existe
         if ($this->count > 0) {
             return $array;
@@ -204,30 +207,37 @@ class plxGlob
         if ($rs = $this->search($motif, $type, $tri, $publi)) {
 
             # Ordre de tri du tableau
-            if (!empty($tri)) {
-                switch ($tri) {
-                    case 'random':
-                        shuffle($rs);
-                        break;
-                    case 'alpha':
-                    case 'asc':
-                    case 'sort':
-                        if (!empty($type)) {
+            if (count($rs) > 1) {
+                if ($type != '' and $tri != 'random') {
+                    # On trie selon les clés du tableau
+                    switch ($tri) {
+                        case 'alpha':
+                        case 'asc':
+                        case 'sort':
                             ksort($rs);
-                        } else {
-                            sort($rs);
-                        }
-                        break;
-                    case 'ralpha':
-                    case 'desc':
-                    case 'rsort':
-                        if (!empty($type)) {
+                            break;
+                        case 'ralpha':
+                        case 'desc':
+                        case 'rsort':
                             krsort($rs);
-                        } else {
+                            break;
+                        default:
+                    }
+                } else {
+                    switch ($tri) {
+                        case 'random':
+                            shuffle($rs);
+                            break;
+                        case 'alpha':
+                        case 'sort':
+                            sort($rs);
+                            break;
+                        case 'ralpha':
+                        case 'rsort':
                             rsort($rs);
-                        }
-                        break;
-                    default:
+                            break;
+                        default:
+                    }
                 }
             }
 
