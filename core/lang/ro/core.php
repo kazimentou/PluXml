@@ -123,6 +123,7 @@ $LANG = array(
 'L_ARTFEED_RSS_TAG'				=> 'RSS Feed Elementele din această etichetă',
 'L_ARTFEED_RSS'					=> 'Articole RSS Feed',
 'L_NO_COMMENT'					=> 'nici un comentariu',
+'L_CLOSED_COMMENTS'				=> 'comentarii închise',
 'L_COMMENT'						=> 'comentariu',
 'L_COMMENTS'					=> 'comentarii',
 'L_COMFEED_RSS_ARTICLE'			=> 'RSS feed pentru comentarii pe acest articol',

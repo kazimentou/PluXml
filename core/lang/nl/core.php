@@ -122,6 +122,7 @@ $LANG = array(
 'L_ARTFEED_RSS_TAG'				=> 'Rss-feed van artikels uit deze tag',
 'L_ARTFEED_RSS'					=> 'Rss-feed van de artikels',
 'L_NO_COMMENT'					=> 'geen commentaar',
+'L_CLOSED_COMMENTS'				=> 'gesloten commentaren',
 'L_COMMENT'						=> 'commentaar',
 'L_COMMENTS'					=> 'commentaren',
 'L_COMFEED_RSS_ARTICLE'			=> 'Rss-feed van de commentaren van dit artikel',

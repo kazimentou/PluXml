@@ -123,6 +123,7 @@ $LANG = array(
 'L_ARTFEED_RSS_TAG'				=> 'Kanał RSS z tagu',
 'L_ARTFEED_RSS'					=> 'Kanał RSS z posta',
 'L_NO_COMMENT'					=> 'brak komentarzy',
+'L_CLOSED_COMMENTS'				=> 'zamknięte komentarze',
 'L_COMMENT'						=> 'komentarz',
 'L_COMMENTS'					=> 'komentarze',
 'L_COMFEED_RSS_ARTICLE'			=> 'Kanał RSS z komentarzy dla tego posta',

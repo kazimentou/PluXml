@@ -123,6 +123,7 @@ $LANG = array(
 'L_ARTFEED_RSS_TAG'				=> 'Rss feed of the tag',
 'L_ARTFEED_RSS'					=> 'Rss feed of the articles',
 'L_NO_COMMENT'					=> 'no comments',
+'L_CLOSED_COMMENTS'				=> 'Closed Comments',
 'L_COMMENT'						=> 'comment',
 'L_COMMENTS'					=> 'comments',
 'L_COMFEED_RSS_ARTICLE'			=> 'Rss feed of the article\'s comments',
