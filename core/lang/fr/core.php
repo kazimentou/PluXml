@@ -124,6 +124,7 @@ $LANG = array(
 'L_ARTFEED_RSS_TAG'				=> 'Fil RSS des articles de ce mot clé',
 'L_ARTFEED_RSS'					=> 'Fil RSS des articles',
 'L_NO_COMMENT'					=> 'Aucun commentaire',
+'L_CLOSED_COMMENTS'				=> 'Commentaires fermés',
 'L_COMMENT'						=> 'commentaire',
 'L_COMMENTS'					=> 'commentaires',
 'L_COMFEED_RSS_ARTICLE'			=> 'Fil RSS des commentaires de cet article',

@@ -123,6 +123,7 @@ $LANG = array(
 'L_ARTFEED_RSS_TAG'				=> 'Fil Rss dels articles d\'aqueste mot clau',
 'L_ARTFEED_RSS'					=> 'Fil Rss dels articles',
 'L_NO_COMMENT'					=> 'pas cap de comentari',
+'L_CLOSED_COMMENTS'				=> 'commentaires fermés',
 'L_COMMENT'						=> 'comentari',
 'L_COMMENTS'					=> 'comentaris',
 'L_COMFEED_RSS_ARTICLE'			=> 'Fil Rss dels comentaris d\'aquel article',

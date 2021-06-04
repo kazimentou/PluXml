@@ -123,6 +123,7 @@ $LANG = array(
 'L_ARTFEED_RSS_TAG'				=> 'Sindicación RSS de los artículos de esta etiqueta',
 'L_ARTFEED_RSS'					=> 'Sindicación RSS de los artículos',
 'L_NO_COMMENT'					=> 'sin comentarios',
+'L_CLOSED_COMMENTS'				=> 'comentarios cerrados',
 'L_COMMENT'						=> 'comentario',
 'L_COMMENTS'					=> 'comentarios',
 'L_COMFEED_RSS_ARTICLE'			=> 'Sindicación RSS de los comentarios de este artículo',

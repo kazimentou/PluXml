@@ -123,6 +123,7 @@ $LANG = array(
 'L_ARTFEED_RSS_TAG'				=> 'RSS-поток статей в этом теге',
 'L_ARTFEED_RSS'					=> 'RSS-поток статей',
 'L_NO_COMMENT'					=> 'нет комментариев',
+'L_CLOSED_COMMENTS'				=> 'закрытые комментарии',
 'L_COMMENT'						=> 'комментарий',
 'L_COMMENTS'					=> 'комментария',
 'L_COMFEED_RSS_ARTICLE'			=> 'RSS-поток комментариев статей',

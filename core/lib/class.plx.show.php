@@ -1005,29 +1005,36 @@ class plxShow
     /**
      * Méthode qui affiche le nombre de commentaires (sous forme de lien ou non selon le mode) d'un article
      *
-     * @param f1        format d'affichage si nombre de commentaire = 0 (#nb pour afficher le nombre de commentaire)
+     * @param f1        format d'affichage si nombre de commentaire = 0
      * @param f2        format d'affichage si nombre de commentaire = 1 (#nb pour afficher le nombre de commentaire)
      * @param f3        format d'affichage si nombre de commentaire > 1 (#nb pour afficher le nombre de commentaire)
      * @scope    home,categorie,article,tags,archives
      * @author    Stephane F
      **/
-    public function artNbCom($f1 = 'L_NO_COMMENT', $f2 = '#nb L_COMMENT', $f3 = '#nb L_COMMENTS')
+    public function artNbCom($f1 = L_NO_COMMENT, $f2 = '#nb ' . L_COMMENT, $f3 = '#nb ' . L_COMMENTS)
     {
         $nb = intval($this->plxMotor->plxRecord_arts->f('nb_com'));
         $num = intval($this->plxMotor->plxRecord_arts->f('numero'));
         $url = $this->plxMotor->plxRecord_arts->f('url');
 
-        if ($nb == 0) {
-            $txt = str_replace('L_NO_COMMENT', L_NO_COMMENT, $f1);
-            $title = $nb . ' ' . L_NO_COMMENT;
-        } elseif ($nb == 1) {
-            $txt = str_replace('L_COMMENT', L_COMMENT, $f2);
-            $title = $nb . ' ' . L_COMMENT;
+        switch ($nb) {
+            case 0:
+                if (!empty($this->plxMotor->plxRecord_arts->f('allow_com'))) {
+                    $txt = L_NO_COMMENT;
+                    $title = L_NO_COMMENT;
         } else {
-            $txt = str_replace('L_COMMENTS', L_COMMENTS, $f3);
+                    $txt = L_CLOSED_COMMENTS;
+                    $title = L_CLOSED_COMMENTS;
+                }
+                break;
+            case 1:
+                $txt = str_replace('#nb', 1, $f2);
+                $title = '1 ' . L_COMMENT;
+                break;
+            default:
+                $txt = str_replace('#nb', $nb, $f3);
             $title = $nb . ' ' . L_COMMENTS;
         }
-        $txt = str_replace('#nb', $nb, $txt);
 
         if ($this->plxMotor->mode == 'article') {
             echo $txt;
