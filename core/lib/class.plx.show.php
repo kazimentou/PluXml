@@ -1570,28 +1570,21 @@ class plxShow
                 }
             }
         }
-        if ($menublog) {
-            if (
-                !empty($this->plxMotor->aConf['homestatic']) and
-                isset($this->plxMotor->aStats[$this->plxMotor->aConf['homestatic']]) and
-                !empty($this->plxMotor->aStats[$this->plxMotor->aConf['homestatic']]['active'])
-            ) {
-                    $menu = str_replace('#static_id', 'static-blog', $format);
-                    if ($this->plxMotor->get and preg_match('/(blog|categorie|archives|tag|article)/', $_SERVER['QUERY_STRING'] . $this->plxMotor->mode)) {
-                        $menu = str_replace('#static_status', 'active', $menu);
+        if ($menublog !== false and preg_match('#^-?\d+$#', $menublog)) {
+            $stat = $this->pageBlog($format, false);
+            if (!empty($stat)) {
+                $n = intval($menublog);
+                if ($n != 0) {
+                    if ($n > 0) {
+                        $n--;
                     } else {
-                        $menu = str_replace('#static_status', 'noactive', $menu);
+                        $n = count($menus) - $n;
+                        if ($n < 0) {
+                            $n = 0;
                     }
-                $active = ($this->plxMotor->get and preg_match('/(blog|categorie|archives|tag|article)/', $_SERVER['QUERY_STRING'] . $this->plxMotor->mode));
-                $stat = strtr($format, array(
-                    '#static_id'		=> 'static-blog',
-                    '#static_class'		=> 'static menu',
-                    '#static_url'		=> $this->plxMotor->urlRewrite('?blog'),
-                    '#static_name'		=> L_PAGEBLOG_TITLE,
-                    '#static_status'	=> $active ? 'active' : 'noactive',
-                ));
-
-                array_splice($menus, (intval($menublog) - 1), 0, array($stat));
+                    }
+                }
+                array_splice($menus, $n, 0, array($stat));
             }
         }
 
@@ -1600,24 +1593,37 @@ class plxShow
             return;
         }
 
-        # Affichage des pages statiques + menu Accueil et Blog
+        # Affichage des pages statiques, homepage et blog
         if ($menus) {
             foreach ($menus as $k => $v) {
                 if (is_numeric($k)) {
-                    echo "\n" . (is_array($v) ? $v[0] : $v);
+                    echo PHP_EOL . (is_array($v) ? $v[0] : $v);
                 } else {
-                    $group = str_replace('#group_id', 'static-group-' . plxUtils::urlify($k), $format_group);
-                    $group = str_replace('#group_class', 'static group', $group);
-                    $group = str_replace('#group_status', ($group_active == $k ? 'active' : 'noactive'), $group);
-                    $group = str_replace('#group_name', plxUtils::strCheck($k), $group);
-                    echo "\n<li class=\"menu\">\n\t" . $group . "\n\t<ul id=\"static-" . plxUtils::urlify($k) . "\" class=\"sub-menu\">\t\t";
+                    # sous-menu
+                    $group = strtr(
+                        $format_group,
+                        array(
+                            '#group_id'     => 'static-group-' . plxUtils::urlify($k),
+                            '#group_class'  => 'static group',
+                            '#group_status' => ($group_active == $k) ? 'active' : 'noactive',
+                            '#group_name'   => plxUtils::strCheck($k),
+
+                        )
+                    ); ?>
+    <li class="menu">
+        <?= $group ?>
+        <ul id="static-<?= plxUtils::urlify($k) ?>" class="sub-menu">
+<?php
                     foreach ($v as $kk => $vv) {
-                        echo "\n\t\t" . $vv;
-                    }
-                    echo "\n\t</ul>\n</li>\n";
+                        ?>
+            <?= $vv ?>
+<?php
+                    } ?>
+        </ul>
+    </li>
+<?php
                 }
             }
-            echo "\n";
         }
     }
 
@@ -2459,25 +2465,29 @@ class plxShow
      * @scope    global
      * @author    Stephane F
      **/
-    public function pageBlog($format = '<li class="#page_class #page_status" id="#page_id"><a href="#page_url" title="#page_name">#page_name</a></li>')
+    public function pageBlog($format = '<li class="#static_class #static_status" id="#static_id"><a href="#static_url" title="#static_name">#static_name</a></li>', $echo=true)
     {
         # Hook Plugins
         if (eval($this->plxMotor->plxPlugins->callHook('plxShowPageBlog'))) {
             return;
         }
 
-        if ($this->plxMotor->aConf['homestatic'] != '' and isset($this->plxMotor->aStats[$this->plxMotor->aConf['homestatic']])) {
-            if ($this->plxMotor->aStats[$this->plxMotor->aConf['homestatic']]['active']) {
-                $name = str_replace('#page_id', 'static-blog', $format);
-                if ($this->plxMotor->get and preg_match('/(blog|categorie|archives|tag|article)/', $_SERVER['QUERY_STRING'] . $this->plxMotor->mode)) {
-                    $name = str_replace('#page_status', 'active', $name);
+        if (
+            !empty($this->plxMotor->aConf['homestatic']) and
+            isset($this->plxMotor->aStats[$this->plxMotor->aConf['homestatic']]) and
+            !empty($this->plxMotor->aStats[$this->plxMotor->aConf['homestatic']]['active'])
+        ) {
+            $replaces = array(
+                '#static_id'		=> 'static-blog',
+                '#static_class'		=> 'static menu',
+                '#static_url'		=> $this->plxMotor->urlRewrite('?blog'),
+                '#static_name'		=> L_PAGEBLOG_TITLE,
+                '#static_status'	=> ($this->plxMotor->mode == 'home') ? 'active' : 'noactive',
+            );
+            if ($echo) {
+                echo strtr($format, $replaces);
                 } else {
-                    $name = str_replace('#page_status', 'noactive', $name);
-                }
-                $name = str_replace('#page_class', 'static menu', $name);
-                $name = str_replace('#page_url', $this->plxMotor->urlRewrite('?blog'), $name);
-                $name = str_replace('#page_name', L_PAGEBLOG_TITLE, $name);
-                echo $name;
+                return strtr($format, $replaces);
             }
         }
     }
