@@ -836,20 +836,24 @@ class plxShow
 
         # Initialisation de notre variable interne
         $taglist = $this->plxMotor->plxRecord_arts->f('tags');
-        if (!empty($taglist)) {
+        if (empty($taglist)) {
+            echo L_ARTTAGS_NONE;
+            return;
+        }
+
             $tags = array_map('trim', explode(',', $taglist));
-            foreach ($tags as $idx => $tag) {
-                $t = plxUtils::urlify($tag);
-                $name = str_replace('#tag_url', $this->plxMotor->urlRewrite('?tag/' . $t), $format);
-                $name = str_replace('#tag_name', plxUtils::strCheck($tag), $name);
-                $name = str_replace('#tag_status', (($this->plxMotor->mode == 'tags' and $this->plxMotor->cible == $t) ? 'active' : 'noactive'), $name);
-                echo $name;
-                if ($idx != sizeof($tags) - 1) {
+        $more = false;
+        foreach ($tags as $tag) {
+            $url = plxUtils::urlify($tag);
+            if ($more) {
                     echo $separator . ' ';
                 }
-            }
-        } else {
-            echo L_ARTTAGS_NONE;
+            echo strtr($format, array(
+                '#tag_url'		=> $this->plxMotor->urlRewrite('?tag/' . $url),
+                '#tag_name'		=> plxUtils::strCheck($tag),
+                '#tag_status'	=> ($this->plxMotor->mode == 'tags' and $this->plxMotor->cible == $url) ? 'active' : 'noactive',
+            ));
+            $more = true;
         }
     }
 
