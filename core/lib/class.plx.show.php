@@ -19,6 +19,8 @@ class plxShow
         'up' => array('▲', '⏫', L_ART_UP),        // :arrow_double_up:
     );
 
+    public const META_TAGS = array('description', 'keywords', 'author');
+
 
     public const AUTHOR_PATTERN = '<li id="#user_id"><a href="#user_url" class="#user_status" title="#user_name">#user_name</a> (#art_nb)</li>';
     public $plxMotor = false; # Objet plxMotor
@@ -275,51 +277,56 @@ class plxShow
      *
      * @param meta    nom du meta à afficher (description, keywords,author)
      * @scope    global
-     * @author    Stéphane F, Pedro "P3ter" CADETE
+     * @author    Stéphane F, Pedro "P3ter" CADETE, Jean-Pierre Pourrez "bazooka07"
      **/
-    public function meta($meta = '')
+    public function meta($name='')
     {
+        if (empty($name)) {
+            foreach (self::META_TAGS as $n) {
+                $this->meta($n);
+        }
+            return;
+        }
+
+        $name = strtolower($name);
+
         # Hook Plugins
-        if (eval($this->plxMotor->plxPlugins->callHook('plxShowMeta'))) {
-            return;
-        }
-
-        if (!in_array($meta, array('description', 'keywords', 'author'))) {
-            return;
-        }
-
-        $meta = strtolower($meta);
-
-        if ($this->plxMotor->mode == 'home') {
-            if (!empty($this->plxMotor->aConf['meta_' . $meta])) {
-                echo "\t" . '<meta name="' . $meta . '" content="' . plxUtils::strCheck($this->plxMotor->aConf['meta_' . $meta]) . '" />' . "\n";
-            }
+        if (
+            eval($this->plxMotor->plxPlugins->callHook('plxShowMeta')) or
+            !in_array($name, self::META_TAGS)
+        ) {
             return;
         }
 
         if ($this->plxMotor->mode == 'article') {
-            if ($meta == 'author') {
-                echo "\t" . '<meta name="author" content="' . $this->artAuthor(false) . '" />' . "\n";
-            } else {
-                $meta_content = trim($this->plxMotor->plxRecord_arts->f('meta_' . $meta));
-                if (!empty($meta_content)) {
-                    echo "\t" . '<meta name="' . $meta . '" content="' . plxUtils::strCheck($meta_content) . '" />' . "\n";
-                }
+            $content = ($name == 'author') ? $this->artAuthor(false) : trim($this->plxMotor->plxRecord_arts->f('meta_' . $name));
+            if (empty($content) and $name == 'keywords') {
+                ob_start();
+                $this->artTags('#tag_name');
+                $content = ob_get_clean();
             }
+        } elseif ($name == 'author') {
             return;
+        } else {
+            switch ($this->plxMotor->mode) {
+                case 'archive':
+                case 'tag': return;
+                case 'static': $content = $this->plxMotor->aStats[$this->plxMotor->cible]['meta_' . $name]; break;
+                case 'categorie':
+                    $infos = $this->plxMotor->aCats[$this->plxMotor->cible];
+                    $content = $infos['meta_' . $name];
+                    if (empty($content) and $name == 'description') {
+                        $content = $infos['description'];
         }
+                    break;
+                default: $content = $this->plxMotor->aConf['meta_description'];
+        }
+            }
 
-        if ($this->plxMotor->mode == 'static') {
-            if (!empty($this->plxMotor->aStats[$this->plxMotor->cible]['meta_' . $meta])) {
-                echo "\t" . '<meta name="' . $meta . '" content="' . plxUtils::strCheck($this->plxMotor->aStats[$this->plxMotor->cible]['meta_' . $meta]) . '" />' . "\n";
-            }
-            return;
-        }
-        if ($this->plxMotor->mode == 'categorie') {
-            if (!empty($this->plxMotor->aCats[$this->plxMotor->cible]['meta_' . $meta])) {
-                echo "\t" . '<meta name="' . $meta . '" content="' . plxUtils::strCheck($this->plxMotor->aCats[$this->plxMotor->cible]['meta_' . $meta]) . '" />' . "\n";
-            }
-            return;
+        if (!empty($content)) {
+            ?>
+	<meta name="<?= $name ?>" content="<?= plxUtils::strCheck($content) ?>" />
+<?php
         }
     }
 
