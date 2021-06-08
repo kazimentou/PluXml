@@ -31,7 +31,7 @@ if (!empty($_POST) and isset($plxAdmin->aStats[$_POST['id']])) {
     if ($valid) {
         $plxAdmin->editStatique($_POST);
     }
-    header('Location: statique.php?p='.$_POST['id']);
+    header('Location: statique.php?p=' . $_POST['id']);
     exit;
 } elseif (!empty($_GET['p'])) { # On affiche le contenu de la page
     $id = plxUtils::strCheck(plxUtils::nullbyteRemove($_GET['p']));
@@ -43,7 +43,7 @@ if (!empty($_POST) and isset($plxAdmin->aStats[$_POST['id']])) {
     # On récupère le contenu
     $content = trim($plxAdmin->getFileStatique($id));
     $title = $plxAdmin->aStats[$id]['name'];
-    $url = $plxAdmin->urlRewrite("?static".intval($id)."/".$plxAdmin->aStats[$id]['url']);
+    $url = $plxAdmin->urlRewrite("?static" . intval($id) . "/" . $plxAdmin->aStats[$id]['url']);
     $active = $plxAdmin->aStats[$id]['active'];
     $title_htmltag = $plxAdmin->aStats[$id]['title_htmltag'];
     $meta_description = $plxAdmin->aStats[$id]['meta_description'];
@@ -58,7 +58,7 @@ if (!empty($_POST) and isset($plxAdmin->aStats[$_POST['id']])) {
 
 # On récupère les templates des pages statiques
 $aTemplates = array();
-$files = plxGlob::getInstance(PLX_ROOT.$plxAdmin->aConf['racine_themes'].$plxAdmin->aConf['style']);
+$files = plxGlob::getInstance(PLX_ROOT . $plxAdmin->aConf['racine_themes'] . $plxAdmin->aConf['style']);
 if ($array = $files->query('/^static(-[a-z0-9-_]+)?.php$/')) {
     foreach ($array as $k=>$v) {
         $aTemplates[$v] = $v;

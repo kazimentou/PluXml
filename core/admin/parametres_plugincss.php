@@ -18,9 +18,9 @@ $plugin = isset($_GET['p']) ? urldecode($_GET['p']) : '';
 $plugin = plxUtils::nullbyteRemove($plugin);
 
 # chargement du fichier css du plugin pour le frontend
-$file_frontend = PLX_ROOT.PLX_CONFIG_PATH.'plugins/'.basename($plugin).'.site.css';
+$file_frontend = PLX_ROOT . PLX_CONFIG_PATH . 'plugins/' . basename($plugin) . '.site.css';
 # chargement du fichier css du plugin pour le backend
-$file_backend = PLX_ROOT.PLX_CONFIG_PATH.'plugins/'.basename($plugin).'.admin.css';
+$file_backend = PLX_ROOT . PLX_CONFIG_PATH . 'plugins/' . basename($plugin) . '.admin.css';
 
 # Traitement du formulaire: sauvegarde du code css et regénération du cache
 if (isset($_POST['submit'])) {
@@ -35,15 +35,15 @@ if (isset($_POST['submit'])) {
     } else {
         plxMsg::Error(L_SAVE_FILE_ERROR);
     }
-    header('Location: parametres_plugincss.php?p='.urlencode($plugin));
+    header('Location: parametres_plugincss.php?p=' . urlencode($plugin));
     exit;
 }
 
 $backend = is_file($file_backend) ? trim(file_get_contents($file_backend)) : '';
-$file_backend_init = PLX_PLUGINS.basename($plugin).'/css/admin.css';
+$file_backend_init = PLX_PLUGINS . basename($plugin) . '/css/admin.css';
 $backend = ($backend=='' and is_file($file_backend_init)) ? trim(file_get_contents($file_backend_init)) : $backend;
 $frontend = is_file($file_frontend) ? trim(file_get_contents($file_frontend)) : '';
-$file_frontend_init = PLX_PLUGINS.basename($plugin).'/css/site.css';
+$file_frontend_init = PLX_PLUGINS . basename($plugin) . '/css/site.css';
 $frontend = ($frontend=='' and is_file($file_frontend_init)) ? trim(file_get_contents($file_frontend_init)) : $frontend;
 
 # On inclut le header
@@ -55,7 +55,7 @@ include 'top.php';
 
 	<div class="inline-form action-bar">
 		<h2><?php echo plxUtils::strCheck($plugin) ?></h2>
-		<?php echo '<p><a class="back" href="parametres_plugins.php">'.L_BACK_TO_PLUGINS.'</a></p>'; ?>
+		<?php echo '<p><a class="back" href="parametres_plugins.php">' . L_BACK_TO_PLUGINS . '</a></p>'; ?>
 		<input name="submit" type="submit" value="<?php echo L_SAVE_FILE ?>" />
 	</div>
 

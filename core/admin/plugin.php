@@ -13,7 +13,7 @@ $plugin = plxUtils::nullbyteRemove($plugin);
 
 $output='';
 # chargement du fichier d'administration du plugin
-$filename = realpath(PLX_PLUGINS.$plugin.'/admin.php');
+$filename = realpath(PLX_PLUGINS . $plugin . '/admin.php');
 if (!empty($plxAdmin->plxPlugins->aPlugins[$plugin]) and is_file($filename)) {
     # utilisation de la variable plxPlugin pour faciliter la syntaxe dans les devs des plugins
     $plxPlugin = $plxAdmin->plxPlugins->aPlugins[$plugin];
@@ -22,7 +22,7 @@ if (!empty($plxAdmin->plxPlugins->aPlugins[$plugin]) and is_file($filename)) {
     ob_start();
     echo '
 	<div class="inline-form action-bar">
-		<h2>'.plxUtils::strCheck($plugin).'</h2>
+		<h2>' . plxUtils::strCheck($plugin) . '</h2>
 	</div>';
     include $filename;
     $output=ob_get_clean();

@@ -33,7 +33,7 @@ class plxPlugins
      **/
     public function getInstance($plugName)
     {
-        $filename = PLX_PLUGINS."$plugName/$plugName.php";
+        $filename = PLX_PLUGINS . "$plugName/$plugName.php";
         if (is_file($filename)) {
             include_once $filename;
             if (class_exists($plugName)) {
@@ -100,18 +100,18 @@ class plxPlugins
                         $this->aHooks = array_merge_recursive($this->aHooks, $instance->getHooks());
                         # Si le plugin a une méthode pour des actions de mises à jour
                         if (method_exists($instance, 'onUpdate')) {
-                            if (is_file(PLX_PLUGINS.$name.'/update')) {
+                            if (is_file(PLX_PLUGINS . $name . '/update')) {
                                 # on supprime le fichier update pour eviter d'appeler la methode onUpdate
                                 # à chaque chargement du plugin
-                                chmod(PLX_PLUGINS.$name.'/update', 0644);
-                                unlink(PLX_PLUGINS.$name.'/update');
+                                chmod(PLX_PLUGINS . $name . '/update', 0644);
+                                unlink(PLX_PLUGINS . $name . '/update');
                                 $updAction = $instance->onUpdate();
                             }
                         }
                     }
                 } else {
                     # Si PLX_ADMIN, on vérifie que le plugin existe et on le recense pour les styles CSS, sans charger sa class.
-                    if (is_file(PLX_PLUGINS."$name/$name.php")) {
+                    if (is_file(PLX_PLUGINS . "$name/$name.php")) {
                         $this->aPlugins[$name] = false;
                     }
                 }
@@ -144,9 +144,9 @@ class plxPlugins
                 }
             }
             if (isset($return)) {
-                return array('?>'.ob_get_clean().'<?php ', $return);
+                return array('?>' . ob_get_clean() . '<?php ', $return);
             } else {
-                return '?>'.ob_get_clean().'<?php ';
+                return '?>' . ob_get_clean() . '<?php ';
             }
         }
     }
@@ -230,22 +230,22 @@ class plxPlugins
                         break;
                     case 'delete':		# suppression des plugins
                         foreach ($content['chkAction'] as $idx => $plugName) {
-                            if ($this->deleteDir(realpath(PLX_PLUGINS.$plugName))) {
+                            if ($this->deleteDir(realpath(PLX_PLUGINS . $plugName))) {
                                 # suppression fichier de config du plugin
-                                if (is_file(PLX_ROOT.PLX_CONFIG_PATH.'plugins/'.$plugName.'.xml')) {
-                                    unlink(PLX_ROOT.PLX_CONFIG_PATH.'plugins/'.$plugName.'.xml');
+                                if (is_file(PLX_ROOT . PLX_CONFIG_PATH . 'plugins/' . $plugName . '.xml')) {
+                                    unlink(PLX_ROOT . PLX_CONFIG_PATH . 'plugins/' . $plugName . '.xml');
                                 }
                                 # suppression fichier site.css du plugin
-                                if (is_file(PLX_ROOT.PLX_CONFIG_PATH.'plugins/'.$plugName.'.site.css')) {
-                                    unlink(PLX_ROOT.PLX_CONFIG_PATH.'plugins/'.$plugName.'.site.css');
+                                if (is_file(PLX_ROOT . PLX_CONFIG_PATH . 'plugins/' . $plugName . '.site.css')) {
+                                    unlink(PLX_ROOT . PLX_CONFIG_PATH . 'plugins/' . $plugName . '.site.css');
                                 }
                                 # suppression fichier admin.css du plugin
-                                if (is_file(PLX_ROOT.PLX_CONFIG_PATH.'plugins/'.$plugName.'.admin.css')) {
-                                    unlink(PLX_ROOT.PLX_CONFIG_PATH.'plugins/'.$plugName.'.admin.css');
+                                if (is_file(PLX_ROOT . PLX_CONFIG_PATH . 'plugins/' . $plugName . '.admin.css')) {
+                                    unlink(PLX_ROOT . PLX_CONFIG_PATH . 'plugins/' . $plugName . '.admin.css');
                                 }
                                 unset($this->aPlugins[$plugName]);
                             } else {
-                                plxMsg::Error(L_PLUGINS_DELETE_ERROR." (".$plugName.")");
+                                plxMsg::Error(L_PLUGINS_DELETE_ERROR . " (" . $plugName . ")");
                                 break;
                             }
                         }
@@ -267,7 +267,7 @@ class plxPlugins
         $this->cssCache('admin');
 
         # Début du fichier XML
-        $xml = "<?xml version='1.0' encoding='".PLX_CHARSET."'?>\n";
+        $xml = "<?xml version='1.0' encoding='" . PLX_CHARSET . "'?>\n";
         $xml .= "<document>\n";
 
         foreach ($this->aPlugins as $name=>$plugin) {
@@ -287,7 +287,7 @@ class plxPlugins
         if (plxUtils::write($xml, path('XMLFILE_PLUGINS'))) {
             return plxMsg::Info(L_SAVE_SUCCESSFUL);
         } else {
-            return plxMsg::Error(L_SAVE_ERR.' '.path('XMLFILE_PLUGINS'));
+            return plxMsg::Error(L_SAVE_ERR . ' ' . path('XMLFILE_PLUGINS'));
         }
     }
 
@@ -331,8 +331,8 @@ class plxPlugins
         }
         foreach (array_keys($this->aPlugins) as $plugName) {
             $filesList = array(
-                PLX_ROOT.PLX_CONFIG_PATH."plugins/$plugName.$type",
-                PLX_PLUGINS."$plugName/css/$type"
+                PLX_ROOT . PLX_CONFIG_PATH . "plugins/$plugName.$type",
+                PLX_PLUGINS . "$plugName/css/$type"
             );
             foreach ($filesList as $filename) {
                 if (is_file($filename)) {
@@ -341,7 +341,7 @@ class plxPlugins
                 }
             }
         }
-        $minify_filename = PLX_ROOT . PLX_PLUGINS_CSS_PATH.$type;
+        $minify_filename = PLX_ROOT . PLX_PLUGINS_CSS_PATH . $type;
         if (!empty($cache)) {
             return plxUtils::write(plxUtils::minify($cache), $minify_filename);
         } elseif ((is_file($minify_filename))) {
@@ -385,9 +385,9 @@ class plxPlugin
         $this->plug = array(
             'dir' 			=> PLX_PLUGINS,
             'name' 			=> $plugName,
-            'filename'		=> PLX_PLUGINS.$plugName.'/'.$plugName.'.php',
-            'parameters.xml'=> PLX_ROOT.PLX_CONFIG_PATH.'plugins/'.$plugName.'.xml',
-            'infos.xml'		=> PLX_PLUGINS.$plugName.'/infos.xml'
+            'filename'		=> PLX_PLUGINS . $plugName . '/' . $plugName . '.php',
+            'parameters.xml'=> PLX_ROOT . PLX_CONFIG_PATH . 'plugins/' . $plugName . '.xml',
+            'infos.xml'		=> PLX_PLUGINS . $plugName . '/infos.xml'
         );
         $this->loadParams();
         if (defined('PLX_ADMIN')) {
@@ -406,13 +406,13 @@ class plxPlugin
 
     public function getPluginLang($plugName, $lang)
     {
-        $dirname = PLX_PLUGINS.$plugName.'/lang/';
+        $dirname = PLX_PLUGINS . $plugName . '/lang/';
 
         if (is_dir($dirname)) {
-            $filename = $dirname.$lang.'.php';
+            $filename = $dirname . $lang . '.php';
 
             if (!is_file($filename)) {
-                if (is_file($dirname.'fr.php')) {
+                if (is_file($dirname . 'fr.php')) {
                     $lang = 'fr';
                 } else {
                     if ($dh = opendir($dirname)) {
@@ -429,7 +429,7 @@ class plxPlugin
         }
 
         $this->default_lang = $lang;
-        $this->aLang = $this->loadLang(PLX_PLUGINS.$plugName.'/lang/'.$this->default_lang.'.php');
+        $this->aLang = $this->loadLang(PLX_PLUGINS . $plugName . '/lang/' . $this->default_lang . '.php');
     }
 
     /**
@@ -603,18 +603,18 @@ class plxPlugin
     {
 
         # Début du fichier XML
-        $xml = "<?xml version='1.0' encoding='".PLX_CHARSET."'?>\n";
+        $xml = "<?xml version='1.0' encoding='" . PLX_CHARSET . "'?>\n";
         $xml .= "<document>\n";
         foreach ($this->aParams as $k=>$v) {
             switch ($v['type']) {
                 case 'numeric':
-                    $xml .= "\t<parameter name=\"$k\" type=\"".$v['type']."\">".intval($v['value'])."</parameter>\n";
+                    $xml .= "\t<parameter name=\"$k\" type=\"" . $v['type'] . "\">" . intval($v['value']) . "</parameter>\n";
                     break;
                 case 'string':
-                    $xml .= "\t<parameter name=\"$k\" type=\"".$v['type']."\">".plxUtils::cdataCheck(plxUtils::strCheck($v['value']))."</parameter>\n";
+                    $xml .= "\t<parameter name=\"$k\" type=\"" . $v['type'] . "\">" . plxUtils::cdataCheck(plxUtils::strCheck($v['value'])) . "</parameter>\n";
                     break;
                 case 'cdata':
-                    $xml .= "\t<parameter name=\"$k\" type=\"".$v['type']."\"><![CDATA[".plxUtils::cdataCheck($v['value'])."]]></parameter>\n";
+                    $xml .= "\t<parameter name=\"$k\" type=\"" . $v['type'] . "\"><![CDATA[" . plxUtils::cdataCheck($v['value']) . "]]></parameter>\n";
                     break;
             }
         }
@@ -623,12 +623,12 @@ class plxPlugin
         # On écrit le fichier
         if (plxUtils::write($xml, $this->plug['parameters.xml'])) {
             # suppression ancien fichier parameters.xml s'il existe encore (5.1.7+)
-            if (file_exists($this->plug['dir'].$this->plug['name'].'/parameters.xml')) {
-                unlink($this->plug['dir'].$this->plug['name'].'/parameters.xml');
+            if (file_exists($this->plug['dir'] . $this->plug['name'] . '/parameters.xml')) {
+                unlink($this->plug['dir'] . $this->plug['name'] . '/parameters.xml');
             }
             return plxMsg::Info(L_SAVE_SUCCESSFUL);
         } else {
-            return plxMsg::Error(L_SAVE_ERR.' '.$this->plug['parameters.xml']);
+            return plxMsg::Error(L_SAVE_ERR . ' ' . $this->plug['parameters.xml']);
         }
     }
 
@@ -761,7 +761,7 @@ class plxPlugin
      **/
     public function REL_PATH()
     {
-        return PLX_PLUGINS.get_class($this).'/';
+        return PLX_PLUGINS . get_class($this) . '/';
     }
 
     /**
@@ -783,6 +783,6 @@ class plxPlugin
      **/
     public function URL()
     {
-        return plxUtils::getRacine().$this->ABS_PATH();
+        return plxUtils::getRacine() . $this->ABS_PATH();
     }
 }

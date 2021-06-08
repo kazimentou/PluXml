@@ -44,9 +44,9 @@ class plxMsg
     public static function Display()
     {
         if (isset($_SESSION['error']) and !empty($_SESSION['error'])) {
-            echo '<p id="msg" class="notification error">'.$_SESSION['error'].'</p>';
+            echo '<p id="msg" class="notification error">' . $_SESSION['error'] . '</p>';
         } elseif (isset($_SESSION['info']) and !empty($_SESSION['info'])) {
-            echo '<p id="msg" class="notification success">'.$_SESSION['info'].'</p>';
+            echo '<p id="msg" class="notification success">' . $_SESSION['info'] . '</p>';
         }
         unset($_SESSION['error']);
         unset($_SESSION['info']);

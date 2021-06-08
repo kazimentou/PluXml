@@ -45,7 +45,7 @@ include 'top.php';
 			<div class="col sml-12 med-7">
 				<?php if (plxUtils::testModRewrite(false)) : ?>
 					<?php plxUtils::printSelect('urlrewriting', array('1'=>L_YES,'0'=>L_NO), $plxAdmin->aConf['urlrewriting']);?>
-					<?php if (is_file(PLX_ROOT.'.htaccess') and $plxAdmin->aConf['urlrewriting']==0) { ?>
+					<?php if (is_file(PLX_ROOT . '.htaccess') and $plxAdmin->aConf['urlrewriting']==0) { ?>
 						<br /><span class="text-red"><?php echo L_CONFIG_ADVANCED_URL_REWRITE_ALERT ?></span>
 					<?php } ?>
 				<?php else: ?>

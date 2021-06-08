@@ -38,7 +38,7 @@ class plxThemes
     public function getThemes()
     {
         # on mets le theme actif en début de liste
-        if (is_dir($this->racineTheme.$this->activeTheme)) {
+        if (is_dir($this->racineTheme . $this->activeTheme)) {
             $this->aThemes[$this->activeTheme] = $this->activeTheme;
         }
         # liste des autres themes dispos
@@ -46,7 +46,7 @@ class plxThemes
 
         if ($styles = $files->query("/[a-z0-9-_\.\(\)]+/i", "", "sort")) {
             foreach ($styles as $k=>$v) {
-                if (is_file($this->racineTheme.$v.'/infos.xml')) {
+                if (is_file($this->racineTheme . $v . '/infos.xml')) {
                     if (substr($v, 0, 7) != 'mobile.' and $v!=$this->activeTheme) {
                         $this->aThemes[$v] = $v;
                     }
@@ -75,7 +75,7 @@ class plxThemes
     public function getInfos($theme)
     {
         $aInfos = array();
-        $filename = $this->racineTheme.$theme.'/infos.xml';
+        $filename = $this->racineTheme . $theme . '/infos.xml';
         if (is_file($filename)) {
             $data = file_get_contents($filename);
             $parser = xml_parser_create(PLX_CHARSET);
@@ -101,7 +101,7 @@ class plxThemes
 # On inclut le header
 include 'top.php';
 
-$plxThemes = new plxThemes(PLX_ROOT.$plxAdmin->aConf['racine_themes'], $plxAdmin->aConf['style']);
+$plxThemes = new plxThemes(PLX_ROOT . $plxAdmin->aConf['racine_themes'], $plxAdmin->aConf['style']);
 
 ?>
 <form action="parametres_themes.php" method="post" id="form_settings">
@@ -133,18 +133,18 @@ $plxThemes = new plxThemes(PLX_ROOT.$plxAdmin->aConf['racine_themes'], $plxAdmin
                         echo '<tr>';
                         # radio
                         $checked = $theme==$plxAdmin->aConf['style'] ? ' checked="checked"' : '';
-                        echo '<td><input id="' . $id . '"'.$checked.' type="radio" name="style" value="'.$theme.'" /></td>';
+                        echo '<td><input id="' . $id . '"' . $checked . ' type="radio" name="style" value="' . $theme . '" /></td>';
                         # img preview
                         echo '<td><label for="' . $id . '">' . $plxThemes->getImgPreview($theme) . '</label></td>';
                         # theme infos
                         echo '<td class="wrap" style="vertical-align:top; padding-top: 1rem;"><div>';
                         if ($aInfos = $plxThemes->getInfos($theme)) {
-                            echo '<div><strong>'.$aInfos['title'].'</strong></div>';
-                            echo '<div style="margin-top: 2rem;">Version : <strong>'.$aInfos['version'].'</strong>';
+                            echo '<div><strong>' . $aInfos['title'] . '</strong></div>';
+                            echo '<div style="margin-top: 2rem;">Version : <strong>' . $aInfos['version'] . '</strong>';
                             if (!empty($aInfos['date'])) {
                                 echo  ' (' . $aInfos['date'] . ')';
                             }
-                            echo '<br />' . L_PLUGINS_AUTHOR.' : ' . $aInfos['author'];
+                            echo '<br />' . L_PLUGINS_AUTHOR . ' : ' . $aInfos['author'];
                             if (!empty($aInfos['site'])) {
                                 echo ' - <a href="' . $aInfos['site'] . '" target="_blank">' . $aInfos['site'] . '</a>';
                             }
@@ -157,14 +157,14 @@ $plxThemes = new plxThemes(PLX_ROOT.$plxAdmin->aConf['racine_themes'], $plxAdmin
                         }
 
                         # lien aide
-                        if (is_file(PLX_ROOT.$plxAdmin->aConf['racine_themes'].$theme.'/lang/'.$plxAdmin->aConf['default_lang'].'-help.php')) {
-                            echo '<div style="margin-top: 2rem;"><a title="'.L_HELP_TITLE.'" href="parametres_help.php?help=theme&amp;page='.urlencode($theme).'">'.L_HELP.'</a></div>';
+                        if (is_file(PLX_ROOT . $plxAdmin->aConf['racine_themes'] . $theme . '/lang/' . $plxAdmin->aConf['default_lang'] . '-help.php')) {
+                            echo '<div style="margin-top: 2rem;"><a title="' . L_HELP_TITLE . '" href="parametres_help.php?help=theme&amp;page=' . urlencode($theme) . '">' . L_HELP . '</a></div>';
                         }
 
                         echo '</div></td></tr>';
                     }
                 } else {
-                    echo '<tr><td colspan="2" class="center">'.L_NONE1.'</td></tr>';
+                    echo '<tr><td colspan="2" class="center">' . L_NONE1 . '</td></tr>';
                 }
                 ?>
 			</tbody>

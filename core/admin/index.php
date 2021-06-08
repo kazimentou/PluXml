@@ -101,9 +101,9 @@ $_GET['artTitle'] = $artTitle;
 # On génère notre motif de recherche
 if (is_numeric($_GET['artTitle'])) {
     $artId = str_pad($_GET['artTitle'], 4, '0', STR_PAD_LEFT);
-    $motif = '/^'.$mod.$artId.'.'.$catIdSel.'.'.$userId.'.[0-9]{12}.(.*).xml$/';
+    $motif = '/^' . $mod . $artId . '.' . $catIdSel . '.' . $userId . '.[0-9]{12}.(.*).xml$/';
 } else {
-    $motif = '/^'.$mod.'[0-9]{4}.'.$catIdSel.'.'.$userId.'.[0-9]{12}.(.*)'.plxUtils::urlify($_GET['artTitle']).'(.*).xml$/';
+    $motif = '/^' . $mod . '[0-9]{4}.' . $catIdSel . '.' . $userId . '.[0-9]{12}.(.*)' . plxUtils::urlify($_GET['artTitle']) . '(.*).xml$/';
 }
 # Calcul du nombre de page si on fait une recherche
 if ($_GET['artTitle']!='') {
@@ -143,16 +143,16 @@ include 'top.php';
 <div class="inline-form action-bar">
 	<h2><?php echo L_ARTICLES_LIST ?></h2>
 	<ul class="menu">
-		<li><a <?php echo ($_SESSION['sel_get']=='all') ? 'class="selected" ' : '' ?>href="index.php?sel=all&amp;page=1"><?php echo L_ALL ?></a><?php echo '&nbsp;('.$plxAdmin->nbArticles('all', $userId).')' ?></li>
-		<li><a <?php echo ($_SESSION['sel_get']=='published') ? 'class="selected" ' : '' ?>href="index.php?sel=published&amp;page=1"><?php echo L_ALL_PUBLISHED ?></a><?php echo '&nbsp;('.$plxAdmin->nbArticles('published', $userId, '').')' ?></li>
-		<li><a <?php echo ($_SESSION['sel_get']=='draft') ? 'class="selected" ' : '' ?>href="index.php?sel=draft&amp;page=1"><?php echo L_ALL_DRAFTS ?></a><?php echo '&nbsp;('.$plxAdmin->nbArticles('draft', $userId).')' ?></li>
-		<li><a <?php echo ($_SESSION['sel_get']=='mod') ? 'class="selected" ' : '' ?>href="index.php?sel=mod&amp;page=1"><?php echo L_ALL_AWAITING_MODERATION ?></a><?php echo '&nbsp;('.$plxAdmin->nbArticles('all', $userId, '_').')' ?></li>
+		<li><a <?php echo ($_SESSION['sel_get']=='all') ? 'class="selected" ' : '' ?>href="index.php?sel=all&amp;page=1"><?php echo L_ALL ?></a><?php echo '&nbsp;(' . $plxAdmin->nbArticles('all', $userId) . ')' ?></li>
+		<li><a <?php echo ($_SESSION['sel_get']=='published') ? 'class="selected" ' : '' ?>href="index.php?sel=published&amp;page=1"><?php echo L_ALL_PUBLISHED ?></a><?php echo '&nbsp;(' . $plxAdmin->nbArticles('published', $userId, '') . ')' ?></li>
+		<li><a <?php echo ($_SESSION['sel_get']=='draft') ? 'class="selected" ' : '' ?>href="index.php?sel=draft&amp;page=1"><?php echo L_ALL_DRAFTS ?></a><?php echo '&nbsp;(' . $plxAdmin->nbArticles('draft', $userId) . ')' ?></li>
+		<li><a <?php echo ($_SESSION['sel_get']=='mod') ? 'class="selected" ' : '' ?>href="index.php?sel=mod&amp;page=1"><?php echo L_ALL_AWAITING_MODERATION ?></a><?php echo '&nbsp;(' . $plxAdmin->nbArticles('all', $userId, '_') . ')' ?></li>
 	</ul>
 	<?php
     echo plxToken::getTokenPostMethod();
     if ($_SESSION['profil']<=PROFIL_MODERATOR) {
         plxUtils::printSelect('selection', array( '' => L_FOR_SELECTION, 'delete' => L_DELETE), '', false, false, 'id_selection');
-        echo '<input name="sel" type="submit" value="'.L_OK.'" onclick="return confirmAction(this.form, \'id_selection\', \'delete\', \'idArt[]\', \''.L_CONFIRM_DELETE.'\')" /><span class="sml-hide med-show">&nbsp;&nbsp;&nbsp;</span>';
+        echo '<input name="sel" type="submit" value="' . L_OK . '" onclick="return confirmAction(this.form, \'id_selection\', \'delete\', \'idArt[]\', \'' . L_CONFIRM_DELETE . '\')" /><span class="sml-hide med-show">&nbsp;&nbsp;&nbsp;</span>';
     }
     ?>
 	<?php plxUtils::printInput('page', 1, 'hidden'); ?>
@@ -228,28 +228,28 @@ if (!preg_match('#^\d{3}$#', $userId)) {
                     foreach ($catIds as $catId) {
                         $selected = ($catId==$_SESSION['sel_cat'] ? ' selected="selected"' : '');
                         if ($catId=='draft') {
-                            $draft = ' - <strong>'.L_CATEGORY_DRAFT.'</strong>';
+                            $draft = ' - <strong>' . L_CATEGORY_DRAFT . '</strong>';
                         } elseif ($catId=='home') {
-                            $aCats['home'] = '<option value="home"'.$selected.'>'.L_CATEGORY_HOME.'</option>';
+                            $aCats['home'] = '<option value="home"' . $selected . '>' . L_CATEGORY_HOME . '</option>';
                         } elseif ($catId=='000') {
-                            $aCats['000'] = '<option value="000"'.$selected.'>'.L_UNCLASSIFIED.'</option>';
+                            $aCats['000'] = '<option value="000"' . $selected . '>' . L_UNCLASSIFIED . '</option>';
                         } elseif (isset($plxAdmin->aCats[$catId])) {
-                            $aCats[$catId] = '<option value="'.$catId.'"'.$selected.'>'.plxUtils::strCheck($plxAdmin->aCats[$catId]['name']).'</option>';
+                            $aCats[$catId] = '<option value="' . $catId . '"' . $selected . '>' . plxUtils::strCheck($plxAdmin->aCats[$catId]['name']) . '</option>';
                         }
                     }
                 }
                 # en attente de validation ?
                 $idArt = $plxAdmin->plxRecord_arts->f('numero');
-                $awaiting = $idArt[0]=='_' ? ' - <strong>'.L_AWAITING.'</strong>' : '';
+                $awaiting = $idArt[0]=='_' ? ' - <strong>' . L_AWAITING . '</strong>' : '';
                 # Commentaires
-                $nbComsToValidate = $plxAdmin->getNbCommentaires('/^_'.$idArt.'.(.*).xml$/', 'all');
-                $nbComsValidated = $plxAdmin->getNbCommentaires('/^'.$idArt.'.(.*).xml$/', 'all');
+                $nbComsToValidate = $plxAdmin->getNbCommentaires('/^_' . $idArt . '.(.*).xml$/', 'all');
+                $nbComsValidated = $plxAdmin->getNbCommentaires('/^' . $idArt . '.(.*).xml$/', 'all');
                 # On affiche la ligne
                 echo '<tr>';
-                echo '<td><input type="checkbox" name="idArt[]" value="'.$idArt.'" /></td>';
-                echo '<td>'.$idArt.'</td>';
-                echo '<td>'.plxDate::formatDate($plxAdmin->plxRecord_arts->f('date')).'&nbsp;</td>';
-                echo '<td class="wrap"><a href="article.php?a='.$idArt.'" title="'.L_ARTICLE_EDIT_TITLE.'">'.plxUtils::strCheck($plxAdmin->plxRecord_arts->f('title')).'</a>'.$draft.$awaiting.'&nbsp;</td>';
+                echo '<td><input type="checkbox" name="idArt[]" value="' . $idArt . '" /></td>';
+                echo '<td>' . $idArt . '</td>';
+                echo '<td>' . plxDate::formatDate($plxAdmin->plxRecord_arts->f('date')) . '&nbsp;</td>';
+                echo '<td class="wrap"><a href="article.php?a=' . $idArt . '" title="' . L_ARTICLE_EDIT_TITLE . '">' . plxUtils::strCheck($plxAdmin->plxRecord_arts->f('title')) . '</a>' . $draft . $awaiting . '&nbsp;</td>';
                 echo '<td>';
                 if (sizeof($aCats)>1) {
                     echo '<select name="sel_cat2" class="ddcat" onchange="this.form.sel_cat.value=this.value;this.form.submit()">';
@@ -259,22 +259,22 @@ if (!preg_match('#^\d{3}$#', $userId)) {
                     echo strip_tags(implode('', $aCats));
                 }
                 echo '&nbsp;</td>';
-                echo '<td><a title="'.L_NEW_COMMENTS_TITLE.'" href="comments.php?sel=offline&amp;a='.$plxAdmin->plxRecord_arts->f('numero').'&amp;page=1">'.$nbComsToValidate.'</a> / <a title="'.L_VALIDATED_COMMENTS_TITLE.'" href="comments.php?sel=online&amp;a='.$plxAdmin->plxRecord_arts->f('numero').'&amp;page=1">'.$nbComsValidated.'</a>&nbsp;</td>';
+                echo '<td><a title="' . L_NEW_COMMENTS_TITLE . '" href="comments.php?sel=offline&amp;a=' . $plxAdmin->plxRecord_arts->f('numero') . '&amp;page=1">' . $nbComsToValidate . '</a> / <a title="' . L_VALIDATED_COMMENTS_TITLE . '" href="comments.php?sel=online&amp;a=' . $plxAdmin->plxRecord_arts->f('numero') . '&amp;page=1">' . $nbComsValidated . '</a>&nbsp;</td>';
                 if (!preg_match('#^\d{3}$#', $userId)) {
                     $author = plxUtils::getValue($plxAdmin->aUsers[$plxAdmin->plxRecord_arts->f('author')]['name']);
-                    echo '<td>'.plxUtils::strCheck($author).'&nbsp;</td>';
+                    echo '<td>' . plxUtils::strCheck($author) . '&nbsp;</td>';
                 }
                 echo '<td>';
-                echo '<a href="article.php?a='.$idArt.'" title="'.L_ARTICLE_EDIT_TITLE.'">'.L_ARTICLE_EDIT.'</a>';
+                echo '<a href="article.php?a=' . $idArt . '" title="' . L_ARTICLE_EDIT_TITLE . '">' . L_ARTICLE_EDIT . '</a>';
                 if ($publi and $draft=='') { # Si l'article est publié
-                    echo ' <a href="'.$plxAdmin->urlRewrite('?article'.intval($idArt).'/'.$plxAdmin->plxRecord_arts->f('url')).'" title="'.L_ARTICLE_VIEW_TITLE.'">'.L_VIEW.'</a>';
+                    echo ' <a href="' . $plxAdmin->urlRewrite('?article' . intval($idArt) . '/' . $plxAdmin->plxRecord_arts->f('url')) . '" title="' . L_ARTICLE_VIEW_TITLE . '">' . L_VIEW . '</a>';
                 }
                 echo "&nbsp;</td>";
                 echo "</tr>";
             }
         } else { # Pas d'article
             $colspan = preg_match('#^\d{3}$#', $userId) ? 7 : 8;
-            echo '<tr><td colspan="' . $colspan . '" class="center">'.L_NO_ARTICLE.'</td></tr>';
+            echo '<tr><td colspan="' . $colspan . '" class="center">' . L_NO_ARTICLE . '</td></tr>';
         }
         ?>
 		</tbody>
@@ -303,25 +303,25 @@ if (!preg_match('#^\d{3}$#', $userId)) {
             $start=1;
         }
         # Génération des URLs
-        $artTitle = (!empty($_GET['artTitle']) ? '&amp;artTitle='.urlencode($_GET['artTitle']) : '');
-        $p_url = 'index.php?page='.($plxAdmin->page-1).$artTitle;
-        $n_url = 'index.php?page='.($plxAdmin->page+1).$artTitle;
-        $l_url = 'index.php?page='.$last_page.$artTitle;
-        $f_url = 'index.php?page=1'.$artTitle;
+        $artTitle = (!empty($_GET['artTitle']) ? '&amp;artTitle=' . urlencode($_GET['artTitle']) : '');
+        $p_url = 'index.php?page=' . ($plxAdmin->page-1) . $artTitle;
+        $n_url = 'index.php?page=' . ($plxAdmin->page+1) . $artTitle;
+        $l_url = 'index.php?page=' . $last_page . $artTitle;
+        $f_url = 'index.php?page=1' . $artTitle;
         # Affichage des liens de pagination
-        printf('<span class="p_page">'.L_PAGINATION.'</span>', '<input style="text-align:right;width:35px" onchange="window.location.href=\'index.php?page=\'+this.value+\''.$artTitle.'\'" value="'.$plxAdmin->page.'" />', $last_page);
-        $s = $plxAdmin->page>2 ? '<a href="'.$f_url.'" title="'.L_PAGINATION_FIRST_TITLE.'">&laquo;</a>' : '&laquo;';
-        echo '<span class="p_first">'.$s.'</span>';
-        $s = $plxAdmin->page>1 ? '<a href="'.$p_url.'" title="'.L_PAGINATION_PREVIOUS_TITLE.'">&lsaquo;</a>' : '&lsaquo;';
-        echo '<span class="p_prev">'.$s.'</span>';
+        printf('<span class="p_page">' . L_PAGINATION . '</span>', '<input style="text-align:right;width:35px" onchange="window.location.href=\'index.php?page=\'+this.value+\'' . $artTitle . '\'" value="' . $plxAdmin->page . '" />', $last_page);
+        $s = $plxAdmin->page>2 ? '<a href="' . $f_url . '" title="' . L_PAGINATION_FIRST_TITLE . '">&laquo;</a>' : '&laquo;';
+        echo '<span class="p_first">' . $s . '</span>';
+        $s = $plxAdmin->page>1 ? '<a href="' . $p_url . '" title="' . L_PAGINATION_PREVIOUS_TITLE . '">&lsaquo;</a>' : '&lsaquo;';
+        echo '<span class="p_prev">' . $s . '</span>';
         for ($i=$start;$i<=$stop;$i++) {
-            $s = $i==$plxAdmin->page ? $i : '<a href="'.('index.php?page='.$i.$artTitle).'" title="'.$i.'">'.$i.'</a>';
-            echo '<span class="p_current">'.$s.'</span>';
+            $s = $i==$plxAdmin->page ? $i : '<a href="' . ('index.php?page=' . $i . $artTitle) . '" title="' . $i . '">' . $i . '</a>';
+            echo '<span class="p_current">' . $s . '</span>';
         }
-        $s = $plxAdmin->page<$last_page ? '<a href="'.$n_url.'" title="'.L_PAGINATION_NEXT_TITLE.'">&rsaquo;</a>' : '&rsaquo;';
-        echo '<span class="p_next">'.$s.'</span>';
-        $s = $plxAdmin->page<($last_page-1) ? '<a href="'.$l_url.'" title="'.L_PAGINATION_LAST_TITLE.'">&raquo;</a>' : '&raquo;';
-        echo '<span class="p_last">'.$s.'</span>';
+        $s = $plxAdmin->page<$last_page ? '<a href="' . $n_url . '" title="' . L_PAGINATION_NEXT_TITLE . '">&rsaquo;</a>' : '&rsaquo;';
+        echo '<span class="p_next">' . $s . '</span>';
+        $s = $plxAdmin->page<($last_page-1) ? '<a href="' . $l_url . '" title="' . L_PAGINATION_LAST_TITLE . '">&raquo;</a>' : '&raquo;';
+        echo '<span class="p_last">' . $s . '</span>';
     }
     ?>
 </p>

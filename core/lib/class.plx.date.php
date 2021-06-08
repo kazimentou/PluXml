@@ -105,7 +105,7 @@ class plxDate
         $minute = substr($date, 10, 2);
 
         # On retourne notre date au format humain
-        $format = str_replace('#time', $hour.':'.$minute, $format);
+        $format = str_replace('#time', $hour . ':' . $minute, $format);
         $format = str_replace('#minute', $minute, $format);
         $format = str_replace('#hour', $hour, $format);
         $format = str_replace('#day', plxDate::getCalendar('day', $day_num), $format);
@@ -149,7 +149,7 @@ class plxDate
             'day' 	=> $capture[3],
             'hour'	=> $capture[4],
             'minute'=> $capture[5],
-            'time' 	=> $capture[4].':'.$capture[5]
+            'time' 	=> $capture[4] . ':' . $capture[5]
         );
     }
 
@@ -165,7 +165,7 @@ class plxDate
      **/
     public static function checkDate($day, $month, $year, $time)
     {
-        return (preg_match("/^(0[1-9]|[1-2][0-9]|3[0-1])(0[1-9]|1[0-2])[1-2][0-9]{3}([0-1][0-9]|2[0-3])\:[0-5][0-9]$/", $day.$month.$year.$time)
+        return (preg_match("/^(0[1-9]|[1-2][0-9]|3[0-1])(0[1-9]|1[0-2])[1-2][0-9]{3}([0-1][0-9]|2[0-3])\:[0-5][0-9]$/", $day . $month . $year . $time)
             and checkdate($month, $day, $year));
     }
 

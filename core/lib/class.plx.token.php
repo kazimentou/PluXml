@@ -26,7 +26,7 @@ class plxToken
         );
         $_SESSION['formtoken'][$token] = time();
 
-        return ($html) ? '<input name="token" value="'.$token.'" type="hidden" />' : $token;
+        return ($html) ? '<input name="token" value="' . $token . '" type="hidden" />' : $token;
     }
 
     /**

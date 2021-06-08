@@ -55,7 +55,7 @@ if (!isset($_GET['code']) && !isset($_GET['provider'])) {
 exit;
 }
 
-require PLX_CORE.'vendor/autoload.php';
+require PLX_CORE . 'vendor/autoload.php';
 
 $providerName = '';
 
@@ -65,7 +65,7 @@ if (array_key_exists('provider', $_GET)) {
 } elseif (array_key_exists('provider', $_SESSION)) {
     $providerName = $_SESSION['provider'];
 }
-if (!in_array($providerName, ['Google'])) {
+if (!in_array($providerName, array('Google'))) {
     exit('Only Google OAuth2 providers are currently supported in this script.');
 }
 
@@ -78,18 +78,18 @@ $clientSecret = $plxAdmin->aConf['smtpOauth2_clientSecret'];
 $redirectUri = (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
 //$redirectUri = 'http://localhost/PHPMailer/redirect';
 
-$params = [
+$params = array(
     'clientId' => $clientId,
     'clientSecret' => $clientSecret,
     'redirectUri' => $redirectUri,
     'accessType' => 'offline'
-];
+);
 
-$options = [];
+$options = array();
 $provider = null;
 
 $provider = new Google($params);
-$options = ['scope' => ['https://mail.google.com/']];
+$options = array('scope' => array('https://mail.google.com/'));
 
 if (null === $provider) {
     exit('Provider missing');
@@ -111,9 +111,9 @@ if (!isset($_GET['code'])) {
     // Try to get an access token (using the authorization code grant)
     $token = $provider->getAccessToken(
         'authorization_code',
-        [
+        array(
             'code' => $_GET['code']
-        ]
+        )
     );
     // Use this to interact with an API on the users behalf
     // Use this to get a new access token if the old one expires
@@ -123,5 +123,5 @@ if (!isset($_GET['code'])) {
     if (!empty($tokenToStore)) {
         $plxAdmin->editConfiguration($plxAdmin->aConf, $tokenToStore);
     }
-    header('Location: '.htmlentities($plxAdmin->aConf['racine'].'core/admin/parametres_avances.php'));
+    header('Location: ' . htmlentities($plxAdmin->aConf['racine'] . 'core/admin/parametres_avances.php'));
 }

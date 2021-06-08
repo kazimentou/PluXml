@@ -109,14 +109,14 @@ class plxAdmin extends plxMotor
         }
 
         # Début du fichier XML
-        $xml = "<?xml version='1.0' encoding='".PLX_CHARSET."'?>\n";
+        $xml = "<?xml version='1.0' encoding='" . PLX_CHARSET . "'?>\n";
         $xml .= "<document>\n";
         foreach ($global as $k=>$v) {
             if ($k!='racine') {
                 if (is_numeric($v)) {
-                    $xml .= "\t<parametre name=\"$k\">".$v."</parametre>\n";
+                    $xml .= "\t<parametre name=\"$k\">" . $v . "</parametre>\n";
                 } else {
-                    $xml .= "\t<parametre name=\"$k\"><![CDATA[".plxUtils::cdataCheck($v)."]]></parametre>\n";
+                    $xml .= "\t<parametre name=\"$k\"><![CDATA[" . plxUtils::cdataCheck($v) . "]]></parametre>\n";
                 }
             }
         }
@@ -137,7 +137,7 @@ class plxAdmin extends plxMotor
 
         # Mise à jour du fichier parametres.xml
         if (!plxUtils::write($xml, path('XMLFILE_PARAMETERS'))) {
-            return plxMsg::Error(L_SAVE_ERR.' '.path('XMLFILE_PARAMETERS'));
+            return plxMsg::Error(L_SAVE_ERR . ' ' . path('XMLFILE_PARAMETERS'));
         }
 
         # Si nouvel emplacement du dossier de configuration
@@ -145,12 +145,12 @@ class plxAdmin extends plxMotor
             $newpath=trim($content['config_path']);
             if ($newpath!=PLX_CONFIG_PATH) {
                 # relocalisation du dossier de configuration de PluXml
-                if (!rename(PLX_ROOT.PLX_CONFIG_PATH, PLX_ROOT.$newpath)) {
+                if (!rename(PLX_ROOT . PLX_CONFIG_PATH, PLX_ROOT . $newpath)) {
                     return plxMsg::Error(sprintf(L_WRITE_NOT_ACCESS, $newpath));
                 }
                 # mise à jour du fichier de configuration config.php
-                if (!plxUtils::write("<?php define('PLX_CONFIG_PATH', '".$newpath."') ?>", PLX_ROOT.'config.php')) {
-                    return plxMsg::Error(L_SAVE_ERR.' config.php');
+                if (!plxUtils::write("<?php define('PLX_CONFIG_PATH', '" . $newpath . "') ?>", PLX_ROOT . 'config.php')) {
+                    return plxMsg::Error(L_SAVE_ERR . ' config.php');
                 }
             }
         }
@@ -316,7 +316,7 @@ Options -Multiviews
             foreach ($this->aUsers as $user_id => $user) {
                 if ($user['password_token'] == $token) {
                     $salt = $this->aUsers[$user_id]['salt'];
-                    $this->aUsers[$user_id]['password'] = sha1($salt.md5($content['password1']));
+                    $this->aUsers[$user_id]['password'] = sha1($salt . md5($content['password1']));
                     $this->aUsers[$user_id]['password_token'] = '';
                     $this->aUsers[$user_id]['password_token_expiry'] = '';
                     $action = true;
@@ -325,7 +325,7 @@ Options -Multiviews
             }
         } else {
             $salt = $this->aUsers[$_SESSION['user']]['salt'];
-            $this->aUsers[$_SESSION['user']]['password'] = sha1($salt.md5($content['password1']));
+            $this->aUsers[$_SESSION['user']]['password'] = sha1($salt . md5($content['password1']));
             $action = true;
         }
 
@@ -354,11 +354,11 @@ Options -Multiviews
                     $tokenExpiry = 24;
                     $lostPasswordToken = plxToken::getTokenPostMethod(32, false);
                     $lostPasswordTokenExpiry = plxToken::generateTokenExperyDate($tokenExpiry);
-                    $templateName = 'email-lostpassword-'.PLX_SITE_LANG.'.xml';
+                    $templateName = 'email-lostpassword-' . PLX_SITE_LANG . '.xml';
 
                     $placeholdersValues = array(
                         "##LOGIN##"			=> $user['login'],
-                        "##URL_PASSWORD##"	=> $this->aConf['racine'].'core/admin/auth.php?action=changepassword&token='.$lostPasswordToken,
+                        "##URL_PASSWORD##"	=> $this->aConf['racine'] . 'core/admin/auth.php?action=changepassword&token=' . $lostPasswordToken,
                         "##URL_EXPIRY##"	=> $tokenExpiry
                     );
                     if (($mail ['body'] = $this->aTemplates[$templateName]->getTemplateGeneratedContent($placeholdersValues)) != '1') {
@@ -441,34 +441,34 @@ Options -Multiviews
         # mise à jour de la liste des utilisateurs
         elseif (!empty($content['update'])) {
             foreach ($content['userNum'] as $user_id) {
-                $username = trim($content[$user_id.'_name']);
-                if ($username!='' and trim($content[$user_id.'_login'])!='') {
+                $username = trim($content[$user_id . '_name']);
+                if ($username!='' and trim($content[$user_id . '_login'])!='') {
 
                     # controle du mot de passe
                     $salt = plxUtils::charAleatoire(10);
-                    if (trim($content[$user_id.'_password'])!='') {
-                        $password=sha1($salt.md5($content[$user_id.'_password']));
-                    } elseif (isset($content[$user_id.'_newuser'])) {
+                    if (trim($content[$user_id . '_password'])!='') {
+                        $password=sha1($salt . md5($content[$user_id . '_password']));
+                    } elseif (isset($content[$user_id . '_newuser'])) {
                         $this->aUsers = $save;
-                        return plxMsg::Error(L_ERR_PASSWORD_EMPTY.' ('.L_CONFIG_USER.' <em>'.$username.'</em>)');
+                        return plxMsg::Error(L_ERR_PASSWORD_EMPTY . ' (' . L_CONFIG_USER . ' <em>' . $username . '</em>)');
                     } else {
                         $salt = $this->aUsers[$user_id]['salt'];
                         $password = $this->aUsers[$user_id]['password'];
                     }
 
                     # controle de l'adresse email
-                    $email = trim($content[$user_id.'_email']);
-                    if (isset($content[$user_id.'_newuser']) and empty($email)) {
+                    $email = trim($content[$user_id . '_email']);
+                    if (isset($content[$user_id . '_newuser']) and empty($email)) {
                         return plxMsg::Error(L_ERR_INVALID_EMAIL);
                     }
                     if (!empty($email) and !plxUtils::checkMail($email)) {
                         return plxMsg::Error(L_ERR_INVALID_EMAIL);
                     }
 
-                    $this->aUsers[$user_id]['login'] = trim($content[$user_id.'_login']);
-                    $this->aUsers[$user_id]['name'] = trim($content[$user_id.'_name']);
-                    $this->aUsers[$user_id]['active'] = ($_SESSION['user']==$user_id ? $this->aUsers[$user_id]['active'] : $content[$user_id.'_active']);
-                    $this->aUsers[$user_id]['profil'] = ($_SESSION['user']==$user_id ? $this->aUsers[$user_id]['profil'] : $content[$user_id.'_profil']);
+                    $this->aUsers[$user_id]['login'] = trim($content[$user_id . '_login']);
+                    $this->aUsers[$user_id]['name'] = trim($content[$user_id . '_name']);
+                    $this->aUsers[$user_id]['active'] = ($_SESSION['user']==$user_id ? $this->aUsers[$user_id]['active'] : $content[$user_id . '_active']);
+                    $this->aUsers[$user_id]['profil'] = ($_SESSION['user']==$user_id ? $this->aUsers[$user_id]['profil'] : $content[$user_id . '_profil']);
                     $this->aUsers[$user_id]['password'] = $password;
                     $this->aUsers[$user_id]['salt'] = $salt;
                     $this->aUsers[$user_id]['email'] = $email;
@@ -492,39 +492,39 @@ Options -Multiviews
             $users_email = array();
 
             # On génére le fichier XML
-            $xml = "<?xml version=\"1.0\" encoding=\"".PLX_CHARSET."\"?>\n";
+            $xml = "<?xml version=\"1.0\" encoding=\"" . PLX_CHARSET . "\"?>\n";
             $xml .= "<document>\n";
 
             foreach ($this->aUsers as $user_id => $user) {
                 # controle de l'unicité du nom de l'utilisateur
                 if (in_array($user['name'], $users_name)) {
                     $this->aUsers = $save;
-                    return plxMsg::Error(L_ERR_USERNAME_ALREADY_EXISTS.' : '.plxUtils::strCheck($user['name']));
+                    return plxMsg::Error(L_ERR_USERNAME_ALREADY_EXISTS . ' : ' . plxUtils::strCheck($user['name']));
                 } elseif ($user['delete'] == 0) {
                     $users_name[] = $user['name'];
                 }
                 # controle de l'unicité du login de l'utilisateur
                 if (in_array($user['login'], $users_login)) {
-                    return plxMsg::Error(L_ERR_LOGIN_ALREADY_EXISTS.' : '.plxUtils::strCheck($user['login']));
+                    return plxMsg::Error(L_ERR_LOGIN_ALREADY_EXISTS . ' : ' . plxUtils::strCheck($user['login']));
                 } elseif ($user['delete'] == 0) {
                     $users_login[] = $user['login'];
                 }
                 # controle de l'unicité de l'adresse e-mail
                 if (in_array($user['email'], $users_email)) {
-                    return plxMsg::Error(L_ERR_EMAIL_ALREADY_EXISTS.' : '.plxUtils::strCheck($user['email']));
+                    return plxMsg::Error(L_ERR_EMAIL_ALREADY_EXISTS . ' : ' . plxUtils::strCheck($user['email']));
                 } elseif ($user['delete'] == 0) {
                     $users_email[] = $user['email'];
                 }
-                $xml .= "\t".'<user number="'.$user_id.'" active="'.$user['active'].'" profil="'.$user['profil'].'" delete="'.$user['delete'].'">'."\n";
-                $xml .= "\t\t".'<login><![CDATA['.plxUtils::cdataCheck($user['login']).']]></login>'."\n";
-                $xml .= "\t\t".'<name><![CDATA['.plxUtils::cdataCheck($user['name']).']]></name>'."\n";
-                $xml .= "\t\t".'<infos><![CDATA['.plxUtils::cdataCheck($user['infos']).']]></infos>'."\n";
-                $xml .= "\t\t".'<password><![CDATA['.plxUtils::cdataCheck($user['password']).']]></password>'."\n";
-                $xml .= "\t\t".'<salt><![CDATA['.plxUtils::cdataCheck($user['salt']).']]></salt>'."\n";
-                $xml .= "\t\t".'<email><![CDATA['.plxUtils::cdataCheck($user['email']).']]></email>'."\n";
-                $xml .= "\t\t".'<lang><![CDATA['.plxUtils::cdataCheck($user['lang']).']]></lang>'."\n";
-                $xml .= "\t\t".'<password_token><![CDATA['.plxUtils::cdataCheck($user['password_token']).']]></password_token>'."\n";
-                $xml .= "\t\t".'<password_token_expiry><![CDATA['.plxUtils::cdataCheck($user['password_token_expiry']).']]></password_token_expiry>'."\n";
+                $xml .= "\t" . '<user number="' . $user_id . '" active="' . $user['active'] . '" profil="' . $user['profil'] . '" delete="' . $user['delete'] . '">' . "\n";
+                $xml .= "\t\t" . '<login><![CDATA[' . plxUtils::cdataCheck($user['login']) . ']]></login>' . "\n";
+                $xml .= "\t\t" . '<name><![CDATA[' . plxUtils::cdataCheck($user['name']) . ']]></name>' . "\n";
+                $xml .= "\t\t" . '<infos><![CDATA[' . plxUtils::cdataCheck($user['infos']) . ']]></infos>' . "\n";
+                $xml .= "\t\t" . '<password><![CDATA[' . plxUtils::cdataCheck($user['password']) . ']]></password>' . "\n";
+                $xml .= "\t\t" . '<salt><![CDATA[' . plxUtils::cdataCheck($user['salt']) . ']]></salt>' . "\n";
+                $xml .= "\t\t" . '<email><![CDATA[' . plxUtils::cdataCheck($user['email']) . ']]></email>' . "\n";
+                $xml .= "\t\t" . '<lang><![CDATA[' . plxUtils::cdataCheck($user['lang']) . ']]></lang>' . "\n";
+                $xml .= "\t\t" . '<password_token><![CDATA[' . plxUtils::cdataCheck($user['password_token']) . ']]></password_token>' . "\n";
+                $xml .= "\t\t" . '<password_token_expiry><![CDATA[' . plxUtils::cdataCheck($user['password_token_expiry']) . ']]></password_token_expiry>' . "\n";
                 # Hook plugins
                 eval($this->plxPlugins->callHook('plxAdminEditUsersXml'));
                 $xml .= "\t</user>\n";
@@ -536,7 +536,7 @@ Options -Multiviews
                 return plxMsg::Info(L_SAVE_SUCCESSFUL);
             } else {
                 $this->aUsers = $save;
-                return plxMsg::Error(L_SAVE_ERR.' '.path('XMLFILE_USERS'));
+                return plxMsg::Error(L_SAVE_ERR . ' ' . path('XMLFILE_USERS'));
             }
         } else {
             return plxMsg::Error(L_SAVE_ERR);
@@ -617,7 +617,7 @@ Options -Multiviews
                         }
                         $filenameArray[1] = implode(",", $filenameArrayCat);
                         $filenameNew = implode(".", $filenameArray);
-                        rename(PLX_ROOT.$this->aConf['racine_articles'].$filename, PLX_ROOT.$this->aConf['racine_articles'].$filenameNew);
+                        rename(PLX_ROOT . $this->aConf['racine_articles'] . $filename, PLX_ROOT . $this->aConf['racine_articles'] . $filenameNew);
                     }
                 }
                 unset($this->aCats[$cat_id]);
@@ -652,20 +652,20 @@ Options -Multiviews
         # mise à jour de la liste des catégories
         elseif (!empty($content['update'])) {
             foreach ($content['catNum'] as $cat_id) {
-                $cat_name = $content[$cat_id.'_name'];
+                $cat_name = $content[$cat_id . '_name'];
                 if ($cat_name!='') {
-                    $tmpstr = (!empty($content[$cat_id.'_url'])) ? $content[$cat_id.'_url'] : $cat_name;
+                    $tmpstr = (!empty($content[$cat_id . '_url'])) ? $content[$cat_id . '_url'] : $cat_name;
                     $cat_url = plxUtils::urlify($tmpstr);
                     if (empty($cat_url)) {
                         $cat_url = L_DEFAULT_NEW_CATEGORY_URL;
                     }
                     $this->aCats[$cat_id]['name'] = $cat_name;
                     $this->aCats[$cat_id]['url'] = $cat_url;
-                    $this->aCats[$cat_id]['tri'] = $content[$cat_id.'_tri'];
-                    $this->aCats[$cat_id]['bypage'] = intval($content[$cat_id.'_bypage']);
-                    $this->aCats[$cat_id]['menu'] = $content[$cat_id.'_menu'];
-                    $this->aCats[$cat_id]['active'] = $content[$cat_id.'_active'];
-                    $this->aCats[$cat_id]['ordre'] = intval($content[$cat_id.'_ordre']);
+                    $this->aCats[$cat_id]['tri'] = $content[$cat_id . '_tri'];
+                    $this->aCats[$cat_id]['bypage'] = intval($content[$cat_id . '_bypage']);
+                    $this->aCats[$cat_id]['menu'] = $content[$cat_id . '_menu'];
+                    $this->aCats[$cat_id]['active'] = $content[$cat_id . '_active'];
+                    $this->aCats[$cat_id]['ordre'] = intval($content[$cat_id . '_ordre']);
                     $this->aCats[$cat_id]['homepage'] = (isset($this->aCats[$cat_id]['homepage']) ? $this->aCats[$cat_id]['homepage'] : 1);
                     $this->aCats[$cat_id]['description'] = (isset($this->aCats[$cat_id]['description']) ? $this->aCats[$cat_id]['description'] : '');
                     $this->aCats[$cat_id]['template'] = (isset($this->aCats[$cat_id]['template']) ? $this->aCats[$cat_id]['template'] : 'categorie.php');
@@ -692,34 +692,34 @@ Options -Multiviews
             $cats_name = array();
             $cats_url = array();
             # On génére le fichier XML
-            $xml = "<?xml version=\"1.0\" encoding=\"".PLX_CHARSET."\"?>\n";
+            $xml = "<?xml version=\"1.0\" encoding=\"" . PLX_CHARSET . "\"?>\n";
             $xml .= "<document>\n";
             foreach ($this->aCats as $cat_id => $cat) {
 
                 # controle de l'unicité du nom de la categorie
                 if (in_array($cat['name'], $cats_name)) {
                     $this->aCats = $save;
-                    return plxMsg::Error(L_ERR_CATEGORY_ALREADY_EXISTS.' : '.plxUtils::strCheck($cat['name']));
+                    return plxMsg::Error(L_ERR_CATEGORY_ALREADY_EXISTS . ' : ' . plxUtils::strCheck($cat['name']));
                 } else {
                     $cats_name[] = $cat['name'];
                 }
 
                 # controle de l'unicité de l'url de la catégorie
                 if (in_array($cat['url'], $cats_url)) {
-                    return plxMsg::Error(L_ERR_URL_ALREADY_EXISTS.' : '.plxUtils::strCheck($cat['url']));
+                    return plxMsg::Error(L_ERR_URL_ALREADY_EXISTS . ' : ' . plxUtils::strCheck($cat['url']));
                 } else {
                     $cats_url[] = $cat['url'];
                 }
 
-                $xml .= "\t<categorie number=\"".$cat_id."\" active=\"".$cat['active']."\" homepage=\"".$cat['homepage']."\" tri=\"".$cat['tri']."\" bypage=\"".$cat['bypage']."\" menu=\"".$cat['menu']."\" url=\"".$cat['url']."\" template=\"".basename($cat['template'])."\">";
-                $xml .= "<name><![CDATA[".plxUtils::cdataCheck($cat['name'])."]]></name>";
-                $xml .= "<description><![CDATA[".plxUtils::cdataCheck($cat['description'])."]]></description>";
-                $xml .= "<meta_description><![CDATA[".plxUtils::cdataCheck($cat['meta_description'])."]]></meta_description>";
-                $xml .= "<meta_keywords><![CDATA[".plxUtils::cdataCheck($cat['meta_keywords'])."]]></meta_keywords>";
-                $xml .= "<title_htmltag><![CDATA[".plxUtils::cdataCheck($cat['title_htmltag'])."]]></title_htmltag>";
-                $xml .= "<thumbnail><![CDATA[".plxUtils::cdataCheck($cat['thumbnail'])."]]></thumbnail>";
-                $xml .= "<thumbnail_alt><![CDATA[".plxUtils::cdataCheck($cat['thumbnail_alt'])."]]></thumbnail_alt>";
-                $xml .= "<thumbnail_title><![CDATA[".plxUtils::cdataCheck($cat['thumbnail_title'])."]]></thumbnail_title>";
+                $xml .= "\t<categorie number=\"" . $cat_id . "\" active=\"" . $cat['active'] . "\" homepage=\"" . $cat['homepage'] . "\" tri=\"" . $cat['tri'] . "\" bypage=\"" . $cat['bypage'] . "\" menu=\"" . $cat['menu'] . "\" url=\"" . $cat['url'] . "\" template=\"" . basename($cat['template']) . "\">";
+                $xml .= "<name><![CDATA[" . plxUtils::cdataCheck($cat['name']) . "]]></name>";
+                $xml .= "<description><![CDATA[" . plxUtils::cdataCheck($cat['description']) . "]]></description>";
+                $xml .= "<meta_description><![CDATA[" . plxUtils::cdataCheck($cat['meta_description']) . "]]></meta_description>";
+                $xml .= "<meta_keywords><![CDATA[" . plxUtils::cdataCheck($cat['meta_keywords']) . "]]></meta_keywords>";
+                $xml .= "<title_htmltag><![CDATA[" . plxUtils::cdataCheck($cat['title_htmltag']) . "]]></title_htmltag>";
+                $xml .= "<thumbnail><![CDATA[" . plxUtils::cdataCheck($cat['thumbnail']) . "]]></thumbnail>";
+                $xml .= "<thumbnail_alt><![CDATA[" . plxUtils::cdataCheck($cat['thumbnail_alt']) . "]]></thumbnail_alt>";
+                $xml .= "<thumbnail_title><![CDATA[" . plxUtils::cdataCheck($cat['thumbnail_title']) . "]]></thumbnail_title>";
                 # Hook plugins
                 eval($this->plxPlugins->callHook('plxAdminEditCategoriesXml'));
                 $xml .= "</categorie>\n";
@@ -730,7 +730,7 @@ Options -Multiviews
                 return plxMsg::Info(L_SAVE_SUCCESSFUL);
             } else {
                 $this->aCats = $save;
-                return plxMsg::Error(L_SAVE_ERR.' '.path('XMLFILE_CATEGORIES'));
+                return plxMsg::Error(L_SAVE_ERR . ' ' . path('XMLFILE_CATEGORIES'));
             }
         }
     }
@@ -774,7 +774,7 @@ Options -Multiviews
         # suppression
         if (!empty($content['selection']) and $content['selection']=='delete' and isset($content['idStatic']) and empty($content['update'])) {
             foreach ($content['idStatic'] as $static_id) {
-                $filename = PLX_ROOT.$this->aConf['racine_statiques'].$static_id.'.'.$this->aStats[$static_id]['url'].'.php';
+                $filename = PLX_ROOT . $this->aConf['racine_statiques'] . $static_id . '.' . $this->aStats[$static_id]['url'] . '.php';
                 if (is_file($filename)) {
                     unlink($filename);
                 }
@@ -790,27 +790,27 @@ Options -Multiviews
         # mise à jour de la liste des pages statiques
         elseif (!empty($content['update'])) {
             foreach ($content['staticNum'] as $static_id) {
-                $stat_name = $content[$static_id.'_name'];
+                $stat_name = $content[$static_id . '_name'];
                 if ($stat_name!='') {
-                    $url = (!empty($content[$static_id.'_url'])) ? plxUtils::urlify($content[$static_id.'_url']) : '';
+                    $url = (!empty($content[$static_id . '_url'])) ? plxUtils::urlify($content[$static_id . '_url']) : '';
                     $stat_url = (!empty($url)) ? $url : plxUtils::urlify($stat_name);
                     if ($stat_url=='') {
                         $stat_url = L_DEFAULT_NEW_STATIC_URL;
                     }
                     # On vérifie si on a besoin de renommer le fichier de la page statique
                     if (isset($this->aStats[$static_id]) and $this->aStats[$static_id]['url']!=$stat_url) {
-                        $oldfilename = PLX_ROOT.$this->aConf['racine_statiques'].$static_id.'.'.$this->aStats[$static_id]['url'].'.php';
-                        $newfilename = PLX_ROOT.$this->aConf['racine_statiques'].$static_id.'.'.$stat_url.'.php';
+                        $oldfilename = PLX_ROOT . $this->aConf['racine_statiques'] . $static_id . '.' . $this->aStats[$static_id]['url'] . '.php';
+                        $newfilename = PLX_ROOT . $this->aConf['racine_statiques'] . $static_id . '.' . $stat_url . '.php';
                         if (is_file($oldfilename)) {
                             rename($oldfilename, $newfilename);
                         }
                     }
-                    $this->aStats[$static_id]['group'] = trim($content[$static_id.'_group']);
+                    $this->aStats[$static_id]['group'] = trim($content[$static_id . '_group']);
                     $this->aStats[$static_id]['name'] = $stat_name;
                     $this->aStats[$static_id]['url'] = plxUtils::checkSite($url) ? $url : $stat_url;
-                    $this->aStats[$static_id]['active'] = $content[$static_id.'_active'];
-                    $this->aStats[$static_id]['menu'] = $content[$static_id.'_menu'];
-                    $this->aStats[$static_id]['ordre'] = intval($content[$static_id.'_ordre']);
+                    $this->aStats[$static_id]['active'] = $content[$static_id . '_active'];
+                    $this->aStats[$static_id]['menu'] = $content[$static_id . '_menu'];
+                    $this->aStats[$static_id]['ordre'] = intval($content[$static_id . '_ordre']);
                     $this->aStats[$static_id]['template'] = (isset($this->aStats[$static_id]['template']) ? $this->aStats[$static_id]['template'] : 'static.php');
                     $this->aStats[$static_id]['title_htmltag'] = (isset($this->aStats[$static_id]['title_htmltag']) ? $this->aStats[$static_id]['title_htmltag'] : '');
                     $this->aStats[$static_id]['meta_description'] = (isset($this->aStats[$static_id]['meta_description']) ? $this->aStats[$static_id]['meta_description'] : '');
@@ -836,13 +836,13 @@ Options -Multiviews
             $statics_name = array();
             $statics_url = array();
             # On génére le fichier XML
-            $xml = "<?xml version=\"1.0\" encoding=\"".PLX_CHARSET."\"?>\n";
+            $xml = "<?xml version=\"1.0\" encoding=\"" . PLX_CHARSET . "\"?>\n";
             $xml .= "<document>\n";
             foreach ($this->aStats as $static_id => $static) {
 
                 # controle de l'unicité du titre de la page
                 if (in_array($static['name'], $statics_name)) {
-                    return plxMsg::Error(L_ERR_STATIC_ALREADY_EXISTS.' : '.plxUtils::strCheck($static['name']));
+                    return plxMsg::Error(L_ERR_STATIC_ALREADY_EXISTS . ' : ' . plxUtils::strCheck($static['name']));
                 } else {
                     $statics_name[] = $static['name'];
                 }
@@ -850,19 +850,19 @@ Options -Multiviews
                 # controle de l'unicité de l'url de la page
                 if (in_array($static['url'], $statics_url)) {
                     $this->aStats = $save;
-                    return plxMsg::Error(L_ERR_URL_ALREADY_EXISTS.' : '.plxUtils::strCheck($static['url']));
+                    return plxMsg::Error(L_ERR_URL_ALREADY_EXISTS . ' : ' . plxUtils::strCheck($static['url']));
                 } else {
                     $statics_url[] = $static['url'];
                 }
 
-                $xml .= "\t<statique number=\"".$static_id."\" active=\"".$static['active']."\" menu=\"".$static['menu']."\" url=\"".$static['url']."\" template=\"".basename($static['template'])."\">";
-                $xml .= "<group><![CDATA[".plxUtils::cdataCheck($static['group'])."]]></group>";
-                $xml .= "<name><![CDATA[".plxUtils::cdataCheck($static['name'])."]]></name>";
-                $xml .= "<meta_description><![CDATA[".plxUtils::cdataCheck($static['meta_description'])."]]></meta_description>";
-                $xml .= "<meta_keywords><![CDATA[".plxUtils::cdataCheck($static['meta_keywords'])."]]></meta_keywords>";
-                $xml .= "<title_htmltag><![CDATA[".plxUtils::cdataCheck($static['title_htmltag'])."]]></title_htmltag>";
-                $xml .= "<date_creation><![CDATA[".plxUtils::cdataCheck($static['date_creation'])."]]></date_creation>";
-                $xml .= "<date_update><![CDATA[".plxUtils::cdataCheck($static['date_update'])."]]></date_update>";
+                $xml .= "\t<statique number=\"" . $static_id . "\" active=\"" . $static['active'] . "\" menu=\"" . $static['menu'] . "\" url=\"" . $static['url'] . "\" template=\"" . basename($static['template']) . "\">";
+                $xml .= "<group><![CDATA[" . plxUtils::cdataCheck($static['group']) . "]]></group>";
+                $xml .= "<name><![CDATA[" . plxUtils::cdataCheck($static['name']) . "]]></name>";
+                $xml .= "<meta_description><![CDATA[" . plxUtils::cdataCheck($static['meta_description']) . "]]></meta_description>";
+                $xml .= "<meta_keywords><![CDATA[" . plxUtils::cdataCheck($static['meta_keywords']) . "]]></meta_keywords>";
+                $xml .= "<title_htmltag><![CDATA[" . plxUtils::cdataCheck($static['title_htmltag']) . "]]></title_htmltag>";
+                $xml .= "<date_creation><![CDATA[" . plxUtils::cdataCheck($static['date_creation']) . "]]></date_creation>";
+                $xml .= "<date_update><![CDATA[" . plxUtils::cdataCheck($static['date_update']) . "]]></date_update>";
                 # Hook plugins
                 eval($this->plxPlugins->callHook('plxAdminEditStatiquesXml'));
                 $xml .=	"</statique>\n";
@@ -873,7 +873,7 @@ Options -Multiviews
                 return plxMsg::Info(L_SAVE_SUCCESSFUL);
             } else {
                 $this->aStats = $save;
-                return plxMsg::Error(L_SAVE_ERR.' '.path('XMLFILE_STATICS'));
+                return plxMsg::Error(L_SAVE_ERR . ' ' . path('XMLFILE_STATICS'));
             }
         }
     }
@@ -889,7 +889,7 @@ Options -Multiviews
     {
 
         # Emplacement de la page
-        $filename = PLX_ROOT.$this->aConf['racine_statiques'].$num.'.'.$this->aStats[ $num ]['url'].'.php';
+        $filename = PLX_ROOT . $this->aConf['racine_statiques'] . $num . '.' . $this->aStats[ $num ]['url'] . '.php';
         if (file_exists($filename) and filesize($filename) > 0) {
             if ($f = fopen($filename, 'r')) {
                 $content = fread($f, filesize($filename));
@@ -916,9 +916,9 @@ Options -Multiviews
         $this->aStats[$content['id']]['title_htmltag'] = trim($content['title_htmltag']);
         $this->aStats[$content['id']]['meta_description'] = trim($content['meta_description']);
         $this->aStats[$content['id']]['meta_keywords'] = trim($content['meta_keywords']);
-        $this->aStats[$content['id']]['date_creation'] = trim($content['date_creation_year']).trim($content['date_creation_month']).trim($content['date_creation_day']).substr(str_replace(':', '', trim($content['date_creation_time'])), 0, 4);
+        $this->aStats[$content['id']]['date_creation'] = trim($content['date_creation_year']) . trim($content['date_creation_month']) . trim($content['date_creation_day']) . substr(str_replace(':', '', trim($content['date_creation_time'])), 0, 4);
         $date_update = $content['date_update'];
-        $date_update_user = trim($content['date_update_year']).trim($content['date_update_month']).trim($content['date_update_day']).substr(str_replace(':', '', trim($content['date_update_time'])), 0, 4);
+        $date_update_user = trim($content['date_update_year']) . trim($content['date_update_month']) . trim($content['date_update_day']) . substr(str_replace(':', '', trim($content['date_update_time'])), 0, 4);
         $date_update = ($date_update==$date_update_user) ? date('YmdHi') : $date_update_user;
         $this->aStats[$content['id']]['date_update'] = $date_update;
 
@@ -926,12 +926,12 @@ Options -Multiviews
         eval($this->plxPlugins->callHook('plxAdminEditStatique'));
         if ($this->editStatiques(null, true)) {
             # Génération du nom du fichier de la page statique
-            $filename = PLX_ROOT.$this->aConf['racine_statiques'].$content['id'].'.'.$this->aStats[ $content['id'] ]['url'].'.php';
+            $filename = PLX_ROOT . $this->aConf['racine_statiques'] . $content['id'] . '.' . $this->aStats[ $content['id'] ]['url'] . '.php';
             # On écrit le fichier
             if (plxUtils::write($content['content'], $filename)) {
                 return plxMsg::Info(L_SAVE_SUCCESSFUL);
             } else {
-                return plxMsg::Error(L_SAVE_ERR.' '.$filename);
+                return plxMsg::Error(L_SAVE_ERR . ' ' . $filename);
             }
         }
     }
@@ -995,41 +995,41 @@ Options -Multiviews
         $content['tags'] = implode(', ', $tags_unique);
 
         # Formate des dates de creation et de mise à jour
-        $date_creation = $content['date_creation_year'].$content['date_creation_month'].$content['date_creation_day'].substr(str_replace(':', '', $content['date_creation_time']), 0, 4);
-        $date_update = $content['date_update_year'].$content['date_update_month'].$content['date_update_day'].substr(str_replace(':', '', $content['date_update_time']), 0, 4);
+        $date_creation = $content['date_creation_year'] . $content['date_creation_month'] . $content['date_creation_day'] . substr(str_replace(':', '', $content['date_creation_time']), 0, 4);
+        $date_update = $content['date_update_year'] . $content['date_update_month'] . $content['date_update_day'] . substr(str_replace(':', '', $content['date_update_time']), 0, 4);
         $date_update = $date_update==$content['date_update_old'] ? date('YmdHi') : $date_update;
         # Génération du fichier XML
-        $xml = "<?xml version='1.0' encoding='".PLX_CHARSET."'?>\n";
+        $xml = "<?xml version='1.0' encoding='" . PLX_CHARSET . "'?>\n";
         $xml .= "<document>\n";
-        $xml .= "\t".'<title><![CDATA['.plxUtils::cdataCheck(trim($content['title'])).']]></title>'."\n";
-        $xml .= "\t".'<allow_com>'.$content['allow_com'].'</allow_com>'."\n";
-        $xml .= "\t".'<template><![CDATA['.basename($content['template']).']]></template>'."\n";
-        $xml .= "\t".'<chapo><![CDATA['.plxUtils::cdataCheck(trim($content['chapo'])).']]></chapo>'."\n";
-        $xml .= "\t".'<content><![CDATA['.plxUtils::cdataCheck(trim($content['content'])).']]></content>'."\n";
-        $xml .= "\t".'<tags><![CDATA['.plxUtils::cdataCheck(trim($content['tags'])).']]></tags>'."\n";
+        $xml .= "\t" . '<title><![CDATA[' . plxUtils::cdataCheck(trim($content['title'])) . ']]></title>' . "\n";
+        $xml .= "\t" . '<allow_com>' . $content['allow_com'] . '</allow_com>' . "\n";
+        $xml .= "\t" . '<template><![CDATA[' . basename($content['template']) . ']]></template>' . "\n";
+        $xml .= "\t" . '<chapo><![CDATA[' . plxUtils::cdataCheck(trim($content['chapo'])) . ']]></chapo>' . "\n";
+        $xml .= "\t" . '<content><![CDATA[' . plxUtils::cdataCheck(trim($content['content'])) . ']]></content>' . "\n";
+        $xml .= "\t" . '<tags><![CDATA[' . plxUtils::cdataCheck(trim($content['tags'])) . ']]></tags>' . "\n";
         $meta_description = plxUtils::getValue($content['meta_description']);
-        $xml .= "\t".'<meta_description><![CDATA['.plxUtils::cdataCheck(trim($meta_description)).']]></meta_description>'."\n";
+        $xml .= "\t" . '<meta_description><![CDATA[' . plxUtils::cdataCheck(trim($meta_description)) . ']]></meta_description>' . "\n";
         $meta_keywords = plxUtils::getValue($content['meta_keywords']);
-        $xml .= "\t".'<meta_keywords><![CDATA['.plxUtils::cdataCheck(trim($meta_keywords)).']]></meta_keywords>'."\n";
+        $xml .= "\t" . '<meta_keywords><![CDATA[' . plxUtils::cdataCheck(trim($meta_keywords)) . ']]></meta_keywords>' . "\n";
         $title_htmltag = plxUtils::getValue($content['title_htmltag']);
-        $xml .= "\t".'<title_htmltag><![CDATA['.plxUtils::cdataCheck(trim($title_htmltag)).']]></title_htmltag>'."\n";
+        $xml .= "\t" . '<title_htmltag><![CDATA[' . plxUtils::cdataCheck(trim($title_htmltag)) . ']]></title_htmltag>' . "\n";
         $thumbnail = plxUtils::getValue($content['thumbnail']);
-        $xml .= "\t".'<thumbnail><![CDATA['.plxUtils::cdataCheck(trim($thumbnail)).']]></thumbnail>'."\n";
+        $xml .= "\t" . '<thumbnail><![CDATA[' . plxUtils::cdataCheck(trim($thumbnail)) . ']]></thumbnail>' . "\n";
         $thumbnail_alt = plxUtils::getValue($content['thumbnail_alt']);
-        $xml .= "\t".'<thumbnail_alt><![CDATA['.plxUtils::cdataCheck(trim($thumbnail_alt)).']]></thumbnail_alt>'."\n";
+        $xml .= "\t" . '<thumbnail_alt><![CDATA[' . plxUtils::cdataCheck(trim($thumbnail_alt)) . ']]></thumbnail_alt>' . "\n";
         $thumbnail_title = plxUtils::getValue($content['thumbnail_title']);
-        $xml .= "\t".'<thumbnail_title><![CDATA['.plxUtils::cdataCheck(trim($thumbnail_title)).']]></thumbnail_title>'."\n";
-        $xml .= "\t".'<date_creation><![CDATA['.plxUtils::cdataCheck($date_creation).']]></date_creation>'."\n";
-        $xml .= "\t".'<date_update><![CDATA['.plxUtils::cdataCheck($date_update).']]></date_update>'."\n";
+        $xml .= "\t" . '<thumbnail_title><![CDATA[' . plxUtils::cdataCheck(trim($thumbnail_title)) . ']]></thumbnail_title>' . "\n";
+        $xml .= "\t" . '<date_creation><![CDATA[' . plxUtils::cdataCheck($date_creation) . ']]></date_creation>' . "\n";
+        $xml .= "\t" . '<date_update><![CDATA[' . plxUtils::cdataCheck($date_update) . ']]></date_update>' . "\n";
         # Hook plugins
         eval($this->plxPlugins->callHook('plxAdminEditArticleXml'));
         $xml .= "</document>\n";
         # Recherche du nom du fichier correspondant à l'id
-        $oldArt = $this->plxGlob_arts->query('/^'.$id.'.(.*).xml$/', '', 'sort', 0, 1, 'all');
+        $oldArt = $this->plxGlob_arts->query('/^' . $id . '.(.*).xml$/', '', 'sort', 0, 1, 'all');
 
         # Si demande de modération de l'article
         if (isset($content['moderate'])) {
-            $id = '_'.str_replace('_', '', $id);
+            $id = '_' . str_replace('_', '', $id);
         }
         # Si demande de publication
         if (isset($content['publish']) or isset($content['draft'])) {
@@ -1037,19 +1037,19 @@ Options -Multiviews
         }
 
         # On genère le nom de notre fichier
-        $time = $content['date_publication_year'].$content['date_publication_month'].$content['date_publication_day'].substr(str_replace(':', '', $content['date_publication_time']), 0, 4);
+        $time = $content['date_publication_year'] . $content['date_publication_month'] . $content['date_publication_day'] . substr(str_replace(':', '', $content['date_publication_time']), 0, 4);
         if (!preg_match('/^[0-9]{12}$/', $time)) {
             $time = date('YmdHi');
         } # Check de la date au cas ou...
         if (empty($content['catId'])) {
             $content['catId']=array('000');
         } # Catégorie non classée
-        $filename = PLX_ROOT.$this->aConf['racine_articles'].$id.'.'.implode(',', $content['catId']).'.'.trim($content['author']).'.'.$time.'.'.$content['url'].'.xml';
+        $filename = PLX_ROOT . $this->aConf['racine_articles'] . $id . '.' . implode(',', $content['catId']) . '.' . trim($content['author']) . '.' . $time . '.' . $content['url'] . '.xml';
         # On va mettre à jour notre fichier
         if (plxUtils::write($xml, $filename)) {
             # suppression ancien fichier si nécessaire
             if ($oldArt) {
-                $oldfilename = PLX_ROOT.$this->aConf['racine_articles'].$oldArt['0'];
+                $oldfilename = PLX_ROOT . $this->aConf['racine_articles'] . $oldArt['0'];
                 if ($oldfilename!=$filename and file_exists($oldfilename)) {
                     unlink($oldfilename);
                 }
@@ -1083,16 +1083,16 @@ Options -Multiviews
         # Variable d'état
         $resDelArt = $resDelCom = true;
         # Suppression de l'article
-        if ($globArt = $this->plxGlob_arts->query('/^'.$id.'.(.*).xml$/')) {
-            unlink(PLX_ROOT.$this->aConf['racine_articles'].$globArt['0']);
-            $resDelArt = !file_exists(PLX_ROOT.$this->aConf['racine_articles'].$globArt['0']);
+        if ($globArt = $this->plxGlob_arts->query('/^' . $id . '.(.*).xml$/')) {
+            unlink(PLX_ROOT . $this->aConf['racine_articles'] . $globArt['0']);
+            $resDelArt = !file_exists(PLX_ROOT . $this->aConf['racine_articles'] . $globArt['0']);
         }
         # Suppression des commentaires
-        if ($globComs = $this->plxGlob_coms->query('/^_?'.str_replace('_', '', $id).'.(.*).xml$/')) {
+        if ($globComs = $this->plxGlob_coms->query('/^_?' . str_replace('_', '', $id) . '.(.*).xml$/')) {
             $nb_coms=sizeof($globComs);
             for ($i=0; $i<$nb_coms; $i++) {
-                unlink(PLX_ROOT.$this->aConf['racine_commentaires'].$globComs[$i]);
-                $resDelCom = (!file_exists(PLX_ROOT.$this->aConf['racine_commentaires'].$globComs[$i]) and $resDelCom);
+                unlink(PLX_ROOT . $this->aConf['racine_commentaires'] . $globComs[$i]);
+                $resDelCom = (!file_exists(PLX_ROOT . $this->aConf['racine_commentaires'] . $globComs[$i]) and $resDelCom);
             }
         }
 
@@ -1136,7 +1136,7 @@ Options -Multiviews
         $comment['parent'] = $content['parent'];
         $idx = $this->nextIdArtComment($artId);
         $time = time();
-        $comment['filename'] = $artId.'.'.$time.'-'.$idx.'.xml';
+        $comment['filename'] = $artId . '.' . $time . '-' . $idx . '.xml';
         # On peut créer le commentaire
         if ($this->addCommentaire($comment)) { # Commentaire OK
             return true;
@@ -1163,8 +1163,8 @@ Options -Multiviews
 
         $comment=array();
         # Génération du nom du fichier
-        $comment['filename'] = $id.'.xml';
-        if (!file_exists(PLX_ROOT.$this->aConf['racine_commentaires'].$comment['filename'])) { # Commentaire inexistant
+        $comment['filename'] = $id . '.xml';
+        if (!file_exists(PLX_ROOT . $this->aConf['racine_commentaires'] . $comment['filename'])) { # Commentaire inexistant
             return plxMsg::Error(L_ERR_UNKNOWN_COMMENT);
         }
         # Contrôle des saisies
@@ -1175,7 +1175,7 @@ Options -Multiviews
             return plxMsg::Error(L_ERR_INVALID_SITE);
         }
         # On récupère les infos du commentaire
-        $com = $this->parseCommentaire(PLX_ROOT.$this->aConf['racine_commentaires'].$comment['filename']);
+        $com = $this->parseCommentaire(PLX_ROOT . $this->aConf['racine_commentaires'] . $comment['filename']);
         # Formatage des données
         if ($com['type'] != 'admin') {
             $comment['author'] = plxUtils::strCheck(trim($content['author']));
@@ -1194,9 +1194,9 @@ Options -Multiviews
         # Génération du nouveau nom du fichier
         $time = explode(':', $content['date_publication_time']);
         $newtimestamp = mktime($time[0], $time[1], 0, $content['date_publication_month'], $content['date_publication_day'], $content['date_publication_year']);
-        $com = $this->comInfoFromFilename($id.'.xml');
-        $newid = $com['comStatus'].$com['artId'].'.'.$newtimestamp.'-'.$com['comIdx'];
-        $comment['filename'] = $newid.'.xml';
+        $com = $this->comInfoFromFilename($id . '.xml');
+        $newid = $com['comStatus'] . $com['artId'] . '.' . $newtimestamp . '-' . $com['comIdx'];
+        $comment['filename'] = $newid . '.xml';
         # Suppression de l'ancien commentaire
         $this->delCommentaire($id);
         # Création du nouveau commentaire
@@ -1219,7 +1219,7 @@ Options -Multiviews
     {
 
         # Génération du nom du fichier
-        $filename = PLX_ROOT.$this->aConf['racine_commentaires'].$id.'.xml';
+        $filename = PLX_ROOT . $this->aConf['racine_commentaires'] . $id . '.xml';
         # Suppression du commentaire
         if (file_exists($filename)) {
             unlink($filename);
@@ -1245,7 +1245,7 @@ Options -Multiviews
         $capture = '';
 
         # Génération du nom du fichier
-        $oldfilename = PLX_ROOT.$this->aConf['racine_commentaires'].$id.'.xml';
+        $oldfilename = PLX_ROOT . $this->aConf['racine_commentaires'] . $id . '.xml';
         if (!file_exists($oldfilename)) { # Commentaire inexistant
             return plxMsg::Error(L_ERR_UNKNOWN_COMMENT);
         }
@@ -1254,10 +1254,10 @@ Options -Multiviews
             $id=str_replace($capture[1], '', $id);
         }
         if ($mod=='offline') {
-            $id = '_'.$id;
+            $id = '_' . $id;
         }
         # Génération du nouveau nom de fichier
-        $newfilename = PLX_ROOT.$this->aConf['racine_commentaires'].$id.'.xml';
+        $newfilename = PLX_ROOT . $this->aConf['racine_commentaires'] . $id . '.xml';
         # On renomme le fichier
         @rename($oldfilename, $newfilename);
         # Contrôle
@@ -1288,10 +1288,10 @@ Options -Multiviews
     {
 
         # Génération du fichier XML
-        $xml = "<?xml version='1.0' encoding='".PLX_CHARSET."'?>\n";
+        $xml = "<?xml version='1.0' encoding='" . PLX_CHARSET . "'?>\n";
         $xml .= "<document>\n";
         foreach ($this->aTags as $id => $tag) {
-            $xml .= "\t".'<article number="'.$id.'" date="'.$tag['date'].'" active="'.$tag['active'].'"><![CDATA['.plxUtils::cdataCheck($tag['tags']).']]></article>'."\n";
+            $xml .= "\t" . '<article number="' . $id . '" date="' . $tag['date'] . '" active="' . $tag['active'] . '"><![CDATA[' . plxUtils::cdataCheck($tag['tags']) . ']]></article>' . "\n";
         }
         $xml .= "</document>";
 
@@ -1344,7 +1344,7 @@ Options -Multiviews
             $msg = L_PLUXML_UPDATE_ERR;
             $className = 'red';
         } elseif (version_compare(PLX_VERSION, $latest_version, ">=")) {
-            $msg = L_PLUXML_UPTODATE.' ('.PLX_VERSION.')';
+            $msg = L_PLUXML_UPTODATE . ' (' . PLX_VERSION . ')';
             $className = 'green';
         } else {
             $msg = $this->update_link;

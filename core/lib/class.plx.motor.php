@@ -7,7 +7,7 @@
  * @author  Anthony GUÉRIN, Florent MONTHEL, Stéphane F, Pedro "P3ter" CADETE
  **/
 
-include_once PLX_CORE.'lib/class.plx.template.php';
+include_once PLX_CORE . 'lib/class.plx.template.php';
 
 class plxMotor
 {
@@ -112,7 +112,7 @@ class plxMotor
             !isset($this->aConf['version']) or
             (version_compare($this->aConf['version'], PLX_VERSION, '<') and !defined('PLX_UPDATER'))
         ) {
-            header('Location: '.PLX_ROOT.'update/index.php');
+            header('Location: ' . PLX_ROOT . 'update/index.php');
             exit;
         }
         # Chargement des variables
@@ -134,8 +134,8 @@ class plxMotor
         # Hook plugins
         eval($this->plxPlugins->callHook('plxMotorConstructLoadPlugins'));
         # Traitement sur les répertoires des articles et des commentaires
-        $this->plxGlob_arts = plxGlob::getInstance(PLX_ROOT.$this->aConf['racine_articles'], false, true, 'arts');
-        $this->plxGlob_coms = plxGlob::getInstance(PLX_ROOT.$this->aConf['racine_commentaires']);
+        $this->plxGlob_arts = plxGlob::getInstance(PLX_ROOT . $this->aConf['racine_articles'], false, true, 'arts');
+        $this->plxGlob_coms = plxGlob::getInstance(PLX_ROOT . $this->aConf['racine_commentaires']);
         # Récupération des données dans les autres fichiers xml
         $this->getCategories(path('XMLFILE_CATEGORIES'));
         $this->getStatiques(path('XMLFILE_STATICS'));
@@ -184,17 +184,17 @@ class plxMotor
             if ($this->plxGlob_arts->query('#^\d{4}\.(home[0-9,]*)\.\d{3}\.\d{12}\.[\w-]+\.xml$#')) {
                 $this->motif = '#^\d{4}.(home[0-9,]*).\d{3}.\d{12}.[\w-]+.xml$#';
             } else { # Sinon on recupere tous les articles
-                $this->motif = '#^\d{4}.(?:\d|,)*(?:'.$this->homepageCats.')(?:\d|,)*.\d{3}.\d{12}.[\w-]+.xml$#';
+                $this->motif = '#^\d{4}.(?:\d|,)*(?:' . $this->homepageCats . ')(?:\d|,)*.\d{3}.\d{12}.[\w-]+.xml$#';
             }
         } elseif ($this->get and preg_match('#^article(\d+)\/?([\w-]+)?#', $this->get, $capture)) {
             $this->mode = 'article'; # Mode article
             $this->template = 'article.php';
             $this->cible = str_pad($capture[1], 4, '0', STR_PAD_LEFT); # On complete sur 4 caracteres
-            $this->motif = '#^'.$this->cible.'.(?:\d|home|,)*(?:'.$this->activeCats.'|home)(?:\d|home|,)*.\d{3}.\d{12}.[\w-]+.xml$#'; # Motif de recherche
+            $this->motif = '#^' . $this->cible . '.(?:\d|home|,)*(?:' . $this->activeCats . '|home)(?:\d|home|,)*.\d{3}.\d{12}.[\w-]+.xml$#'; # Motif de recherche
             if ($this->getArticles()) {
                 # Redirection 301
                 if (!isset($capture[2]) or $this->plxRecord_arts->f('url')!=$capture[2]) {
-                    $this->redir301($this->urlRewrite('?article'.intval($this->cible).'/'.$this->plxRecord_arts->f('url')));
+                    $this->redir301($this->urlRewrite('?article' . intval($this->cible) . '/' . $this->plxRecord_arts->f('url')));
                 }
             } else {
                 $this->error404(L_UNKNOWN_ARTICLE);
@@ -213,20 +213,20 @@ class plxMotor
                     $this->mode = 'static'; # Mode static
                     $this->template = $this->aStats[$this->cible]['template'];
                 } else {
-                    $this->redir301($this->urlRewrite('?static'.intval($this->cible).'/'.$this->aStats[$this->cible]['url']));
+                    $this->redir301($this->urlRewrite('?static' . intval($this->cible) . '/' . $this->aStats[$this->cible]['url']));
                 }
             }
         } elseif ($this->get and preg_match('#^categorie(\d+)\/?([\w-]+)?#', $this->get, $capture)) {
             $this->cible = str_pad($capture[1], 3, '0', STR_PAD_LEFT); # On complete sur 3 caracteres
             if (!empty($this->aCats[$this->cible]) and $this->aCats[$this->cible]['active'] and $this->aCats[$this->cible]['url']==$capture[2]) {
                 $this->mode = 'categorie'; # Mode categorie
-                $this->motif = '#^\d{4}.((?:\d|home|,)*(?:'.$this->cible.')(?:\d|home|,)*).\d{3}.\d{12}.[\w-]+.xml$#'; # Motif de recherche
+                $this->motif = '#^\d{4}.((?:\d|home|,)*(?:' . $this->cible . ')(?:\d|home|,)*).\d{3}.\d{12}.[\w-]+.xml$#'; # Motif de recherche
                 $this->template = $this->aCats[$this->cible]['template'];
                 $this->tri = $this->aCats[$this->cible]['tri']; # Recuperation du tri des articles
                 $this->bypage = $this->aCats[$this->cible]['bypage'];
             } elseif (isset($this->aCats[$this->cible])) { # Redirection 301
                 if ($this->aCats[$this->cible]['url']!=$capture[2]) {
-                    $this->redir301($this->urlRewrite('?categorie'.intval($this->cible).'/'.$this->aCats[$this->cible]['url']));
+                    $this->redir301($this->urlRewrite('?categorie' . intval($this->cible) . '/' . $this->aCats[$this->cible]['url']));
                 }
             } else {
                 $this->error404(L_UNKNOWN_CATEGORY);
@@ -240,7 +240,7 @@ class plxMotor
             // $this->tri = $this->aCats[$this->cible]['tri']; # Recuperation du tri des articles
             } elseif (isset($this->aUser[$this->cible])) { # Redirection 301
                 if ($this->aCats[$this->cible]['url']!=$capture[2]) {
-                    $this->redir301($this->urlRewrite('?user'.intval($this->cible).'/'.$this->aCats[$this->cible]['login']));
+                    $this->redir301($this->urlRewrite('?user' . intval($this->cible) . '/' . $this->aCats[$this->cible]['login']));
                 }
             } else {
                 $this->error404(L_UNKNOWN_USER);
@@ -260,7 +260,7 @@ class plxMotor
             } else {
                 $search .= '\d{2}';
             }
-            $this->motif = '#^\d{4}.(?:\d|home|,)*(?:'.$this->activeCats.'|home)(?:\d|home|,)*.\d{3}.'.$search.'\d{4}.[\w-]+.xml$#';
+            $this->motif = '#^\d{4}.(?:\d|home|,)*(?:' . $this->activeCats . '|home)(?:\d|home|,)*.\d{3}.' . $search . '\d{4}.[\w-]+.xml$#';
         } elseif ($this->get and preg_match('#^tag\/([\w-]+)#', $this->get, $capture)) {
             $this->cible = $capture[1];
             $ids = array();
@@ -283,7 +283,7 @@ class plxMotor
             if (sizeof($ids)>0) {
                 $this->mode = 'tags'; # Affichage en mode home
                 $this->template = 'tags.php';
-                $this->motif = '#('.implode('|', $ids).').(?:\d|home|,)*(?:'.$this->activeCats.'|home)(?:\d|home|,)*.\d{3}.\d{12}.[\w-]+.xml$#';
+                $this->motif = '#(' . implode('|', $ids) . ').(?:\d|home|,)*(?:' . $this->activeCats . '|home)(?:\d|home|,)*.\d{3}.\d{12}.[\w-]+.xml$#';
                 $this->bypage = $this->aConf['bypage_tags']; # Nombre d'article par page
             } else {
                 $this->error404(L_ARTICLE_NO_TAG);
@@ -323,7 +323,7 @@ class plxMotor
         eval($this->plxPlugins->callHook('plxMotorRedir301'));
         # Redirection 301
         header('Status: 301 Moved Permanently', false, 301);
-        header('Location: '.$url);
+        header('Location: ' . $url);
         exit();
     }
 
@@ -375,7 +375,7 @@ class plxMotor
                 # On récupère le retour de la création
                 $retour = $this->newCommentaire($this->cible, plxUtils::unSlash($_POST));
                 # Url de l'article
-                $url = $this->urlRewrite('?article'.intval($this->plxRecord_arts->f('numero')).'/'.$this->plxRecord_arts->f('url'));
+                $url = $this->urlRewrite('?article' . intval($this->plxRecord_arts->f('numero')) . '/' . $this->plxRecord_arts->f('url'));
                 eval($this->plxPlugins->callHook('plxMotorDemarrageNewCommentaire')); # Hook Plugins
                 if ($retour[0] == 'c') { # Le commentaire a été publié
                     $_SESSION['msgcom'] = L_COM_PUBLISHED;
@@ -399,7 +399,7 @@ class plxMotor
             }
 
             # Récupération des commentaires
-            $this->getCommentaires('#^'.$this->cible.'.\d{10}-\d+.xml$#', $this->tri_coms);
+            $this->getCommentaires('#^' . $this->cible . '.\d{10}-\d+.xml$#', $this->tri_coms);
             $this->template=$this->plxRecord_arts->f('template');
             if ($this->aConf['capcha']) {
                 $this->plxCapcha = new plxCapcha();
@@ -728,7 +728,7 @@ class plxMotor
             if (!isset($statique['url'])) {
                 continue;
             }
-            $filename = PLX_ROOT . $this->aConf['racine_statiques'] . $statId. '.' . $statique['url'] . '.php';
+            $filename = PLX_ROOT . $this->aConf['racine_statiques'] . $statId . '.' . $statique['url'] . '.php';
             $statique['readable'] = is_readable($filename) ? 1 : 0;
 
             $this->aStats[$statId] = $statique;
@@ -1010,7 +1010,7 @@ class plxMotor
                 'comStatus' => $capture[1],
                 'artId'     => $capture[2],
                 'comDate'   => plxDate::timestamp2Date($capture[3]),
-                'comId'     => $capture[3].'-'.$capture[4],
+                'comId'     => $capture[3] . '-' . $capture[4],
                 'comIdx'    => $capture[4],
 
             );
@@ -1103,7 +1103,7 @@ class plxMotor
         $aFiles = $this->plxGlob_coms->query($motif, 'com', $ordre, $start, $limite, $publi);
         if ($aFiles) { # On a des fichiers
             foreach ($aFiles as $k=>$v) {
-                $array[$k] = $this->parseCommentaire(PLX_ROOT.$this->aConf['racine_commentaires'].$v);
+                $array[$k] = $this->parseCommentaire(PLX_ROOT . $this->aConf['racine_commentaires'] . $v);
             }
 
             # hiérarchisation et indentation des commentaires seulement sur les écrans requis
@@ -1128,10 +1128,10 @@ class plxMotor
     public function nextIdArtComment($idArt)
     {
         $ret = '0';
-        if ($dh = opendir(PLX_ROOT.$this->aConf['racine_commentaires'])) {
+        if ($dh = opendir(PLX_ROOT . $this->aConf['racine_commentaires'])) {
             $Idxs = array();
             while (false !== ($file = readdir($dh))) {
-                if (preg_match("/_?".$idArt.".\d+-(\d+).xml/", $file, $capture)) {
+                if (preg_match("/_?" . $idArt . ".\d+-(\d+).xml/", $file, $capture)) {
                     if ($capture[1] > $ret) {
                         $ret = $capture[1];
                     }
@@ -1192,16 +1192,16 @@ class plxMotor
                 # On génère le nom du fichier
                 $time = time();
                 if ($this->aConf['mod_com']) { # On modère le commentaire => underscore
-                    $comment['filename'] = '_'.$artId.'.'.$time.'-'.$idx.'.xml';
+                    $comment['filename'] = '_' . $artId . '.' . $time . '-' . $idx . '.xml';
                 } else { # On publie le commentaire directement
-                    $comment['filename'] = $artId.'.'.$time.'-'.$idx.'.xml';
+                    $comment['filename'] = $artId . '.' . $time . '-' . $idx . '.xml';
                 }
                 # On peut créer le commentaire
                 if ($this->addCommentaire($comment)) { # Commentaire OK
                     if ($this->aConf['mod_com']) { # En cours de modération
                         return 'mod';
                     } else { # Commentaire publie directement, on retourne son identifiant
-                        return 'c'.$artId.'-'.$idx;
+                        return 'c' . $artId . '-' . $idx;
                     }
                 } else { # Erreur lors de la création du commentaire
                     return L_NEWCOMMENT_ERR;
@@ -1228,20 +1228,20 @@ class plxMotor
             return;
         }
         # On genere le contenu de notre fichier XML
-        $xml = "<?xml version='1.0' encoding='".PLX_CHARSET."'?>\n";
+        $xml = "<?xml version='1.0' encoding='" . PLX_CHARSET . "'?>\n";
         $xml .= "<comment>\n";
-        $xml .= "\t<author><![CDATA[".plxUtils::cdataCheck($content['author'])."]]></author>\n";
-        $xml .= "\t<type>".$content['type']."</type>\n";
-        $xml .= "\t<ip>".$content['ip']."</ip>\n";
-        $xml .= "\t<mail><![CDATA[".plxUtils::cdataCheck($content['mail'])."]]></mail>\n";
-        $xml .= "\t<site><![CDATA[".plxUtils::cdataCheck($content['site'])."]]></site>\n";
-        $xml .= "\t<content><![CDATA[".plxUtils::cdataCheck($content['content'])."]]></content>\n";
-        $xml .= "\t<parent><![CDATA[".plxUtils::cdataCheck($content['parent'])."]]></parent>\n";
+        $xml .= "\t<author><![CDATA[" . plxUtils::cdataCheck($content['author']) . "]]></author>\n";
+        $xml .= "\t<type>" . $content['type'] . "</type>\n";
+        $xml .= "\t<ip>" . $content['ip'] . "</ip>\n";
+        $xml .= "\t<mail><![CDATA[" . plxUtils::cdataCheck($content['mail']) . "]]></mail>\n";
+        $xml .= "\t<site><![CDATA[" . plxUtils::cdataCheck($content['site']) . "]]></site>\n";
+        $xml .= "\t<content><![CDATA[" . plxUtils::cdataCheck($content['content']) . "]]></content>\n";
+        $xml .= "\t<parent><![CDATA[" . plxUtils::cdataCheck($content['parent']) . "]]></parent>\n";
         # Hook plugins
         eval($this->plxPlugins->callHook('plxMotorAddCommentaireXml'));
         $xml .= "</comment>\n";
         # On ecrit ce contenu dans notre fichier XML
-        return plxUtils::write($xml, PLX_ROOT.$this->aConf['racine_commentaires'].$content['filename']);
+        return plxUtils::write($xml, PLX_ROOT . $this->aConf['racine_commentaires'] . $content['filename']);
     }
 
     /**
@@ -1314,21 +1314,21 @@ class plxMotor
     {
 
         # On décrypte le nom du fichier
-        $file = PLX_ROOT.$this->aConf['medias'].plxEncrypt::decryptId($cible);
+        $file = PLX_ROOT . $this->aConf['medias'] . plxEncrypt::decryptId($cible);
         # Hook plugins
         if (eval($this->plxPlugins->callHook('plxMotorSendDownload'))) {
             return;
         }
         # On lance le téléchargement et on check le répertoire medias
-        if (file_exists($file) and preg_match('#^'.str_replace('\\', '#', realpath(PLX_ROOT.$this->aConf['medias']).'#'), str_replace('\\', '/', realpath($file)))) {
+        if (file_exists($file) and preg_match('#^' . str_replace('\\', '#', realpath(PLX_ROOT . $this->aConf['medias']) . '#'), str_replace('\\', '/', realpath($file)))) {
             header('Content-Description: File Transfer');
             header('Content-Type: application/download');
-            header('Content-Disposition: attachment; filename='.basename($file));
+            header('Content-Disposition: attachment; filename=' . basename($file));
             header('Content-Transfer-Encoding: binary');
             header('Expires: 0');
             header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
             header('Pragma: no-cache');
-            header('Content-Length: '.filesize($file));
+            header('Content-Length: ' . filesize($file));
             readfile($file);
             exit;
         } else { # On retourne false
@@ -1369,7 +1369,7 @@ class plxMotor
                 $new_url = $this->path_url;
             }
             if (!empty($args['fragment'])) {
-                $new_url .= '#'. $args['fragment'];
+                $new_url .= '#' . $args['fragment'];
             }
         } else {
             if (empty($args['path']) and !empty($args['query'])) {
@@ -1411,7 +1411,7 @@ class plxMotor
             $motif = $select;
         }
 
-        if ($arts = $this->plxGlob_arts->query('#^'.$mod.'\d{4}.('.$motif.').'.$userId.'.\d{12}.[\w-]+.xml$#', 'art', '', 0, false, $publi)) {
+        if ($arts = $this->plxGlob_arts->query('#^' . $mod . '\d{4}.(' . $motif . ').' . $userId . '.\d{12}.[\w-]+.xml$#', 'art', '', 0, false, $publi)) {
             $nb = sizeof($arts);
         }
 
@@ -1459,7 +1459,7 @@ class plxMotor
         if ($this->plxGlob_arts->aFiles) {
             $datetime=date('YmdHi');
             foreach ($this->plxGlob_arts->aFiles as $filename) {
-                if (preg_match('#^(\d{4}).(?:\d|home|,)*(?:'.$this->activeCats.'|home)(?:\d|home|,)*.\d{3}.(\d{12}).[\w-]+.xml$#', $filename, $capture)) {
+                if (preg_match('#^(\d{4}).(?:\d|home|,)*(?:' . $this->activeCats . '|home)(?:\d|home|,)*.\d{3}.(\d{12}).[\w-]+.xml$#', $filename, $capture)) {
                     if ($capture[2]<=$datetime) { # on ne prends que les articles publiés
                         $this->activeArts[$capture[1]]=1;
                     }

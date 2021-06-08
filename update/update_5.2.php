@@ -10,7 +10,7 @@ class update_5_2 extends plxUpdate
     # mise à jour fichier parametres.xml
     public function step1()
     {
-        echo L_UPDATE_UPDATE_PARAMETERS_FILE."<br />";
+        echo L_UPDATE_UPDATE_PARAMETERS_FILE . "<br />";
         # nouveaux parametres
         $new_parameters = array();
         $new_parameters['hometemplate'] = 'home.php';
@@ -24,11 +24,11 @@ class update_5_2 extends plxUpdate
     # mise à jour fichier parametres.xml
     public function step2()
     {
-        echo L_UPDATE_UPDATE_PLUGINS_FILE."<br />";
+        echo L_UPDATE_UPDATE_PLUGINS_FILE . "<br />";
         # récupération de la liste des plugins
         $aPlugins = $this->loadConfig();
         # Migration du format du fichier plugins.xml
-        $xml = "<?xml version='1.0' encoding='".PLX_CHARSET."'?>\n";
+        $xml = "<?xml version='1.0' encoding='" . PLX_CHARSET . "'?>\n";
         $xml .= "<document>\n";
         foreach ($aPlugins as $k=>$v) {
             if (isset($v['activate']) and $v['activate']!='0') {
@@ -37,7 +37,7 @@ class update_5_2 extends plxUpdate
         }
         $xml .= "</document>";
         if (!plxUtils::write($xml, path('XMLFILE_PLUGINS'))) {
-            echo '<p class="error">'.L_UPDATE_ERR_FILE_PROCESSING.'</p>';
+            echo '<p class="error">' . L_UPDATE_ERR_FILE_PROCESSING . '</p>';
             return false;
         }
         return true;

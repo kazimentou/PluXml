@@ -21,7 +21,7 @@ $plxAdmin->checkProfil(PROFIL_ADMIN, PROFIL_MANAGER, PROFIL_MODERATOR, PROFIL_ED
 # On édite la catégorie
 if (!empty($_POST) and isset($plxAdmin->aCats[ $_POST['id'] ])) {
     $plxAdmin->editCategorie($_POST);
-    header('Location: categorie.php?p='.$_POST['id']);
+    header('Location: categorie.php?p=' . $_POST['id']);
     exit;
 } elseif (!empty($_GET['p'])) { # On vérifie l'existence de la catégorie
     $id = plxUtils::strCheck($_GET['p']);
@@ -37,7 +37,7 @@ if (!empty($_POST) and isset($plxAdmin->aCats[ $_POST['id'] ])) {
 
 # On récupère les templates des catégories
 $aTemplates = array();
-$files = plxGlob::getInstance(PLX_ROOT.$plxAdmin->aConf['racine_themes'].$plxAdmin->aConf['style']);
+$files = plxGlob::getInstance(PLX_ROOT . $plxAdmin->aConf['racine_themes'] . $plxAdmin->aConf['style']);
 if ($array = $files->query('/^categorie(-[a-z0-9-_]+)?.php$/')) {
     foreach ($array as $k=>$v) {
         $aTemplates[$v] = $v;
@@ -106,7 +106,7 @@ include 'top.php';
                 if (preg_match('@^(?:https?|data):@', $thumbnail)) {
                     $src = $thumbnail;
                 } else {
-                    $src = PLX_ROOT.$thumbnail;
+                    $src = PLX_ROOT . $thumbnail;
                     $src = is_file($src) ? $src : false;
                 }
                 if ($src) {

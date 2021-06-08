@@ -20,12 +20,12 @@ $page = plxUtils::nullbyteRemove($page);
 
 switch ($help) {
     case 'plugin':
-        $filename = realpath(PLX_PLUGINS.$page.'/lang/'.$plxAdmin->aConf['default_lang'].'-help.php');
+        $filename = realpath(PLX_PLUGINS . $page . '/lang/' . $plxAdmin->aConf['default_lang'] . '-help.php');
         $back_to_title = L_BACK_TO_PLUGINS;
         $back_to = 'parametres_plugins.php';
         break;
     case 'theme':
-        $filename = realpath(PLX_ROOT.$plxAdmin->aConf['racine_themes'].$page.'/lang/'.$plxAdmin->aConf['default_lang'].'-help.php');
+        $filename = realpath(PLX_ROOT . $plxAdmin->aConf['racine_themes'] . $page . '/lang/' . $plxAdmin->aConf['default_lang'] . '-help.php');
         $back_to_title = L_BACK_TO_THEMES;
         $back_to = 'parametres_themes.php';
         break;
@@ -41,14 +41,14 @@ if (is_file($filename)) {
     ob_start();
     echo '
 	<div class="inline-form action-bar">
-		<h2>'.plxUtils::strCheck($page).'</h2>
-		<p><a class="back" href="'.$back_to.'">'.$back_to_title.'</a></p>
+		<h2>' . plxUtils::strCheck($page) . '</h2>
+		<p><a class="back" href="' . $back_to . '">' . $back_to_title . '</a></p>
 	</div>';
     include  $filename;
     $output=ob_get_clean();
 } else {
     plxMsg::Error(L_NO_ENTRY);
-    header('Location: '.$back_to);
+    header('Location: ' . $back_to);
     exit;
 }
 

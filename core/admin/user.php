@@ -21,7 +21,7 @@ $plxAdmin->checkProfil(PROFIL_ADMIN);
 # On édite la page statique
 if (!empty($_POST) and isset($plxAdmin->aUsers[ $_POST['id'] ])) {
     $plxAdmin->editUser($_POST);
-    header('Location: user.php?p='.$_POST['id']);
+    header('Location: user.php?p=' . $_POST['id']);
     exit;
 } elseif (!empty($_GET['p'])) { # On vérifie l'existence de l'utilisateur
     $id = plxUtils::strCheck(plxUtils::nullbyteRemove($_GET['p']));

@@ -53,8 +53,8 @@ class plxFeed extends plxMotor
         # Hook plugins
         eval($this->plxPlugins->callHook('plxFeedConstructLoadPlugins'));
         # Traitement sur les répertoires des articles et des commentaires
-        $this->plxGlob_arts = plxGlob::getInstance(PLX_ROOT.$this->aConf['racine_articles'], false, true, 'arts');
-        $this->plxGlob_coms = plxGlob::getInstance(PLX_ROOT.$this->aConf['racine_commentaires']);
+        $this->plxGlob_arts = plxGlob::getInstance(PLX_ROOT . $this->aConf['racine_articles'], false, true, 'arts');
+        $this->plxGlob_coms = plxGlob::getInstance(PLX_ROOT . $this->aConf['racine_commentaires']);
         # Récupération des données dans les autres fichiers xml
         $this->getCategories(path('XMLFILE_CATEGORIES'));
         $this->getUsers(path('XMLFILE_USERS'));
@@ -86,7 +86,7 @@ class plxFeed extends plxMotor
             # On récupère la catégorie cible
             $this->cible = str_pad($capture[1], 3, '0', STR_PAD_LEFT); # On complète sur 3 caractères
             # On modifie le motif de recherche
-            $this->motif = '#^\d{4}.((?:\d|home|,)*(?:'.$this->cible.')(?:\d|home|,)*).\d{3}.\d{12}.[\w-]+.xml$#';
+            $this->motif = '#^\d{4}.((?:\d|home|,)*(?:' . $this->cible . ')(?:\d|home|,)*).\d{3}.\d{12}.[\w-]+.xml$#';
         } elseif ($this->get and preg_match('#^(?:atom/|rss/)?user(\d+)/?#', $this->get, $capture)) {
             $this->mode = 'user'; # Mode du flux
             # On récupère l'id de l'utilisateur
@@ -116,7 +116,7 @@ class plxFeed extends plxMotor
                 }
             }
             if (sizeof($ids)>0) {
-                $this->motif = '#('.implode('|', $ids).').(?:\d|home|,)*(?:'.$this->activeCats.'|home)(?:\d|home|,)*.\d{3}.\d{12}.[\w-]+.xml$#';
+                $this->motif = '#(' . implode('|', $ids) . ').(?:\d|home|,)*(?:' . $this->activeCats . '|home)(?:\d|home|,)*.\d{3}.\d{12}.[\w-]+.xml$#';
             } else {
                 $this->motif = '';
             }
@@ -125,7 +125,7 @@ class plxFeed extends plxMotor
             # On récupère l'article cible
             $this->cible = str_pad($capture[1], 4, '0', STR_PAD_LEFT); # On complète sur 4 caractères
             # On modifie le motif de recherche
-            $this->motif = '#^'.$this->cible.'.(?:\d|home|,)*(?:'.$this->activeCats.'|home)(?:\d|home|,)*.\d{3}.\d{12}.[\w-]+.xml$#';
+            $this->motif = '#^' . $this->cible . '.(?:\d|home|,)*(?:' . $this->activeCats . '|home)(?:\d|home|,)*.\d{3}.\d{12}.[\w-]+.xml$#';
         } elseif ($this->get and preg_match('#^admin([\w-]+)/commentaires/(hors|en)-ligne/?$#', $this->get, $capture)) {
             $this->mode = 'admin'; # Mode du flux
             $this->cible = '-';	# /!\: il ne faut pas initialiser à blanc sinon ça prend par défaut les commentaires en ligne (faille sécurité)
@@ -139,7 +139,7 @@ class plxFeed extends plxMotor
         } else {
             $this->mode = 'article'; # Mode du flux
             # On modifie le motif de recherche
-            $this->motif = '#^\d{4}.(?:\d|home|,)*(?:'.$this->activeCats.'|home)(?:\d|home|,)*.\d{3}.\d{12}.[\w-]+.xml$#';
+            $this->motif = '#^\d{4}.(?:\d|home|,)*(?:' . $this->activeCats . '|home)(?:\d|home|,)*.\d{3}.\d{12}.[\w-]+.xml$#';
         }
         # Hook plugins
         eval($this->plxPlugins->callHook('plxFeedPreChauffageEnd'));
@@ -163,10 +163,10 @@ class plxFeed extends plxMotor
         if ($this->mode == 'commentaire' and $this->cible) {
             if (!$this->getArticles()) { # Aucun article, on redirige
                 $this->cible = $this->cible + 0;
-                header('Location: '.$this->urlRewrite('?article'.$this->cible.'/'));
+                header('Location: ' . $this->urlRewrite('?article' . $this->cible . '/'));
                 exit;
             } else { # On récupère les commentaires
-                $regex = '/^'.$this->cible.'.\d{10}-\d+.xml$/';
+                $regex = '/^' . $this->cible . '.\d{10}-\d+.xml$/';
                 $this->getCommentaires($regex, 'rsort', 0, $this->bypage);
             }
         }
@@ -178,17 +178,17 @@ class plxFeed extends plxMotor
         # Flux admin
         elseif ($this->mode == 'admin') {
             if (empty($this->clef)) { # Clef non initialisée
-                header('Content-Type: text/plain; charset='.PLX_CHARSET);
+                header('Content-Type: text/plain; charset=' . PLX_CHARSET);
                 echo L_FEED_NO_PRIVATE_URL;
                 exit;
             }
             # On récupère les commentaires
-            $this->getCommentaires('#^'.$this->cible.'\d{4}.\d{10}-\d+.xml$#', 'rsort', 0, $this->bypage, 'all');
+            $this->getCommentaires('#^' . $this->cible . '\d{4}.\d{10}-\d+.xml$#', 'rsort', 0, $this->bypage, 'all');
         }
         # Flux d'articles pour un tag
         elseif ($this->mode == 'tag') {
             if (empty($this->motif)) {
-                header('Location: '.$this->urlRewrite('?tag/'.$this->cible.'/'));
+                header('Location: ' . $this->urlRewrite('?tag/' . $this->cible . '/'));
                 exit;
             } else {
                 $this->getArticles(); # Récupération des articles (on les parse)
@@ -203,7 +203,7 @@ class plxFeed extends plxMotor
                         # On vérifie que la catégorie existe et est active
                         if (!isset($this->aCats[$this->cible]) or !$this->aCats[$this->cible]['active']) {
                             # Echec, on redirige
-                            header('Location: '.$this->urlRewrite('?categorie'.intval($this->cible).'/'));
+                            header('Location: ' . $this->urlRewrite('?categorie' . intval($this->cible) . '/'));
                             exit;
                         }
                         break;
@@ -211,7 +211,7 @@ class plxFeed extends plxMotor
                         # On vérifie que la catégorie existe et est active
                         if (!isset($this->aUsers[$this->cible]) or !$this->aUsers[$this->cible]['active']) {
                             # Echec, on redirige
-                            header('Location: '.$this->urlRewrite('?user'.intval($this->cible).'/'));
+                            header('Location: ' . $this->urlRewrite('?user' . intval($this->cible) . '/'));
                             exit;
                         }
                         break;
@@ -252,16 +252,16 @@ class plxFeed extends plxMotor
         $link = $this->urlRewrite();
         switch ($this->mode) {
             case 'tag':
-                $title = $this->aConf['title'].' - '.L_PAGETITLE_TAG.' '.$this->cible;
-                $link = $this->urlRewrite('?tag/'.$this->cible);
+                $title = $this->aConf['title'] . ' - ' . L_PAGETITLE_TAG . ' ' . $this->cible;
+                $link = $this->urlRewrite('?tag/' . $this->cible);
                 break;
             case 'categorie':
-                $title = $this->aConf['title'].' - '.$this->aCats[ $this->cible ]['name'];
-                $link = $this->urlRewrite('?categorie'.intval($this->cible).'/'.$this->aCats[ $this->cible ]['url']);
+                $title = $this->aConf['title'] . ' - ' . $this->aCats[ $this->cible ]['name'];
+                $link = $this->urlRewrite('?categorie' . intval($this->cible) . '/' . $this->aCats[ $this->cible ]['url']);
                 break;
             case 'user':
-                $title = $this->aConf['title'].' - '.$this->aUsers[ $this->cible ]['name'];
-                $link = $this->urlRewrite('?user'.intval($this->cible).'/'.md5($this->aUsers[ $this->cible ]['name']));
+                $title = $this->aConf['title'] . ' - ' . $this->aUsers[ $this->cible ]['name'];
+                $link = $this->urlRewrite('?user' . intval($this->cible) . '/' . md5($this->aUsers[ $this->cible ]['name']));
                 break;
             default:
         }
@@ -275,8 +275,8 @@ class plxFeed extends plxMotor
                 $thumb = '';
                 $src = $this->plxRecord_arts->f('thumbnail');
                 if ($src!='') {
-                    $src = (strpos($src, 'http')===false ? $this->racine.$src : $src);
-                    $thumb = plxUtils::strCheck('<img src="'.$src.'" alt="" title="" />');
+                    $src = (strpos($src, 'http')===false ? $this->racine . $src : $src);
+                    $thumb = plxUtils::strCheck('<img src="' . $src . '" alt="" title="" />');
                 }
                 # Traitement initial
                 if ($this->aConf['feed_chapo']) {
@@ -285,7 +285,7 @@ class plxFeed extends plxMotor
                         $content = $this->plxRecord_arts->f('content');
                     }
                 } else {
-                    $content = $this->plxRecord_arts->f('chapo').$this->plxRecord_arts->f('content');
+                    $content = $this->plxRecord_arts->f('chapo') . $this->plxRecord_arts->f('content');
                 }
                 $content .= $this->aConf['feed_footer'];
                 $artId = $this->plxRecord_arts->f('numero') + 0;
@@ -297,12 +297,12 @@ class plxFeed extends plxMotor
 
                 # On affiche le flux dans un buffer
                 $entry .= "\t<item>\n";
-                $entry .= "\t\t".'<title>'.plxUtils::strCheck($this->plxRecord_arts->f('title')).'</title> '.PHP_EOL;
-                $entry .= "\t\t".'<link>'.$this->urlRewrite('?article'.$artId.'/'.$this->plxRecord_arts->f('url')).'</link>'.PHP_EOL;
-                $entry .= "\t\t".'<guid>'.$this->urlRewrite('?article'.$artId.'/'.$this->plxRecord_arts->f('url')).'</guid>'.PHP_EOL;
-                $entry .= "\t\t".'<description><![CDATA[' . $thumb . plxUtils::rel2abs($this->racine, $content) . ']]></description>'.PHP_EOL;
-                $entry .= "\t\t".'<pubDate>'.plxDate::dateIso2rfc822($this->plxRecord_arts->f('date')).'</pubDate>'.PHP_EOL;
-                $entry .= "\t\t".'<dc:creator>'.plxUtils::strCheck($author).'</dc:creator>'.PHP_EOL;
+                $entry .= "\t\t" . '<title>' . plxUtils::strCheck($this->plxRecord_arts->f('title')) . '</title> ' . PHP_EOL;
+                $entry .= "\t\t" . '<link>' . $this->urlRewrite('?article' . $artId . '/' . $this->plxRecord_arts->f('url')) . '</link>' . PHP_EOL;
+                $entry .= "\t\t" . '<guid>' . $this->urlRewrite('?article' . $artId . '/' . $this->plxRecord_arts->f('url')) . '</guid>' . PHP_EOL;
+                $entry .= "\t\t" . '<description><![CDATA[' . $thumb . plxUtils::rel2abs($this->racine, $content) . ']]></description>' . PHP_EOL;
+                $entry .= "\t\t" . '<pubDate>' . plxDate::dateIso2rfc822($this->plxRecord_arts->f('date')) . '</pubDate>' . PHP_EOL;
+                $entry .= "\t\t" . '<dc:creator>' . plxUtils::strCheck($author) . '</dc:creator>' . PHP_EOL;
                 # Hook plugins
                 eval($this->plxPlugins->callHook('plxFeedRssArticlesXml'));
                 $entry .= "\t</item>\n";
@@ -310,20 +310,20 @@ class plxFeed extends plxMotor
         }
 
         # On affiche le flux
-        header('Content-Type: application/rss+xml; charset='.PLX_CHARSET);
-        echo '<?xml version="1.0" encoding="'.PLX_CHARSET.'" ?>'.PHP_EOL;
-        echo '<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom">'.PHP_EOL;
-        echo '<channel>'.PHP_EOL;
-        echo "\t".'<title>'.plxUtils::strCheck($title).'</title>'.PHP_EOL;
-        echo "\t".'<link>'.$link.'</link>'.PHP_EOL;
-        echo "\t".'<language>' . $this->aConf['default_lang'] . '</language>'.PHP_EOL;
-        echo "\t".'<description><![CDATA[' . $this->aConf['description'] . ']]></description>'.PHP_EOL;
-        echo "\t".'<atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="self" type="application/rss+xml" href="'.$this->urlRewrite('feed.php?'.$this->get).'" />'.PHP_EOL;
+        header('Content-Type: application/rss+xml; charset=' . PLX_CHARSET);
+        echo '<?xml version="1.0" encoding="' . PLX_CHARSET . '" ?>' . PHP_EOL;
+        echo '<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom">' . PHP_EOL;
+        echo '<channel>' . PHP_EOL;
+        echo "\t" . '<title>' . plxUtils::strCheck($title) . '</title>' . PHP_EOL;
+        echo "\t" . '<link>' . $link . '</link>' . PHP_EOL;
+        echo "\t" . '<language>' . $this->aConf['default_lang'] . '</language>' . PHP_EOL;
+        echo "\t" . '<description><![CDATA[' . $this->aConf['description'] . ']]></description>' . PHP_EOL;
+        echo "\t" . '<atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="self" type="application/rss+xml" href="' . $this->urlRewrite('feed.php?' . $this->get) . '" />' . PHP_EOL;
         $last_updated = plxDate::dateIso2rfc822($last_updated);
-        echo "\t".'<lastBuildDate>'.$last_updated.'</lastBuildDate>'.PHP_EOL;
-        echo "\t".'<generator>PluXml</generator>'.PHP_EOL;
+        echo "\t" . '<lastBuildDate>' . $last_updated . '</lastBuildDate>' . PHP_EOL;
+        echo "\t" . '<generator>PluXml</generator>' . PHP_EOL;
         echo $entry;
-        echo '</channel>'.PHP_EOL;
+        echo '</channel>' . PHP_EOL;
         echo '</rss>';
     }
 
@@ -342,10 +342,10 @@ class plxFeed extends plxMotor
         $entry = '';
         if ($this->cible) { # Commentaires d'un article
             $artId = $this->plxRecord_arts->f('numero') + 0;
-            $title = $this->aConf['title'].' - '.$this->plxRecord_arts->f('title').' - '.L_FEED_COMMENTS;
-            $link = $this->urlRewrite('?article'.$artId.'/'.$this->plxRecord_arts->f('url'));
+            $title = $this->aConf['title'] . ' - ' . $this->plxRecord_arts->f('title') . ' - ' . L_FEED_COMMENTS;
+            $link = $this->urlRewrite('?article' . $artId . '/' . $this->plxRecord_arts->f('url'));
         } else { # Commentaires globaux
-            $title = $this->aConf['title'].' - '.L_FEED_COMMENTS;
+            $title = $this->aConf['title'] . ' - ' . L_FEED_COMMENTS;
             $link = $this->urlRewrite();
         }
 
@@ -356,17 +356,17 @@ class plxFeed extends plxMotor
                 if (isset($this->activeArts[$this->plxRecord_coms->f('article')])) {
                     $artId = $this->plxRecord_coms->f('article') + 0;
                     if ($this->cible) { # Commentaires d'un article
-                        $title_com = $this->plxRecord_arts->f('title').' - ';
-                        $title_com .= L_FEED_WRITTEN_BY.' '.$this->plxRecord_coms->f('author').' @ ';
+                        $title_com = $this->plxRecord_arts->f('title') . ' - ';
+                        $title_com .= L_FEED_WRITTEN_BY . ' ' . $this->plxRecord_coms->f('author') . ' @ ';
                         $title_com .= plxDate::formatDate($this->plxRecord_coms->f('date'), '#day #num_day #month #num_year(4), #hour:#minute');
-                        $comId = 'c'.$this->plxRecord_coms->f('article').'-'.$this->plxRecord_coms->f('index');
-                        $link_com = $this->urlRewrite('?article'.$artId.'/'.$this->plxRecord_arts->f('url').'#'.$comId);
+                        $comId = 'c' . $this->plxRecord_coms->f('article') . '-' . $this->plxRecord_coms->f('index');
+                        $link_com = $this->urlRewrite('?article' . $artId . '/' . $this->plxRecord_arts->f('url') . '#' . $comId);
                     } else { # Commentaires globaux
-                        $title_com = $this->plxRecord_coms->f('author').' @ ';
+                        $title_com = $this->plxRecord_coms->f('author') . ' @ ';
                         $title_com .= plxDate::formatDate($this->plxRecord_coms->f('date'), '#day #num_day #month #num_year(4), #hour:#minute');
                         $artInfo = $this->artInfoFromFilename($this->plxGlob_arts->aFiles[$this->plxRecord_coms->f('article')]);
-                        $comId = 'c'.$this->plxRecord_coms->f('article').'-'.$this->plxRecord_coms->f('index');
-                        $link_com = $this->urlRewrite('?article'.$artId.'/'.$artInfo['artUrl'].'#'.$comId);
+                        $comId = 'c' . $this->plxRecord_coms->f('article') . '-' . $this->plxRecord_coms->f('index');
+                        $link_com = $this->urlRewrite('?article' . $artId . '/' . $artInfo['artUrl'] . '#' . $comId);
                     }
                     # On vérifie la date de publication
                     if ($this->plxRecord_coms->f('date') > $last_updated) {
@@ -375,12 +375,12 @@ class plxFeed extends plxMotor
 
                     # On affiche le flux dans un buffer
                     $entry .= "\t<item>\n";
-                    $entry .= "\t\t".'<title>'.strip_tags(html_entity_decode($title_com, ENT_QUOTES, PLX_CHARSET)).'</title> '."\n";
-                    $entry .= "\t\t".'<link>'.$link_com.'</link>'."\n";
-                    $entry .= "\t\t".'<guid>'.$link_com.'</guid>'."\n";
-                    $entry .= "\t\t".'<description>'.plxUtils::strCheck(strip_tags($this->plxRecord_coms->f('content'))).'</description>'."\n";
-                    $entry .= "\t\t".'<pubDate>'.plxDate::dateIso2rfc822($this->plxRecord_coms->f('date')).'</pubDate>'."\n";
-                    $entry .= "\t\t".'<dc:creator>'.plxUtils::strCheck($this->plxRecord_coms->f('author')).'</dc:creator>'."\n";
+                    $entry .= "\t\t" . '<title>' . strip_tags(html_entity_decode($title_com, ENT_QUOTES, PLX_CHARSET)) . '</title> ' . "\n";
+                    $entry .= "\t\t" . '<link>' . $link_com . '</link>' . "\n";
+                    $entry .= "\t\t" . '<guid>' . $link_com . '</guid>' . "\n";
+                    $entry .= "\t\t" . '<description>' . plxUtils::strCheck(strip_tags($this->plxRecord_coms->f('content'))) . '</description>' . "\n";
+                    $entry .= "\t\t" . '<pubDate>' . plxDate::dateIso2rfc822($this->plxRecord_coms->f('date')) . '</pubDate>' . "\n";
+                    $entry .= "\t\t" . '<dc:creator>' . plxUtils::strCheck($this->plxRecord_coms->f('author')) . '</dc:creator>' . "\n";
                     # Hook plugins
                     eval($this->plxPlugins->callHook('plxFeedRssCommentsXml'));
                     $entry .= "\t</item>\n";
@@ -389,22 +389,22 @@ class plxFeed extends plxMotor
         }
 
         # On affiche le flux
-        header('Content-Type: application/rss+xml; charset='.PLX_CHARSET);
-        echo '<?xml version="1.0" encoding="'.PLX_CHARSET.'" ?>'."\n";
-        echo '<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom">'."\n";
-        echo '<channel>'."\n";
-        echo "\t".'<atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="self" type="application/rss+xml" href="' . $this->urlRewrite('feed.php?rss/commentaires/') . '" />'."\n";
+        header('Content-Type: application/rss+xml; charset=' . PLX_CHARSET);
+        echo '<?xml version="1.0" encoding="' . PLX_CHARSET . '" ?>' . "\n";
+        echo '<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom">' . "\n";
+        echo '<channel>' . "\n";
+        echo "\t" . '<atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="self" type="application/rss+xml" href="' . $this->urlRewrite('feed.php?rss/commentaires/') . '" />' . "\n";
 
-        $entry .= "\t".'<title>'.strip_tags(html_entity_decode($title, ENT_QUOTES, PLX_CHARSET)).'</title> '."\n";
-        echo "\t".'<link>'.$link.'</link>'."\n";
-        echo "\t".'<language>' . $this->aConf['default_lang'] . '</language>'."\n";
-        echo "\t".'<description>'.plxUtils::strCheck($this->aConf['description']).'</description>'."\n";
+        $entry .= "\t" . '<title>' . strip_tags(html_entity_decode($title, ENT_QUOTES, PLX_CHARSET)) . '</title> ' . "\n";
+        echo "\t" . '<link>' . $link . '</link>' . "\n";
+        echo "\t" . '<language>' . $this->aConf['default_lang'] . '</language>' . "\n";
+        echo "\t" . '<description>' . plxUtils::strCheck($this->aConf['description']) . '</description>' . "\n";
 
         $last_updated = plxDate::dateIso2rfc822($last_updated);
-        echo "\t".'<lastBuildDate>'.$last_updated.'</lastBuildDate>'."\n";
-        echo "\t".'<generator>PluXml</generator>'."\n";
+        echo "\t" . '<lastBuildDate>' . $last_updated . '</lastBuildDate>' . "\n";
+        echo "\t" . '<generator>PluXml</generator>' . "\n";
         echo $entry;
-        echo '</channel>'."\n";
+        echo '</channel>' . "\n";
         echo '</rss>';
     }
 
@@ -420,35 +420,35 @@ class plxFeed extends plxMotor
         $last_updated = '197001010100';
         $entry = '';
         if ($this->cible == '_') { # Commentaires hors ligne
-            $link = $this->racine.'core/admin/comments.php?sel=offline&amp;page=1';
-            $title = $this->aConf['title'].' - '.L_FEED_OFFLINE_COMMENTS;
-            $link_feed = $this->racine.'feed.php?admin'.$this->clef.'/commentaires/hors-ligne';
+            $link = $this->racine . 'core/admin/comments.php?sel=offline&amp;page=1';
+            $title = $this->aConf['title'] . ' - ' . L_FEED_OFFLINE_COMMENTS;
+            $link_feed = $this->racine . 'feed.php?admin' . $this->clef . '/commentaires/hors-ligne';
         } else { # Commentaires en ligne
-            $link = $this->racine.'core/admin/comments.php?sel=online&amp;page=1';
-            $title = $this->aConf['title'].' - '.L_FEED_ONLINE_COMMENTS;
-            $link_feed = $this->racine.'feed.php?admin'.$this->clef.'/commentaires/en-ligne';
+            $link = $this->racine . 'core/admin/comments.php?sel=online&amp;page=1';
+            $title = $this->aConf['title'] . ' - ' . L_FEED_ONLINE_COMMENTS;
+            $link_feed = $this->racine . 'feed.php?admin' . $this->clef . '/commentaires/en-ligne';
         }
 
         # On va boucler sur les commentaires (s'il y en a)
         if ($this->plxRecord_coms) {
             while ($this->plxRecord_coms->loop()) {
                 $artId = $this->plxRecord_coms->f('article') + 0;
-                $comId = $this->cible.$this->plxRecord_coms->f('article').'.'.$this->plxRecord_coms->f('numero');
-                $title_com = $this->plxRecord_coms->f('author').' @ ';
+                $comId = $this->cible . $this->plxRecord_coms->f('article') . '.' . $this->plxRecord_coms->f('numero');
+                $title_com = $this->plxRecord_coms->f('author') . ' @ ';
                 $title_com .= plxDate::formatDate($this->plxRecord_coms->f('date'), '#day #num_day #month #num_year(4), #hour:#minute');
-                $link_com = $this->racine.'core/admin/comment.php?c='.$comId;
+                $link_com = $this->racine . 'core/admin/comment.php?c=' . $comId;
                 # On vérifie la date de publication
                 if ($this->plxRecord_coms->f('date') > $last_updated) {
                     $last_updated = $this->plxRecord_coms->f('date');
                 }
                 # On affiche le flux dans un buffer
                 $entry .= "\t<item>\n";
-                $entry .= "\t\t".'<title>'.strip_tags(html_entity_decode($title_com, ENT_QUOTES, PLX_CHARSET)).'</title> '."\n";
-                $entry .= "\t\t".'<link>'.$link_com.'</link>'."\n";
-                $entry .= "\t\t".'<guid>'.$link_com.'</guid>'."\n";
-                $entry .= "\t\t".'<description>'.plxUtils::strCheck(strip_tags($this->plxRecord_coms->f('content'))).'</description>'."\n";
-                $entry .= "\t\t".'<pubDate>'.plxDate::dateIso2rfc822($this->plxRecord_coms->f('date')).'</pubDate>'."\n";
-                $entry .= "\t\t".'<dc:creator>'.plxUtils::strCheck($this->plxRecord_coms->f('author')).'</dc:creator>'."\n";
+                $entry .= "\t\t" . '<title>' . strip_tags(html_entity_decode($title_com, ENT_QUOTES, PLX_CHARSET)) . '</title> ' . "\n";
+                $entry .= "\t\t" . '<link>' . $link_com . '</link>' . "\n";
+                $entry .= "\t\t" . '<guid>' . $link_com . '</guid>' . "\n";
+                $entry .= "\t\t" . '<description>' . plxUtils::strCheck(strip_tags($this->plxRecord_coms->f('content'))) . '</description>' . "\n";
+                $entry .= "\t\t" . '<pubDate>' . plxDate::dateIso2rfc822($this->plxRecord_coms->f('date')) . '</pubDate>' . "\n";
+                $entry .= "\t\t" . '<dc:creator>' . plxUtils::strCheck($this->plxRecord_coms->f('author')) . '</dc:creator>' . "\n";
                 # Hook plugins
                 eval($this->plxPlugins->callHook('plxFeedAdminCommentsXml'));
                 $entry .= "\t</item>\n";
@@ -456,20 +456,20 @@ class plxFeed extends plxMotor
         }
 
         # On affiche le flux
-        header('Content-Type: application/rss+xml; charset='.PLX_CHARSET);
-        echo '<?xml version="1.0" encoding="'.PLX_CHARSET.'" ?>'."\n";
-        echo '<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom">'."\n";
-        echo '<channel>'."\n";
-        echo "\t".'<title>'.plxUtils::strCheck($title).'</title>'."\n";
-        echo "\t".'<description>'.plxUtils::strCheck($this->aConf['description']).'</description>'."\n";
-        echo "\t".'<link>'.$link.'</link>'."\n";
-        echo "\t".'<language>' . $this->aConf['default_lang'] . '</language>'."\n";
-        echo "\t".'<atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="self" type="application/rss+xml" href="' . $link_feed . '" />'."\n";
+        header('Content-Type: application/rss+xml; charset=' . PLX_CHARSET);
+        echo '<?xml version="1.0" encoding="' . PLX_CHARSET . '" ?>' . "\n";
+        echo '<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom">' . "\n";
+        echo '<channel>' . "\n";
+        echo "\t" . '<title>' . plxUtils::strCheck($title) . '</title>' . "\n";
+        echo "\t" . '<description>' . plxUtils::strCheck($this->aConf['description']) . '</description>' . "\n";
+        echo "\t" . '<link>' . $link . '</link>' . "\n";
+        echo "\t" . '<language>' . $this->aConf['default_lang'] . '</language>' . "\n";
+        echo "\t" . '<atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="self" type="application/rss+xml" href="' . $link_feed . '" />' . "\n";
         $last_updated = plxDate::dateIso2rfc822($last_updated);
-        echo "\t".'<lastBuildDate>'.$last_updated.'</lastBuildDate>'."\n";
-        echo "\t".'<generator>PluXml</generator>'."\n";
+        echo "\t" . '<lastBuildDate>' . $last_updated . '</lastBuildDate>' . "\n";
+        echo "\t" . '<generator>PluXml</generator>' . "\n";
         echo $entry;
-        echo '</channel>'."\n";
+        echo '</channel>' . "\n";
         echo '</rss>';
     }
 }
