@@ -902,7 +902,8 @@ class plxMotor
                     return in_array($item, $ids);
                 }
             );
-            if (count($artCats) == 1 and $artCats[0] == 'draft') {
+            # array_filter conserve les anciens index dans $artCats
+            if (count($artCats) == 1 and array_values($artCats)[0] == 'draft') {
                 $artCats[] = '000';
             }
             return array(
