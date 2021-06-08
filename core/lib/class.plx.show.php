@@ -2461,7 +2461,7 @@ class plxShow
     /**
      * Méthode qui affiche un lien vers la page blog.php
      *
-     * @param format    format du texte pour l'affichage (variable : #page_id, #page_status, #page_url, #page_name)
+     * @param format    format du texte pour l'affichage (variable : #static_id, #static_status, #static_url, #static_name)
      * @scope    global
      * @author    Stephane F
      **/
