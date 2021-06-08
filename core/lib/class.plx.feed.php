@@ -262,7 +262,8 @@ class plxFeed extends plxMotor
                 break;
             case 'user':
                 $title = $this->aConf['title'] . ' - ' . $this->aUsers[ $this->cible ]['name'];
-                $link = $this->urlRewrite('?user' . intval($this->cible) . '/' . $this->aUsers[ $this->cible ]['login']);
+                # $link = $this->urlRewrite('?user' . intval($this->cible) . '/' . $this->aUsers[ $this->cible ]['login']);
+                $link = $this->urlRewrite('?user' . intval($this->cible) . '/' . md5($this->aUsers[ $this->cible ]['name']));
                 break;
             default:
         }
@@ -301,7 +302,7 @@ class plxFeed extends plxMotor
                 $entry .= "\t\t" . '<title>' . plxUtils::strCheck($this->plxRecord_arts->f('title')) . '</title> ' . PHP_EOL;
                 $entry .= "\t\t" . '<link>' . $this->urlRewrite('?article' . $artId . '/' . $this->plxRecord_arts->f('url')) . '</link>' . PHP_EOL;
                 $entry .= "\t\t" . '<guid>' . $this->urlRewrite('?article' . $artId . '/' . $this->plxRecord_arts->f('url')) . '</guid>' . PHP_EOL;
-                $entry .= "\t\t" . '<description>' . $thumb . plxUtils::strCheck(plxUtils::rel2abs($this->racine, $content)) . '</description>' . PHP_EOL;
+                $entry .= "\t\t" . '<description><![CDATA[' . $thumb . plxUtils::rel2abs($this->racine, $content) . ']]></description>' . PHP_EOL;
                 $entry .= "\t\t" . '<pubDate>' . plxDate::dateIso2rfc822($this->plxRecord_arts->f('date')) . '</pubDate>' . PHP_EOL;
                 $entry .= "\t\t" . '<dc:creator>' . plxUtils::strCheck($author) . '</dc:creator>' . PHP_EOL;
                 # Hook plugins
@@ -318,7 +319,7 @@ class plxFeed extends plxMotor
         echo "\t" . '<title>' . plxUtils::strCheck($title) . '</title>' . PHP_EOL;
         echo "\t" . '<link>' . $link . '</link>' . PHP_EOL;
         echo "\t" . '<language>' . $this->aConf['default_lang'] . '</language>' . PHP_EOL;
-        echo "\t" . '<description>' . plxUtils::strCheck($this->aConf['description']) . '</description>' . PHP_EOL;
+        echo "\t" . '<description><![CDATA[' . $this->aConf['description'] . ']]></description>' . PHP_EOL;
         echo "\t" . '<atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="self" type="application/rss+xml" href="' . $this->urlRewrite('feed.php?' . $this->get) . '" />' . PHP_EOL;
         $last_updated = plxDate::dateIso2rfc822($last_updated);
         echo "\t" . '<lastBuildDate>' . $last_updated . '</lastBuildDate>' . PHP_EOL;

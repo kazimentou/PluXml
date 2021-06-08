@@ -3,7 +3,7 @@
 const PLX_DEBUG = true;
 const PLX_VERSION = '5.8.9-kazimentou';
 const PLX_URL_REPO = 'https://www.pluxml.org';
-const PLX_URL_VERSION = PLX_URL_REPO.'/download/latest-version.txt';
+const PLX_URL_VERSION = PLX_URL_REPO . '/download/latest-version.txt';
 
 # Gestion des erreurs PHP
 if (PLX_DEBUG) {
@@ -21,12 +21,12 @@ function getMicrotime()
 define('PLX_MICROTIME', getMicrotime());
 
 $CONSTS = array(
-	'XMLFILE_PARAMETERS'	=> PLX_ROOT.PLX_CONFIG_PATH.'parametres.xml',
-	'XMLFILE_CATEGORIES'	=> PLX_ROOT.PLX_CONFIG_PATH.'categories.xml',
-	'XMLFILE_STATICS'		=> PLX_ROOT.PLX_CONFIG_PATH.'statiques.xml',
-	'XMLFILE_USERS'			=> PLX_ROOT.PLX_CONFIG_PATH.'users.xml',
-	'XMLFILE_PLUGINS'		=> PLX_ROOT.PLX_CONFIG_PATH.'plugins.xml',
-	'XMLFILE_TAGS'			=> PLX_ROOT.PLX_CONFIG_PATH.'tags.xml',
+    'XMLFILE_PARAMETERS'	=> PLX_ROOT . PLX_CONFIG_PATH . 'parametres.xml',
+    'XMLFILE_CATEGORIES'	=> PLX_ROOT . PLX_CONFIG_PATH . 'categories.xml',
+    'XMLFILE_STATICS'		=> PLX_ROOT . PLX_CONFIG_PATH . 'statiques.xml',
+    'XMLFILE_USERS'			=> PLX_ROOT . PLX_CONFIG_PATH . 'users.xml',
+    'XMLFILE_PLUGINS'		=> PLX_ROOT . PLX_CONFIG_PATH . 'plugins.xml',
+    'XMLFILE_TAGS'			=> PLX_ROOT . PLX_CONFIG_PATH . 'tags.xml',
 );
 
 # Définition de l'encodage => PLX_CHARSET : UTF-8 (conseillé) ou ISO-8859-1

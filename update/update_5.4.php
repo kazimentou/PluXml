@@ -10,10 +10,10 @@ class update_5_4 extends plxUpdate
     # mise à jour fichier parametres.xml
     public function step1()
     {
-        echo L_UPDATE_UPDATE_PARAMETERS_FILE."<br />";
+        echo L_UPDATE_UPDATE_PARAMETERS_FILE . "<br />";
         # vérification de l'existence des dossiers médias
-        if (!is_dir(PLX_ROOT.'data/medias')) {
-            @mkdir(PLX_ROOT.'data/medias', 0755, true);
+        if (!is_dir(PLX_ROOT . 'data/medias')) {
+            @mkdir(PLX_ROOT . 'data/medias', 0755, true);
         }
         # nouveaux paramètres
         $new_parameters = array();

@@ -47,7 +47,7 @@ class plxThemes
         if ($styles = $files->query('#^(?!mobile\.)[\w\.\(\)-]+#i', '', 'sort')) {
             foreach ($styles as $k=>$v) {
                 if (is_file($this->racineTheme . $v . '/infos.xml')) {
-                    if ($v != $this->activeTheme) {
+                    if (substr($v, 0, 7) != 'mobile.' and $v!=$this->activeTheme) {
                         $this->aThemes[$v] = $v;
                     }
                 }
@@ -134,18 +134,18 @@ $plxThemes = new plxThemes(PLX_ROOT . $plxAdmin->aConf['racine_themes'], $plxAdm
                         echo '<tr>';
                         # radio
                         $checked = $theme==$plxAdmin->aConf['style'] ? ' checked="checked"' : '';
-                        echo '<td><input id="' . $id . '"'.$checked.' type="radio" name="style" value="'.$theme.'" /></td>';
+                        echo '<td><input id="' . $id . '"' . $checked . ' type="radio" name="style" value="' . $theme . '" /></td>';
                         # img preview
                         echo '<td><label for="' . $id . '">' . $plxThemes->getImgPreview($theme) . '</label></td>';
                         # theme infos
                         echo '<td class="wrap" style="vertical-align:top; padding-top: 1rem;"><div>';
                         if ($aInfos = $plxThemes->getInfos($theme)) {
-                            echo '<div><strong>'.$aInfos['title'].'</strong></div>';
-                            echo '<div style="margin-top: 2rem;">Version : <strong>'.$aInfos['version'].'</strong>';
+                            echo '<div><strong>' . $aInfos['title'] . '</strong></div>';
+                            echo '<div style="margin-top: 2rem;">Version : <strong>' . $aInfos['version'] . '</strong>';
                             if (!empty($aInfos['date'])) {
                                 echo  ' (' . $aInfos['date'] . ')';
                             }
-                            echo '<br />' . L_PLUGINS_AUTHOR.' : ' . $aInfos['author'];
+                            echo '<br />' . L_PLUGINS_AUTHOR . ' : ' . $aInfos['author'];
                             if (!empty($aInfos['site'])) {
                                 echo ' - <a href="' . $aInfos['site'] . '" target="_blank">' . $aInfos['site'] . '</a>';
                             }
@@ -159,7 +159,8 @@ $plxThemes = new plxThemes(PLX_ROOT . $plxAdmin->aConf['racine_themes'], $plxAdm
 
                         # lien aide
                         if (is_file(PLX_ROOT . $plxAdmin->aConf['racine_themes'] . $theme . '/lang/' . $plxAdmin->aConf['default_lang'] . '-help.php')) {
-                            echo '<a title="' . L_HELP_TITLE . '" href="parametres_help.php?help=theme&amp;page=' . urlencode($theme) . '">' . L_HELP . '</a>';
+                            echo '<div style="margin-top: 2rem;"><a title="' . L_HELP_TITLE . '" href="parametres_help.php?help=theme&amp;page=' . urlencode($theme) . '">' . L_HELP . '</a></div>';
+                        }
 
                         echo '</div></td></tr>';
                     }

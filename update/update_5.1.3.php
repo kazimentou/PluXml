@@ -10,7 +10,7 @@ class update_5_1_3 extends plxUpdate
     # mise à jour fichier parametres.xml
     public function step1()
     {
-        echo L_UPDATE_UPDATE_PARAMETERS_FILE."<br />";
+        echo L_UPDATE_UPDATE_PARAMETERS_FILE . "<br />";
         # nouveaux parametres
         $new_parameters = array(
             'images_l' => 800,

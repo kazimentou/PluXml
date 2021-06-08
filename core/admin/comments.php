@@ -30,7 +30,7 @@ if (isset($_POST['selection']) and !empty($_POST['btn_ok']) and ($_POST['selecti
     foreach ($_POST['idCom'] as $k => $v) {
         $plxAdmin->delCommentaire($v);
     }
-    header('Location: comments.php'.(!empty($_GET['a']) ? '?a='.$_GET['a'] : ''));
+    header('Location: comments.php' . (!empty($_GET['a']) ? '?a=' . $_GET['a'] : ''));
     exit;
 }
 # Validation des commentaires sélectionnés
@@ -38,7 +38,7 @@ elseif (isset($_POST['selection']) and !empty($_POST['btn_ok']) and ($_POST['sel
     foreach ($_POST['idCom'] as $k => $v) {
         $plxAdmin->modCommentaire($v, 'online');
     }
-    header('Location: comments.php'.(!empty($_GET['a']) ? '?a='.$_GET['a'] : ''));
+    header('Location: comments.php' . (!empty($_GET['a']) ? '?a=' . $_GET['a'] : ''));
     exit;
 }
 # Mise hors-ligne des commentaires sélectionnés
@@ -46,21 +46,21 @@ elseif (isset($_POST['selection']) and !empty($_POST['btn_ok']) and ($_POST['sel
     foreach ($_POST['idCom'] as $k => $v) {
         $plxAdmin->modCommentaire($v, 'offline');
     }
-    header('Location: comments.php'.(!empty($_GET['a']) ? '?a='.$_GET['a'] : ''));
+    header('Location: comments.php' . (!empty($_GET['a']) ? '?a=' . $_GET['a'] : ''));
     exit;
 }
 
 # Récupération des infos sur l'article attaché au commentaire si passé en paramètre
 if (!empty($_GET['a'])) {
     # Infos sur notre article
-    if (!$globArt = $plxAdmin->plxGlob_arts->query('/^'.$_GET['a'].'.(.*).xml$/', '', 'sort', 0, 1)) {
+    if (!$globArt = $plxAdmin->plxGlob_arts->query('/^' . $_GET['a'] . '.(.*).xml$/', '', 'sort', 0, 1)) {
         plxMsg::Error(L_ERR_UNKNOWN_ARTICLE); # Article inexistant
         header('Location: index.php');
         exit;
     }
     # Infos sur l'article
-    $aArt = $plxAdmin->parseArticle(PLX_ROOT.$plxAdmin->aConf['racine_articles'].$globArt['0']);
-    $portee = L_COMMENTS_ARTICLE_SCOPE.' &laquo;'.$aArt['title'].'&raquo;';
+    $aArt = $plxAdmin->parseArticle(PLX_ROOT . $plxAdmin->aConf['racine_articles'] . $globArt['0']);
+    $portee = L_COMMENTS_ARTICLE_SCOPE . ' &laquo;' . $aArt['title'] . '&raquo;';
 } else { # Commentaires globaux
     $portee = '';
 }
@@ -87,37 +87,37 @@ if (!empty($_GET['a'])) {
         default:
             $mod = '[[:punct:]]?';
     }
-    $comSelMotif = '/^'.$mod.str_replace('_', '', $_GET['a']).'.(.*).xml$/';
+    $comSelMotif = '/^' . $mod . str_replace('_', '', $_GET['a']) . '.(.*).xml$/';
     $_SESSION['selCom'] = 'all';
     $nbComPagination=$plxAdmin->nbComments($comSelMotif);
-    $h2 = '<h2>'.L_COMMENTS_ALL_LIST.'</h2>';
+    $h2 = '<h2>' . L_COMMENTS_ALL_LIST . '</h2>';
 } elseif ($comSel=='online') {
     $comSelMotif = '/^\d{4}.(.*).xml$/';
     $_SESSION['selCom'] = 'online';
     $nbComPagination=$plxAdmin->nbComments('online');
-    $h2 = '<h2>'.L_COMMENTS_ONLINE_LIST.'</h2>';
+    $h2 = '<h2>' . L_COMMENTS_ONLINE_LIST . '</h2>';
 } elseif ($comSel=='offline') {
     $comSelMotif = '/^_\d{4}.(.*).xml$/';
     $_SESSION['selCom'] = 'offline';
     $nbComPagination=$plxAdmin->nbComments('offline');
-    $h2 = '<h2>'.L_COMMENTS_OFFLINE_LIST.'</h2>';
+    $h2 = '<h2>' . L_COMMENTS_OFFLINE_LIST . '</h2>';
 } elseif ($comSel=='all') { // all
     $comSelMotif = '/^[[:punct:]]?\d{4}.(.*).xml$/';
     $_SESSION['selCom'] = 'all';
     $nbComPagination=$plxAdmin->nbComments('all');
-    $h2 = '<h2>'.L_COMMENTS_ALL_LIST.'</h2>';
+    $h2 = '<h2>' . L_COMMENTS_ALL_LIST . '</h2>';
 }
 
 if ($portee!='') {
-    $h3 = '<h3>'.$portee.'</h3>';
+    $h3 = '<h3>' . $portee . '</h3>';
 }
 
 $breadcrumbs = array();
-$breadcrumbs[] = '<li><a '.($_SESSION['selCom']=='all' ? 'class="selected" ' : '').'href="comments.php?sel=all&amp;page=1">'.L_ALL.'</a>&nbsp;('.$plxAdmin->nbComments('all').')</li>';
-$breadcrumbs[] = '<li><a '.($_SESSION['selCom']=='online' ? 'class="selected" ' : '').'href="comments.php?sel=online&amp;page=1">'.L_COMMENT_ONLINE.'</a>&nbsp;('.$plxAdmin->nbComments('online').')</li>';
-$breadcrumbs[] = '<li><a '.($_SESSION['selCom']=='offline' ? 'class="selected" ' : '').'href="comments.php?sel=offline&amp;page=1">'.L_COMMENT_OFFLINE.'</a>&nbsp;('.$plxAdmin->nbComments('offline').')</li>';
+$breadcrumbs[] = '<li><a ' . ($_SESSION['selCom']=='all' ? 'class="selected" ' : '') . 'href="comments.php?sel=all&amp;page=1">' . L_ALL . '</a>&nbsp;(' . $plxAdmin->nbComments('all') . ')</li>';
+$breadcrumbs[] = '<li><a ' . ($_SESSION['selCom']=='online' ? 'class="selected" ' : '') . 'href="comments.php?sel=online&amp;page=1">' . L_COMMENT_ONLINE . '</a>&nbsp;(' . $plxAdmin->nbComments('online') . ')</li>';
+$breadcrumbs[] = '<li><a ' . ($_SESSION['selCom']=='offline' ? 'class="selected" ' : '') . 'href="comments.php?sel=offline&amp;page=1">' . L_COMMENT_OFFLINE . '</a>&nbsp;(' . $plxAdmin->nbComments('offline') . ')</li>';
 if (!empty($_GET['a'])) {
-    $breadcrumbs[] = '<a href="comment_new.php?a='.$_GET['a'].'" title="'.L_COMMENT_NEW_COMMENT_TITLE.'">'.L_COMMENT_NEW_COMMENT.'</a>';
+    $breadcrumbs[] = '<a href="comment_new.php?a=' . $_GET['a'] . '" title="' . L_COMMENT_NEW_COMMENT_TITLE . '">' . L_COMMENT_NEW_COMMENT . '</a>';
 }
 
 function selector($comSel, $id)
@@ -139,7 +139,7 @@ $selector=selector($comSel, 'id_selection');
 
 <?php eval($plxAdmin->plxPlugins->callHook('AdminCommentsTop')) # Hook Plugins?>
 
-<form action="comments.php<?php echo !empty($_GET['a']) ? '?a='.$_GET['a'] : '' ?>" method="post" id="form_comments">
+<form action="comments.php<?php echo !empty($_GET['a']) ? '?a=' . $_GET['a'] : '' ?>" method="post" id="form_comments">
 
 	<div class="inline-form action-bar">
 		<?php echo $h2 ?>
@@ -186,7 +186,7 @@ $selector=selector($comSel, 'id_selection');
                 while ($plxAdmin->plxRecord_coms->loop()) { # On boucle
                     $artId = $plxAdmin->plxRecord_coms->f('article');
                     $status = $plxAdmin->plxRecord_coms->f('status');
-                    $id = $status.$artId.'.'.$plxAdmin->plxRecord_coms->f('numero');
+                    $id = $status . $artId . '.' . $plxAdmin->plxRecord_coms->f('numero');
                     $query = 'c=' . $id;
                     if (isset($_GET['a'])) {
                         $query .= '&a=' . $_GET['a'];
@@ -259,25 +259,25 @@ $selector=selector($comSel, 'id_selection');
             $start=1;
         }
         # Génération des URLs
-        $sel = '&amp;sel='.$_SESSION['selCom'].(!empty($_GET['a']) ? '&amp;a='.$_GET['a'] : '');
-        $p_url = 'comments.php?page='.($plxAdmin->page-1).$sel;
-        $n_url = 'comments.php?page='.($plxAdmin->page+1).$sel;
-        $l_url = 'comments.php?page='.$last_page.$sel;
-        $f_url = 'comments.php?page=1'.$sel;
+        $sel = '&amp;sel=' . $_SESSION['selCom'] . (!empty($_GET['a']) ? '&amp;a=' . $_GET['a'] : '');
+        $p_url = 'comments.php?page=' . ($plxAdmin->page-1) . $sel;
+        $n_url = 'comments.php?page=' . ($plxAdmin->page+1) . $sel;
+        $l_url = 'comments.php?page=' . $last_page . $sel;
+        $f_url = 'comments.php?page=1' . $sel;
         # Affichage des liens de pagination
-        printf('<span class="p_page">'.L_PAGINATION.'</span>', '<input style="text-align:right;width:35px" onchange="window.location.href=\'comments.php?page=\'+this.value+\''.$sel.'\'" value="'.$plxAdmin->page.'" />', $last_page);
-        $s = $plxAdmin->page>2 ? '<a href="'.$f_url.'" title="'.L_PAGINATION_FIRST_TITLE.'">&laquo;</a>' : '&laquo;';
-        echo '<span class="p_first">'.$s.'</span>';
-        $s = $plxAdmin->page>1 ? '<a href="'.$p_url.'" title="'.L_PAGINATION_PREVIOUS_TITLE.'">&lsaquo;</a>' : '&lsaquo;';
-        echo '<span class="p_prev">'.$s.'</span>';
+        printf('<span class="p_page">' . L_PAGINATION . '</span>', '<input style="text-align:right;width:35px" onchange="window.location.href=\'comments.php?page=\'+this.value+\'' . $sel . '\'" value="' . $plxAdmin->page . '" />', $last_page);
+        $s = $plxAdmin->page>2 ? '<a href="' . $f_url . '" title="' . L_PAGINATION_FIRST_TITLE . '">&laquo;</a>' : '&laquo;';
+        echo '<span class="p_first">' . $s . '</span>';
+        $s = $plxAdmin->page>1 ? '<a href="' . $p_url . '" title="' . L_PAGINATION_PREVIOUS_TITLE . '">&lsaquo;</a>' : '&lsaquo;';
+        echo '<span class="p_prev">' . $s . '</span>';
         for ($i=$start;$i<=$stop;$i++) {
-            $s = $i==$plxAdmin->page ? $i : '<a href="'.('comments.php?page='.$i.$sel).'" title="'.$i.'">'.$i.'</a>';
-            echo '<span class="p_current">'.$s.'</span>';
+            $s = $i==$plxAdmin->page ? $i : '<a href="' . ('comments.php?page=' . $i . $sel) . '" title="' . $i . '">' . $i . '</a>';
+            echo '<span class="p_current">' . $s . '</span>';
         }
-        $s = $plxAdmin->page<$last_page ? '<a href="'.$n_url.'" title="'.L_PAGINATION_NEXT_TITLE.'">&rsaquo;</a>' : '&rsaquo;';
-        echo '<span class="p_next">'.$s.'</span>';
-        $s = $plxAdmin->page<($last_page-1) ? '<a href="'.$l_url.'" title="'.L_PAGINATION_LAST_TITLE.'">&raquo;</a>' : '&raquo;';
-        echo '<span class="p_last">'.$s.'</span>';
+        $s = $plxAdmin->page<$last_page ? '<a href="' . $n_url . '" title="' . L_PAGINATION_NEXT_TITLE . '">&rsaquo;</a>' : '&rsaquo;';
+        echo '<span class="p_next">' . $s . '</span>';
+        $s = $plxAdmin->page<($last_page-1) ? '<a href="' . $l_url . '" title="' . L_PAGINATION_LAST_TITLE . '">&raquo;</a>' : '&raquo;';
+        echo '<span class="p_last">' . $s . '</span>';
     }
 ?>
 </p>
@@ -286,9 +286,9 @@ $selector=selector($comSel, 'id_selection');
 
 <ul class="unstyled-list">
 	<li><?php echo L_COMMENTS_PRIVATE_FEEDS ?> :</li>
-	<?php $urlp_hl = $plxAdmin->racine.'feed.php?admin'.$plxAdmin->aConf['clef'].'/commentaires/hors-ligne'; ?>
+	<?php $urlp_hl = $plxAdmin->racine . 'feed.php?admin' . $plxAdmin->aConf['clef'] . '/commentaires/hors-ligne'; ?>
 	<li><a href="<?php echo $urlp_hl ?>" title="<?php echo L_COMMENT_OFFLINE_FEEDS_TITLE ?>"><?php echo L_COMMENT_OFFLINE_FEEDS ?></a></li>
-	<?php $urlp_el = $plxAdmin->racine.'feed.php?admin'.$plxAdmin->aConf['clef'].'/commentaires/en-ligne'; ?>
+	<?php $urlp_el = $plxAdmin->racine . 'feed.php?admin' . $plxAdmin->aConf['clef'] . '/commentaires/en-ligne'; ?>
 	<li><a href="<?php echo $urlp_el ?>" title="<?php echo L_COMMENT_ONLINE_FEEDS_TITLE ?>"><?php echo L_COMMENT_ONLINE_FEEDS ?></a></li>
 </ul>
 

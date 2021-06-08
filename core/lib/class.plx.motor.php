@@ -240,7 +240,7 @@ class plxMotor
 				// $this->tri = $this->aCats[$this->cible]['tri']; # Recuperation du tri des articles
             } elseif (isset($this->aUser[$this->cible])) { # Redirection 301
                 if ($this->aCats[$this->cible]['url']!=$capture[2]) {
-					$this->redir301($this->urlRewrite('?user'.intval($this->cible).'/'.$this->aCats[$this->cible]['login']));
+                    $this->redir301($this->urlRewrite('?user' . intval($this->cible) . '/' . $this->aCats[$this->cible]['login']));
 				}
 			} else {
 				$this->error404(L_UNKNOWN_USER);
@@ -758,7 +758,7 @@ class plxMotor
             if (!isset($statique['url'])) {
                 continue;
             }
-            $filename = PLX_ROOT . $this->aConf['racine_statiques'] . $statId. '.' . $statique['url'] . '.php';
+            $filename = PLX_ROOT . $this->aConf['racine_statiques'] . $statId . '.' . $statique['url'] . '.php';
             $statique['readable'] = is_readable($filename) ? 1 : 0;
 
             $this->aStats[$statId] = $statique;
@@ -1039,7 +1039,7 @@ class plxMotor
 				'comStatus'	=> $capture[1],
 				'artId'		=> $capture[2],
 				'comDate'	=> plxDate::timestamp2Date($capture[3]),
-                'comId'     => $capture[3].'-'.$capture[4],
+                'comId'     => $capture[3] . '-' . $capture[4],
 				'comIdx'	=> $capture[4],
 			);
 		}

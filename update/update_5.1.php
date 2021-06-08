@@ -10,7 +10,7 @@ class update_5_1 extends plxUpdate
     # mise à jour fichier parametres.xml
     public function step1()
     {
-        echo L_UPDATE_UPDATE_PARAMETERS_FILE."<br />";
+        echo L_UPDATE_UPDATE_PARAMETERS_FILE . "<br />";
         # nouveaux parametres
         $new_parameters = array(
             'bypage_archives' => 5,
@@ -31,9 +31,9 @@ class update_5_1 extends plxUpdate
     # création d'un fichier	.htacces dans le dossier data pour eviter de lister les dossiers
     public function step2()
     {
-        echo L_UPDATE_CREATE_HTACCESS_FILE.' '.PLX_ROOT.'data/.htaccess<br />';
-        if (!plxUtils::write('options -indexes', PLX_ROOT.'data/.htaccess')) {
-            echo '<p class="error">'.L_UPDATE_CREATE_HTACCESS_FILE.' '.PLX_ROOT.'data/.htaccess</p>';
+        echo L_UPDATE_CREATE_HTACCESS_FILE . ' ' . PLX_ROOT . 'data/.htaccess<br />';
+        if (!plxUtils::write('options -indexes', PLX_ROOT . 'data/.htaccess')) {
+            echo '<p class="error">' . L_UPDATE_CREATE_HTACCESS_FILE . ' ' . PLX_ROOT . 'data/.htaccess</p>';
             return false;
         }
         return true; # pas d'erreurs
@@ -42,22 +42,22 @@ class update_5_1 extends plxUpdate
     # Migration du fichier des categories
     public function step3()
     {
-        echo L_UPDATE_CATEGORIES_MIGRATION."<br />";
-        if ($categories = $this->_getCategories(PLX_ROOT.$this->plxAdmin->aConf['categories'])) {
+        echo L_UPDATE_CATEGORIES_MIGRATION . "<br />";
+        if ($categories = $this->_getCategories(PLX_ROOT . $this->plxAdmin->aConf['categories'])) {
             # On génère le fichier XML
-            $xml = "<?xml version=\"1.0\" encoding=\"".PLX_CHARSET."\"?>\n";
+            $xml = "<?xml version=\"1.0\" encoding=\"" . PLX_CHARSET . "\"?>\n";
             $xml .= "<document>\n";
             foreach ($categories as $cat_id => $cat) {
-                $xml .= "\t<categorie number=\"".$cat_id."\" tri=\"".$cat['tri']."\" bypage=\"".$cat['bypage']."\" menu=\"".$cat['menu']."\" url=\"".$cat['url']."\" template=\"".$cat['template']."\">";
-                $xml .= "<name><![CDATA[".plxUtils::cdataCheck($cat['name'])."]]></name>";
+                $xml .= "\t<categorie number=\"" . $cat_id . "\" tri=\"" . $cat['tri'] . "\" bypage=\"" . $cat['bypage'] . "\" menu=\"" . $cat['menu'] . "\" url=\"" . $cat['url'] . "\" template=\"" . $cat['template'] . "\">";
+                $xml .= "<name><![CDATA[" . plxUtils::cdataCheck($cat['name']) . "]]></name>";
                 $xml .= "<description><![CDATA[]]></description>";
                 $xml .= "<meta_description><![CDATA[]]></meta_description>";
                 $xml .= "<meta_keywords><![CDATA[]]></meta_keywords>";
                 $xml .= "</categorie>\n";
             }
             $xml .= "</document>";
-            if (!plxUtils::write($xml, PLX_ROOT.$this->plxAdmin->aConf['categories'])) {
-                echo '<p class="error">'.L_UPDATE_ERR_CATEGORIES_MIGRATION.' ('.$this->plxAdmin->aConf['categories'].')</p>';
+            if (!plxUtils::write($xml, PLX_ROOT . $this->plxAdmin->aConf['categories'])) {
+                echo '<p class="error">' . L_UPDATE_ERR_CATEGORIES_MIGRATION . ' (' . $this->plxAdmin->aConf['categories'] . ')</p>';
                 return false;
             }
         }
@@ -68,22 +68,22 @@ class update_5_1 extends plxUpdate
     # Migration du fichier des page statiques
     public function step4()
     {
-        echo L_UPDATE_STATICS_MIGRATION."<br />";
-        if ($statics = $this->_getStatiques(PLX_ROOT.$this->plxAdmin->aConf['statiques'])) {
+        echo L_UPDATE_STATICS_MIGRATION . "<br />";
+        if ($statics = $this->_getStatiques(PLX_ROOT . $this->plxAdmin->aConf['statiques'])) {
             # On génère le fichier XML
-            $xml = "<?xml version=\"1.0\" encoding=\"".PLX_CHARSET."\"?>\n";
+            $xml = "<?xml version=\"1.0\" encoding=\"" . PLX_CHARSET . "\"?>\n";
             $xml .= "<document>\n";
             foreach ($statics as $static_id => $static) {
-                $xml .= "\t<statique number=\"".$static_id."\" active=\"".$static['active']."\" menu=\"".$static['menu']."\" url=\"".$static['url']."\" template=\"".$static['template']."\">";
-                $xml .= "<group><![CDATA[".plxUtils::cdataCheck($static['group'])."]]></group>";
-                $xml .= "<name><![CDATA[".plxUtils::cdataCheck($static['name'])."]]></name>";
+                $xml .= "\t<statique number=\"" . $static_id . "\" active=\"" . $static['active'] . "\" menu=\"" . $static['menu'] . "\" url=\"" . $static['url'] . "\" template=\"" . $static['template'] . "\">";
+                $xml .= "<group><![CDATA[" . plxUtils::cdataCheck($static['group']) . "]]></group>";
+                $xml .= "<name><![CDATA[" . plxUtils::cdataCheck($static['name']) . "]]></name>";
                 $xml .= "<meta_description><![CDATA[]]></meta_description>";
                 $xml .= "<meta_keywords><![CDATA[]]></meta_keywords>";
                 $xml .=	"</statique>\n";
             }
             $xml .= "</document>";
-            if (!plxUtils::write($xml, PLX_ROOT.$this->plxAdmin->aConf['statiques'])) {
-                echo '<p class="error">'.L_UPDATE_ERR_STATICS_MIGRATION.' ('.$this->plxAdmin->aConf['statiques'].')</p>';
+            if (!plxUtils::write($xml, PLX_ROOT . $this->plxAdmin->aConf['statiques'])) {
+                echo '<p class="error">' . L_UPDATE_ERR_STATICS_MIGRATION . ' (' . $this->plxAdmin->aConf['statiques'] . ')</p>';
                 return false;
             }
         }
@@ -93,26 +93,26 @@ class update_5_1 extends plxUpdate
     # Migration du fichier des utilisateurs
     public function step5()
     {
-        echo L_UPDATE_USERS_MIGRATION."<br />";
-        if ($users = $this->_getUsers(PLX_ROOT.$this->plxAdmin->aConf['users'])) {
+        echo L_UPDATE_USERS_MIGRATION . "<br />";
+        if ($users = $this->_getUsers(PLX_ROOT . $this->plxAdmin->aConf['users'])) {
             # On génère le fichier XML
-            $xml = "<?xml version=\"1.0\" encoding=\"".PLX_CHARSET."\"?>\n";
+            $xml = "<?xml version=\"1.0\" encoding=\"" . PLX_CHARSET . "\"?>\n";
             $xml .= "<document>\n";
             foreach ($users as $user_id => $user) {
                 if (intval($user['profil']=='2')) {
                     $user['profil']='4';
                 }
-                $xml .= "\t".'<user number="'.$user_id.'" active="'.$user['active'].'" profil="'.$user['profil'].'" delete="'.$user['delete'].'">'."\n";
-                $xml .= "\t\t".'<login><![CDATA['.plxUtils::cdataCheck(trim($user['login'])).']]></login>'."\n";
-                $xml .= "\t\t".'<name><![CDATA['.plxUtils::cdataCheck(trim($user['name'])).']]></name>'."\n";
-                $xml .= "\t\t".'<infos><![CDATA['.plxUtils::cdataCheck(trim($user['infos'])).']]></infos>'."\n";
-                $xml .= "\t\t".'<password><![CDATA['.$user['password'].']]></password>'."\n";
-                $xml .= "\t\t".'<email><![CDATA[]]></email>'."\n";
+                $xml .= "\t" . '<user number="' . $user_id . '" active="' . $user['active'] . '" profil="' . $user['profil'] . '" delete="' . $user['delete'] . '">' . "\n";
+                $xml .= "\t\t" . '<login><![CDATA[' . plxUtils::cdataCheck(trim($user['login'])) . ']]></login>' . "\n";
+                $xml .= "\t\t" . '<name><![CDATA[' . plxUtils::cdataCheck(trim($user['name'])) . ']]></name>' . "\n";
+                $xml .= "\t\t" . '<infos><![CDATA[' . plxUtils::cdataCheck(trim($user['infos'])) . ']]></infos>' . "\n";
+                $xml .= "\t\t" . '<password><![CDATA[' . $user['password'] . ']]></password>' . "\n";
+                $xml .= "\t\t" . '<email><![CDATA[]]></email>' . "\n";
                 $xml .= "\t</user>\n";
             }
             $xml .= "</document>";
-            if (!plxUtils::write($xml, PLX_ROOT.$this->plxAdmin->aConf['users'])) {
-                echo '<p class="error">'.L_UPDATE_ERR_USERS_MIGRATION.' ('.$this->plxAdmin->aConf['users'].')</p>';
+            if (!plxUtils::write($xml, PLX_ROOT . $this->plxAdmin->aConf['users'])) {
+                echo '<p class="error">' . L_UPDATE_ERR_USERS_MIGRATION . ' (' . $this->plxAdmin->aConf['users'] . ')</p>';
                 return false;
             }
         }
@@ -122,12 +122,12 @@ class update_5_1 extends plxUpdate
     # Création du fichier data/configuration/plugins.xml
     public function step6()
     {
-        echo L_UPDATE_CREATE_PLUGINS_FILE."<br />";
-        $xml = '<?xml version="1.0" encoding="'.PLX_CHARSET.'"?>'."\n";
-        $xml .= '<document>'."\n";
+        echo L_UPDATE_CREATE_PLUGINS_FILE . "<br />";
+        $xml = '<?xml version="1.0" encoding="' . PLX_CHARSET . '"?>' . "\n";
+        $xml .= '<document>' . "\n";
         $xml .= '</document>';
-        if (!plxUtils::write($xml, PLX_ROOT.$this->plxAdmin->aConf['plugins'])) {
-            echo '<p class="error">'.L_UPDATE_ERR_CREATE_PLUGINS_FILE.'</p>';
+        if (!plxUtils::write($xml, PLX_ROOT . $this->plxAdmin->aConf['plugins'])) {
+            echo '<p class="error">' . L_UPDATE_ERR_CREATE_PLUGINS_FILE . '</p>';
             return false;
         }
         return true;
@@ -136,10 +136,10 @@ class update_5_1 extends plxUpdate
     # suppression du fichier core/admin/fullscreen.php
     public function step7()
     {
-        if (file_exists(PLX_ROOT.'core/admin/fullscreen.php')) {
-            echo L_UPDATE_DELETE_FULLSCREEN_FILE."<br />";
-            if (!unlink(PLX_ROOT.'core/admin/fullscreen.php')) {
-                echo '<p class="error">'.L_UPDATE_ERR_DELETE_FULLSCREEN_FILE.'</p>';
+        if (file_exists(PLX_ROOT . 'core/admin/fullscreen.php')) {
+            echo L_UPDATE_DELETE_FULLSCREEN_FILE . "<br />";
+            if (!unlink(PLX_ROOT . 'core/admin/fullscreen.php')) {
+                echo '<p class="error">' . L_UPDATE_ERR_DELETE_FULLSCREEN_FILE . '</p>';
             }
         }
         return true;
@@ -148,10 +148,10 @@ class update_5_1 extends plxUpdate
     # suppression du dossier de la plxtoolar
     public function step8()
     {
-        if (is_dir(PLX_ROOT.'core/plxtoolbar')) {
-            echo L_UPDATE_DELETE_PLXTOOLBAR_FOLDER."<br />";
-            if (!$this->deleteDir(PLX_ROOT.'core/plxtoolbar/')) {
-                echo '<p class="error">'.L_UPDATE_ERR_DELETE_PLXTOOLBAR_FOLDER.'</p>';
+        if (is_dir(PLX_ROOT . 'core/plxtoolbar')) {
+            echo L_UPDATE_DELETE_PLXTOOLBAR_FOLDER . "<br />";
+            if (!$this->deleteDir(PLX_ROOT . 'core/plxtoolbar/')) {
+                echo '<p class="error">' . L_UPDATE_ERR_DELETE_PLXTOOLBAR_FOLDER . '</p>';
             }
         }
         return true;

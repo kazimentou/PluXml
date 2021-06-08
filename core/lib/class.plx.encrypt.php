@@ -40,7 +40,7 @@ class plxEncrypt
 
     public static function encryptId($int, $class='')
     {
-        return plxEncrypt::base64url_encode($int.'*'.substr(sha1($class.$int.ENCRYPTION_KEY), 0, 6));
+        return plxEncrypt::base64url_encode($int . '*' . substr(sha1($class . $int . ENCRYPTION_KEY), 0, 6));
     }
 
     public static function decryptId($int, $class='')
@@ -49,6 +49,6 @@ class plxEncrypt
         if (sizeof($parts) != 2) {
             return 0;
         }
-        return substr(sha1($class.$parts[0].ENCRYPTION_KEY), 0, 6) === $parts[1] ? $parts[0] : 0;
+        return substr(sha1($class . $parts[0] . ENCRYPTION_KEY), 0, 6) === $parts[1] ? $parts[0] : 0;
     }
 }

@@ -10,7 +10,7 @@ class update_5_1_6 extends plxUpdate
     # mise à jour fichier parametres.xml
     public function step1()
     {
-        echo L_UPDATE_UPDATE_PARAMETERS_FILE."<br />";
+        echo L_UPDATE_UPDATE_PARAMETERS_FILE . "<br />";
         # nouveaux parametres
         $new_parameters = array(
             'display_empty_cat' => 0,
@@ -26,15 +26,15 @@ class update_5_1_6 extends plxUpdate
     # mise à jour fichier .htaccess
     public function step2()
     {
-        if (file_exists(PLX_ROOT.'.htaccess')) {
-            echo L_UPDATE_UPDATE_HTACCESS_FILE."<br />";
+        if (file_exists(PLX_ROOT . '.htaccess')) {
+            echo L_UPDATE_UPDATE_HTACCESS_FILE . "<br />";
             # lecture du fichier .htaccess
-            $htaccess = file_get_contents(PLX_ROOT.'.htaccess');
+            $htaccess = file_get_contents(PLX_ROOT . '.htaccess');
             $old = 'RewriteRule ^([^feed\/].*)$ index.php?$1 [L]';
             $new = 'RewriteRule ^(?!feed)(.*)$ index.php?$1 [L]';
             $htaccess = str_replace($old, $new, $htaccess);
-            if (!plxUtils::write($htaccess, PLX_ROOT.'.htaccess')) {
-                echo '<p class="error">'.L_UPDATE_ERR_UPDATE_HTACCESS_FILE.'</p>';
+            if (!plxUtils::write($htaccess, PLX_ROOT . '.htaccess')) {
+                echo '<p class="error">' . L_UPDATE_ERR_UPDATE_HTACCESS_FILE . '</p>';
                 return false;
             }
         }
@@ -43,18 +43,18 @@ class update_5_1_6 extends plxUpdate
     # Mise à jour des pages statiques: ajout nouveau champ title_htmltag
     public function step3()
     {
-        echo L_UPDATE_FILE." (".$this->plxAdmin->aConf['statiques'].")<br />";
-        $data = file_get_contents(PLX_ROOT.$this->plxAdmin->aConf['statiques']);
+        echo L_UPDATE_FILE . " (" . $this->plxAdmin->aConf['statiques'] . ")<br />";
+        $data = file_get_contents(PLX_ROOT . $this->plxAdmin->aConf['statiques']);
         $tag = 'statique';
-        if (preg_match_all('{<'.$tag.'[^>]*>(.*?)</'.$tag.'>}', $data, $matches, PREG_PATTERN_ORDER)) {
+        if (preg_match_all('{<' . $tag . '[^>]*>(.*?)</' . $tag . '>}', $data, $matches, PREG_PATTERN_ORDER)) {
             foreach ($matches[0] as $match) {
                 if (!preg_match('/<title_htmltag>/', $match)) {
-                    $str = str_replace('</'.$tag.'>', '<title_htmltag><![CDATA[]]></title_htmltag></'.$tag.'>', $match);
+                    $str = str_replace('</' . $tag . '>', '<title_htmltag><![CDATA[]]></title_htmltag></' . $tag . '>', $match);
                     $data = str_replace($match, $str, $data);
                 }
             }
-            if (!plxUtils::write($data, PLX_ROOT.$this->plxAdmin->aConf['statiques'])) {
-                echo '<p class="error">'.L_UPDATE_ERR_FILE.'</p>';
+            if (!plxUtils::write($data, PLX_ROOT . $this->plxAdmin->aConf['statiques'])) {
+                echo '<p class="error">' . L_UPDATE_ERR_FILE . '</p>';
                 return false;
             }
         }
@@ -63,18 +63,18 @@ class update_5_1_6 extends plxUpdate
     # Mise à jour des categories: ajout nouveau champ title_htmltag
     public function step4()
     {
-        echo L_UPDATE_FILE." (".$this->plxAdmin->aConf['categories'].")<br />";
-        $data = file_get_contents(PLX_ROOT.$this->plxAdmin->aConf['categories']);
+        echo L_UPDATE_FILE . " (" . $this->plxAdmin->aConf['categories'] . ")<br />";
+        $data = file_get_contents(PLX_ROOT . $this->plxAdmin->aConf['categories']);
         $tag = 'categorie';
-        if (preg_match_all('{<'.$tag.'[^>]*>(.*?)</'.$tag.'>}', $data, $matches, PREG_PATTERN_ORDER)) {
+        if (preg_match_all('{<' . $tag . '[^>]*>(.*?)</' . $tag . '>}', $data, $matches, PREG_PATTERN_ORDER)) {
             foreach ($matches[0] as $match) {
                 if (!preg_match('/<title_htmltag>/', $match)) {
-                    $str = str_replace('</'.$tag.'>', '<title_htmltag><![CDATA[]]></title_htmltag></'.$tag.'>', $match);
+                    $str = str_replace('</' . $tag . '>', '<title_htmltag><![CDATA[]]></title_htmltag></' . $tag . '>', $match);
                     $data = str_replace($match, $str, $data);
                 }
             }
-            if (!plxUtils::write($data, PLX_ROOT.$this->plxAdmin->aConf['categories'])) {
-                echo '<p class="error">'.L_UPDATE_ERR_FILE.'</p>';
+            if (!plxUtils::write($data, PLX_ROOT . $this->plxAdmin->aConf['categories'])) {
+                echo '<p class="error">' . L_UPDATE_ERR_FILE . '</p>';
                 return false;
             }
         }

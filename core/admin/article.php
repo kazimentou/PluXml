@@ -59,7 +59,7 @@ if (!empty($_POST)) { # Création, mise à jour, suppression ou aperçu
 	# Si profil PROFIL_WRITER on vérifie que l'article n'est pas celui d'un autre utilisateur
     if ($_SESSION['profil']==PROFIL_WRITER and isset($_POST['artId']) and $_POST['artId']!='0000') {
 		# On valide l'article
-        if (($aFile = $plxAdmin->plxGlob_arts->query('/^'.$_POST['artId'].'.([home[draft|0-9,]*).'.$_SESSION['user'].'.(.+).xml$/')) == false) { # Article inexistant
+        if (($aFile = $plxAdmin->plxGlob_arts->query('/^' . $_POST['artId'] . '.([home[draft|0-9,]*).' . $_SESSION['user'] . '.(.+).xml$/')) == false) { # Article inexistant
 			plxMsg::Error(L_ERR_UNKNOWN_ARTICLE);
 			header('Location: index.php');
 			exit;
@@ -93,9 +93,9 @@ if (!empty($_POST)) { # Création, mise à jour, suppression ou aperçu
 		}
             $art['categorie']=implode(',', $array);
         }
-        $art['date'] = $_POST['date_publication_year'].$_POST['date_publication_month'].$_POST['date_publication_day'].substr(str_replace(':', '', $_POST['date_publication_time']), 0, 4);
-        $art['date_creation'] = $_POST['date_creation_year'].$_POST['date_creation_month'].$_POST['date_creation_day'].substr(str_replace(':', '', $_POST['date_creation_time']), 0, 4);
-        $art['date_update'] = $_POST['date_update_year'].$_POST['date_update_month'].$_POST['date_update_day'].substr(str_replace(':', '', $_POST['date_update_time']), 0, 4);
+        $art['date'] = $_POST['date_publication_year'] . $_POST['date_publication_month'] . $_POST['date_publication_day'] . substr(str_replace(':', '', $_POST['date_publication_time']), 0, 4);
+        $art['date_creation'] = $_POST['date_creation_year'] . $_POST['date_creation_month'] . $_POST['date_creation_day'] . substr(str_replace(':', '', $_POST['date_creation_time']), 0, 4);
+        $art['date_update'] = $_POST['date_update_year'] . $_POST['date_update_month'] . $_POST['date_update_day'] . substr(str_replace(':', '', $_POST['date_update_time']), 0, 4);
 		$art['nb_com'] = 0;
 		$tmpstr = (!empty(trim($_POST['url']))) ? $_POST['url'] : $_POST['title'];
 		$art['url'] = plxUtils::urlify($tmpstr);
@@ -108,7 +108,7 @@ if (!empty($_POST)) { # Création, mise à jour, suppression ou aperçu
 
 		$article[0] = $art;
 		$_SESSION['preview'] = $article;
-		header('Location: '.PLX_ROOT.'index.php?preview');
+        header('Location: ' . PLX_ROOT . 'index.php?preview');
 		exit;
 	}
 	# Suppression d'un article
@@ -125,7 +125,7 @@ if (!empty($_POST)) { # Création, mise à jour, suppression ou aperçu
         foreach ($plxAdmin->plxGlob_arts->aFiles as $numart => $filename) {
             if (preg_match("/^_?[0-9]{4}.([0-9,|home|draft]*).[0-9]{3}.[0-9]{12}.$url.xml$/", $filename)) {
                 if ($numart!=str_replace('_', '', $_POST['artId'])) {
-                    $valid = plxMsg::Error(L_ERR_URL_ALREADY_EXISTS." : ".plxUtils::strCheck($url)) and $valid;
+                    $valid = plxMsg::Error(L_ERR_URL_ALREADY_EXISTS . " : " . plxUtils::strCheck($url)) and $valid;
 				}
 			}
 		}
@@ -143,7 +143,7 @@ if (!empty($_POST)) { # Création, mise à jour, suppression ou aperçu
 		}
         if ($valid) {
             $plxAdmin->editArticle($_POST, $_POST['artId']);
-			header('Location: article.php?a='.$_POST['artId']);
+            header('Location: article.php?a=' . $_POST['artId']);
 			exit;
 		# Si url ou date invalide, on ne sauvegarde pas mais on repasse en mode brouillon
         } else {
@@ -198,7 +198,7 @@ if (!empty($_POST)) { # Création, mise à jour, suppression ou aperçu
 		exit;
 	}
 	# On parse et alimente nos variables
-	$result = $plxAdmin->parseArticle(PLX_ROOT.$plxAdmin->aConf['racine_articles'].$aFile['0']);
+    $result = $plxAdmin->parseArticle(PLX_ROOT . $plxAdmin->aConf['racine_articles'] . $aFile['0']);
 	$title = trim($result['title']);
 	$chapo = trim($result['chapo']);
 	$content = trim($result['content']);
@@ -270,13 +270,15 @@ foreach ($plxAdmin->aUsers as $_userid => $_user) {
 }
 
 # On récupère les templates des articles
-$glob = plxGlob::getInstance(PLX_ROOT . $plxAdmin->aConf['racine_themes'] . $plxAdmin->aConf['style'], false, true, '#^article(?:-[\w-]+)?\.php$#');
-if (!empty($glob->aFiles)) {
-	$aTemplates = array();
-	foreach($glob->aFiles as $v)
-		$aTemplates[$v] = basename($v, '.php');
-} else {
-	$aTemplates = array('' => L_NONE1);
+$aTemplates = array();
+$files = plxGlob::getInstance(PLX_ROOT . $plxAdmin->aConf['racine_themes'] . $plxAdmin->aConf['style'], false, true, '#^article(?:-[\w-]+)?\.php$#');
+if ($array = $files->query('/^article(-[a-z0-9-_]+)?.php$/')) {
+    foreach ($array as $k=>$v) {
+        $aTemplates[$v] = $v;
+    }
+}
+if (empty($aTemplates)) {
+    $aTemplates[''] = L_NONE1;
 }
 
 $cat_id='000';
@@ -311,18 +313,18 @@ function refreshImg(dta) {
             if ($_SESSION['profil']>PROFIL_MODERATOR and $plxAdmin->aConf['mod_art']) {
                 if (in_array('draft', $catId)) { # brouillon
                     if ($artId!='0000') { # nouvel article
-					echo '<input onclick="this.form.target=\'_self\';return true;" type="submit" name="draft" value="'.L_ARTICLE_DRAFT_BUTTON.'"/> ';
+                    echo '<input onclick="this.form.target=\'_self\';return true;" type="submit" name="draft" value="' . L_ARTICLE_DRAFT_BUTTON . '"/> ';
                     }
-					echo '<input onclick="this.form.target=\'_self\';return true;" type="submit" name="moderate" value="'.L_ARTICLE_MODERATE_BUTTON.'"/> ';
-					echo '<span class="sml-hide med-show">&nbsp;&nbsp;&nbsp;</span><input class="red" type="submit" name="delete" value="'.L_DELETE.'" onclick="Check=confirm(\''.L_ARTICLE_DELETE_CONFIRM.'\');if(Check==false) {return false;} else {this.form.target=\'_self\';return true;}" /> ';
+                    echo '<input onclick="this.form.target=\'_self\';return true;" type="submit" name="moderate" value="' . L_ARTICLE_MODERATE_BUTTON . '"/> ';
+                    echo '<span class="sml-hide med-show">&nbsp;&nbsp;&nbsp;</span><input class="red" type="submit" name="delete" value="' . L_DELETE . '" onclick="Check=confirm(\'' . L_ARTICLE_DELETE_CONFIRM . '\');if(Check==false) {return false;} else {this.form.target=\'_self\';return true;}" /> ';
 				} else {
                     if (isset($_GET['a']) and preg_match('/^_[0-9]{4}$/', $_GET['a'])) { # en attente
 						echo '<input onclick="this.form.target=\'_self\';return true;" type="submit" name="update" value="' . L_ARTICLE_UPDATE_BUTTON . '"/> ';
-						echo '<input onclick="this.form.target=\'_self\';return true;" type="submit" name="draft" value="'.L_ARTICLE_DRAFT_BUTTON.'"/> ';
-						echo '<span class="sml-hide med-show">&nbsp;&nbsp;&nbsp;</span><input class="red" type="submit" name="delete" value="'.L_DELETE.'" onclick="Check=confirm(\''.L_ARTICLE_DELETE_CONFIRM.'\');if(Check==false) {return false;} else {this.form.target=\'_self\';return true;}" /> ';
+                        echo '<input onclick="this.form.target=\'_self\';return true;" type="submit" name="draft" value="' . L_ARTICLE_DRAFT_BUTTON . '"/> ';
+                        echo '<span class="sml-hide med-show">&nbsp;&nbsp;&nbsp;</span><input class="red" type="submit" name="delete" value="' . L_DELETE . '" onclick="Check=confirm(\'' . L_ARTICLE_DELETE_CONFIRM . '\');if(Check==false) {return false;} else {this.form.target=\'_self\';return true;}" /> ';
 					} else {
-						echo '<input onclick="this.form.target=\'_self\';return true;" type="submit" name="draft" value="'.L_ARTICLE_DRAFT_BUTTON.'"/> ';
-						echo '<input onclick="this.form.target=\'_self\';return true;" type="submit" name="moderate" value="'.L_ARTICLE_MODERATE_BUTTON.'"/> ';
+                        echo '<input onclick="this.form.target=\'_self\';return true;" type="submit" name="draft" value="' . L_ARTICLE_DRAFT_BUTTON . '"/> ';
+                        echo '<input onclick="this.form.target=\'_self\';return true;" type="submit" name="moderate" value="' . L_ARTICLE_MODERATE_BUTTON . '"/> ';
 					}
 				}
 			} else {
@@ -338,7 +340,7 @@ function refreshImg(dta) {
 						echo '<input onclick="this.form.target=\'_self\';return true;" type="submit" name="draft" value="' . L_ARTICLE_OFFLINE_BUTTON . '"/> ';
 				}
                 if ($artId!='0000') {
-					echo '<span class="sml-hide med-show">&nbsp;&nbsp;&nbsp;</span><input class="red" type="submit" name="delete" value="'.L_DELETE.'" onclick="Check=confirm(\''.L_ARTICLE_DELETE_CONFIRM.'\');if(Check==false) {return false;} else {this.form.target=\'_self\';return true;}" /> ';
+                    echo '<span class="sml-hide med-show">&nbsp;&nbsp;&nbsp;</span><input class="red" type="submit" name="delete" value="' . L_DELETE . '" onclick="Check=confirm(\'' . L_ARTICLE_DELETE_CONFIRM . '\');if(Check==false) {return false;} else {this.form.target=\'_self\';return true;}" /> ';
 			}
             }
 		?>
@@ -362,7 +364,7 @@ function refreshImg(dta) {
 				<div class="grid">
 					<div class="col sml-12 small">
 						<?php if ($artId!='' and $artId!='0000') : ?>
-							<?php $link = $plxAdmin->urlRewrite('?article'.intval($artId).'/'.$url) ?>
+							<?php $link = $plxAdmin->urlRewrite('?article' . intval($artId) . '/' . $url) ?>
 					 			<small>
 					 				<strong><?php echo L_LINK_FIELD ?>&nbsp;:</strong>
 					 				<a onclick="this.target=\'_blank\';return true;" href="<?php echo $link ?>" title="<?php echo L_LINK_ACCESS ?> : <?php echo $link ?>"><?php echo $link ?></a>
@@ -409,7 +411,7 @@ function refreshImg(dta) {
                     if (preg_match('@^(?:https?|data):@', $thumbnail)) {
 						$src = $thumbnail;
 					} else {
-						$src = PLX_ROOT.$thumbnail;
+                        $src = PLX_ROOT . $thumbnail;
 						$src = is_file($src) ? $src : false;
 					}
                     if ($src) {
@@ -447,8 +449,8 @@ function refreshImg(dta) {
                         if ($_SESSION['profil'] < PROFIL_WRITER) {
 							plxUtils::printSelect('author', $_users, $author);
                         } else {
-							echo '<input type="hidden" id="id_author" name="author" value="'.$author.'" />';
-							echo '<strong>'.plxUtils::strCheck($plxAdmin->aUsers[$author]['name']).'</strong>';
+                            echo '<input type="hidden" id="id_author" name="author" value="' . $author . '" />';
+                            echo '<strong>' . plxUtils::strCheck($plxAdmin->aUsers[$author]['name']) . '</strong>';
 						}
 						?>
 					</div>
@@ -502,15 +504,15 @@ function refreshImg(dta) {
 						<label><?php echo L_ARTICLE_CATEGORIES ?>&nbsp;:</label>
 						<?php
                             $selected = (is_array($catId) and in_array('000', $catId)) ? ' checked="checked"' : '';
-							echo '<label for="cat_unclassified"><input class="no-margin" disabled="disabled" type="checkbox" id="cat_unclassified" name="catId[]"'.$selected.' value="000" />&nbsp;'. L_UNCLASSIFIED .'</label>';
+                            echo '<label for="cat_unclassified"><input class="no-margin" disabled="disabled" type="checkbox" id="cat_unclassified" name="catId[]"' . $selected . ' value="000" />&nbsp;' . L_UNCLASSIFIED . '</label>';
                             $selected = (is_array($catId) and in_array('home', $catId)) ? ' checked="checked"' : '';
-							echo '<label for="cat_home"><input type="checkbox" class="no-margin" id="cat_home" name="catId[]"'.$selected.' value="home" />&nbsp;'. L_CATEGORY_HOME_PAGE .'</label>';
+                            echo '<label for="cat_home"><input type="checkbox" class="no-margin" id="cat_home" name="catId[]"' . $selected . ' value="home" />&nbsp;' . L_CATEGORY_HOME_PAGE . '</label>';
                             foreach ($plxAdmin->aCats as $cat_id => $cat_name) {
                                 $selected = (is_array($catId) and in_array($cat_id, $catId)) ? ' checked="checked"' : '';
                                 if ($plxAdmin->aCats[$cat_id]['active']) {
-									echo '<label for="cat_'.$cat_id.'">'.'<input type="checkbox" class="no-margin" id="cat_'.$cat_id.'" name="catId[]"'.$selected.' value="'.$cat_id.'" />&nbsp;'.plxUtils::strCheck($cat_name['name']).'</label>';
+                                    echo '<label for="cat_' . $cat_id . '">' . '<input type="checkbox" class="no-margin" id="cat_' . $cat_id . '" name="catId[]"' . $selected . ' value="' . $cat_id . '" />&nbsp;' . plxUtils::strCheck($cat_name['name']) . '</label>';
                                 } else {
-									echo '<label for="cat_'.$cat_id.'">'.'<input type="checkbox" class="no-margin" id="cat_'.$cat_id.'" name="catId[]"'.$selected.' value="'.$cat_id.'" />&nbsp;'.plxUtils::strCheck($cat_name['name']).'</label>';
+                                    echo '<label for="cat_' . $cat_id . '">' . '<input type="checkbox" class="no-margin" id="cat_' . $cat_id . '" name="catId[]"' . $selected . ' value="' . $cat_id . '" />&nbsp;' . plxUtils::strCheck($cat_name['name']) . '</label>';
 							}
                             }
 						?>
@@ -557,8 +559,8 @@ function refreshImg(dta) {
                                 }
 								array_multisort($array);
                                 foreach ($array as $tagname => $tag) {
-									echo '<a href="javascript:void(0)" onclick="insTag(\'tags\',\''.addslashes($tagname).'\')" title="'.plxUtils::strCheck($tagname).' ('.$tag['count'].')">'.
-									str_replace(' ', '&nbsp;', plxUtils::strCheck($tagname)).'</a>&nbsp;('.$tag['count'].')&nbsp; ';
+                                    echo '<a href="javascript:void(0)" onclick="insTag(\'tags\',\'' . addslashes($tagname) . '\')" title="' . plxUtils::strCheck($tagname) . ' (' . $tag['count'] . ')">' .
+                                    str_replace(' ', '&nbsp;', plxUtils::strCheck($tagname)) . '</a>&nbsp;(' . $tag['count'] . ')&nbsp; ';
 								}
                             } else {
                                 echo L_NO_TAG;
@@ -619,8 +621,8 @@ function refreshImg(dta) {
 						<a href="comments.php?a=<?php echo $artId ?>&amp;page=1" title="<?php echo L_ARTICLE_MANAGE_COMMENTS_TITLE ?>"><?php echo L_ARTICLE_MANAGE_COMMENTS ?></a>
 						<?php
 						# récupération du nombre de commentaires
-                        $nbComsToValidate = $plxAdmin->getNbCommentaires('/^_'.$artId.'.(.*).xml$/', 'all');
-                        $nbComsValidated = $plxAdmin->getNbCommentaires('/^'.$artId.'.(.*).xml$/', 'all');
+                        $nbComsToValidate = $plxAdmin->getNbCommentaires('/^_' . $artId . '.(.*).xml$/', 'all');
+                        $nbComsValidated = $plxAdmin->getNbCommentaires('/^' . $artId . '.(.*).xml$/', 'all');
 						?>
 						<ul>
 							<li><?php echo L_COMMENT_OFFLINE ?> : <a title="<?php echo L_NEW_COMMENTS_TITLE ?>" href="comments.php?sel=offline&amp;a=<?php echo $artId ?>&amp;page=1"><?php echo $nbComsToValidate ?></a></li>

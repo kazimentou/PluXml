@@ -3,10 +3,10 @@
 } ?>
 <?php
 if (isset($_GET["del"]) and $_GET["del"]=="install") {
-    if (@unlink(PLX_ROOT.'install.php')) {
+    if (@unlink(PLX_ROOT . 'install.php')) {
 		plxMsg::Info(L_DELETE_SUCCESSFUL);
     } else {
-		plxMsg::Error(L_DELETE_FILE_ERR.' install.php');
+        plxMsg::Error(L_DELETE_FILE_ERR . ' install.php');
     }
     header("Location: index.php");
     exit;
@@ -87,7 +87,7 @@ if (isset($_GET["del"]) and $_GET["del"]=="install") {
 <?php
 					$menus = array();
 					$nbartsmod = $plxAdmin->nbArticles('all', ($_SESSION['profil'] < PROFIL_WRITER) ? '\d{3}' : $_SESSION['user'], '_');
-                    $arts_mod = $nbartsmod>0 ? '<span class="badge" onclick="window.location=\''.'index.php?sel=mod&amp;page=1\';return false;">'.$nbartsmod.'</span>' : '';
+                    $arts_mod = $nbartsmod>0 ? '<span class="badge" onclick="window.location=\'' . 'index.php?sel=mod&amp;page=1\';return false;">' . $nbartsmod . '</span>' : '';
                     $menus[] = plxUtils::formatMenu(L_MENU_ARTICLES, 'index.php?page=1', L_MENU_ARTICLES_TITLE, false, false, $arts_mod);
 
                     if (isset($_GET['a'])) { # edition article
@@ -104,7 +104,7 @@ if (isset($_GET["del"]) and $_GET["del"]=="install") {
 
                     if ($_SESSION['profil'] <= PROFIL_MODERATOR) {
 						$nbcoms = $plxAdmin->nbComments('offline');
-                        $coms_offline = $nbcoms>0 ? '<span class="badge" onclick="window.location=\''.'comments.php?sel=offline&amp;page=1\';return false;">'.$plxAdmin->nbComments('offline').'</span>' : '';
+                        $coms_offline = $nbcoms>0 ? '<span class="badge" onclick="window.location=\'' . 'comments.php?sel=offline&amp;page=1\';return false;">' . $plxAdmin->nbComments('offline') . '</span>' : '';
                         $menus[] = plxUtils::formatMenu(L_MENU_COMMENTS, 'comments.php?page=1', L_MENU_COMMENTS_TITLE, false, false, $coms_offline);
 					}
 
@@ -129,17 +129,17 @@ if (isset($_GET["del"]) and $_GET["del"]=="install") {
 
 					# récuperation des menus admin pour les plugins
                     foreach ($plxAdmin->plxPlugins->aPlugins as $plugName => $plugInstance) {
-                        if ($plugInstance and is_file(PLX_PLUGINS.$plugName.'/admin.php')) {
+                        if ($plugInstance and is_file(PLX_PLUGINS . $plugName . '/admin.php')) {
                             if ($plxAdmin->checkProfil($plugInstance->getAdminProfil(), false)) {
                                 if ($plugInstance->adminMenu) {
-                                    $menu = plxUtils::formatMenu(plxUtils::strCheck($plugInstance->adminMenu['title']), 'plugin.php?p='.$plugName, plxUtils::strCheck($plugInstance->adminMenu['caption']));
+                                    $menu = plxUtils::formatMenu(plxUtils::strCheck($plugInstance->adminMenu['title']), 'plugin.php?p=' . $plugName, plxUtils::strCheck($plugInstance->adminMenu['caption']));
                                     if ($plugInstance->adminMenu['position']!='') {
 										array_splice($menus, ($plugInstance->adminMenu['position']-1), 0, $menu);
                                     } else {
 										$menus[] = $menu;
                                     }
 								} else {
-                                    $menus[] = plxUtils::formatMenu(plxUtils::strCheck($plugInstance->getInfo('title')), 'plugin.php?p='.$plugName, plxUtils::strCheck($plugInstance->getInfo('title')));
+                                    $menus[] = plxUtils::formatMenu(plxUtils::strCheck($plugInstance->getInfo('title')), 'plugin.php?p=' . $plugName, plxUtils::strCheck($plugInstance->getInfo('title')));
 								}
 							}
 						}
@@ -163,10 +163,10 @@ if (isset($_GET["del"]) and $_GET["del"]=="install") {
         if (is_file(PLX_ROOT.'install.php')) {
         if (
 			$_SESSION['profil']==PROFIL_ADMIN and
-			is_file(PLX_ROOT.'install.php') and
+            is_file(PLX_ROOT . 'install.php') and
 			preg_match('#^(?:parametres_|index)#', basename($_SERVER['SCRIPT_NAME'], '.php'))
 		) {
-            echo '<p class="alert red">'.L_WARNING_INSTALLATION_FILE.'</p>'."\n";
+            echo '<p class="alert red">' . L_WARNING_INSTALLATION_FILE . '</p>' . "\n";
         }
 	plxMsg::Display();
 	# Hook Plugins

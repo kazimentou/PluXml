@@ -76,23 +76,23 @@ include 'top.php';
             if ($plxAdmin->aCats) {
                 foreach ($plxAdmin->aCats as $k=>$v) { # Pour chaque catégorie
                     echo '<tr>';
-                    echo '<td><input type="checkbox" name="idCategory[]" value="'.$k.'" /><input type="hidden" name="catNum[]" value="'.$k.'" /></td>';
-                    echo '<td>'.$k.'</td><td>';
-                    plxUtils::printInput($k.'_name', plxUtils::strCheck($v['name']), 'text', '-50');
+                    echo '<td><input type="checkbox" name="idCategory[]" value="' . $k . '" /><input type="hidden" name="catNum[]" value="' . $k . '" /></td>';
+                    echo '<td>' . $k . '</td><td>';
+                    plxUtils::printInput($k . '_name', plxUtils::strCheck($v['name']), 'text', '-50');
                     echo '</td><td>';
-                    plxUtils::printInput($k.'_url', $v['url'], 'text', '-50');
+                    plxUtils::printInput($k . '_url', $v['url'], 'text', '-50');
                     echo '</td><td>';
-                    plxUtils::printSelect($k.'_active', array('1'=>L_YES,'0'=>L_NO), $v['active']);
+                    plxUtils::printSelect($k . '_active', array('1'=>L_YES,'0'=>L_NO), $v['active']);
                     echo '</td><td>';
-                    plxUtils::printSelect($k.'_tri', $aTri, $v['tri']);
+                    plxUtils::printSelect($k . '_tri', $aTri, $v['tri']);
                     echo '</td><td>';
-                    plxUtils::printInput($k.'_bypage', $v['bypage'], 'text', '-3');
+                    plxUtils::printInput($k . '_bypage', $v['bypage'], 'text', '-3');
                     echo '</td><td>';
-                    plxUtils::printInput($k.'_ordre', $ordre, 'text', '-3');
+                    plxUtils::printInput($k . '_ordre', $ordre, 'text', '-3');
                     echo '</td><td>';
-                    plxUtils::printSelect($k.'_menu', array('oui'=>L_DISPLAY,'non'=>L_HIDE), $v['menu']);
+                    plxUtils::printSelect($k . '_menu', array('oui'=>L_DISPLAY,'non'=>L_HIDE), $v['menu']);
                     echo '</td>';
-                    echo '<td><a href="categorie.php?p='.$k.'">'.L_OPTIONS.'</a></td>';
+                    echo '<td><a href="categorie.php?p=' . $k . '">' . L_OPTIONS . '</a></td>';
                     echo '</tr>';
                     $ordre++;
                 }
@@ -108,21 +108,21 @@ include 'top.php';
 					<td colspan="2"><?php echo L_NEW_CATEGORY ?></td>
 					<td>
 					<?php
-                        echo '<input type="hidden" name="catNum[]" value="'.$new_catid.'" />';
-                        plxUtils::printInput($new_catid.'_template', 'categorie.php', 'hidden');
-                        plxUtils::printInput($new_catid.'_name', '', 'text', '-50');
+                        echo '<input type="hidden" name="catNum[]" value="' . $new_catid . '" />';
+                        plxUtils::printInput($new_catid . '_template', 'categorie.php', 'hidden');
+                        plxUtils::printInput($new_catid . '_name', '', 'text', '-50');
                         echo '</td><td>';
-                        plxUtils::printInput($new_catid.'_url', '', 'text', '-50');
+                        plxUtils::printInput($new_catid . '_url', '', 'text', '-50');
                         echo '</td><td>';
-                        plxUtils::printSelect($new_catid.'_active', array('1'=>L_YES,'0'=>L_NO), '1');
+                        plxUtils::printSelect($new_catid . '_active', array('1'=>L_YES,'0'=>L_NO), '1');
                         echo '</td><td>';
-                        plxUtils::printSelect($new_catid.'_tri', $aTri, $plxAdmin->aConf['tri']);
+                        plxUtils::printSelect($new_catid . '_tri', $aTri, $plxAdmin->aConf['tri']);
                         echo '</td><td>';
-                        plxUtils::printInput($new_catid.'_bypage', $plxAdmin->aConf['bypage'], 'text', '-3');
+                        plxUtils::printInput($new_catid . '_bypage', $plxAdmin->aConf['bypage'], 'text', '-3');
                         echo '</td><td>';
-                        plxUtils::printInput($new_catid.'_ordre', $ordre, 'text', '-3');
+                        plxUtils::printInput($new_catid . '_ordre', $ordre, 'text', '-3');
                         echo '</td><td>';
-                        plxUtils::printSelect($new_catid.'_menu', array('oui'=>L_DISPLAY,'non'=>L_HIDE), '1');
+                        plxUtils::printSelect($new_catid . '_menu', array('oui'=>L_DISPLAY,'non'=>L_HIDE), '1');
                         echo '</td><td>&nbsp;';
                     ?>
 					</td>

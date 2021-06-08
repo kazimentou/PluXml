@@ -29,9 +29,9 @@ if (empty($_SESSION['medias'])) {
     $_SESSION['folder'] = ($_POST['folder']=='.' ? '' : $_POST['folder']);
 }
 # Nouvel objet de type plxMedias
-$plxMediasRoot = PLX_ROOT.$_SESSION['medias'];
+$plxMediasRoot = PLX_ROOT . $_SESSION['medias'];
 if ($plxAdmin->aConf['userfolders'] and $_SESSION['profil']==PROFIL_WRITER) {
-    $plxMediasRoot .= $_SESSION['user'].'/';
+    $plxMediasRoot .= $_SESSION['user'] . '/';
 }
 $plxMedias = new plxMedias($plxMediasRoot, $_SESSION['folder'], $plxAdmin->aConf['default_lang']);
 
@@ -39,7 +39,7 @@ $plxMedias = new plxMedias($plxMediasRoot, $_SESSION['folder'], $plxAdmin->aConf
 
 if (!empty($_POST['btn_newfolder']) and !empty($_POST['newfolder'])) {
     if ($plxMedias->newDir($_POST['newfolder'])) {
-        $_SESSION['folder'] = $_SESSION['folder'].$_POST['newfolder'].'/';
+        $_SESSION['folder'] = $_SESSION['folder'] . $_POST['newfolder'] . '/';
     }
     header('Location: medias.php');
     exit;
@@ -115,7 +115,7 @@ $selectionList = array(''=>L_FOR_SELECTION,'move'=>L_PLXMEDIAS_MOVE_FOLDER,'thum
 # On inclut le header
 include 'top.php';
 
-$curFolder = '/'.plxUtils::strCheck(basename($_SESSION['medias']).'/'.$_SESSION['folder']);
+$curFolder = '/' . plxUtils::strCheck(basename($_SESSION['medias']) . '/' . $_SESSION['folder']);
 $curFolders = explode('/', $curFolder);
 
 ?>
@@ -154,13 +154,13 @@ $curFolders = explode('/', $curFolder);
 			<h2><?php echo L_MEDIAS_TITLE ?></h2>
 			<p>
 				<?php
-                echo L_MEDIAS_DIRECTORY.' : <a href="javascript:void(0)" onclick="document.forms[1].folder.value=\'.\';document.forms[1].submit();return true;" title="'.L_PLXMEDIAS_ROOT.'">('.L_PLXMEDIAS_ROOT.')</a> / ';
+                echo L_MEDIAS_DIRECTORY . ' : <a href="javascript:void(0)" onclick="document.forms[1].folder.value=\'.\';document.forms[1].submit();return true;" title="' . L_PLXMEDIAS_ROOT . '">(' . L_PLXMEDIAS_ROOT . ')</a> / ';
                 if ($curFolders) {
                     $path='';
                     foreach ($curFolders as $id => $folder) {
                         if (!empty($folder) and $id>1) {
-                            $path .= $folder.'/';
-                            echo '<a href="javascript:void(0)" onclick="document.forms[1].folder.value=\''.$path.'\';document.forms[1].submit();return true;" title="'.$folder.'">'.$folder.'</a> / ';
+                            $path .= $folder . '/';
+                            echo '<a href="javascript:void(0)" onclick="document.forms[1].folder.value=\'' . $path . '\';document.forms[1].submit();return true;" title="' . $folder . '">' . $folder . '</a> / ';
                         }
                     }
                 }
@@ -210,45 +210,45 @@ $curFolders = explode('/', $curFolder);
                         $isImage = in_array(strtolower($v['extension']), $plxMedias->img_supported);
                         $title = pathinfo($v['name'], PATHINFO_FILENAME);
                         echo '<tr>';
-                        echo '<td><input type="checkbox" name="idFile[]" value="'.$v['name'].'" /></td>';
+                        echo '<td><input type="checkbox" name="idFile[]" value="' . $v['name'] . '" /></td>';
                         echo '<td class="icon">';
                         if (is_file($v['path']) and $isImage) {
-                            echo '<a class="overlay" title="'.$title.'" href="'.$v['path'].'"><img alt="'.$title.'" src="'.$v['.thumb'].'" class="thumb" /></a>';
+                            echo '<a class="overlay" title="' . $title . '" href="' . $v['path'] . '"><img alt="' . $title . '" src="' . $v['.thumb'] . '" class="thumb" /></a>';
                         } else {
-                            echo '<img alt="" src="'.$v['.thumb'].'" class="thumb" />';
+                            echo '<img alt="" src="' . $v['.thumb'] . '" class="thumb" />';
                         }
                         echo '</td>';
                         echo '<td>';
-                        echo '<a class="imglink" onclick="'."this.target='_blank'".'" title="'.$title.'" href="'.$v['path'].'">'.$title.$v['extension'].'</a>';
-                        echo '<div data-copy="'.str_replace(PLX_ROOT, '', $v['path']).'" title="'.L_MEDIAS_LINK_COPYCLP.'" class="ico">&#128203;<div>'.L_MEDIAS_LINK_COPYCLP_DONE.'</div></div>';
-                        echo '<div data-rename="'.$v['path'].'" title="'.L_RENAME_FILE.'" class="ico">&#9998;</div>';
+                        echo '<a class="imglink" onclick="' . "this.target='_blank'" . '" title="' . $title . '" href="' . $v['path'] . '">' . $title . $v['extension'] . '</a>';
+                        echo '<div data-copy="' . str_replace(PLX_ROOT, '', $v['path']) . '" title="' . L_MEDIAS_LINK_COPYCLP . '" class="ico">&#128203;<div>' . L_MEDIAS_LINK_COPYCLP_DONE . '</div></div>';
+                        echo '<div data-rename="' . $v['path'] . '" title="' . L_RENAME_FILE . '" class="ico">&#9998;</div>';
                         echo '<br />';
                         $href = plxUtils::thumbName($v['path']);
                         if ($isImage and is_file($href)) {
-                            echo L_MEDIAS_THUMB.' : '.'<a onclick="'."this.target='_blank'".'" title="'.$title.'" href="'.$href.'">'.plxUtils::strCheck(basename($href)).'</a>';
-                            echo '<div data-copy="'.str_replace(PLX_ROOT, '', $href).'" title="'.L_MEDIAS_LINK_COPYCLP.'" class="ico">&#128203;<div>'.L_MEDIAS_LINK_COPYCLP_DONE.'</div></div>';
+                            echo L_MEDIAS_THUMB . ' : ' . '<a onclick="' . "this.target='_blank'" . '" title="' . $title . '" href="' . $href . '">' . plxUtils::strCheck(basename($href)) . '</a>';
+                            echo '<div data-copy="' . str_replace(PLX_ROOT, '', $href) . '" title="' . L_MEDIAS_LINK_COPYCLP . '" class="ico">&#128203;<div>' . L_MEDIAS_LINK_COPYCLP_DONE . '</div></div>';
                         }
                         echo '</td>';
-                        echo '<td>'.strtoupper($v['extension']).'</td>';
+                        echo '<td>' . strtoupper($v['extension']) . '</td>';
                         echo '<td>';
                         echo plxUtils::formatFilesize($v['filesize']);
                         if ($isImage and is_file($href)) {
-                            echo '<br />'.plxUtils::formatFilesize($v['thumb']['filesize']);
+                            echo '<br />' . plxUtils::formatFilesize($v['thumb']['filesize']);
                         }
                         echo '</td>';
                         $dimensions = '&nbsp;';
                         if ($isImage and (isset($v['infos']) and isset($v['infos'][0]) and isset($v['infos'][1]))) {
-                            $dimensions = $v['infos'][0].' x '.$v['infos'][1];
+                            $dimensions = $v['infos'][0] . ' x ' . $v['infos'][1];
                         }
                         if ($isImage and is_file($href)) {
-                            $dimensions .= '<br />'.$v['thumb']['infos'][0].' x '.$v['thumb']['infos'][1];
+                            $dimensions .= '<br />' . $v['thumb']['infos'][0] . ' x ' . $v['thumb']['infos'][1];
                         }
-                        echo '<td>'.$dimensions.'</td>';
-                        echo '<td>'.plxDate::formatDate(plxDate::timestamp2Date($v['date'])).'</td>';
+                        echo '<td>' . $dimensions . '</td>';
+                        echo '<td>' . plxDate::formatDate(plxDate::timestamp2Date($v['date'])) . '</td>';
                         echo '</tr>';
                     }
                 } else {
-                    echo '<tr><td colspan="7" class="center">'.L_MEDIAS_NO_FILE.'</td></tr>';
+                    echo '<tr><td colspan="7" class="center">' . L_MEDIAS_NO_FILE . '</td></tr>';
                 }
                 ?>
 				</tbody>
@@ -265,13 +265,13 @@ $curFolders = explode('/', $curFolder);
 			<h2 class="h4"><?php echo L_MEDIAS_TITLE ?></h2>
 			<p>
 				<?php
-                echo L_MEDIAS_DIRECTORY.' : ('.L_PLXMEDIAS_ROOT.') / ';
+                echo L_MEDIAS_DIRECTORY . ' : (' . L_PLXMEDIAS_ROOT . ') / ';
                 if ($curFolders) {
                     $path='';
                     foreach ($curFolders as $id => $folder) {
                         if (!empty($folder) and $id>1) {
-                            $path .= $folder.'/';
-                            echo $folder.' / ';
+                            $path .= $folder . '/';
+                            echo $folder . ' / ';
                         }
                     }
                 }
@@ -289,7 +289,7 @@ $curFolders = explode('/', $curFolder);
 		<p>
 			<?php echo L_MEDIAS_MAX_UPLOAD_FILE ?> : <?php echo $plxMedias->maxUpload['display'] ?>
 			<?php if ($plxMedias->maxPost['value'] > 0) {
-                    echo " / ".L_MEDIAS_MAX_POST_SIZE." : ".$plxMedias->maxPost['display'];
+                    echo " / " . L_MEDIAS_MAX_POST_SIZE . " : " . $plxMedias->maxPost['display'];
                 } ?>
 		</p>
 
@@ -305,11 +305,11 @@ $curFolders = explode('/', $curFolder);
 					<li><input type="radio" checked="checked" name="resize" value="" />&nbsp;<?php echo L_MEDIAS_RESIZE_NO ?></li>
 					<?php
                         foreach ($img_redim as $redim) {
-                            echo '<li><input type="radio" name="resize" value="'.$redim.'" />&nbsp;'.$redim.'</li>';
+                            echo '<li><input type="radio" name="resize" value="' . $redim . '" />&nbsp;' . $redim . '</li>';
                         }
                     ?>
 					<li>
-						<input type="radio" name="resize" value="<?php echo intval($plxAdmin->aConf['images_l' ]).'x'.intval($plxAdmin->aConf['images_h' ]) ?>" />&nbsp;<?php echo intval($plxAdmin->aConf['images_l' ]).'x'.intval($plxAdmin->aConf['images_h' ]) ?>
+						<input type="radio" name="resize" value="<?php echo intval($plxAdmin->aConf['images_l' ]) . 'x' . intval($plxAdmin->aConf['images_h' ]) ?>" />&nbsp;<?php echo intval($plxAdmin->aConf['images_l' ]) . 'x' . intval($plxAdmin->aConf['images_h' ]) ?>
 						&nbsp;&nbsp;(<a href="parametres_affichage.php"><?php echo L_MEDIAS_MODIFY ?>)</a>
 					</li>
 					<li>
@@ -328,12 +328,12 @@ $curFolders = explode('/', $curFolder);
 					</li>
 					<?php
                         foreach ($img_thumb as $thumb) {
-                            echo '<li><input type="radio" name="thumb" value="'.$thumb.'" />&nbsp;'.$thumb.'</li>';
+                            echo '<li><input type="radio" name="thumb" value="' . $thumb . '" />&nbsp;' . $thumb . '</li>';
                         }
                     ?>
 					<li>
 						<?php $sel = ($plxAdmin->aConf['thumbs'] ? ' checked="checked"' : '') ?>
-						<input<?php echo $sel ?> type="radio" name="thumb" value="<?php echo intval($plxAdmin->aConf['miniatures_l' ]).'x'.intval($plxAdmin->aConf['miniatures_h' ]) ?>" />&nbsp;<?php echo intval($plxAdmin->aConf['miniatures_l' ]).'x'.intval($plxAdmin->aConf['miniatures_h' ]) ?>
+						<input<?php echo $sel ?> type="radio" name="thumb" value="<?php echo intval($plxAdmin->aConf['miniatures_l' ]) . 'x' . intval($plxAdmin->aConf['miniatures_h' ]) ?>" />&nbsp;<?php echo intval($plxAdmin->aConf['miniatures_l' ]) . 'x' . intval($plxAdmin->aConf['miniatures_h' ]) ?>
 						&nbsp;&nbsp;(<a href="parametres_affichage.php"><?php echo L_MEDIAS_MODIFY ?>)</a>
 					</li>
 					<li>

@@ -29,7 +29,7 @@ class PlxTemplate
     public function __construct($templateFolder, $templateFileName, $templatePlaceholdersValues = array())
     {
         $this->setTemplateFolder($templateFolder);
-        $template = $this->parseTemplate($this->_templateFolder.$templateFileName);
+        $template = $this->parseTemplate($this->_templateFolder . $templateFileName);
 
         $this->setTemplateName($template['name']);
         $this->setTemplateType($template['type']);

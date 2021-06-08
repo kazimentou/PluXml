@@ -12,7 +12,7 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\OAuth;
 use League\OAuth2\Client\Provider\Google;
 
-$autoload = PLX_CORE.'vendor/autoload.php';
+$autoload = PLX_CORE . 'vendor/autoload.php';
 if (file_exists($autoload)) {
 	require $autoload;
 }
@@ -210,36 +210,36 @@ class plxUtils
         }
 
         if (is_bool($id)) {
-			$id = ($id ? ' id="id_'.$name.'"' : '');
+            $id = ($id ? ' id="id_' . $name . '"' : '');
         } else {
-			$id = ($id!='' ? ' id="'.$id.'"' : '');
+            $id = ($id!='' ? ' id="' . $id . '"' : '');
         }
 
         if ($readonly) {
-            echo '<select'.$id.' name="'.$name.'" disabled="disabled" class="readonly'.($class!='' ? ' '.$class : '').'">'."\n";
+            echo '<select' . $id . ' name="' . $name . '" disabled="disabled" class="readonly' . ($class!='' ? ' ' . $class : '') . '">' . "\n";
         } else {
-            echo '<select'.$id.' name="'.$name.'"'.($class!='' ? ' class="'.$class.'"' : '').'>'."\n";
+            echo '<select' . $id . ' name="' . $name . '"' . ($class!='' ? ' class="' . $class . '"' : '') . '>' . "\n";
         }
         foreach ($array as $a => $b) {
             if (is_array($b)) {
-				echo '<optgroup label="'.$a.'">'."\n";
+                echo '<optgroup label="' . $a . '">' . "\n";
                 foreach ($b as $c=>$d) {
                     if ($c == $selected) {
-						echo "\t".'<option value="'.$c.'" selected="selected">'.$d.'</option>'."\n";
+                        echo "\t" . '<option value="' . $c . '" selected="selected">' . $d . '</option>' . "\n";
                     } else {
-						echo "\t".'<option value="'.$c.'">'.$d.'</option>'."\n";
+                        echo "\t" . '<option value="' . $c . '">' . $d . '</option>' . "\n";
 				}
                 }
-				echo '</optgroup>'."\n";
+                echo '</optgroup>' . "\n";
 			} else {
                 if (strval($a) == $selected) {
-					echo "\t".'<option value="'.$a.'" selected="selected">'.$b.'</option>'."\n";
+                    echo "\t" . '<option value="' . $a . '" selected="selected">' . $b . '</option>' . "\n";
                 } else {
-					echo "\t".'<option value="'.$a.'">'.$b.'</option>'."\n";
+                    echo "\t" . '<option value="' . $a . '">' . $b . '</option>' . "\n";
 			}
 		}
         }
-		echo '</select>'."\n";
+        echo '</select>' . "\n";
 	}
 
 	/**
@@ -260,12 +260,12 @@ class plxUtils
     public static function printInput($name, $value='', $type='text', $sizes='50-255', $readonly=false, $className='', $placeholder='', $extra='', $required=false)
     {
 		 $params = array(
-			'id="id_'.$name.'"',
-			'name="'.$name.'"',
-			'type="'.$type.'"'
+            'id="id_' . $name . '"',
+            'name="' . $name . '"',
+            'type="' . $type . '"'
 		 );
         if (!empty($value)) {
-			 $params[] = 'value="'.$value.'"';
+            $params[] = 'value="' . $value . '"';
         }
         if (!empty($extra)) {
 			 $params[] = $extra;
@@ -278,22 +278,22 @@ class plxUtils
 				$params[] = 'readonly="readonly" class="readonly"';
             }
             if (!empty($className)) {
-				$params[] = 'class="'.$className.'"';
+                $params[] = 'class="' . $className . '"';
             }
             if (!empty($placeholder)) {
-				$params[] = 'placeholder="'.$placeholder.'"';
+                $params[] = 'placeholder="' . $placeholder . '"';
             }
             if (!empty($sizes) and (strpos($sizes, '-') !== false)) {
 				list($size, $maxlength) = explode('-', $sizes);
                 if (!empty($size)) {
-					$params[] = 'size="'.$size.'"';
+                    $params[] = 'size="' . $size . '"';
                 }
                 if (!empty($maxlength)) {
-					$params[] = 'maxlength="'.$maxlength.'"';
+                    $params[] = 'maxlength="' . $maxlength . '"';
 			}
 		 }
         }
-		 echo '<input '.implode(' ', $params).'/>';
+        echo '<input ' . implode(' ', $params) . '/>';
 	}
 
 	/**
@@ -310,20 +310,20 @@ class plxUtils
     public static function printInputRadio($name, $array, $checked='', $className='', $extra='')
     {
 		$params = array(
-			'id="id_'.$name.'"',
-			'name="'.$name.'"',
+            'id="id_' . $name . '"',
+            'name="' . $name . '"',
 		);
         if (!empty($extra)) {
 			$params[] = $extra;
 		}
         if (!empty($className)) {
-			$params[] = 'class="'.$className.'"';
+            $params[] = 'class="' . $className . '"';
 		}
         foreach ($array as $a => $b) {
 			if ($a == $checked) {
-				echo '<input type="radio" value="'.$a.'" '.implode(' ', $params).' checked>&nbsp;'.$b.'<br>';
+                echo '<input type="radio" value="' . $a . '" ' . implode(' ', $params) . ' checked>&nbsp;' . $b . '<br>';
             } else {
-				echo '<input type="radio" value="'.$a.'" '.implode(' ', $params).'>&nbsp;'.$b.'<br>';
+                echo '<input type="radio" value="' . $a . '" ' . implode(' ', $params) . '>&nbsp;' . $b . '<br>';
 			}
 		}
 	}
@@ -651,9 +651,9 @@ class plxUtils
     {
 		$fnum = str_pad(abs($num), $lenght, '0', STR_PAD_LEFT);
         if ($num > -1) {
-			return '+'.$fnum;
+            return '+' . $fnum;
         } else {
-			return '-'.$fnum;
+            return '-' . $fnum;
 	}
     }
 
@@ -668,11 +668,11 @@ class plxUtils
     public static function write($xml, $filename)
     {
         if (file_exists($filename)) {
-			$f = fopen($filename.'.tmp', 'w'); # On ouvre le fichier temporaire
+            $f = fopen($filename . '.tmp', 'w'); # On ouvre le fichier temporaire
 			fwrite($f, trim($xml)); # On écrit
 			fclose($f); # On ferme
 			unlink($filename);
-			rename($filename.'.tmp', $filename); # On renomme le fichier temporaire avec le nom de l'ancien
+            rename($filename . '.tmp', $filename); # On renomme le fichier temporaire avec le nom de l'ancien
 		} else {
 			$f = fopen($filename, 'w'); # On ouvre le fichier
 			fwrite($f, trim($xml)); # On écrit
@@ -681,7 +681,7 @@ class plxUtils
 		# On place les bons droits
         chmod($filename, 0644);
 		# On vérifie le résultat
-        if (file_exists($filename) and !file_exists($filename.'.tmp')) {
+        if (file_exists($filename) and !file_exists($filename . '.tmp')) {
 			return true;
         } else {
 			return false;
@@ -697,11 +697,11 @@ class plxUtils
     public static function formatFilesize($bytes)
     {
         if ($bytes < 1024) {
-            return $bytes.' B';
+            return $bytes . ' B';
         } elseif ($bytes < 1048576) {
-            return round($bytes / 1024, 2).' Kb';
+            return round($bytes / 1024, 2) . ' Kb';
         } elseif ($bytes < 1073741824) {
-            return round($bytes / 1048576, 2).' Mb';
+            return round($bytes / 1048576, 2) . ' Mb';
         }
 	}
 
@@ -861,7 +861,7 @@ class plxUtils
     public static function showMsg($msg, $class='', $format_start='<p class="#CLASS">', $format_end='</p>')
     {
         $format_start = str_replace('#CLASS', ($class != '' ? $class : 'msg'), $format_start);
-		echo $format_start.$msg.$format_end;
+        echo $format_start . $msg . $format_end;
 	}
 
 	/**
@@ -873,7 +873,7 @@ class plxUtils
     {
         $protocol = (!empty($_SERVER['HTTPS']) and strtolower($_SERVER['HTTPS']) == 'on') || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) and strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) == 'https') ? 'https://' : 'http://';
 		$servername = $_SERVER['HTTP_HOST'];
-        $serverport = (preg_match('/:[0-9]+/', $servername) or $_SERVER['SERVER_PORT'])=='80' ? '' : ':'.$_SERVER['SERVER_PORT'];
+        $serverport = (preg_match('/:[0-9]+/', $servername) or $_SERVER['SERVER_PORT'])=='80' ? '' : ':' . $_SERVER['SERVER_PORT'];
         $dirname = preg_replace('#(?:/core/admin/\w+|/(?:index|feed|sitemap|install)|plugins/.*?)?\.php$#', '/', $_SERVER['SCRIPT_NAME']);
         $racine = $protocol . $servername . $serverport . $dirname;
         if (!plxUtils::checkSite($racine, false)) {
@@ -915,9 +915,9 @@ class plxUtils
         if ($type == 'word') { # On coupe la chaine en comptant le nombre de mots
             $content = explode(' ', $str);
 			$length = sizeof($content) < $length ? sizeof($content) : $length;
-            return implode(' ', array_slice($content, 0, $length)).$add_text;
+            return implode(' ', array_slice($content, 0, $length)) . $add_text;
 		} else { # On coupe la chaine en comptant le nombre de caractères
-			return strlen($str) > $length ? utf8_decode(substr(utf8_encode($str), 0, $length)).$add_text : $str;
+            return strlen($str) > $length ? utf8_decode(substr(utf8_encode($str), 0, $length)) . $add_text : $str;
 		}
 	}
 
@@ -997,8 +997,8 @@ class plxUtils
 			'@(href|src|<object\s[^>]*data)=("|\')(?:\./)?([^/])@i' # lieu relatif à transformer
 		);
 		$replaces = array(
-			'$1'.$mask.'$2$3',
-			'$1=$2'.$base.'$3'
+            '$1' . $mask . '$2$3',
+            '$1=$2' . $base . '$3'
 		);
 		$result = preg_replace($patterns, $replaces, $html);
 
@@ -1040,11 +1040,11 @@ class plxUtils
     {
 		header_remove();
 		header('Expires: Wed, 11 Jan 1984 05:00:00 GMT');
-        header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
 		header('Cache-Control: no-cache, must-revalidate, max-age=0');
 		header('Cache: no-cache');
 		header('Pragma: no-cache');
-		header('Content-Type: '.$type.'; charset='.$charset);
+        header('Content-Type: ' . $type . '; charset=' . $charset);
 	}
 
 	/**
@@ -1167,20 +1167,20 @@ class plxUtils
 				$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
 				$mail->AuthType = 'XOAUTH2';
 				$provider = new Google(
-					[
+                    array(
 						'clientId' => $conf['smtpOauth2_clientId'],
 						'clientSecret' => $conf['smtpOauth2_clientSecret'],
-					]
+                    )
 				);
 				$mail->setOAuth(
 						new OAuth(
-							[
+                        array(
 								'provider' => $provider,
 								'clientId' => $conf['smtpOauth2_clientId'],
 								'clientSecret' => $conf['smtpOauth2_clientSecret'],
 								'refreshToken' => $conf['smtpOauth2_refreshToken'],
 								'userName' => $conf['smtpOauth2_emailAdress'],
-							]
+                            )
 						)
 					);
 				break;
@@ -1205,14 +1205,14 @@ class plxUtils
 		$menu = '';
 		$basename = explode('?', basename($href));
         $active = ($highlight and ($basename[0] == basename($_SERVER['SCRIPT_NAME']))) ? ' active' : '';
-        if ($basename[0]=='plugin.php' and isset($_GET['p']) and $basename[1]!='p='.$_GET['p']) {
+        if ($basename[0]=='plugin.php' and isset($_GET['p']) and $basename[1]!='p=' . $_GET['p']) {
             $active='';
         }
-        $title = $title ? ' title="'.$title.'"' : '';
-        $class = $class ? ' '.$class : '';
-        $onclick = $onclick ? ' onclick="'.$onclick.'"' : '';
+        $title = $title ? ' title="' . $title . '"' : '';
+        $class = $class ? ' ' . $class : '';
+        $onclick = $onclick ? ' onclick="' . $onclick . '"' : '';
         $id = ($basename[0]=='plugin.php' ? strtr($basename[1], 'p=', '') : strtr($basename[0], '.php', ''));
-		$menu = '<li id="mnu_'.$id.'" class="menu'.$active.$class.'"><a href="'.$href.'"'.$onclick.$title.'>'.$name.$extra.'</a></li>';
+        $menu = '<li id="mnu_' . $id . '" class="menu' . $active . $class . '"><a href="' . $href . '"' . $onclick . $title . '>' . $name . $extra . '</a></li>';
 		return $menu;
 	}
 
@@ -1377,7 +1377,7 @@ class plxUtils
     {
 		$matches = '';
         if (preg_match('/^(.*\.)(jpe?g|png|gif|bmp|webp)$/iD', $filename, $matches)) {
-			return $matches[1].'tb.'.$matches[2];
+            return $matches[1] . 'tb.' . $matches[2];
 		} else {
 			return $filename;
 		}
@@ -1422,7 +1422,7 @@ class plxUtils
 			$attrs .= " {$attribute}=\"{$value}\"";
 		}
 		$str = ' ' . $str;
-		$str = preg_replace('#([^"=\'>])((http|https|ftp)://[^\s<]+[^\s<\.)])#i', '$1<a href="$2"'.$attrs.'>$2</a>', $str);
+        $str = preg_replace('#([^"=\'>])((http|https|ftp)://[^\s<]+[^\s<\.)])#i', '$1<a href="$2"' . $attrs . '>$2</a>', $str);
 		$str = substr($str, 1);
 		return $str;
 	}
@@ -1489,7 +1489,7 @@ EOT;
             function ($item) use (&$modeDir, &$root, &$extsText) {# détermine s'il s'agit de fichier ou dossier php 5.3+
                 $ext = pathinfo($item, PATHINFO_EXTENSION);
 				return  ($item[0] != '.' and
-                    ((is_dir($root.$item)) or
+                    ((is_dir($root . $item)) or
                         (!$modeDir and (!empty($ext) and (strpos($extsText, $ext) !== false) or empty($extsText)))
 					)
 				);
@@ -1511,10 +1511,10 @@ EOT;
 					$prefix .= '├ '; # espace insécable !
 					$next = '│'; # espace insécable !
 				}
-				$dirOk = (is_dir($root.$child));
+                $dirOk = (is_dir($root . $child));
 				$next .= str_repeat(' ', 3); # espace insécable ! 3 = strlen($prefix.$next)
-				$dataLevel = 'level-'.str_repeat('X', $level);
-				$value = substr($root.$child, $firstRootLength);
+                $dataLevel = 'level-' . str_repeat('X', $level);
+                $value = substr($root . $child, $firstRootLength);
 				$selected = ($value == rtrim($currentValue, '/')) ? ' selected' : '';
 				$caption = basename($value);
 				$classList = array();
@@ -1526,7 +1526,7 @@ EOT;
 					$classList[] = 'folder';
                 }
 
-				$classAttr = (!empty($classList)) ? ' class="'.implode(' ', $classList).'"' : '';
+                $classAttr = (!empty($classList)) ? ' class="' . implode(' ', $classList) . '"' : '';
 
                 if ($dirOk) { # pour un dossier
                     if ($modeDir) {
@@ -1540,7 +1540,7 @@ EOT;
 
 EOT;
 					}
-					plxUtils::_printSelectDir($root.$child.'/', $level, $prefixParent.$next);
+                    plxUtils::_printSelectDir($root . $child . '/', $level, $prefixParent . $next);
 				} else { # pour un fichier
 					echo <<<EOT
 						<option value="$value"$classAttr data-level="$dataLevel"$selected>$prefix$caption</option>
@@ -1568,9 +1568,9 @@ EOT;
     public static function printSelectDir($name, $currentValue, $root, $class='', $modeDir=true, $id=true)
     {
         if (is_bool($id)) {
-			$id = ($id ? ' id="id_'.$name.'"' : '');
+            $id = ($id ? ' id="id_' . $name . '"' : '');
         } else {
-			$id = ($id!='' ? ' id="'.$id.'"' : '');
+            $id = ($id!='' ? ' id="' . $id . '"' : '');
         }
 
         if (substr($root, -1) != '/') {
@@ -1581,7 +1581,7 @@ EOT;
 		$caption = L_PLXMEDIAS_ROOT;
         $data_files = (!$modeDir) ? ' data-files' : '';
         $disabled = (!$modeDir) ? ' disabled' : '';
-        $class = ($class ? $class.' ' : '') . 'scan-folders fold' . $data_files;
+        $class = ($class ? $class . ' ' : '') . 'scan-folders fold' . $data_files;
 		echo <<< EOT
 		<select $id name="$name" class="$class">
 			<option$disabled value="$value"$selected>$caption/</option>
@@ -1608,7 +1608,7 @@ EOT;
 				$plxMotor = plxMotor::getinstance();
 				$href = $plxMotor->urlRewrite($file);
 			}
-			$href .= '?d='.base_convert(filemtime(PLX_ROOT.$file) & 4194303, 10, 36); # 4194303 === 2 puissance 22 - 1; base_convert(4194303, 10, 16) -> 3fffff; => 48,54 jours
+            $href .= '?d=' . base_convert(filemtime(PLX_ROOT . $file) & 4194303, 10, 36); # 4194303 === 2 puissance 22 - 1; base_convert(4194303, 10, 16) -> 3fffff; => 48,54 jours
 ?>
 	<link rel="stylesheet" type="text/css" href="<?= $href ?>" media="screen" />
 <?php

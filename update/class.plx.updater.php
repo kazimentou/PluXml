@@ -7,7 +7,7 @@
  * @author	Stephane F
  **/
 
-define('PLX_UPDATE', PLX_ROOT.'update/');
+define('PLX_UPDATE', PLX_ROOT . 'update/');
 
 class plxUpdater
 {
@@ -73,8 +73,8 @@ class plxUpdater
         # Récupère le nouveau n° de version de PluXml
         if (defined('PLX_VERSION')) { # PluXml à partir de la version 5.5
             $this->newVersion = PLX_VERSION;
-        } elseif (is_readable(PLX_ROOT.'version')) {
-            $f = file(PLX_ROOT.'version');
+        } elseif (is_readable(PLX_ROOT . 'version')) {
+            $f = file(PLX_ROOT . 'version');
             $this->newVersion = $f['0'];
         }
     }
@@ -93,7 +93,7 @@ class plxUpdater
         $this->plxAdmin->getConfiguration(path('XMLFILE_PARAMETERS'));
         $new_params['version'] = $this->newVersion;
         $this->plxAdmin->editConfiguration($this->plxAdmin->aConf, $new_params);
-        printf(L_UPDATE_ENDED.'<br />', $this->newVersion);
+        printf(L_UPDATE_ENDED . '<br />', $this->newVersion);
     }
 
     /**
@@ -107,19 +107,19 @@ class plxUpdater
         $errors = false;
         foreach ($this->allVersions as $num_version => $upd_filename) {
             if ($upd_filename!='') {
-                echo '<p><strong>'.L_UPDATE_INPROGRESS.' '.$num_version.'</strong></p>';
+                echo '<p><strong>' . L_UPDATE_INPROGRESS . ' ' . $num_version . '</strong></p>';
                 # inclusion du fichier de mise à jour
-                include(PLX_UPDATE.$upd_filename);
+                include(PLX_UPDATE . $upd_filename);
 
                 # création d'un instance de l'objet de mise à jour
-                $class_name = 'update_'.str_replace('.', '_', $num_version);
+                $class_name = 'update_' . str_replace('.', '_', $num_version);
                 $class_update = new $class_name();
 
                 # appel des différentes étapes de mise à jour
                 $next = true;
                 $step = 1;
                 while ($next and !$errors) {
-                    $method_name = 'step'.$step;
+                    $method_name = 'step' . $step;
                     if (method_exists($class_name, $method_name)) {
                         if (!$class_update->$method_name()) {
                             $errors = true; # erreur détectée
@@ -136,9 +136,9 @@ class plxUpdater
         echo '<br />';
 
         if ($errors) {
-            echo '<p class="error">'.L_UPDATE_ERROR.'</p>';
+            echo '<p class="error">' . L_UPDATE_ERROR . '</p>';
         } else {
-            echo '<p class="msg">'.L_UPDATE_SUCCESSFUL.'</p>';
+            echo '<p class="msg">' . L_UPDATE_SUCCESSFUL . '</p>';
         }
 
         return !$errors;
@@ -182,7 +182,7 @@ class plxUpdate
         # enregistrement des nouveaux paramètres
         $ret = $this->plxAdmin->editConfiguration($this->plxAdmin->aConf, $new_params);
         # valeur de retour
-        return $ret.'<br />';
+        return $ret . '<br />';
     }
 
     /**
@@ -199,7 +199,7 @@ class plxUpdate
             if ($dh = opendir($deldir)) {
                 while (false !== ($file = readdir($dh))) {
                     if ($file != '.' and $file != '..') {
-                        $this->deleteDir(($deldir!='' ? $deldir.'/' : '').$file);
+                        $this->deleteDir(($deldir!='' ? $deldir . '/' : '') . $file);
                     }
                 }
                 closedir($dh);

@@ -51,29 +51,29 @@ if (!empty($_POST) and !empty($_POST['comId'])) {
     if (isset($_POST['online'])) {
         $plxAdmin->editCommentaire($_POST, $_POST['comId']);
         $plxAdmin->modCommentaire($_POST['comId'], 'online');
-        header('Location: comment.php?c='.$_POST['comId'].(!empty($_GET['a']) ? '&a='.$_GET['a'] : ''));
+        header('Location: comment.php?c=' . $_POST['comId'] . (!empty($_GET['a']) ? '&a=' . $_GET['a'] : ''));
         exit;
     }
     # Commentaire hors-ligne
     if (isset($_POST['offline'])) {
         $plxAdmin->editCommentaire($_POST, $_POST['comId']);
         $plxAdmin->modCommentaire($_POST['comId'], 'offline');
-        header('Location: comment.php?c='.$_POST['comId'].(!empty($_GET['a']) ? '&a='.$_GET['a'] : ''));
+        header('Location: comment.php?c=' . $_POST['comId'] . (!empty($_GET['a']) ? '&a=' . $_GET['a'] : ''));
         exit;
     }
     # Répondre au commentaire
     if (isset($_POST['answer'])) {
-        header('Location: comment_new.php?c='.$_POST['comId']).(!empty($_GET['a']) ? '&a='.$_GET['a'] : '');
+        header('Location: comment_new.php?c=' . $_POST['comId']) . (!empty($_GET['a']) ? '&a=' . $_GET['a'] : '');
         exit;
     }
     # Edition
     $plxAdmin->editCommentaire($_POST, $_POST['comId']);
-    header('Location: comment.php?c='.$_POST['comId'].(!empty($_GET['a']) ? '&a='.$_GET['a'] : ''));
+    header('Location: comment.php?c=' . $_POST['comId'] . (!empty($_GET['a']) ? '&a=' . $_GET['a'] : ''));
     exit;
 }
 
 # On va récupérer les infos sur le commentaire
-if (!$plxAdmin->getCommentaires('/^'.plxUtils::nullbyteRemove($_GET['c']).'.xml$/', '', 0, 1, 'all')) {
+if (!$plxAdmin->getCommentaires('/^' . plxUtils::nullbyteRemove($_GET['c']) . '.xml$/', '', 0, 1, 'all')) {
     # Commentaire inexistant, on redirige
     plxMsg::Error(L_ERR_UNKNOWN_COMMENT);
     header('Location: comments.php');
@@ -83,25 +83,25 @@ if (!$plxAdmin->getCommentaires('/^'.plxUtils::nullbyteRemove($_GET['c']).'.xml$
 # On va récupérer les infos sur l'article
 $artId = $plxAdmin->plxRecord_coms->f('article');
 # On va rechercher notre article
-if (($aFile = $plxAdmin->plxGlob_arts->query('/^'.$artId.'.(.+).xml$/', '', 'sort', 0, 1)) == false) {
+if (($aFile = $plxAdmin->plxGlob_arts->query('/^' . $artId . '.(.+).xml$/', '', 'sort', 0, 1)) == false) {
     # On indique que le commentaire est attaché à aucun article
-    $article = '<strong>'.L_COMMENT_ORPHAN.'</strong>';
+    $article = '<strong>' . L_COMMENT_ORPHAN . '</strong>';
     # Statut du commentaire
-    $statut = '<strong>'.L_COMMENT_ORPHAN_STATUS.'</strong>';
+    $statut = '<strong>' . L_COMMENT_ORPHAN_STATUS . '</strong>';
 } else {
-    $result = $plxAdmin->parseArticle(PLX_ROOT.$plxAdmin->aConf['racine_articles'].$aFile['0']);
+    $result = $plxAdmin->parseArticle(PLX_ROOT . $plxAdmin->aConf['racine_articles'] . $aFile['0']);
     # On génère notre lien
-    $article = '<a href="'.$plxAdmin->urlRewrite('?article'.intval($result['numero']).'/'.$result['url']).'" title="'.L_COMMENT_ARTICLE_LINKED_TITLE.'">';
+    $article = '<a href="' . $plxAdmin->urlRewrite('?article' . intval($result['numero']) . '/' . $result['url']) . '" title="' . L_COMMENT_ARTICLE_LINKED_TITLE . '">';
     $article .= plxUtils::strCheck($result['title']);
     $article .= '</a>';
 }
 
 # Statut du commentaire
-$com=$plxAdmin->comInfoFromFilename($_GET['c'].'.xml');
+$com=$plxAdmin->comInfoFromFilename($_GET['c'] . '.xml');
 if ($com['comStatus']=='_') {
-    $statut = '<strong>'.L_COMMENT_OFFLINE.'</strong>';
+    $statut = '<strong>' . L_COMMENT_OFFLINE . '</strong>';
 } elseif ($com['comStatus']=='') {
-    $statut = '<a href="'.$plxAdmin->urlRewrite('?article'.intval($plxAdmin->plxRecord_coms->f('article')).'/#c'.$plxAdmin->plxRecord_coms->f('index')).'" title="'.L_COMMENT_ONLINE_TITLE.'">'.L_COMMENT_ONLINE.'</a>';
+    $statut = '<a href="' . $plxAdmin->urlRewrite('?article' . intval($plxAdmin->plxRecord_coms->f('article')) . '/#c' . $plxAdmin->plxRecord_coms->f('index')) . '" title="' . L_COMMENT_ONLINE_TITLE . '">' . L_COMMENT_ONLINE . '</a>';
 } else {
     $statut = '';
 }
@@ -124,7 +124,7 @@ if ($plxAdmin->plxRecord_coms->f('type') != 'admin') {
 
 ?>
 
-<form action="comment.php<?php echo(!empty($_GET['a']) ? '?a='.plxUtils::strCheck($_GET['a']) : '') ?>" method="post" id="form_comment">
+<form action="comment.php<?php echo(!empty($_GET['a']) ? '?a=' . plxUtils::strCheck($_GET['a']) : '') ?>" method="post" id="form_comment">
 
 	<div class="inline-form action-bar">
 		<h2><?php echo L_COMMENT_EDITING ?></h2>
@@ -177,9 +177,9 @@ if ($plxAdmin->plxRecord_coms->f('type') != 'admin') {
 		<div class="grid">
 			<div class="col sml-12">
 				<label for="id_site">
-				<?php echo L_COMMENT_SITE_FIELD.'&nbsp;:&nbsp;';
+				<?php echo L_COMMENT_SITE_FIELD . '&nbsp;:&nbsp;';
                 if ($site != '') {
-                    echo '<a href="'.$site.'">'.$site.'</a>';
+                    echo '<a href="' . $site . '">' . $site . '</a>';
                 }
                 ?>
 				</label>
@@ -193,7 +193,7 @@ if ($plxAdmin->plxRecord_coms->f('type') != 'admin') {
 			<div class="col sml-12">
 				<label for="id_mail"><?php echo L_COMMENT_EMAIL_FIELD ?> :
 				<?php if ($plxAdmin->plxRecord_coms->f('mail') != '') : ?>
-				<?php echo '<a href="mailto:'.$plxAdmin->plxRecord_coms->f('mail').'">'.$plxAdmin->plxRecord_coms->f('mail').'</a>' ?>
+				<?php echo '<a href="mailto:' . $plxAdmin->plxRecord_coms->f('mail') . '">' . $plxAdmin->plxRecord_coms->f('mail') . '</a>' ?>
 				<?php endif; ?>
 				</label>
 				<?php plxUtils::printInput('mail', plxUtils::strCheck($plxAdmin->plxRecord_coms->f('mail')), 'text', '40-255') ?>
