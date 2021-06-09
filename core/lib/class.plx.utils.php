@@ -302,15 +302,14 @@ class plxUtils
 	 * @param	string $name		 nom des radio boutons
 	 * @param	string $value		valeur correspond au radio bouton
 	 * @param	string $className	class css à utiliser pour formater l'affichage
-	 * @param	string $checked		valeur par défaut
+     * @param   string $value       valeur à cocher
 	 * @param	boolean $required	permet de rendre le champ obligatoire
 	 * @return	self
-	 * @author	Pedro "P3ter" CADETE
+     * @author  Pedro "P3ter" CADETE, J.P. Pourrez "bazooka07"
 	 **/
-    public static function printInputRadio($name, $array, $checked='', $className='', $extra='')
+    public static function printInputRadio($name, $array, $value='', $className='', $extra='')
     {
 		$params = array(
-            'id="id_' . $name . '"',
             'name="' . $name . '"',
 		);
         if (!empty($extra)) {
@@ -319,12 +318,12 @@ class plxUtils
         if (!empty($className)) {
             $params[] = 'class="' . $className . '"';
 		}
+        $i = 1;
         foreach ($array as $a => $b) {
-			if ($a == $checked) {
-                echo '<input type="radio" value="' . $a . '" ' . implode(' ', $params) . ' checked>&nbsp;' . $b . '<br>';
-            } else {
-                echo '<input type="radio" value="' . $a . '" ' . implode(' ', $params) . '>&nbsp;' . $b . '<br>';
-			}
+            $id = 'id_' . $name . '-' . $i;
+            $checked = ($a == $value) ? ' checked' : '';
+            echo '<input type="radio" value="' . $a . '" id="' . $id . '"' . implode(' ', $params) . $checked . '/>&nbsp;<label for="' . $id . '">' . $b . '</label>' . PHP_EOL;
+            $i++;
 		}
 	}
 
