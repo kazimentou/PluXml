@@ -16,15 +16,18 @@ class plxMotor
 
     # On gère la non régression en cas d'ajout de paramètres sur une version de pluxml déjà installée
     protected const DEFAULT_CONFIG = array(
+        'version'           => PLX_VERSION,
         'title'					=> 'PluXml',
-        'bypage_admin'			=> 10,
-        'bypage_admin_coms'		=> 10,
-        'bypage_archives'		=> 5,
-        'bypage_tags'			=> 5,
-        'default_lang'			=> DEFAULT_LANG,
-        'racine_plugins'		=> 'plugins/',
-        'racine_themes'			=> 'themes/',
-        'hometemplate'			=> 'home.php',
+        'description'       => '',
+        'meta_description'  => '',
+        'meta_keywords'     => 'cms,xml,pluxml,' . DEFAULT_LANG,
+        'timezone'          => 'Europe/Paris',
+        'allow_com'         => 1,
+        'mod_com'           => 0,
+        'mod_art'           => 0,
+        'capcha'            => 1,
+        'style'             => 'defaut',
+        'clef'              => '', # A générer
         'bypage'				=> 5,
         'bypage_archives'		=> 5,
         'bypage_tags'			=> 5,
@@ -32,13 +35,45 @@ class plxMotor
         'bypage_admin_coms'		=> 10,
         'bypage_feed'			=> 8,
         'tri'					=> 'desc',
+        'tri_coms'          => 'asc',
         'images_l'				=> 800,
         'images_h'				=> 600,
         'miniatures_l'			=> 200,
         'miniatures_h'			=> 100,
+        'thumbs'            => 1,
+        'medias'            => 'data/medias/',
+        'racine_articles'   => 'data/articles/',
+        'racine_commentaires' => 'data/commentaires/',
+        'racine_statiques'  => 'data/statiques/',
+        'racine_themes'     => 'themes/',
+        'racine_plugins'    => 'plugins/',
+        'custom_admincss_file' => '',
+        'homestatic'        => '',
+        'urlrewriting'      => 0,
+        'gzip'              => 0,
+        'feed_chapo'        => 0,
+        'feed_footer'       => '',
+        'default_lang'      => DEFAULT_LANG,
+        'userfolders'       => 0,
+        'display_empty_cat' => 0,
+        # PluXml 5.1.7 et plus
+        'hometemplate'      => 'home.php',
+        # PluXml 5.8 et plus
+        'enable_rss'        => '1',
+        'lostpassword'      => '1',
         'email_method'			=> 'sendmail',
+        'smtp_server'       => '',
+        'smtp_username'     => '',
+        'smtp_password'     => '',
         'smtp_port'				=> 465,
         'smtp_security'			=> 'ssl',
+        'smtpOauth2_emailAdress' => '',
+        'smtpOauth2_clientId' => '',
+        'smtpOauth2_clientSecret' => '',
+        'smtpOauth2_refreshToken' => '',
+        # PluXml 5.8.3 et plus
+        'cleanurl' => 0,
+        'thumbnail' => '',
     );
 
 	public $get = false; # Donnees variable GET
@@ -109,12 +144,13 @@ class plxMotor
 		date_default_timezone_set($this->aConf['timezone']);
 		# On vérifie s'il faut faire une mise à jour
         if (
-            !isset($this->aConf['version']) or
+            empty($this->aConf['version']) or
             (version_compare($this->aConf['version'], PLX_VERSION, '<') and !defined('PLX_UPDATER'))
         ) {
             header('Location: ' . PLX_ROOT . 'update/index.php');
 			exit;
 		}
+
 		# Chargement des variables
 		$this->style = $this->aConf['style'];
 		$this->racine = $this->aConf['racine'];
@@ -124,6 +160,7 @@ class plxMotor
 		# On récupère le chemin de l'url
 		$var = parse_url($this->racine);
 		$this->path_url = str_replace(ltrim($var['path'], '\/'), '', ltrim($_SERVER['REQUEST_URI'], '\/'));
+
 		# Traitement des plugins
 		# Détermination du fichier de langue (nb: la langue peut être modifiée par plugins via $_SESSION['lang'])
 		$context = defined('PLX_ADMIN') ? 'admin_lang' : 'lang';
