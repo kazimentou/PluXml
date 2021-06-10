@@ -141,7 +141,8 @@ $LANG = array(
 'L_PAGINATION_LAST'				=> '»',
 'L_PAGINATION'					=> 'pagina %s sus %s',
 
-'L_PAGEBLOG_TITLE'				=> 'Blòg',
+'L_BLOG'				=> 'Blòg',
+'L_BACK_TO_BLOG_TITLE' => 'Retorn a la pagina del blòg',
 
 'L_YEAR'				    	=> 'annada',
 'L_TOTAL'				    	=> 'total',

@@ -216,30 +216,38 @@ class plxUtils
         }
 
         if ($readonly) {
-            echo '<select' . $id . ' name="' . $name . '" disabled="disabled" class="readonly' . ($class!='' ? ' ' . $class : '') . '">' . "\n";
+			if (empty($class) or !is_string($class)) {
+				$class = 'readonly';
         } else {
-            echo '<select' . $id . ' name="' . $name . '"' . ($class!='' ? ' class="' . $class . '"' : '') . '>' . "\n";
+				$class .= ' readonly';
         }
+		}
+?>
+        <select <?= $id ?> name="<?= $name ?>" <?= empty($class) ? ' class="' . $class . '"' : '' ?>>
+
+<?php
         foreach ($array as $a => $b) {
             if (is_array($b)) {
-                echo '<optgroup label="' . $a . '">' . "\n";
+?>
+			<optgroup label="<?= $a ?>">
+<?php
                 foreach ($b as $c=>$d) {
-                    if ($c == $selected) {
-                        echo "\t" . '<option value="' . $c . '" selected="selected">' . $d . '</option>' . "\n";
-                    } else {
-                        echo "\t" . '<option value="' . $c . '">' . $d . '</option>' . "\n";
-				}
+?>
+                <option value="<?= $c ?>" <?= ($c == $selected) ? 'selected="selected"' : '' ?>><?= $d ?></option>
+<?php
                 }
-                echo '</optgroup>' . "\n";
-			} else {
-                if (strval($a) == $selected) {
-                    echo "\t" . '<option value="' . $a . '" selected="selected">' . $b . '</option>' . "\n";
+?>
+			</optgroup>
+<?php
                 } else {
-                    echo "\t" . '<option value="' . $a . '">' . $b . '</option>' . "\n";
-			}
+?>
+                <option value="<?= $a ?>" <?= (strval($a) == $selected) ? 'selected="selected"' : '' ?>><?= $b ?></option>
+<?php
 		}
         }
-        echo '</select>' . "\n";
+?>
+        </select>
+<?php
 	}
 
 	/**
@@ -373,19 +381,22 @@ class plxUtils
 	 * @param	file		emplacement et nom du fichier à tester
 	 * @param	format		format d'affichage
 	 **/
-    public static function testWrite($file, $format="<li><span style=\"color:#color\">#symbol #message</span></li>\n")
+    public static function testWrite($file, $format='<li><span style="color:#color">#symbol #message</span></li>' . PHP_EOL)
     {
         if (is_writable($file)) {
-			$output = str_replace('#color', 'green', $format);
-			$output = str_replace('#symbol', '&#10004;', $output);
-			$output = str_replace('#message', sprintf(L_WRITE_ACCESS, $file), $output);
-			echo $output;
+			$replaces = array(
+				'#color'	=> 'green',
+				'#symbol'	=> '&#10004;',
+				'#message'	=> sprintf(L_WRITE_ACCESS, $file),
+			);
 		} else {
-			$output = str_replace('#color', 'red', $format);
-			$output = str_replace('#symbol', '&#10007;', $output);
-			$output = str_replace('#message', sprintf(L_WRITE_NOT_ACCESS, $file), $output);
-			echo $output;
+			$replaces = array(
+				'#color'	=> 'red',
+				'#symbol'	=> '&#10007;',
+				'#message'	=> sprintf(L_WRITE_NOT_ACCESS, $file),
+            );
 		}
+        echo strtr($format, $replaces);
 	}
 
 	/**
@@ -396,26 +407,29 @@ class plxUtils
 	 * @return	boolean		retourne vrai si le module apache mod_rewrite est disponible
 	 * @author	Stephane F
 	 **/
-    public static function testModRewrite($io=true, $format="<li><span style=\"color:#color\">#symbol #message</span></li>\n")
+    public static function testModRewrite($io=true, $format='<li><span style="color:#color">#symbol #message</span></li>' . PHP_EOL)
     {
         if (function_exists('apache_get_modules')) {
-			$test = in_array("mod_rewrite", apache_get_modules());
+            $test = in_array('mod_rewrite', apache_get_modules());
             if ($io==true) {
                 if ($test) {
-					$output = str_replace('#color', 'green', $format);
-					$output = str_replace('#symbol', '&#10004;', $output);
-					$output = str_replace('#message', L_MODREWRITE_AVAILABLE, $output);
-					echo $output;
+					$replaces = array(
+						'#color'	=> 'green',
+						'#symbol'	=> '&#10004;',
+						'#message'	=> L_MODREWRITE_AVAILABLE,
+					);
 				} else {
-					$output = str_replace('#color', 'red', $format);
-					$output = str_replace('#symbol', '&#10007;', $output);
-					$output = str_replace('#message', L_MODREWRITE_NOT_AVAILABLE, $output);
-					echo $output;
+					$replaces = array(
+						'#color'	=> 'red',
+						'#symbol'	=> '&#10007;',
+						'#message'	=> L_MODREWRITE_NOT_AVAILABLE,
+					);
 				}
+                echo strtr($format, $replaces);
 			}
 			return $test;
         } else {
-            return true;
+            return false;
 		}
 	}
 

@@ -95,8 +95,8 @@ if ($aFiles = $plxMotor->plxGlob_arts->query('/^[0-9]{4}.(?:[0-9]|home|,)*(?:' .
 			$num = intval($plxRecord_arts->f('numero'));
 			echo "\n";
 			echo "\t<url>\n";
-			echo "\t\t<loc>".$plxMotor->urlRewrite("?article".$num."/".plxUtils::strCheck($plxRecord_arts->f('url')))."</loc>\n";
-			echo "\t\t<lastmod>".plxDate::formatDate($plxRecord_arts->f('date_update'),'#num_year(4)-#num_month-#num_day')."</lastmod>\n";
+            echo "\t\t<loc>" . $plxMotor->urlRewrite("?article" . $num . "/" . plxUtils::strCheck($plxRecord_arts->f('url'))) . "</loc>\n";
+            echo "\t\t<lastmod>" . plxDate::formatDate($plxRecord_arts->f('date_update'), '#num_year(4)-#num_month-#num_day') . "</lastmod>\n";
 			echo "\t\t<changefreq>monthly</changefreq>\n";
 			echo "\t\t<priority>0.5</priority>\n";
 			echo "\t</url>\n";
@@ -115,5 +115,3 @@ eval($plxMotor->plxPlugins->callHook('SitemapEnd')); # Hook Plugins
 
 # Restitution écran
 echo $output;
-exit;
-?>

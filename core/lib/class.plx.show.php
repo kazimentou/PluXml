@@ -701,7 +701,6 @@ class plxShow
 		} else {
 			echo $authorName;
 		}
-        }
     }
 
     /**
@@ -1884,19 +1883,16 @@ class plxShow
                     $backQuery .= intval($cible) . '/' . $this->plxMotor->aCats[$cible]['url'];
                     $backLabel = ucfirst(L_CATEGORY);
                     $backTitle = $this->plxMotor->aCats[$cible]['name'];
-                            $bypage = $this->plxMotor->aCats[$cible]['bypage'];
                             break;
                         case 'user':
                     $backQuery .= intval($cible) . '/' . md5($this->plxMotor->aUsers[$cible]['name']);
                     $backLabel = ucfirst(L_AUTHOR);
                     $backTitle = $this->plxMotor->aUsers[$cible]['name'];
-                            $bypage = $this->plxMotor->bypage;
                             break;
                         case 'tags':
                     $backQuery = '?tag/' . $cible;
                     $backLabel = ucfirst(L_PAGETITLE_TAG);
                     $backTitle = $cible;
-                            $bypage = $this->plxMotor->aConf['bypage_tags'];
                             break;
                         case 'archives':
                     $backQuery .= '/' . substr($cible, 0, 4);
@@ -1905,14 +1901,15 @@ class plxShow
                             }
                     $backLabel = ucfirst(L_ARCHIVES);
                     $backTitle = $cible;
-                            $bypage = $this->plxMotor->aConf['bypage_archives'];
+                    break;
+                case 'blog':
+                    $backTitle = ucfirst(L_BLOG);
                             break;
                         default: # home
                     $backHomepage = ($mode == 'home');
                     $backQuery = '';
                     $backLabel = '';
                     $backTitle = L_HOMEPAGE;
-                            $bypage = $this->plxMotor->bypage;
                     }
         }
 
@@ -1921,7 +1918,11 @@ class plxShow
 <div>
 	<a href="<?= $this->plxMotor->racine ?>"><?= L_HOMEPAGE ?></a>
 <?php
-            if (!empty($backLabel)) {
+            if ($mode == 'blog') {
+?>
+    > <a href="<?= $this->plxMotor->urlRewrite($backQuery) ?>" title="<?= L_BACK_TO_BLOG_TITLE ?>" ><?= $backTitle ?></a>
+<?php                
+            } elseif (!empty($backLabel)) {
                 ?>
 	> <strong><?= $backLabel ?></strong> : <a href="<?= $this->plxMotor->urlRewrite($backQuery) ?>"><?= $backTitle ?></a>
 <?php
@@ -1945,10 +1946,7 @@ class plxShow
                     $title = (!empty($backLabel) ? $backLabel . ' ' . $backTitle : $backTitle);
 
                     if (strpos($format, '<link') === false) {
-                        if ($bypage <= 0) {
-                            $bypage = $this->plxMotor->bypage;
-                        }
-                        $page = intval(ceil($_SESSION['previous']['position'] / $bypage));
+                        $page = intval(ceil($_SESSION['previous']['position'] / $_SESSION['previous']['bypage']));
                         if ($page > 1) {
                             $query .= (!empty($backHomepage) ? '?page' : '/page') . $page;
                         }
@@ -2481,7 +2479,7 @@ class plxShow
                 '#static_id'		=> 'static-blog',
                 '#static_class'		=> 'static menu',
                 '#static_url'		=> $this->plxMotor->urlRewrite('?blog'),
-                '#static_name'		=> L_PAGEBLOG_TITLE,
+                '#static_name'      => L_BLOG,
                 '#static_status'	=> ($this->plxMotor->mode == 'home') ? 'active' : 'noactive',
             );
             if ($echo) {
