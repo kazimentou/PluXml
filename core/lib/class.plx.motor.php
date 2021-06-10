@@ -423,11 +423,11 @@ class plxMotor
                 } else {
                     $_SESSION['msgcom'] = $retour;
                     $_SESSION['msg'] = array(
-                        'name'		=> plxUtils::unSlash($_POST['name']),
-                        'site'		=> plxUtils::unSlash($_POST['site']),
-                        'mail'		=> plxUtils::unSlash($_POST['mail']),
-                        'content'	=> plxUtils::unSlash($_POST['content']),
-                        'parent'	=> plxUtils::unSlash($_POST['parent']),
+                        'name'      => plxUtils::unSlash($_POST['name']),
+                        'site'      => plxUtils::unSlash($_POST['site']),
+                        'mail'      => plxUtils::unSlash($_POST['mail']),
+                        'content'   => plxUtils::unSlash($_POST['content']),
+                        'parent'    => plxUtils::unSlash($_POST['parent']),
                     );
                     eval($this->plxPlugins->callHook('plxMotorDemarrageCommentSessionMessage')); # Hook Plugins
                     header('Location: ' . $url . '#form');
@@ -609,15 +609,15 @@ class plxMotor
         # On gère la non régression en cas d'ajout de paramètres sur une version de pluxml déjà installée
         $dataRoot = preg_replace('#^([^/]+)/.*#', '$1/', PLX_CONFIG_PATH);
         foreach (array(
-            'tri_coms'				=> $this->aConf['tri'],
-            'timezone'				=> @date_default_timezone_get(),
-            'medias'				=> $dataRoot . 'images/',
-            'racine_articles'		=> $dataRoot . 'articles/',
-            'racine_commentaires'	=> $dataRoot . 'commentaires/',
-            'racine_statiques'		=> $dataRoot . 'statiques/',
-            'version'				=> PLX_VERSION,
-            'default_lang'			=> DEFAULT_LANG,
-            # 'clef'					=> plxUtils::charAleatoire(15),
+            'tri_coms'              => $this->aConf['tri'],
+            'timezone'              => @date_default_timezone_get(),
+            'medias'                => $dataRoot . 'images/',
+            'racine_articles'       => $dataRoot . 'articles/',
+            'racine_commentaires'   => $dataRoot . 'commentaires/',
+            'racine_statiques'      => $dataRoot . 'statiques/',
+            'version'               => PLX_VERSION,
+            'default_lang'          => DEFAULT_LANG,
+            # 'clef'                    => plxUtils::charAleatoire(15),
         ) as $param=>$value) {
             if (!isset($this->aConf[$param])) {
                 $this->aConf[$param] = $value;
@@ -642,9 +642,9 @@ class plxMotor
     }
 
     /**
-     * Méthode qui parse le fichier des catégories et alimente
-     * le tableau aCats
+     * Méthode qui parse le fichier des catégories et alimente le tableau aCats.
      *
+     * N.B. : Les balises <statique> ont des enfants et des attributs.
      * @param   filename    emplacement du fichier XML des catégories
      * @return  null
      * @author  Stéphane F
@@ -670,44 +670,77 @@ class plxMotor
         $activeCats = array('000');
         $homepageCats = array('000');
 
-        $categorie = array_values(array_filter(
+        $items = array_values(array_filter(
             $values,
             function ($value) {
-                return ($value['tag'] == 'categorie' and $value['type'] == 'open');
+                return (
+                    $value['tag'] == 'categorie' and
+                    $value['type'] == 'open' and
+                    isset($value['attributes']) and
+                    !empty($value['attributes']['number'])
+                );
             }
         ));
         $children = array_keys($iTags);
         unset($children['document']);
         unset($children['categorie']);
-        foreach ($categorie as $i=>$infos) {
+        foreach ($items as $i=>$infos) {
             # number, active, homepage, tri, bypage, menu, url, template
-            $cat = $infos['attributes'];
+            $item = array_merge(
+                array(
+                    'active'    => '1' ,
+                    'homepage'  => '1' ,
+                    'tri'       => 'desc' ,
+                    'menu'      => 'oui' ,
+                    'template'  => 'categorie.php',
+                ),
+                $infos['attributes']
+            );
 
-            if (!isset($cat['number'])) {
-                # article invalide
-                continue;
-            }
-            $catId = str_pad($cat['number'], 3, '0', STR_PAD_LEFT);
-            unset($cat['number']);
+            $id = str_pad($item['number'], 3, '0', STR_PAD_LEFT);
+            unset($item['number']);
 
-            # Children for categorie tag
+            # Children for this tag
             foreach ($children as $child) {
-                $cat[$child] = plxUtils::getTagIndexValue($iTags[$child], $values, $i);
+                $item[$child] = plxUtils::getTagIndexValue($iTags[$child], $values, $i);
             }
 
-            if (!empty($cat['active'])) {
-                $activeCats[] = $catId;
-                if (!empty($cat['homepage'])) {
-                    $homepageCats[] = $catId;
+            #for missing children. May have empty value
+            foreach (array(
+                'bypage',
+                'description',
+                'meta_description',
+                'meta_keywords',
+                'title_htmltag',
+                'thumbnail',
+                'thumbnail_alt',
+                'thumbnail_title',
+            ) as $f) {
+                if (!isset($item[$f])) {
+                    $item[$f] = '';
                 }
             }
 
-            # Recuperation du nombre d'articles publiés de la categorie
-            $motif = '#^\d{4}\.(?:home,|\d{3},)*' . $catId . '(?:,\d{3})*\.\d{3}\.\d{12}\.[\w-]+\.xml$#';
-            $arts = $this->plxGlob_arts->query($motif, 'art', '', 0, false, 'before');
-            $cat['articles'] = !empty($arts) ? sizeof($arts) : 0;
+            # for these missing children, value is required
+            foreach (array('name', 'url', ) as $f) {
+                if (!isset($item[$f])) {
+                    $item[$f] = 'category-' . $i;
+                }
+            }
 
-            $this->aCats[$catId] = $cat;
+            if (!empty($item['active'])) {
+                $activeCats[] = $id;
+                if (!empty($item['homepage'])) {
+                    $homepageCats[] = $id;
+                }
+            }
+
+            # Get count of articles for this category
+            $motif = '#^\d{4}\.(?:home,|\d{3},)*' . $id . '(?:,\d{3})*\.\d{3}\.\d{12}\.[\w-]+\.xml$#';
+            $arts = $this->plxGlob_arts->query($motif, 'art', '', 0, false, 'before');
+            $item['articles'] = !empty($arts) ? sizeof($arts) : 0;
+
+            $this->aCats[$id] = $item;
             # Hook plugins
             eval($this->plxPlugins->callHook('plxMotorGetCategories'));
         }
@@ -717,9 +750,9 @@ class plxMotor
     }
 
     /**
-     * Méthode qui parse le fichier des pages statiques et alimente
-     * le tableau aStats
+     * Méthode qui parse le fichier des pages statiques et alimente le tableau aStats.
      *
+     * N.B. : Les balises <statique> ont des enfants et des attributs.
      * @param   filename    emplacement du fichier XML des pages statiques
      * @return  null
      * @author  Stéphane F
@@ -741,34 +774,68 @@ class plxMotor
             return;
         }
 
+        $items = array_values(array_filter(
+            $values,
+            function ($value) {
+                return (
+                    $value['tag'] == 'statique' and
+                    $value['type'] == 'open' and
+                    isset($value['attributes']) and
+                    !empty($value['attributes']['number'])
+                );
+            }
+        ));
         $children = array_keys($iTags);
         unset($children['document']);
         unset($children['statique']);
 
-        $nb = sizeof($iTags['name']);
-        $step = ceil(sizeof($iTags['statique']) / $nb);
-        for ($i=0; $i<$nb; $i++) {
-            $node = $values[$iTags['statique'][$i * $step]];
-            $statique = $node['attributes'];
+        foreach ($items as $i=>$infos) {
+            $item = array_merge(
+                array(
+                    'active'    => '1',
+                    'menu'      => 'oui',
+                    'template'  => 'static.php',
+                ),
+                $infos['attributes']
+            );
 
-            if (!isset($statique['number'])) {
-                continue;
-            }
-            $statId = $statique['number'];
-            unset($statique['number']);
+            $id = str_pad($item['number'], 3, '0', STR_PAD_LEFT);
+            unset($item['number']);
 
+            # Children for this tag
             foreach ($children as $child) {
-                $statique[$child] = plxUtils::getTagIndexValue($iTags[$child], $values, $i);
+                $item[$child] = plxUtils::getTagIndexValue($iTags[$child], $values, $i);
             }
 
-            # On verifie que le fichier de page statique est lisible
-            if (!isset($statique['url'])) {
-                continue;
+            #for missing children. May have empty value
+            foreach (array(
+                'group',
+                'meta_description',
+                'meta_keywords',
+                'title_htmltag',
+            ) as $f) {
+                if (!isset($item[$f])) {
+                    $item[$f] = '';
+                }
             }
-            $filename = PLX_ROOT . $this->aConf['racine_statiques'] . $statId . '.' . $statique['url'] . '.php';
-            $statique['readable'] = is_readable($filename) ? 1 : 0;
 
-            $this->aStats[$statId] = $statique;
+            # for these missing children, value is required
+            foreach (array('name', 'url', ) as $f) {
+                if (!isset($item[$f])) {
+                    $item[$f] = 'statique-' . $i;
+                }
+            }
+            if (empty($item['date_creation'])) {
+                $item['date_creation'] = date('YmdHi');
+            }
+            if (empty($item['date_update'])) {
+                $item['date_update'] = $item['date_creation'];
+            }
+
+            $filename = PLX_ROOT . $this->aConf['racine_statiques'] . $id . '.' . $item['url'] . '.php';
+            $item['readable'] = is_readable($filename) ? 1 : 0;
+
+            $this->aStats[$id] = $item;
 
             # Hook plugins
             eval($this->plxPlugins->callHook('plxMotorGetStatiques'));
@@ -978,26 +1045,26 @@ class plxMotor
             $art = array(
                 'filename'      => $filename,
                 # Recuperation des valeurs de nos champs XML
-                'title'				=> plxUtils::getTagValue($iTags['title'], $values),
-                'allow_com'			=> plxUtils::getTagValue($iTags['allow_com'], $values, 0),
-                'template'			=> plxUtils::getTagValue($iTags['template'], $values, 'article.php'),
-                'chapo'				=> plxUtils::getTagValue($iTags['chapo'], $values),
-                'content'			=> plxUtils::getTagValue($iTags['content'], $values),
-                'tags'				=> plxUtils::getTagValue($iTags['tags'], $values),
-                'meta_description'	=> plxUtils::getTagValue($iTags['meta_description'], $values),
-                'meta_keywords'		=> plxUtils::getTagValue($iTags['meta_keywords'], $values),
-                'title_htmltag'		=> plxUtils::getTagValue($iTags['title_htmltag'], $values),
-                'thumbnail'			=> plxUtils::getTagValue($iTags['thumbnail'], $values),
-                'thumbnail_title'	=> plxUtils::getTagValue($iTags['thumbnail_title'], $values),
-                'thumbnail_alt'		=> plxUtils::getTagValue($iTags['thumbnail_alt'], $values),
+                'title'             => plxUtils::getTagValue($iTags['title'], $values),
+                'allow_com'         => plxUtils::getTagValue($iTags['allow_com'], $values, 0),
+                'template'          => plxUtils::getTagValue($iTags['template'], $values, 'article.php'),
+                'chapo'             => plxUtils::getTagValue($iTags['chapo'], $values),
+                'content'           => plxUtils::getTagValue($iTags['content'], $values),
+                'tags'              => plxUtils::getTagValue($iTags['tags'], $values),
+                'meta_description'  => plxUtils::getTagValue($iTags['meta_description'], $values),
+                'meta_keywords'     => plxUtils::getTagValue($iTags['meta_keywords'], $values),
+                'title_htmltag'     => plxUtils::getTagValue($iTags['title_htmltag'], $values),
+                'thumbnail'         => plxUtils::getTagValue($iTags['thumbnail'], $values),
+                'thumbnail_title'   => plxUtils::getTagValue($iTags['thumbnail_title'], $values),
+                'thumbnail_alt'     => plxUtils::getTagValue($iTags['thumbnail_alt'], $values),
                 'numero'            => $tmp['artId'],
                 'author'            => $tmp['usrId'],
                 'categorie'         => $tmp['catId'],
                 'url'               => $tmp['artUrl'],
                 'date'              => $tmp['artDate'],
                 'nb_com'            => $this->getNbCommentaires('#^' . $tmp['artId'] . '.\d{10}.\d+.xml$#'),
-                'date_creation'		=> plxUtils::getTagValue($iTags['date_creation'], $values, $tmp['artDate']),
-                'date_update'		=> plxUtils::getTagValue($iTags['date_update'], $values, $tmp['artDate']),
+                'date_creation'     => plxUtils::getTagValue($iTags['date_creation'], $values, $tmp['artDate']),
+                'date_update'       => plxUtils::getTagValue($iTags['date_update'], $values, $tmp['artDate']),
             );
 
             # Hook plugins
@@ -1282,9 +1349,9 @@ class plxMotor
     }
 
     /**
-     * Méthode qui parse le fichier des tags et alimente
-     * le tableau aTags
+     * Méthode qui parse le fichier des tags et alimente le tableau aTags.
      *
+     * N.B. : Les balises <article> n'ont pas d'enfant.
      * @param   filename    emplacement du fichier XML contenant les tags
      * @return  null
      * @author  Stephane F.
