@@ -49,11 +49,11 @@ $plxMotor->demarrage();
 echo '<?xml version="1.0" encoding="' . strtolower(PLX_CHARSET) . '" ?>' . "\n";
 ?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-	<url>
-		<loc><?php echo $plxMotor->urlRewrite() ?></loc>
-		<changefreq>weekly</changefreq>
-		<priority>1.0</priority>
-	</url>
+    <url>
+        <loc><?php echo $plxMotor->urlRewrite() ?></loc>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
 <?php
 # Les pages statiques
 foreach ($plxMotor->aStats as $stat_num => $stat_info) {
@@ -96,7 +96,7 @@ if ($aFiles = $plxMotor->plxGlob_arts->query('/^[0-9]{4}.(?:[0-9]|home|,)*(?:' .
             echo "\n";
             echo "\t<url>\n";
             echo "\t\t<loc>" . $plxMotor->urlRewrite("?article" . $num . "/" . plxUtils::strCheck($plxRecord_arts->f('url'))) . "</loc>\n";
-            echo "\t\t<lastmod>" . plxDate::formatDate($plxRecord_arts->f('date'), '#num_year(4)-#num_month-#num_day') . "</lastmod>\n";
+            echo "\t\t<lastmod>" . plxDate::formatDate($plxRecord_arts->f('date_update'), '#num_year(4)-#num_month-#num_day') . "</lastmod>\n";
             echo "\t\t<changefreq>monthly</changefreq>\n";
             echo "\t\t<priority>0.5</priority>\n";
             echo "\t</url>\n";
@@ -115,5 +115,3 @@ eval($plxMotor->plxPlugins->callHook('SitemapEnd')); # Hook Plugins
 
 # Restitution écran
 echo $output;
-exit;
-?>
