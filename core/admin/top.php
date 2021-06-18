@@ -49,7 +49,7 @@ if (isset($_GET["del"]) and $_GET["del"]=="install") {
 				</li>
 				<li>
 <?php if (isset($plxAdmin->aConf['homestatic']) and !empty($plxAdmin->aConf['homestatic'])) : ?>
-					<small><a class="back-blog" href="<?= $plxAdmin->urlRewrite('?blog'); ?>" title="<?= L_BACK_TO_BLOG_TITLE ?>"><?= L_BACK_TO_BLOG;?></a></small>
+					<small><a class="back-blog" href="<?= $plxAdmin->urlRewrite('?blog'); ?>" title="<?= L_BACK_TO_BLOG_TITLE ?>"><?= L_BLOG;?></a></small>
 <?php else: ?>&nbsp;
 <?php endif; ?>
 				</li>

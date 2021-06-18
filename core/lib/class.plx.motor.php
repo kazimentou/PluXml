@@ -399,11 +399,12 @@ class plxMotor
                 $this->error404(L_NO_ARTICLE_PAGE);
             }
             $_SESSION['previous'] = array(
-               'mode'  => $this->mode,
-               'cible' => $this->cible,
-               'motif' => $this->motif,
-               'tri'   => $this->tri,
-               'artIds'   => false, # sera actualisé en mode article
+               'mode'    => preg_match('#^blog\b#', $this->get) ? 'blog' : $this->mode,
+               'cible'  => $this->cible,
+               'motif'  => $this->motif,
+               'tri'    => $this->tri,
+               'bypage' => $this->bypage,
+               'artIds' => false, # sera actualisé en mode article
             );
         } elseif ($this->mode == 'article') {
 
