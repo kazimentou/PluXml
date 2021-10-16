@@ -5,4 +5,4 @@
 .php-cs-fixer.cache
 tools/php-cs-fixer/vendor/
 tools/php-cs-fixer/composer.lock
-
+.idea

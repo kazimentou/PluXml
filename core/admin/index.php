@@ -25,7 +25,17 @@ if (isset($_POST['selection']) and !empty($_POST['sel']) and ($_POST['selection'
 }
 
 # Récuperation de l'id de l'utilisateur
-$userId = ($_SESSION['profil'] < PROFIL_WRITER ? '[0-9]{3}' : $_SESSION['user']);
+if($_SESSION['profil'] < PROFIL_WRITER) {
+	if(isset($_POST['sel_user']) and preg_match('#^\d{3}$#', $_POST['sel_user']) and array_key_exists($_POST['sel_user'], $plxAdmin->aUsers)) {
+		$userId = $_POST['sel_user'];
+		$_SESSION['sel_user'] = $userId;
+	} else {
+		$userId = '\d{3}';
+		$_SESSION['sel_user'] = '';
+	}
+} else {
+	$userId = $_SESSION['user'];
+}
 
 # Récuperation des paramètres
 if (!empty($_GET['sel']) and in_array($_GET['sel'], array('all','published', 'draft','mod'))) {
@@ -151,7 +161,28 @@ include __DIR__ .'/top.php';
 <div class="grid">
 	<div class="col sml-6">
 		<?php plxUtils::printSelect('sel_cat', $aFilterCat, $_SESSION['sel_cat']) ?>
-		<input class="<?php echo $_SESSION['sel_cat']!='all' ? ' select' : '' ?>" type="submit" value="<?php echo L_ARTICLES_FILTER_BUTTON ?>" />
+<?php
+if($_SESSION['profil'] < PROFIL_WRITER) {
+	$users = array_filter($plxAdmin->aUsers, function($item) {
+		return (!empty($item['active']) and empty($item['delete']));
+	});
+	if(count($plxAdmin->aUsers) > 1) {
+		$values = array_map(
+			function($item) {
+				return $item['name'];
+			},
+			$users
+		);
+		uasort($values, function($a, $b) {
+			$la = preg_replace('#.*\s(\w[\w-]*)$#', '$1', $a);
+			$lb = preg_replace('#.*\s(\w[\w-]*)$#', '$1', $b);
+			return strcasecmp($la, $lb);
+		});
+		plxUtils::printSelect('sel_user', array_merge(array('' => L_ARTICLES_ALL_AUTHORS), $values), $_SESSION['sel_user']);
+	}
+}
+?>
+		<input class="<?php echo $_SESSION['sel_cat']!='all'?' select':'' ?>" type="submit" value="<?php echo L_ARTICLES_FILTER_BUTTON ?>" />
 	</div>
 	<div class="col sml-6 text-right">
 		<input id="index-search" placeholder="<?php echo L_SEARCH_PLACEHOLDER ?>" type="text" name="artTitle" value="<?php echo plxUtils::strCheck($_GET['artTitle']) ?>" />
@@ -169,7 +200,13 @@ include __DIR__ .'/top.php';
 				<th><?php echo L_ARTICLE_LIST_TITLE ?></th>
 				<th><?php echo L_ARTICLE_LIST_CATEGORIES ?></th>
 				<th><?php echo L_ARTICLE_LIST_NBCOMS ?></th>
+<?php
+if(!preg_match('#^\d{3}$#', $userId)) {
+?>
 				<th><?php echo L_ARTICLE_LIST_AUTHOR ?></th>
+<?php
+}
+?>
 				<th class="action"><?php echo L_ARTICLE_LIST_ACTION ?></th>
 			</tr>
 		</thead>
@@ -180,9 +217,8 @@ include __DIR__ .'/top.php';
             # Initialisation de l'ordre
             $num=0;
             $datetime = date('YmdHi');
-            while ($plxAdmin->plxRecord_arts->loop()) { # Pour chaque article
-                $author = plxUtils::getValue($plxAdmin->aUsers[$plxAdmin->plxRecord_arts->f('author')]['name']);
-                $publi = (bool)!($plxAdmin->plxRecord_arts->f('date') > $datetime);
+			while($plxAdmin->plxRecord_arts->loop()) { # Pour chaque article
+				$publi = (boolean)!($plxAdmin->plxRecord_arts->f('date') > $datetime);
                 # Catégories : liste des libellés de toutes les categories
                 $draft='';
                 $libCats='';
@@ -224,7 +260,10 @@ include __DIR__ .'/top.php';
                 }
                 echo '&nbsp;</td>';
                 echo '<td><a title="'.L_NEW_COMMENTS_TITLE.'" href="comments.php?sel=offline&amp;a='.$plxAdmin->plxRecord_arts->f('numero').'&amp;page=1">'.$nbComsToValidate.'</a> / <a title="'.L_VALIDATED_COMMENTS_TITLE.'" href="comments.php?sel=online&amp;a='.$plxAdmin->plxRecord_arts->f('numero').'&amp;page=1">'.$nbComsValidated.'</a>&nbsp;</td>';
+				if(!preg_match('#^\d{3}$#', $userId)) {
+					$author = plxUtils::getValue($plxAdmin->aUsers[$plxAdmin->plxRecord_arts->f('author')]['name']);
                 echo '<td>'.plxUtils::strCheck($author).'&nbsp;</td>';
+				}
                 echo '<td>';
                 echo '<a href="article.php?a='.$idArt.'" title="'.L_ARTICLE_EDIT_TITLE.'">'.L_ARTICLE_EDIT.'</a>';
                 if ($publi and $draft=='') { # Si l'article est publié
@@ -234,7 +273,8 @@ include __DIR__ .'/top.php';
                 echo "</tr>";
             }
         } else { # Pas d'article
-            echo '<tr><td colspan="8" class="center">'.L_NO_ARTICLE.'</td></tr>';
+			$colspan = preg_match('#^\d{3}$#', $userId) ? 7 : 8;
+			echo '<tr><td colspan="' . $colspan . '" class="center">'.L_NO_ARTICLE.'</td></tr>';
         }
         ?>
 		</tbody>

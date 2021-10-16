@@ -205,7 +205,8 @@ ul.menu a.noactive{
 }
 
 .cat-list .active,
-.classified-in .active {
+.classified-in .active,
+.author-list .active {
 	background-color: var(--color1);
 	color: #fff;
 }
