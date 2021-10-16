@@ -57,16 +57,16 @@ class plxThemes
 
     public function getImgPreview($theme)
     {
-		# Image par défaut
-		$img = PLX_CORE . 'admin/theme/images/theme.png';
+        # Image par défaut
+        $img = PLX_CORE . 'admin/theme/images/theme.png';
 
-        foreach(array('png', 'jpg', 'jpeg', 'gif') as $ext) {
-			$filename = $this->racineTheme . $theme . '/preview.' . $ext;
-			if(file_exists($filename)) {
-				$img = $filename;
-				break;
-			}
-		}
+        foreach (array('png', 'jpg', 'jpeg', 'gif') as $ext) {
+            $filename = $this->racineTheme . $theme . '/preview.' . $ext;
+            if (file_exists($filename)) {
+                $img = $filename;
+                break;
+            }
+        }
 
         $current = ($theme == $this->activeTheme) ? ' current' : '';
         return '<img class="img-preview' . $current . '" src="' . $img . '" alt="" />';
@@ -83,7 +83,7 @@ class plxThemes
             xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 0);
             xml_parse_into_struct($parser, $data, $values, $iTags);
             xml_parser_free($parser);
-            foreach(array(
+            foreach (array(
                 'title',
                 'author',
                 'version',
@@ -92,7 +92,7 @@ class plxThemes
                 'description',
             ) as $k) {
                 $aInfos[$k] = plxUtils::getTagValue($iTags[$k], $values);
-			}
+            }
         }
         return $aInfos;
     }
@@ -130,7 +130,7 @@ $plxThemes = new plxThemes(PLX_ROOT . $plxAdmin->aConf['racine_themes'], $plxAdm
                 if ($plxThemes->aThemes) {
                     $num=0;
                     foreach ($plxThemes->aThemes as $i=>$theme) {
-						$id = 'preview-' . $i;
+                        $id = 'preview-' . $i;
                         echo '<tr>';
                         # radio
                         $checked = $theme==$plxAdmin->aConf['style'] ? ' checked="checked"' : '';
@@ -142,21 +142,21 @@ $plxThemes = new plxThemes(PLX_ROOT . $plxAdmin->aConf['racine_themes'], $plxAdm
                         if ($aInfos = $plxThemes->getInfos($theme)) {
                             echo '<div><strong>'.$aInfos['title'].'</strong></div>';
                             echo '<div style="margin-top: 2rem;">Version : <strong>'.$aInfos['version'].'</strong>';
-                            if(!empty($aInfos['date'])) {
-								echo  ' (' . $aInfos['date'] . ')';
-							}
+                            if (!empty($aInfos['date'])) {
+                                echo  ' (' . $aInfos['date'] . ')';
+                            }
                             echo '<br />' . L_PLUGINS_AUTHOR.' : ' . $aInfos['author'];
-                            if(!empty($aInfos['site'])) {
-								echo ' - <a href="' . $aInfos['site'] . '" target="_blank">' . $aInfos['site'] . '</a>';
-							}
-                            if(!empty($aInfos['description'])) {
-								echo '<br />' . preg_replace('#(https?://[^\s]*)#', '<a href="$1" target="_blank">$1</a>', $aInfos['description']);
-							}
-							echo '</div>';
+                            if (!empty($aInfos['site'])) {
+                                echo ' - <a href="' . $aInfos['site'] . '" target="_blank">' . $aInfos['site'] . '</a>';
+                            }
+                            if (!empty($aInfos['description'])) {
+                                echo '<br />' . preg_replace('#(https?://[^\s]*)#', '<a href="$1" target="_blank">$1</a>', $aInfos['description']);
+                            }
+                            echo '</div>';
                         } else {
                             echo '<div><strong>' . $theme . '</strong></div>';
                         }
-                        
+
                         # lien aide
                         if (is_file(PLX_ROOT . $plxAdmin->aConf['racine_themes'] . $theme . '/lang/' . $plxAdmin->aConf['default_lang'] . '-help.php')) {
                             echo '<a title="' . L_HELP_TITLE . '" href="parametres_help.php?help=theme&amp;page=' . urlencode($theme) . '">' . L_HELP . '</a>';

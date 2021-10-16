@@ -8,7 +8,7 @@
 
 <?php eval($plxAdmin->plxPlugins->callHook('AdminFootEndBody')) # Hook Plugins?>
 
-<script src="<?php echo PLX_CORE ?>lib/drag-and-drop.js"></script>
+<script src="../lib/drag-and-drop.js"></script>
 <script>
 	setMsg();
 	mediasManager.construct({

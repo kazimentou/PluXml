@@ -149,7 +149,7 @@ $LANG = array(
 
 		'L_SUBMIT_BUTTON' => 'Validar',
 		'L_ERR_WRONG_PASSWORD' => 'Identificant e/o senhal incorrèct',
-		'L_POWERED_BY' => 'Generat per <a href="https://www.pluxml.org">PluXml</a>',
+        'L_POWERED_BY' => 'Generat per',
 		'L_ERR_MAXLOGIN' => 'Nombre de pròvas atent<br />Tornatz ensajar d’aquí %s minutas',
 		'L_LOST_PASSWORD' => 'Senhal oblidat ?',
 		'L_LOST_PASSWORD_LOGIN' => 'Se connectar',

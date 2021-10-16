@@ -1518,16 +1518,20 @@ class plxShow
         if (eval($this->plxMotor->plxPlugins->callHook('plxShowStaticListBegin'))) {
             return;
         }
-        $home = ((empty($this->plxMotor->get) or preg_match('/^page[0-9]*/', $this->plxMotor->get)) and basename($_SERVER['SCRIPT_NAME']) == "index.php");
+
+        $home = ((empty($this->plxMotor->get) or preg_match('/^page\d*/', $this->plxMotor->get)) and basename($_SERVER['SCRIPT_NAME']) == 'index.php');
         # Si on a la variable extra, on affiche un lien vers la page d'accueil (avec $extra comme nom)
         if ($extra != '') {
-            $stat = str_replace('#static_id', 'static-home', $format);
-            $stat = str_replace('#static_class', 'static menu', $stat);
-            $stat = str_replace('#static_url', $this->plxMotor->urlRewrite(), $stat);
-            $stat = str_replace('#static_name', plxUtils::strCheck($extra), $stat);
-            $stat = str_replace('#static_status', ($home == true ? "active" : "noactive"), $stat);
+            $stat = strtr($format, array(
+                '#static_id'		=> 'static-home',
+                '#static_class'		=> 'static menu',
+                '#static_url'		=> $this->plxMotor->urlRewrite(),
+                '#static_name'		=> plxUtils::strCheck($extra),
+                '#static_status'	=> $home ? 'active' : 'noactive',
+            ));
             $menus[][] = $stat;
         }
+
         $group_active = "";
         if ($this->plxMotor->aStats) {
             foreach ($this->plxMotor->aStats as $k => $v) {
@@ -1555,19 +1559,27 @@ class plxShow
             }
         }
         if ($menublog) {
-            if ($this->plxMotor->aConf['homestatic'] != '' and isset($this->plxMotor->aStats[$this->plxMotor->aConf['homestatic']])) {
-                if ($this->plxMotor->aStats[$this->plxMotor->aConf['homestatic']]['active']) {
+            if (
+                !empty($this->plxMotor->aConf['homestatic']) and
+                isset($this->plxMotor->aStats[$this->plxMotor->aConf['homestatic']]) and
+                !empty($this->plxMotor->aStats[$this->plxMotor->aConf['homestatic']]['active'])
+            ) {
                     $menu = str_replace('#static_id', 'static-blog', $format);
                     if ($this->plxMotor->get and preg_match('/(blog|categorie|archives|tag|article)/', $_SERVER['QUERY_STRING'] . $this->plxMotor->mode)) {
                         $menu = str_replace('#static_status', 'active', $menu);
                     } else {
                         $menu = str_replace('#static_status', 'noactive', $menu);
                     }
-                    $menu = str_replace('#static_url', $this->plxMotor->urlRewrite('?blog'), $menu);
-                    $menu = str_replace('#static_name', L_PAGEBLOG_TITLE, $menu);
-                    $menu = str_replace('#static_class', 'static menu', $menu);
-                    array_splice($menus, (intval($menublog) - 1), 0, array($menu));
-                }
+                $active = ($this->plxMotor->get and preg_match('/(blog|categorie|archives|tag|article)/', $_SERVER['QUERY_STRING'] . $this->plxMotor->mode));
+                $stat = strtr($format, array(
+                    '#static_id'		=> 'static-blog',
+                    '#static_class'		=> 'static menu',
+                    '#static_url'		=> $this->plxMotor->urlRewrite('?blog'),
+                    '#static_name'		=> L_PAGEBLOG_TITLE,
+                    '#static_status'	=> $active ? 'active' : 'noactive',
+                ));
+
+                array_splice($menus, (intval($menublog) - 1), 0, array($stat));
             }
         }
 
@@ -1805,18 +1817,18 @@ class plxShow
 
             # On effectue l'affichage
             if ($this->plxMotor->page > 2) { # Si la page active > 2 on affiche un lien 1ere page
-                echo '<span class="p_first"><a href="' . $f_url . '" title="' . L_PAGINATION_FIRST_TITLE . '">' . L_PAGINATION_FIRST . '</a></span>&nbsp;';
+                echo '<span class="p_first"><a href="' . $f_url . '" title="' . L_PAGINATION_FIRST_TITLE . '">' . L_PAGINATION_FIRST . '</a></span>' . PHP_EOL;
             }
             if ($this->plxMotor->page > 1) { # Si la page active > 1 on affiche un lien page precedente
-                echo '<span class="p_prev"><a href="' . $p_url . '" title="' . L_PAGINATION_PREVIOUS_TITLE . '">' . L_PAGINATION_PREVIOUS . '</a></span>&nbsp;';
+                echo '<span class="p_prev"><a href="' . $p_url . '" title="' . L_PAGINATION_PREVIOUS_TITLE . '">' . L_PAGINATION_PREVIOUS . '</a></span>' . PHP_EOL;
             }
             # Affichage de la page courante
             printf('<span class="p_page p_current">' . L_PAGINATION . '</span>', $this->plxMotor->page, $last_page);
             if ($this->plxMotor->page < $last_page) { # Si la page active < derniere page on affiche un lien page suivante
-                echo '&nbsp;<span class="p_next"><a href="' . $n_url . '" title="' . L_PAGINATION_NEXT_TITLE . '">' . L_PAGINATION_NEXT . '</a></span>';
+                echo '&nbsp;<span class="p_next"><a href="' . $n_url . '" title="' . L_PAGINATION_NEXT_TITLE . '">' . L_PAGINATION_NEXT . '</a></span>' . PHP_EOL;
             }
             if (($this->plxMotor->page + 1) < $last_page) { # Si la page active++ < derniere page on affiche un lien derniere page
-                echo '&nbsp;<span class="p_last"><a href="' . $l_url . '" title="' . L_PAGINATION_LAST_TITLE . '">' . L_PAGINATION_LAST . '</a></span>';
+                echo '&nbsp;<span class="p_last"><a href="' . $l_url . '" title="' . L_PAGINATION_LAST_TITLE . '">' . L_PAGINATION_LAST . '</a></span>' . PHP_EOL;
             }
         }
     }
@@ -1832,7 +1844,9 @@ class plxShow
     {
 
         # Hook Plugins
-        if (eval($this->plxMotor->plxPlugins->callHook('plxShowArtNavigationBegin'))) return;
+        if (eval($this->plxMotor->plxPlugins->callHook('plxShowArtNavigationBegin'))) {
+            return;
+        }
 
         if (
             empty($_SESSION['previous']) or
@@ -1896,13 +1910,16 @@ class plxShow
                     }
 
                     # Hook Plugins
-                    if (eval($this->plxMotor->plxPlugins->callHook('plxShowArtNavigation'))) return;
-
+                    if (eval($this->plxMotor->plxPlugins->callHook('plxShowArtNavigation'))) {
+                        return;
+                    }
                 }
                 list($icon, $emoji, $caption) = self::ART_DIRECTIONS[$direction];
 
                 # Hook Plugins
-                if (eval($this->plxMotor->plxPlugins->callHook('plxShowArtNavigationEnd'))) return;
+                if (eval($this->plxMotor->plxPlugins->callHook('plxShowArtNavigationEnd'))) {
+                    return;
+                }
 
                 echo strtr($format, array(
                         '#url' => $this->plxMotor->urlRewrite($query),
@@ -1939,25 +1956,24 @@ class plxShow
     {
         $id = $this->plxMotor->cible;
         switch ($this->plxMotor->mode) {
-            case 'categorie'    :
+            case 'categorie':
                 $query = '?categorie' . intval($id) . '/' . $this->plxMotor->aCats[$id]['url'];
                 break;
-            case 'tags'            :
+            case 'tags':
                 $query = '?tags/' . $id;
                 break;
-            case 'archives'        :
+            case 'archives':
                 $query = '?archives/' . $id;
                 break;
-            case 'static'        :
+            case 'static':
                 $query = '?static' . intval($id) . '/' . $this->plxMotor->aStats[$id]['url'];
                 break;
-            case 'article'        :
+            case 'article':
                 $query = '?article' . intval($id) . '/' . $this->plxMotor->plxRecord_arts->f('url');
                 break;
-            default                :
+            default:
                 $query = '';
-        }
-        ?>
+        } ?>
         <link rel="canonical" href="<?= $this->plxMotor->aConf['racine'] . 'index.php' . $query ?>"/>
         <?php
     }

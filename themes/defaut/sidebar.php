@@ -3,7 +3,7 @@ if (!defined('PLX_ROOT')) {
     exit;
 }
 ?>
-
+<!-- begin of sidebar.php  -->
 	<aside class="aside col med-3">
 
 		<h3>
@@ -23,6 +23,19 @@ if (!defined('PLX_ROOT')) {
 		</ul>
 
 <?php
+if (!empty($plxMotor->aConf['allow_com'])) {
+    ?>
+		<h3>
+			<?php $plxShow->lang('LATEST_COMMENTS'); ?>
+		</h3>
+
+		<ul class="lastcom-list unstyled-list">
+			<?php $plxShow->lastComList('<li><a href="#com_url">#com_author '.$plxShow->getLang('SAID').' : #com_content(34)</a></li>'); ?>
+		</ul>
+
+<?php
+}
+
 if ($plxShow->authorCount > 1) {
     ?>
 		<h3>
@@ -50,14 +63,6 @@ $plxShow->authorList();
 		</ul>
 
 		<h3>
-			<?php $plxShow->lang('LATEST_COMMENTS'); ?>
-		</h3>
-
-		<ul class="lastcom-list unstyled-list">
-			<?php $plxShow->lastComList('<li><a href="#com_url">#com_author '.$plxShow->getLang('SAID').' : #com_content(34)</a></li>'); ?>
-		</ul>
-
-		<h3>
 			<?php $plxShow->lang('ARCHIVES'); ?>
 		</h3>
 
@@ -66,3 +71,5 @@ $plxShow->authorList();
 		</ul>
 
 	</aside>
+<!-- end of sidebar.php  -->
+

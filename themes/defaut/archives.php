@@ -1,31 +1,17 @@
-<?php include 'header.php'; ?>
+<?php
+if (!defined('PLX_ROOT')) {
+    exit;
+}
 
-	<main class="main">
-
-		<div class="container">
-
-			<div class="grid">
-
-				<div class="content col med-9">
-
+include 'header.php';
+?>
+<!-- begin of archives.php -->
 					<ul class="repertory menu breadcrumb">
 						<li><a href="<?php $plxShow->racine() ?>"><?php $plxShow->lang('HOME'); ?></a></li>
-						<li><?php echo plxDate::formatDate($plxShow->plxMotor->cible, $plxShow->lang('ARCHIVES').' #month #num_year(4)') ?></li>
+						<li><?= plxDate::formatDate($plxShow->plxMotor->cible, $plxShow->getLang('ARCHIVES') . ' #month #num_year(4)') ?></li>
 					</ul>
-
-<?php include 'posts.php' ?>
-
-					<?php $plxShow->artFeed('rss', $plxShow->catId(), '<span><a class="rss" href="#feedUrl" title="#feedTitle">#feedName</a></span>'); ?>
-
-				</div>
-
-				<?php include 'sidebar.php'; ?>
-
-			</div>
-
-		</div>
-
-	</main>
+<!-- end of archives.php -->
 
 <?php
+include 'posts.php';
 include 'footer.php';

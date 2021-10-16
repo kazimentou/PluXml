@@ -402,18 +402,22 @@ class plxMotor
             } # Création objet captcha
 
             # Gestion des articles précédent, suivant, dans le mode précèdent (home, categorie, archives, tags)
-            if(!empty($_SESSION['previous'])) {
+            if (!empty($_SESSION['previous'])) {
                 # On récupère un tableau indexé des articles
                 $aFiles = $this->plxGlob_arts->query($_SESSION['previous']['motif'], 'art', $_SESSION['previous']['tri'], 0, false, 'before');
                 $artIds = array();
-                foreach($aFiles as $key=>$value) {
-                    if(substr($value, 0, 4) == $this->cible) {
-                        if($key > 0) {
-                            if($key > 1) { $artIds['first'] = $aFiles[0]; }
+                foreach ($aFiles as $key=>$value) {
+                    if (substr($value, 0, 4) == $this->cible) {
+                        if ($key > 0) {
+                            if ($key > 1) {
+                                $artIds['first'] = $aFiles[0];
+                            }
                             $artIds['prev'] = $aFiles[$key - 1];
                         }
-                        if($key < count($aFiles) - 1) {
-                            if($key < count($aFiles) - 2) { $artIds['last'] = $aFiles[count($aFiles) - 1]; }
+                        if ($key < count($aFiles) - 1) {
+                            if ($key < count($aFiles) - 2) {
+                                $artIds['last'] = $aFiles[count($aFiles) - 1];
+                            }
                             $artIds['next'] = $aFiles[$key + 1];
                         }
                         $_SESSION['previous']['position'] = $key + 1;
@@ -423,7 +427,6 @@ class plxMotor
                 }
                 $_SESSION['previous']['artIds'] = $artIds;
             }
-
         } elseif ($this->mode == 'preview') {
 			$this->mode='article';
 			$this->plxRecord_arts = new plxRecord($_SESSION['preview']);

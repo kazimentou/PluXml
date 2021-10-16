@@ -1,7 +1,45 @@
-<?php if (!defined('PLX_ROOT')) {
+<?php
+if (!defined('PLX_ROOT')) {
     exit;
-} ?>
+}
+
+if (version_compare(PLX_VERSION, '6.0.0', '<')) {
+    // Pas d'auto-loader pour les classes PluXml
+    include_once PLX_CORE . 'lib/class.plx.token.php';
+    if ($plxShow->plxMotor->aConf['capcha']) {
+        include_once PLX_CORE . 'lib/class.plx.capcha.php';
+    }
+}
+
+function printCapcha()
+{
+    global $plxShow;
+
+    if ($plxShow->plxMotor->aConf['capcha']) {
+        // Hack against PluXml: $plxShow->plxMotor->plxCapcha est instancié uniquement en mode article.
+        if (!class_exists('plxCapcha')) {
+            include_once PLX_CORE . 'lib/class.plx.capcha.php';
+        }
+
+        if (empty($plxShow->plxMotor->plxCapcha)) {
+            $plxShow->plxMotor->plxCapcha = new plxCapcha();
+        } ?>
+		<div>
+			<label for="id_rep"><strong><?php echo $plxShow->lang('ANTISPAM_WARNING') ?></strong> :</label>
+			<div class="capcha-challenge">
+				<p>
+					<?php $plxShow->capchaQ(); ?>
+				</p>
+				<input type="text" name="rep" id="id_rep" maxlength="1" class="antispam" autocomplete="off" required />
+			</div>
+		</div>
+<?php
+    }
+}
+
+?>
 <!DOCTYPE html>
+<!-- begin of header.php -->
 <html lang="<?php $plxShow->defaultLang() ?>">
 <head>
 	<meta charset="<?php $plxShow->charset('min'); ?>">
@@ -29,9 +67,9 @@
 
 		<div class="container">
 
-			<div class="grid">
+			<div>
 
-				<div class="brand col med-6 lrg-4">
+				<div class="brand">
 
 					<div>
 						<h1 class="no-margin heading-small"><?php $plxShow->mainTitle('link'); ?></h1>
@@ -40,7 +78,7 @@
 
 				</div>
 
-				<nav class="nav col med-6 lrg-8">
+				<nav class="nav">
 
 					<div class="responsive-menu">
 						<label for="menu"></label>
@@ -60,3 +98,13 @@
 	</header>
 
 	<div class="bg"></div>
+
+	<main class="main">
+
+		<div class="container">
+
+			<div class="grid">
+
+				<div class="content col <?= defined('FULL_WIDTH') ? '' : 'med-9' ?>">
+<!-- end of header.php -->
+
