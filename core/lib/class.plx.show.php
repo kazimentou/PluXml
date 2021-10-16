@@ -11,7 +11,7 @@ const PLX_SHOW = true;
 
 class plxShow
 {
-	const AUTHOR_PATTERN = '<li id="#user_id"><a href="#user_url" class="#user_status" title="#user_name">#user_name</a> (#art_nb)</li>';
+    public const AUTHOR_PATTERN = '<li id="#user_id"><a href="#user_url" class="#user_status" title="#user_name">#user_name</a> (#art_nb)</li>';
     public $plxMotor = false; # Objet plxMotor
     private $lang; # fichier de traduction du theme
 
@@ -202,7 +202,7 @@ class plxShow
 		# valeur par défaut
 		$subtitle = $this->plxMotor->aConf['title'];
 
-		switch($this->plxMotor->mode) {
+        switch ($this->plxMotor->mode) {
 			case 'article':
 				$title_htmltag = trim($this->plxMotor->plxRecord_arts->f('title_htmltag'));
 				$title = !empty($title_htmltag) ? $title_htmltag : $this->plxMotor->plxRecord_arts->f('title');
@@ -673,7 +673,7 @@ class plxShow
 			return $authorName;
 		}
 
-		if($link and !empty($author)) {
+        if ($link and !empty($author)) {
 			$href = 'index.php?user' . $authorId . '/' . md5($authorName);
 			echo '<a href="' . $this->plxMotor->urlRewrite($href) . '">' . $authorName . '</a>';
 		} else {
@@ -948,9 +948,9 @@ class plxShow
 			if (trim($idStr) != '' and is_numeric($idStr)) {
                 # Fil Rss des articles d'une catégorie
 				$id = str_pad($idStr, 3, '0', STR_PAD_LEFT);
-				switch($this->plxMotor->mode) {
+                switch ($this->plxMotor->mode) {
 					case 'categorie':
-						if (isset ($this->plxMotor->aCats[$id])) {
+                        if (isset($this->plxMotor->aCats[$id])) {
 							$replaces = array(
 								'#feedUrl'		=> $this->plxMotor->urlRewrite('feed.php?rss/categorie' . $idStr . '/' . $this->plxMotor->aCats[$id]['url']),
 								'#feedTitle'	=> L_ARTFEED_RSS_CATEGORY,
@@ -959,7 +959,7 @@ class plxShow
 						}
 						break;
 					case 'user':
-						if (isset ($this->plxMotor->aUsers[$id])) {
+                        if (isset($this->plxMotor->aUsers[$id])) {
 							$replaces = array(
 								'#feedUrl'		=> $this->plxMotor->urlRewrite('feed.php?rss/user' . $idStr . '/' . $this->plxMotor->aUsers[$id]['login']),
 								'#feedTitle'	=> L_ARTFEED_RSS_USER,
@@ -979,7 +979,7 @@ class plxShow
 				);
 			}
 
-			if(!empty($replaces)) {
+            if (!empty($replaces)) {
 				echo strtr($format, $replaces);
             }
         }
@@ -2024,7 +2024,6 @@ class plxShow
 	 **/
 	public function authorName($type = '')
 	{
-
 		if ($this->plxMotor->mode == 'user' and isset($this->plxMotor->aUsers[$this->plxMotor->cible])) {
 			$id = plxUtils::strCheck($this->plxMotor->cible);
 			$userName = $this->plxMotor->aUsers[$id]['name'];
@@ -2049,16 +2048,18 @@ class plxShow
 	public function authorList($format = self::AUTHOR_PATTERN, $include = '', $exclude = '', $sortMethod='')
 	{
 		# Hook Plugins
-		if (eval($this->plxMotor->plxPlugins->callHook('plxShowLastUserList'))) return;
+        if (eval($this->plxMotor->plxPlugins->callHook('plxShowLastUserList'))) {
+            return;
+        }
 
 		$motif = '#^\d{4}\.(?:home,|\d{3},)*(?:home|\d{3})(?:,\d{3})*\.\d{3}\.\d{12}\.[\w-]+\.xml$#';
 		# On trie les articles par date de publication
-		$arts = $this->plxMotor->plxGlob_arts->query($motif,'art','desc',0,false,'before');
+        $arts = $this->plxMotor->plxGlob_arts->query($motif, 'art', 'desc', 0, false, 'before');
 		$nbArts = array();
-		array_walk($arts, function($item) use(&$nbArts) {
-			if(preg_match('#.*\.(\d{3})\.(\d{12})\.[\w-]+\.xml$#', $item, $matches)) {
+        array_walk($arts, function ($item) use (&$nbArts) {
+            if (preg_match('#.*\.(\d{3})\.(\d{12})\.[\w-]+\.xml$#', $item, $matches)) {
 				$userId = $matches[1];
-				if(!isset($nbArts[$userId])) {
+                if (!isset($nbArts[$userId])) {
 					$nbArts[$userId] = 1;
 				} else {
 					$nbArts[$userId]++;
@@ -2067,24 +2068,24 @@ class plxShow
 		});
 
 		# On trie les auteurs
-		switch($sortMethod) {
+        switch ($sortMethod) {
 			case 'name':
 				# tri par prénom, nom des auteurs
 				$users = $this->plxMotor->aUsers;
-				uksort($nbArts, function($a, $b) use($users) {
+                uksort($nbArts, function ($a, $b) use ($users) {
 					return strcasecmp($users[$a]['name'], $users[$b]['name']);
 				});
 				break;
 			case 'lastname':
 				# tri par nom (lastname) des auteurs
 				$users = array_map(
-					function($item) {
+                    function ($item) {
 						$item['lastname'] = preg_replace('#.*\s+(\w[\w-]*)$#', '$1', $item['name']);
 						return $item;
 					},
 					$this->plxMotor->aUsers
 				);
-				uksort($nbArts, function($a, $b) use($users) {
+                uksort($nbArts, function ($a, $b) use ($users) {
 					return strcasecmp($users[$a]['lastname'], $users[$b]['lastname']);
 				});
 				break;
@@ -2417,7 +2418,7 @@ class plxShow
                 $tag = plxUtils::strCheck($this->plxMotor->cible);
 				return $this->urlRewrite('feed.php?rss/tag/' . plxUtils::strCheck($tag));
                 break;
-            default :
+            default:
 		return $this->urlRewrite('feed.php?rss');
         }
     }

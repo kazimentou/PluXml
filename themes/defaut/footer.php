@@ -15,6 +15,7 @@
 				<a rel="nofollow" href="<?php $plxShow->urlRewrite('core/admin/'); ?>" title="<?php $plxShow->lang('ADMINISTRATION') ?>"><?php $plxShow->lang('ADMINISTRATION') ?></a>
 			</p>
 			<ul class="menu">
+<<<<<<< HEAD
 <?php
 if ($plxShow->plxMotor->aConf['enable_rss']) {
     ?>
