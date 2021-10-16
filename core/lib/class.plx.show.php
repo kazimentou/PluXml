@@ -13,6 +13,7 @@ class plxShow
 {
     public const AUTHOR_PATTERN = '<li id="#user_id"><a href="#user_url" class="#user_status" title="#user_name">#user_name</a> (#art_nb)</li>';
     public $plxMotor = false; # Objet plxMotor
+    public $authorCount = 0;
     private $lang; # fichier de traduction du theme
 
     private static $instance = null;
@@ -48,6 +49,14 @@ class plxShow
             include $langfile;
             $this->lang = $LANG; # $LANG = tableau contenant les traductions présentes dans le fichier de langue
         }
+
+        $authors = array_filter(
+            $this->plxMotor->aUsers,
+            function ($value) {
+                return (empty($value['delete']) and !empty($value['active']) and $value['articles'] > 0);
+            }
+        );
+        $this->authorCount = count($authors);
 
         # Hook Plugins
         eval($this->plxMotor->plxPlugins->callHook('plxShowConstruct'));

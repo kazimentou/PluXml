@@ -86,7 +86,7 @@
 			<?php endif; ?>
 
 			<div class="grid">
-				<div class="col">
+				<div class="col sml-12">
 					<input type="hidden" id="id_parent" name="parent" value="<?php $plxShow->comGet('parent', ''); ?>" />
 					<input class="blue" type="submit" value="<?php $plxShow->lang('SEND') ?>" />
 				</div>
