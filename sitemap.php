@@ -36,7 +36,7 @@ if (eval($plxMotor->plxPlugins->callHook('SitemapBegin'))) {
 }
 
 # chargement du fichier de langue
-loadLang(PLX_CORE.'lang/'.$lang.'/core.php');
+loadLang(PLX_CORE . 'lang/' . $lang . '/core.php');
 
 # On démarre la bufferisation
 ob_start();
