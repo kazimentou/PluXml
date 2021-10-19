@@ -802,6 +802,11 @@ body.slideshow #slideshow.no-gallery {
 	--tabs-container-offset: 3rem;
 }
 
+.sitemap .tab-content.level-2 {
+	border-top: 3px solid var(--color1);
+	margin-top: 3px;
+}
+
 /* -------------- static-download.php -------------- */
 
 [data-download] table {

@@ -1780,7 +1780,8 @@ class plxShow
         }
         # On génère un nouvel objet plxGlob
         $plxGlob_stats = plxGlob::getInstance(PLX_ROOT . $this->plxMotor->aConf['racine_statiques'], true, 'statiques');
-        if (is_numeric($id)) # inclusion à partir de l'id de la page
+        if (is_numeric($id)) {
+            # inclusion à partir de l'id de la page
             $regx = '/^' . str_pad($id, 3, '0', STR_PAD_LEFT) . '.[a-z0-9-]+.php$/';
         } else { # inclusion à partir du titre de la page
             $url = plxUtils::urlify($id);
