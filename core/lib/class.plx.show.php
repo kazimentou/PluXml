@@ -20,8 +20,6 @@ class plxShow
     );
 
     public const META_TAGS = array('description', 'keywords', 'author');
-
-
     public const AUTHOR_PATTERN = '<li id="#user_id"><a href="#user_url" class="#user_status" title="#user_name">#user_name</a> (#art_nb)</li>';
     public $plxMotor = false; # Objet plxMotor
     public $authorCount = 0;
@@ -221,7 +219,7 @@ class plxShow
 
         # valeur par défaut
         $subtitle = $this->plxMotor->aConf['title'];
-
+        $title_htmltag = $this->plxMotor->aConf['title'];
         switch ($this->plxMotor->mode) {
             case 'article':
                 $title_htmltag = trim($this->plxMotor->plxRecord_arts->f('title_htmltag'));
@@ -238,8 +236,8 @@ class plxShow
                 $title = $this->plxMotor->aUsers[$this->plxMotor->cible]['name'];
                 break;
             case 'home':
-            $title = $this->plxMotor->aConf['title'];
-            $subtitle = $this->plxMotor->aConf['description'];
+                $title = $this->plxMotor->aConf['title'];
+                $subtitle = $this->plxMotor->aConf['description'];
                 break;
             case 'static':
                 $title_htmltag = trim($this->plxMotor->aStats[$this->plxMotor->cible]['title_htmltag']);
@@ -253,11 +251,11 @@ class plxShow
                 $title = L_ARCHIVES . $day . $month . $year;
                 break;
             case 'erreur':
-            $title = $this->plxMotor->plxErreur->getMessage();
+                $title = $this->plxMotor->plxErreur->getMessage();
                 break;
             default:
-            $title = $this->plxMotor->aConf['title'];
-            $subtitle = $this->plxMotor->aConf['description'];
+                $title = $this->plxMotor->aConf['title'];
+                $subtitle = $this->plxMotor->aConf['description'];
         }
 
         if (preg_match('/' . $this->plxMotor->mode . '\s*=\s*(.*?)\s*(' . $sep . '|$)/i', $format, $captures)) {
@@ -265,11 +263,14 @@ class plxShow
         } else {
             $format = '#title - #subtitle';
         }
-        $txt = strtr($format, array(
-            '#title'	=> trim($title),
-            '#subtitle'	=> trim($subtitle),
+        echo plxUtils::strCheck(trim(
+            strtr($fmt, array(
+                '#title'			=> trim($title),
+                '#subtitle'			=> trim($subtitle),
+                '#title_htmltag'	=> trim($title_htmltag),
+            )),
+            " \t\n\r\0\x0B-."
         ));
-        echo plxUtils::strCheck(trim($txt, ' - '));
     }
 
     /**
@@ -636,7 +637,7 @@ class plxShow
      * @param bool $article si vrai, #img_url pointe sur l'article à la place de l'image
      * @return    bool|string
      * @scope    home,categorie,article,tags,archives
-     * @author    Stephane F, Thatoo, J.P. Pourrez (bazooka07))
+     * @author    Stephane F, Thatoo, J.P. Pourrez (bazooka07)
      **/
     public function artThumbnail($format = '<a href="#img_url"><img class="art_thumbnail" src="#img_thumb_url" alt="#img_alt" title="#img_title" /></a>', $echo = true, $article = false)
     {
@@ -826,7 +827,7 @@ class plxShow
      * @scope    home,categorie,article,tags,archives
      * @author    Stephane F
      **/
-    public function artTags($format = '<a class="#tag_status" href="#tag_url" title="#tag_name">#tag_name</a>', $separator = ',')
+    public function artTags($format = '<a class="#tag_status" href="#tag_url" title="#tag_name">#tag_name</a>', $separator = ', ')
     {
         # Hook Plugins
         if (eval($this->plxMotor->plxPlugins->callHook('plxShowArtTags'))) {
@@ -1151,7 +1152,7 @@ class plxShow
                 # Mise en forme de la liste des catégories
                 $catList = array();
                 $catIds = explode(',', $art['categorie']);
-                foreach ($catIds as $idx => $catId) {
+                foreach ($catIds as $catId) {
                     if (isset($this->plxMotor->aCats[$catId])) { # La catégorie existe
                         $catName = plxUtils::strCheck($this->plxMotor->aCats[$catId]['name']);
                         $catUrl = $this->plxMotor->aCats[$catId]['url'];
@@ -1190,8 +1191,8 @@ class plxShow
                 # Hook plugin
                 eval($this->plxMotor->plxPlugins->callHook('plxShowLastArtListContent'));
 
-                # On genère notre ligne
-                echo $row;
+                # On génère notre ligne
+                echo $row . PHP_EOL;
             }
         }
     }
@@ -1368,9 +1369,10 @@ class plxShow
                 default:
                     $color = 'red';
             }
-            $row = str_replace('#com_message', $_SESSION['msgcom'], $format);
-            $row = str_replace('#com_class', 'alert ' . $color, $row);
-            echo $row;
+            echo strtr($format, array(
+                '#com_message' => $_SESSION['msgcom'],
+                '#com_class' => 'alert ' . $color
+            ));
             unset($_SESSION['msgcom']);
             return true;
         }
@@ -1435,7 +1437,7 @@ class plxShow
      * @param art_id    id de l'article cible (24,3)
      * @param cat_ids    liste des categories pour filtrer les derniers commentaires (sous la forme 001|002)
      * @scope    global
-     * @author    Florent MONTHEL, Stephane F
+     * @author    Florent MONTHEL, Stephane F, Jean-Pierre Pourrez "bazooka07"
      **/
     public function lastComList($format = '<li><a href="#com_url">#com_author L_SAID :</a><br/>#com_content(50)</li>', $max = 5, $art_id = '', $cat_ids = '')
     {
@@ -1533,14 +1535,13 @@ class plxShow
         $home = ((empty($this->plxMotor->get) or preg_match('/^page\d*/', $this->plxMotor->get)) and basename($_SERVER['SCRIPT_NAME']) == 'index.php');
         # Si on a la variable extra, on affiche un lien vers la page d'accueil (avec $extra comme nom)
         if ($extra != '') {
-            $stat = strtr($format, array(
-                '#static_id'		=> 'static-home',
-                '#static_class'		=> 'static menu',
-                '#static_url'		=> $this->plxMotor->urlRewrite(),
-                '#static_name'		=> plxUtils::strCheck($extra),
-                '#static_status'	=> $home ? 'active' : 'noactive',
+            $menus[][] = strtr($format, array(
+                '#static_id'     => 'static-home',
+                '#static_class'  => 'static menu',
+                '#static_url'    => $this->plxMotor->urlRewrite(),
+                '#static_name'   => plxUtils::strCheck($extra),
+                '#static_status' => $home ? 'active' : 'noactive',
             ));
-            $menus[][] = $stat;
         }
 
         $group_active = "";
@@ -1623,6 +1624,7 @@ class plxShow
 <?php
                 }
             }
+            echo PHP_EOL;
         }
     }
 
@@ -2043,6 +2045,11 @@ class plxShow
         if (eval($this->plxMotor->plxPlugins->callHook('plxShowCapchaQ'))) {
             return;
         }
+
+        if (empty($this->plxMotor->plxCapcha)) {
+            $this->plxMotor->plxCapcha = new plxCapcha(); # Création objet captcha
+        }
+
         echo $this->plxMotor->plxCapcha->q(); ?>
         <input type="hidden" name="capcha_token" value="<?= $_SESSION['capcha_token'] ?>"/>
         <?php
@@ -2119,10 +2126,11 @@ class plxShow
             if ($tag == '' and $this->plxMotor->mode == 'tags') {
                 $tag = $this->plxMotor->cible;
             }
-            $result = str_replace('#feedUrl', $this->plxMotor->urlRewrite('feed.php?rss/tag/' . plxUtils::strCheck($tag)), $format);
-            $result = str_replace('#feedTitle', L_ARTFEED_RSS_TAG, $result);
-            $result = str_replace('#feedName', L_ARTFEED_RSS_TAG, $result);
-            echo $result;
+            echo strtr($format, array(
+                '#feedUrl' => $this->plxMotor->urlRewrite('feed.php?rss/tag/' . plxUtils::strCheck($tag)),
+                '#feedTitle' => L_ARTFEED_RSS_TAG,
+                '#feedName' => L_ARTFEED_RSS_TAG
+            ));
         }
     }
 
@@ -2223,17 +2231,17 @@ class plxShow
             $id = 0;
             foreach ($counters as $tag => $counter) {
                 $url = plxUtils::urlify($tag);
-                $status = 'noactive';
                 switch ($mode) {
                     case 'article':
-                        if (in_array($tag, $artTags)) {
-                            $status = 'active';
-                        }
+                        $status = (in_array($tag, $artTags)) ? 'active' : 'noactive';
                         break;
                     case 'tags':
                         $status = ($this->plxMotor->cible == $url) ? 'active' : 'noactive';
+                        break;
+                    default:
+                        $status = '';
                 }
-                $replaces = array(
+                echo strtr($format, array(
                     '#tag_id' => 'tag-' . $id++,
                     '#tag_size' => 'tag-size-' . (1 + intval($counter / $max_value)), # taille des caractères
                     '#tag_count' => $counter,
@@ -2242,8 +2250,7 @@ class plxShow
                     '#tag_url' => $this->plxMotor->urlRewrite('?tag/' . $url),
                     '#tag_name' => plxUtils::strCheck($tag),
                     '#tag_status' => $status
-                );
-                echo str_replace(array_keys($replaces), array_values($replaces), $format);
+                )) . PHP_EOL;
             }
         }
     }
@@ -2417,7 +2424,7 @@ class plxShow
                     '#archives_nbart' => $nbarts,
                     '#archives_status' => (($active) ? 'active' : 'noactive'),
                     '#archives_selected' => (($active) ? 'selected' : '')
-                ));
+                )) . PHP_EOL;
             }
 
             # Affichage annuel
@@ -2434,7 +2441,7 @@ class plxShow
                     '#archives_nbart' => $nbarts,
                     '#archives_status' => ($active) ? 'active' : 'noactive',
                     '#archives_selected' => ($active) ? 'selected' : ''
-                ));
+                )) . PHP_EOL;
             }
 
             # Total des articles
@@ -2452,7 +2459,7 @@ class plxShow
                     '#archives_nbart' => $total,
                     '#archives_status' => ($active) ? 'active' : 'noactive',
                     '#archives_selected' => ($active) ? 'selected' : ''
-                ));
+                )) . PHP_EOL;
             }
         }
     }

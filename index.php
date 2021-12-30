@@ -1,33 +1,27 @@
 <?php
 
 const PLX_ROOT = './';
-const PLX_CORE = PLX_ROOT . 'core/';
-
-include PLX_ROOT . 'config.php';
-include PLX_CORE . 'lib/config.php';
-
-# On verifie que PluXml est installé
-if (!file_exists(path('XMLFILE_PARAMETERS'))) {
-    header('Location: ' . PLX_ROOT . 'install.php');
-    exit;
-}
+include PLX_ROOT . 'core/lib/config.php'; # Autochargement des classes
 
 # On démarre la session
-session_set_cookie_params(0, '/', $_SERVER['SERVER_NAME'], isset($_SERVER['HTTPS']), true);
-session_start();
+const SESSION_LIFETIME = 7200;
 
-# On inclut les librairies nécessaires
-include PLX_CORE . 'lib/class.plx.date.php';
-include PLX_CORE . 'lib/class.plx.glob.php';
-include PLX_CORE . 'lib/class.plx.utils.php';
-include PLX_CORE . 'lib/class.plx.capcha.php';
-include PLX_CORE . 'lib/class.plx.erreur.php';
-include PLX_CORE . 'lib/class.plx.record.php';
-include PLX_CORE . 'lib/class.plx.motor.php';
-include PLX_CORE . 'lib/class.plx.feed.php';
-include PLX_CORE . 'lib/class.plx.show.php';
-include PLX_CORE . 'lib/class.plx.encrypt.php';
-include PLX_CORE . 'lib/class.plx.plugins.php';
+# use session_set_cookie_params() before session_start() - See https://www.php.net
+$path1 = preg_replace('@/(core|plugins)/(.*)$@', '/', dirname($_SERVER['SCRIPT_NAME']));
+if (version_compare(phpversion(), '7.3.1', '>=')) {
+    session_set_cookie_params(array(
+        'lifetime'	=> SESSION_LIFETIME,
+        'path'		=> $path1,
+        'domain'	=> $_SERVER['SERVER_NAME'],
+        'secure'	=> isset($_SERVER["HTTPS"]),
+        'httponly'	=> true,
+        'samesite'	=> 'Strict',
+    ));
+} else {
+    # No support for samesite option
+    session_set_cookie_params(SESSION_LIFETIME, $path1, $_SERVER['SERVER_NAME'], isset($_SERVER["HTTPS"]), true);
+}
+session_start();
 
 # Creation de l'objet principal et lancement du traitement
 $plxMotor = plxMotor::getInstance();
@@ -49,25 +43,47 @@ $plxShow = plxShow::getInstance();
 
 eval($plxMotor->plxPlugins->callHook('IndexBegin')); # Hook Plugins
 
+# Traitements du thème choisi. S'il n'existe pas, on se replie sur le thème "defaut" s'il existe, sinon arrêt immédiat.
+if (empty($plxMotor->style) or !is_dir(PLX_ROOT . $plxMotor->aConf['racine_themes'] . $plxMotor->style)) {
+    if (!is_dir(PLX_ROOT . $plxMotor->aConf['racine_themes'] . 'defaut')) {
+        header('Content-Type: text/plain; charset=' . PLX_CHARSET);
+        echo L_ERR_THEME_NOTFOUND . ' (' . PLX_ROOT . $plxMotor->aConf['racine_themes'] . $plxMotor->style . ') !';
+        exit;
+    }
+
+    # fallback si thème perso pas trouvé
+    $plxMotor->style = 'defaut';
+}
+
+# On teste si le template existe
+$filename = PLX_ROOT . $plxMotor->aConf['racine_themes'] . $plxMotor->style . '/' . $plxMotor->template;
+if (!file_exists($filename)) {
+    if (preg_match('#^(.*/(?:article|categorie|tags|statique)).*(\.php)$#', $filename, $matches)) {
+        # On essaie avec un template basique
+        $filename = '$1$2';
+        $missing = !file_exists($filename);
+    } else {
+        $missing = true;
+    }
+
+    if ($missing) {
+        header('Content-Type: text/plain; charset=' . PLX_CHARSET);
+        echo L_ERR_FILE_NOTFOUND . ' (' . $filename . ') !';
+        exit;
+    }
+}
+
 # On démarre la bufferisation
 ob_start();
 ob_implicit_flush(0);
 
-# Traitements du thème
-if ($plxMotor->style == '' or !is_dir(PLX_ROOT . $plxMotor->aConf['racine_themes'] . $plxMotor->style)) {
-    header('Content-Type: text/plain; charset=' . PLX_CHARSET);
-    echo L_ERR_THEME_NOTFOUND . ' (' . PLX_ROOT . $plxMotor->aConf['racine_themes'] . $plxMotor->style . ') !';
-} elseif (file_exists(PLX_ROOT . $plxMotor->aConf['racine_themes'] . $plxMotor->style . '/' . $plxMotor->template)) {
-    # On impose le charset
-    header('Content-Type: text/html; charset=' . PLX_CHARSET);
-    # Insertion du template
-    include(PLX_ROOT . $plxMotor->aConf['racine_themes'] . $plxMotor->style . '/' . $plxMotor->template);
-} else {
-    header('Content-Type: text/plain; charset=' . PLX_CHARSET);
-    echo L_ERR_FILE_NOTFOUND . ' (' . PLX_ROOT . $plxMotor->aConf['racine_themes'] . $plxMotor->style . '/' . $plxMotor->template . ') !';
-}
+# On impose le charset
+header('Content-Type: text/html; charset=' . PLX_CHARSET);
 
-# Récuperation de la bufférisation
+# Insertion du template
+include(PLX_ROOT . $plxMotor->aConf['racine_themes'] . $plxMotor->style . '/' . $plxMotor->template);
+
+# Récupération de la bufférisation
 $output = ob_get_clean();
 
 # Hooks spécifiques au thème

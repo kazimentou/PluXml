@@ -4,7 +4,7 @@
  * Classe plxUtils rassemblant les fonctions utiles à PluXml
  *
  * @package PLX
- * @author	Florent MONTHEL et Stephane F
+ * @author  Florent MONTHEL et Stephane F
  **/
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -19,20 +19,34 @@ if (file_exists($autoload)) {
 
 class plxUtils
 {
+    public const THUMB_WIDTH = 48;
+    public const THUMB_HEIGHT = 48;
     public const REMOVE_WORDS = array(
         'en' => 'an?|as|at|before|but|by|for|from|is|in(?:to)?|like|off?on(?:to)?|per|since|than|the|this|that|to|up|via|with',
         'de' => 'das|der|die|fur|am',
         'fr' => 'a|de?|des|du|e?n|la|le|une?|vers'
     );
+    public const DELTA_PAGINATION = 3;
+    public const TEMPLATE_MSG = '<li><span class="#color">#symbol #message</span></li>' . PHP_EOL;
+    public const TEST_FUNCTIONS = array(
+          'mail'                    => array(L_MAIL_NOT_AVAILABLE, L_MAIL_AVAILABLE),
+          'imagecreatetruecolor'    => 'GD',
+          'simplexml_load_file'     => 'SIMPLEXML',
+          'xml_parser_create'       => 'XML',
+          'curl_exec'               => 'CURL',
+          'json_decode'             => 'JSON',
+    );
+    public const CLASSNAMES = array('warning' ,'success');
+    public const SYMBOLS = array('&#10007;', '&#10004;');
 
     /**
      * Méthode qui vérifie si une variable est définie.
      * Renvoie la valeur de la variable ou la valeur par défaut passée en paramètre
      *
-     * @param	var			string	variable à tester
-     * @param	default		string	valeur par défaut
-     * @return	string		valeur de la variable ou valeur par défaut passée en paramètre
-    */
+     * @param     var           string    variable à tester
+     * @param     default       string    valeur par défaut
+     * @return    string        valeur de la variable ou valeur par défaut passée en paramètre
+     */
     public static function getValue(&$var, $default='')
     {
         return isset($var) ? $var : $default;
@@ -85,14 +99,14 @@ class plxUtils
     /**
      * Méthode qui supprime les antislashs
      *
-     * @param	content				variable ou tableau
-     * @return	array ou string		tableau ou variable avec les antislashs supprimés
+     * @param    content           variable ou tableau
+     * @return   array ou string   tableau ou variable avec les antislashs supprimés
      * @author  J.P. Pourrez aka bazooka07
      **/
     public static function unSlash($content)
     {
 
-         # On traite un tableau
+        # On traite un tableau
         if (is_array($content)) {
             $new_content = array();
             foreach ($content as $k=>$v) { # On parcourt le tableau
@@ -115,8 +129,8 @@ class plxUtils
     /**
      * Méthode qui vérifie le bon formatage d'une adresse email
      *
-     * @param	mail		adresse email à vérifier
-     * @return	boolean		vrai si adresse email bien formatée
+     * @param   mail    adresse email à vérifier
+     * @return  boolean vrai si adresse email bien formatée
      **/
     public static function checkMail($mail)
     {
@@ -129,14 +143,14 @@ class plxUtils
     /**
      * Méthode qui vérifie si l'url passée en paramètre correspond à un format valide
      *
-     * @param	site		url d'un site
-     * @return	boolean		vrai si l'url est bien formatée
+     * @param    site        url d'un site
+     * @return   boolean     vrai si l'url est bien formatée
      **/
     public static function checkSite(&$site, $reset=true)
     {
         $site = preg_replace('#([\'"].*)#', '', $site);
 
-        if (isset($site[0]) and $site[0]=='?') {
+        if (isset($site[0]) and $site[0] == '?') {
             return true;
         } # url interne commençant par ?
         # On vérifie le site via une expression régulière
@@ -146,7 +160,7 @@ class plxUtils
             return true;
         } else {
             if ($reset) {
-                $site='';
+                $site = '';
             }
             return false;
         }
@@ -796,7 +810,7 @@ class plxUtils
                 break;
             default:
                 return false; # Unsupported format
-            break;
+                break;
         }
 
         # Verify import
@@ -805,7 +819,7 @@ class plxUtils
         }
 
         # Calculate measurements (square crop)
-        if ($thumb_width==$thumb_height) {
+        if ($thumb_width == $thumb_height) {
             if ($image[0] > $image[1]) {
                 # For landscape images
                 $x_offset = ($image[0] - $image[1]) / 2;
@@ -853,7 +867,7 @@ class plxUtils
                     break;
                 default:
                     return false;# Unsupported format
-                break;
+                    break;
             }
         } else {
             return false;
