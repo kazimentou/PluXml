@@ -160,13 +160,14 @@ if (isset($_GET["del"]) and $_GET["del"]=="install") {
 		<p class="alert red"><?= sprintf(L_WARNING_INSTALLATION_FILE, $urlDeleteInstall) ?></p>
 <?php endif; ?>
 <?php
-        if (is_file(PLX_ROOT.'install.php')) {
         if (
 			$_SESSION['profil']==PROFIL_ADMIN and
             is_file(PLX_ROOT . 'install.php') and
 			preg_match('#^(?:parametres_|index)#', basename($_SERVER['SCRIPT_NAME'], '.php'))
 		) {
-            echo '<p class="alert red">' . L_WARNING_INSTALLATION_FILE . '</p>' . "\n";
+            ?>
+		<p class="alert red"><?= sprintf(L_WARNING_INSTALLATION_FILE, $url) ?></p>
+<?php
         }
 	plxMsg::Display();
 	# Hook Plugins

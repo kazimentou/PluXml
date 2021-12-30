@@ -20,107 +20,107 @@ $plxAdmin->checkProfil(PROFIL_ADMIN, PROFIL_MANAGER, PROFIL_MODERATOR);
 
 # Interdire de l'accès à la page si les commentaires sont désactivés
 if (!$plxAdmin->aConf['allow_com']) {
-	header('Location: index.php');
-	exit;
+    header('Location: index.php');
+    exit;
 }
 
 # validation de l'id de l'article si passé en paramètre avec $_GET['a']
 if (isset($_GET['a'])) {
     if (!preg_match('/^_?([0-9]{4})$/', $_GET['a'], $capture)) {
-		plxMsg::Error(L_ERR_UNKNOWN_ARTICLE);
-		header('Location: index.php');
-		exit;
-	} else {
-		$artId = $capture[1];
-	}
+        plxMsg::Error(L_ERR_UNKNOWN_ARTICLE);
+        header('Location: index.php');
+        exit;
+    } else {
+        $artId = $capture[1];
+    }
 }
 # validation de l'id de l'article si passé en paramètre avec $_GET['c']
 if (isset($_GET['c'])) {
     if (!preg_match('/^_?([0-9]{4}).(.*)$/', $_GET['c'], $capture)) {
-		plxMsg::Error(L_ERR_UNKNOWN_ARTICLE);
-		header('Location: index.php');
-		exit;
-	} else {
-		$artId = $capture[1];
-	}
+        plxMsg::Error(L_ERR_UNKNOWN_ARTICLE);
+        header('Location: index.php');
+        exit;
+    } else {
+        $artId = $capture[1];
+    }
 }
 
 # On va checker le mode (répondre ou écrire)
 if (!empty($_GET['c'])) { # Mode "answer"
-	# On check que le commentaire existe et est "online"
+    # On check que le commentaire existe et est "online"
     if (!$plxAdmin->getCommentaires('/^' . plxUtils::nullbyteRemove($_GET['c']) . '.xml$/', '', 0, 1, 'all')) {
-		# On redirige
-		plxMsg::Error(L_ERR_ANSWER_UNKNOWN_COMMENT);
+        # On redirige
+        plxMsg::Error(L_ERR_ANSWER_UNKNOWN_COMMENT);
         header('Location: comments.php' . (!empty($_GET['a']) ? '?a=' . $_GET['a'] : ''));
-		exit;
-	}
-	# Commentaire offline
+        exit;
+    }
+    # Commentaire offline
     if (preg_match('/^_/', $_GET['c'])) {
-		# On redirige
-		plxMsg::Error(L_ERR_ANSWER_OFFLINE_COMMENT);
+        # On redirige
+        plxMsg::Error(L_ERR_ANSWER_OFFLINE_COMMENT);
         header('Location: comments.php' . (!empty($_GET['a']) ? '?a=' . $_GET['a'] : ''));
-		exit;
-	}
-	# On va rechercher notre article
+        exit;
+    }
+    # On va rechercher notre article
     if (($aFile = $plxAdmin->plxGlob_arts->query('/^' . $artId . '.(.+).xml$/', '', 'sort', 0, 1)) == false) { # Article inexistant
-		plxMsg::Error(L_ERR_COMMENT_UNKNOWN_ARTICLE);
-		header('Location: index.php');
-		exit;
-	}
-	# Variables de traitement
+        plxMsg::Error(L_ERR_COMMENT_UNKNOWN_ARTICLE);
+        header('Location: index.php');
+        exit;
+    }
+    # Variables de traitement
     if (!empty($_GET['a'])) {
         $get = 'c=' . $_GET['c'] . '&amp;a=' . $_GET['a'];
     } else {
         $get = 'c=' . $_GET['c'];
     }
     $aArt = $plxAdmin->parseArticle(PLX_ROOT . $plxAdmin->aConf['racine_articles'] . $aFile['0']);
-	# Variable du formulaire
-	$content = '';
+    # Variable du formulaire
+    $content = '';
     $article = '<a href="article.php?a=' . $aArt['numero'] . '" title="' . L_COMMENT_ARTICLE_LINKED_TITLE . '">';
-	$article .= plxUtils::strCheck($aArt['title']);
-	$article .= '</a>';
-	# Ok, on récupère les commentaires de l'article
+    $article .= plxUtils::strCheck($aArt['title']);
+    $article .= '</a>';
+    # Ok, on récupère les commentaires de l'article
     $plxAdmin->getCommentaires('/^' . str_replace('_', '', $artId) . '.(.*).xml$/', 'sort');
-	# Recherche du parent à partir de l'url
+    # Recherche du parent à partir de l'url
     if ($com = $plxAdmin->comInfoFromFilename($_GET['c'] . '.xml')) {
-		$parent = $com['comIdx'];
+        $parent = $com['comIdx'];
     } else {
-		$parent = '';
+        $parent = '';
     }
 } elseif (!empty($_GET['a'])) { # Mode "new"
-	# On check l'article si il existe bien
+    # On check l'article si il existe bien
     if (($aFile = $plxAdmin->plxGlob_arts->query('/^' . $_GET['a'] . '.(.+).xml$/', '', 'sort', 0, 1)) == false) {
-		plxMsg::Error(L_ERR_COMMENT_UNEXISTENT_ARTICLE);
-		header('Location: index.php');
-		exit;
-	}
-	# Variables de traitement
-	$artId = $_GET['a'];
+        plxMsg::Error(L_ERR_COMMENT_UNEXISTENT_ARTICLE);
+        header('Location: index.php');
+        exit;
+    }
+    # Variables de traitement
+    $artId = $_GET['a'];
     $get = 'a=' . $_GET['a'];
     $aArt = $plxAdmin->parseArticle(PLX_ROOT . $plxAdmin->aConf['racine_articles'] . $aFile['0']);
-	# Variable du formulaire
-	$content = '';
+    # Variable du formulaire
+    $content = '';
     $article = '<a href="article.php?a=' . $aArt['numero'] . '" title="' . L_COMMENT_ARTICLE_LINKED_TITLE . '">';
-	$article .= plxUtils::strCheck($aArt['title']);
-	$article .= '</a>';
-	$parent='';
-	# Ok, on récupère les commentaires de l'article
+    $article .= plxUtils::strCheck($aArt['title']);
+    $article .= '</a>';
+    $parent='';
+    # Ok, on récupère les commentaires de l'article
     $plxAdmin->getCommentaires('/^' . str_replace('_', '', $artId) . '.(.*).xml$/', 'sort');
 } else { # Mode inconnu
-	header('Location: index.php');
-	exit;
+    header('Location: index.php');
+    exit;
 }
 
 # On a validé le formulaire
 if (!empty($_POST) and !empty($_POST['content'])) {
-	# Création du commentaire
+    # Création du commentaire
     if (!$plxAdmin->newCommentaire(str_replace('_', '', $artId), $_POST)) { # Erreur
-		plxMsg::Error(L_ERR_CREATING_COMMENT);
-	} else { # Ok
-		plxMsg::Info(L_CREATING_COMMENT_SUCCESSFUL);
-	}
+        plxMsg::Error(L_ERR_CREATING_COMMENT);
+    } else { # Ok
+        plxMsg::Info(L_CREATING_COMMENT_SUCCESSFUL);
+    }
     header('Location: comment_new.php?a=' . $artId);
-	exit;
+    exit;
 }
 
 # On inclut le header
