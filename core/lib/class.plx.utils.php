@@ -221,31 +221,28 @@ class plxUtils
         } else {
 				$class .= ' readonly';
         }
-		}
-?>
+        } ?>
         <select <?= $id ?> name="<?= $name ?>" <?= empty($class) ? ' class="' . $class . '"' : '' ?>>
 
 <?php
         foreach ($array as $a => $b) {
             if (is_array($b)) {
-?>
+                ?>
 			<optgroup label="<?= $a ?>">
 <?php
                 foreach ($b as $c=>$d) {
-?>
+                    ?>
                 <option value="<?= $c ?>" <?= ($c == $selected) ? 'selected="selected"' : '' ?>><?= $d ?></option>
 <?php
-                }
-?>
+                } ?>
 			</optgroup>
 <?php
                 } else {
-?>
+                ?>
                 <option value="<?= $a ?>" <?= (strval($a) == $selected) ? 'selected="selected"' : '' ?>><?= $b ?></option>
 <?php
 		}
-        }
-?>
+        } ?>
         </select>
 <?php
 	}

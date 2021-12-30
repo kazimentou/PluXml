@@ -219,56 +219,56 @@ class plxShow
             return;
         }
 
-		# valeur par défaut
-		$subtitle = $this->plxMotor->aConf['title'];
+        # valeur par défaut
+        $subtitle = $this->plxMotor->aConf['title'];
 
         switch ($this->plxMotor->mode) {
-			case 'article':
-				$title_htmltag = trim($this->plxMotor->plxRecord_arts->f('title_htmltag'));
-				$title = !empty($title_htmltag) ? $title_htmltag : $this->plxMotor->plxRecord_arts->f('title');
-				break;
-			case 'categorie':
-				$title_htmltag = trim($this->plxMotor->aCats[$this->plxMotor->cible]['title_htmltag']);
-				$title = !empty($title_htmltag) ? $title_htmltag : $this->plxMotor->aCats[$this->plxMotor->cible]['name'];
-				break;
-			case 'tags':
-				$title = L_PAGETITLE_TAG . ' ' . $this->plxMotor->cibleName;
-				break;
-			case 'user':
-				$title = $this->plxMotor->aUsers[$this->plxMotor->cible]['name'];
-				break;
-			case 'home':
+            case 'article':
+                $title_htmltag = trim($this->plxMotor->plxRecord_arts->f('title_htmltag'));
+                $title = !empty($title_htmltag) ? $title_htmltag : $this->plxMotor->plxRecord_arts->f('title');
+                break;
+            case 'categorie':
+                $title_htmltag = trim($this->plxMotor->aCats[$this->plxMotor->cible]['title_htmltag']);
+                $title = !empty($title_htmltag) ? $title_htmltag : $this->plxMotor->aCats[$this->plxMotor->cible]['name'];
+                break;
+            case 'tags':
+                $title = L_PAGETITLE_TAG . ' ' . $this->plxMotor->cibleName;
+                break;
+            case 'user':
+                $title = $this->plxMotor->aUsers[$this->plxMotor->cible]['name'];
+                break;
+            case 'home':
             $title = $this->plxMotor->aConf['title'];
             $subtitle = $this->plxMotor->aConf['description'];
-				break;
-			case 'static':
-				$title_htmltag = trim($this->plxMotor->aStats[$this->plxMotor->cible]['title_htmltag']);
-				$title = !empty($title_htmltag) ? $title_htmltag : $this->plxMotor->aStats[$this->plxMotor->cible]['name'];
-				break;
-			case 'archives':
-				preg_match('/^(\d{4})(\d{2})?(\d{2})?/', $this->plxMotor->cible, $captures);
-				$year = !empty($captures[1]) ? ' ' . $captures[1] : '';
-				$month = !empty($captures[2]) ? ' ' . plxDate::getCalendar('month', $captures[2]) : '';
-				$day = !empty($captures[3]) ? ' ' . plxDate::getCalendar('day', $captures[3]) : '';
+                break;
+            case 'static':
+                $title_htmltag = trim($this->plxMotor->aStats[$this->plxMotor->cible]['title_htmltag']);
+                $title = !empty($title_htmltag) ? $title_htmltag : $this->plxMotor->aStats[$this->plxMotor->cible]['name'];
+                break;
+            case 'archives':
+                preg_match('/^(\d{4})(\d{2})?(\d{2})?/', $this->plxMotor->cible, $captures);
+                $year = !empty($captures[1]) ? ' ' . $captures[1] : '';
+                $month = !empty($captures[2]) ? ' ' . plxDate::getCalendar('month', $captures[2]) : '';
+                $day = !empty($captures[3]) ? ' ' . plxDate::getCalendar('day', $captures[3]) : '';
                 $title = L_ARCHIVES . $day . $month . $year;
-				break;
-			case 'erreur':
+                break;
+            case 'erreur':
             $title = $this->plxMotor->plxErreur->getMessage();
-				break;
-			default:
+                break;
+            default:
             $title = $this->plxMotor->aConf['title'];
             $subtitle = $this->plxMotor->aConf['description'];
         }
 
-		if (preg_match('/' . $this->plxMotor->mode . '\s*=\s*(.*?)\s*(' . $sep . '|$)/i', $format, $captures)) {
-			$format = trim($captures[1]);
-		} else {
-			$format = '#title - #subtitle';
+        if (preg_match('/' . $this->plxMotor->mode . '\s*=\s*(.*?)\s*(' . $sep . '|$)/i', $format, $captures)) {
+            $format = trim($captures[1]);
+        } else {
+            $format = '#title - #subtitle';
         }
-		$txt = strtr($format, array(
-			'#title'	=> trim($title),
-			'#subtitle'	=> trim($subtitle),
-		));
+        $txt = strtr($format, array(
+            '#title'	=> trim($title),
+            '#subtitle'	=> trim($subtitle),
+        ));
         echo plxUtils::strCheck(trim($txt, ' - '));
     }
 
@@ -284,7 +284,7 @@ class plxShow
         if (empty($name)) {
             foreach (self::META_TAGS as $n) {
                 $this->meta($n);
-        }
+            }
             return;
         }
 
@@ -317,11 +317,11 @@ class plxShow
                     $content = $infos['meta_' . $name];
                     if (empty($content) and $name == 'description') {
                         $content = $infos['description'];
-        }
+                    }
                     break;
                 default: $content = $this->plxMotor->aConf['meta_description'];
         }
-            }
+        }
 
         if (!empty($content)) {
             ?>
@@ -472,8 +472,8 @@ class plxShow
     public function catDescription($format = '<div class="infos">#cat_description</div>')
     {
         if ($this->plxMotor->mode != 'categorie') {
-			return;
-		}
+            return;
+        }
         $desc = plxUtils::getValue($this->plxMotor->aCats[$this->plxMotor->cible]['description']);
         if (!empty($desc)) {
             echo str_replace('#cat_description', $desc, $format);
@@ -677,30 +677,30 @@ class plxShow
      * Méthode qui affiche ou renvoie l'auteur de l'article
      *
      * @param echo si à VRAI affichage à l'écran
-	 * @param link affiche un lien vers tous les articles de l'auteur si vrai
+     * @param link affiche un lien vers tous les articles de l'auteur si vrai
      * @scope    home,categorie,user,article,tags,archives
-	 * @author    Anthony GUÉRIN, Florent MONTHEL, Stephane F, Jean-Pierre Pourrez "bazooka07"
+     * @author    Anthony GUÉRIN, Florent MONTHEL, Stephane F, Jean-Pierre Pourrez "bazooka07"
      **/
-	public function artAuthor($echo = true, $link=true)
+    public function artAuthor($echo = true, $link=true)
     {
         $authorId = ($this->plxMotor->mode != 'user') ? $this->plxMotor->plxRecord_arts->f('author') : $this->plxMotor->cible;
-		if (isset($this->plxMotor->aUsers[$authorId]['name'])) {
+        if (isset($this->plxMotor->aUsers[$authorId]['name'])) {
             $author = $this->plxMotor->aUsers[$authorId];
-			$authorName = plxUtils::strCheck($author['name']);
-		} else {
-			$authorName = L_ARTAUTHOR_UNKNOWN;
-		}
+            $authorName = plxUtils::strCheck($author['name']);
+        } else {
+            $authorName = L_ARTAUTHOR_UNKNOWN;
+        }
 
-		if (!$echo) {
-			return $authorName;
-		}
+        if (!$echo) {
+            return $authorName;
+        }
 
         if ($link and !empty($author)) {
-			$href = 'index.php?user' . $authorId . '/' . md5($authorName);
-			echo '<a href="' . $this->plxMotor->urlRewrite($href) . '">' . $authorName . '</a>';
-		} else {
-			echo $authorName;
-		}
+            $href = 'index.php?user' . $authorId . '/' . md5($authorName);
+            echo '<a href="' . $this->plxMotor->urlRewrite($href) . '">' . $authorName . '</a>';
+        } else {
+            echo $authorName;
+        }
     }
 
     /**
@@ -730,10 +730,10 @@ class plxShow
         $userId = ($this->plxMotor->mode != 'user') ? $this->plxMotor->plxRecord_arts->f('author') : $this->plxMotor->cible;
         $infos = trim(plxUtils::getValue($this->plxMotor->aUsers[$userId]['infos']));
         if (!empty($infos)) {
-			echo strtr($format, array(
-				'#art_authorinfos'	=> $infos,
-				'#art_author'		=> $this->artAuthor(false),
-			));
+            echo strtr($format, array(
+                '#art_authorinfos'	=> $infos,
+                '#art_author'		=> $this->artAuthor(false),
+            ));
         }
     }
 
@@ -840,13 +840,13 @@ class plxShow
             return;
         }
 
-            $tags = array_map('trim', explode(',', $taglist));
+        $tags = array_map('trim', explode(',', $taglist));
         $more = false;
         foreach ($tags as $tag) {
             $url = plxUtils::urlify($tag);
             if ($more) {
-                    echo $separator . ' ';
-                }
+                echo $separator . ' ';
+            }
             echo strtr($format, array(
                 '#tag_url'		=> $this->plxMotor->urlRewrite('?tag/' . $url),
                 '#tag_name'		=> plxUtils::strCheck($tag),
@@ -959,12 +959,12 @@ class plxShow
      * d'une catégorie précise (si $categorie renseigné) ou du site tout entier
      *
      * @param type        type de flux (obsolete)
-	 * @param idStr		  identifiant (sans les 0) d'une catégorie
+     * @param idStr		  identifiant (sans les 0) d'une catégorie
      * @param format        format du code HTML pour l'affichage du lien (variable : #feedUrl, #feedTitle, #feedName)
      * @scope    home,categorie,article,tags,archives
      * @author    Florent MONTHEL, Stephane F, Pedro "P3ter" CADETE
      **/
-	public function artFeed($type = 'rss', $idStr = '', $format = '<a href="#feedUrl" title="#feedTitle">#feedName</a>')
+    public function artFeed($type = 'rss', $idStr = '', $format = '<a href="#feedUrl" title="#feedTitle">#feedName</a>')
     {
         # Hook Plugins
         if (eval($this->plxMotor->plxPlugins->callHook('plxShowArtFeed'))) {
@@ -972,42 +972,42 @@ class plxShow
         }
 
         if ($this->plxMotor->aConf ['enable_rss']) {
-			if (trim($idStr) != '' and is_numeric($idStr)) {
+            if (trim($idStr) != '' and is_numeric($idStr)) {
                 # Fil Rss des articles d'une catégorie
-				$id = str_pad($idStr, 3, '0', STR_PAD_LEFT);
+                $id = str_pad($idStr, 3, '0', STR_PAD_LEFT);
                 switch ($this->plxMotor->mode) {
-					case 'categorie':
+                    case 'categorie':
                         if (isset($this->plxMotor->aCats[$id])) {
-							$replaces = array(
-								'#feedUrl'		=> $this->plxMotor->urlRewrite('feed.php?rss/categorie' . $idStr . '/' . $this->plxMotor->aCats[$id]['url']),
-								'#feedTitle'	=> L_ARTFEED_RSS_CATEGORY,
-								'#feedName'		=> L_ARTFEED_RSS_CATEGORY,
-							);
-						}
-						break;
-					case 'user':
+                            $replaces = array(
+                                '#feedUrl'		=> $this->plxMotor->urlRewrite('feed.php?rss/categorie' . $idStr . '/' . $this->plxMotor->aCats[$id]['url']),
+                                '#feedTitle'	=> L_ARTFEED_RSS_CATEGORY,
+                                '#feedName'		=> L_ARTFEED_RSS_CATEGORY,
+                            );
+                        }
+                        break;
+                    case 'user':
                         if (isset($this->plxMotor->aUsers[$id])) {
-							$replaces = array(
-								'#feedUrl'		=> $this->plxMotor->urlRewrite('feed.php?rss/user' . $idStr . '/' . $this->plxMotor->aUsers[$id]['login']),
-								'#feedTitle'	=> L_ARTFEED_RSS_USER,
-								'#feedName'		=> L_ARTFEED_RSS_USER,
-							);
-						}
-						break;
-					default:
-						return;
+                            $replaces = array(
+                                '#feedUrl'		=> $this->plxMotor->urlRewrite('feed.php?rss/user' . $idStr . '/' . $this->plxMotor->aUsers[$id]['login']),
+                                '#feedTitle'	=> L_ARTFEED_RSS_USER,
+                                '#feedName'		=> L_ARTFEED_RSS_USER,
+                            );
+                        }
+                        break;
+                    default:
+                        return;
                 }
             } else {
                 # Fil Rss des articles
-				$replaces = array(
-					'#feedUrl'		=> $this->plxMotor->urlRewrite('feed.php?rss'),
-					'#feedTitle'	=> L_ARTFEED_RSS,
-					'#feedName'		=> L_ARTFEED_RSS,
-				);
-			}
+                $replaces = array(
+                    '#feedUrl'		=> $this->plxMotor->urlRewrite('feed.php?rss'),
+                    '#feedTitle'	=> L_ARTFEED_RSS,
+                    '#feedName'		=> L_ARTFEED_RSS,
+                );
+            }
 
             if (!empty($replaces)) {
-				echo strtr($format, $replaces);
+                echo strtr($format, $replaces);
             }
         }
     }
@@ -1032,7 +1032,7 @@ class plxShow
                 if (!empty($this->plxMotor->plxRecord_arts->f('allow_com'))) {
                     $txt = L_NO_COMMENT;
                     $title = L_NO_COMMENT;
-        } else {
+                } else {
                     $txt = L_CLOSED_COMMENTS;
                     $title = L_CLOSED_COMMENTS;
                 }
@@ -1580,7 +1580,7 @@ class plxShow
                         $n = count($menus) - $n;
                         if ($n < 0) {
                             $n = 0;
-                    }
+                        }
                     }
                 }
                 array_splice($menus, $n, 0, array($stat));
@@ -1876,10 +1876,10 @@ class plxShow
 
         # On affiche la barre de navigation ou on a un bouton "up" pour remonter au niveau supérieur
         if ($asBar or in_array('up', $matches[0])) {
-                    $mode = $_SESSION['previous']['mode'];
+            $mode = $_SESSION['previous']['mode'];
             $backQuery = '?' . $mode;
             $cible = $_SESSION['previous']['cible'];
-                    switch ($mode) {
+            switch ($mode) {
                         case 'categorie':
                     $backQuery .= intval($cible) . '/' . $this->plxMotor->aCats[$cible]['url'];
                     $backLabel = ucfirst(L_CATEGORY);
@@ -1898,7 +1898,7 @@ class plxShow
                         case 'archives':
                     $backQuery .= '/' . substr($cible, 0, 4);
                             if (strlen($cible) > 4) {
-                        $backQuery .= '/' . substr($cible, 4);
+                                $backQuery .= '/' . substr($cible, 4);
                             }
                     $backLabel = ucfirst(L_ARCHIVES);
                     $backTitle = $cible;
@@ -1920,9 +1920,9 @@ class plxShow
 	<a href="<?= $this->plxMotor->racine ?>"><?= L_HOMEPAGE ?></a>
 <?php
             if ($mode == 'blog') {
-?>
+                ?>
     > <a href="<?= $this->plxMotor->urlRewrite($backQuery) ?>" title="<?= L_BACK_TO_BLOG_TITLE ?>" ><?= $backTitle ?></a>
-<?php                
+<?php
             } elseif (!empty($backLabel)) {
                 ?>
 	> <strong><?= $backLabel ?></strong> : <a href="<?= $this->plxMotor->urlRewrite($backQuery) ?>"><?= $backTitle ?></a>
@@ -2250,15 +2250,15 @@ class plxShow
 
     /**
      * @param string $format format du texte pour chaque auteur (variable : #user_id, #user_url, #user_name, #user_infos, #art_nb)
-	 * @param string $include liste des id des utilisateurs à afficher, séparés par un ou plusieurs caractères (exemple: '001 |003 5, 45|50')
-	 * @param string $exclude liste des id des utilisateurs à ne pas afficher
-	 * @sortMethod string nom méthode de tri des auteurs : name, lastname, hits ou vide. Par défaut tri selon la date de l'article leplus récent pour chaque auteur
-	 * @scope    global
-	 * @author   Jean-Pierre Pourrez "bazooka07"
-	 **/
-	public function authorList($format = self::AUTHOR_PATTERN, $include = '', $exclude = '', $sortMethod='')
-	{
-		# Hook Plugins
+     * @param string $include liste des id des utilisateurs à afficher, séparés par un ou plusieurs caractères (exemple: '001 |003 5, 45|50')
+     * @param string $exclude liste des id des utilisateurs à ne pas afficher
+     * @sortMethod string nom méthode de tri des auteurs : name, lastname, hits ou vide. Par défaut tri selon la date de l'article leplus récent pour chaque auteur
+     * @scope    global
+     * @author   Jean-Pierre Pourrez "bazooka07"
+     **/
+    public function authorList($format = self::AUTHOR_PATTERN, $include = '', $exclude = '', $sortMethod='')
+    {
+        # Hook Plugins
         if (eval($this->plxMotor->plxPlugins->callHook('plxShowLastUserList'))) {
             return;
         }
@@ -2267,71 +2267,71 @@ class plxShow
             $this->plxMotor->aUsers,
             function ($value) {
                 return (empty($value['delete']) and !empty($value['active']) and $value['articles'] > 0);
-			}
+            }
         );
 
-		# On trie les auteurs
+        # On trie les auteurs
         switch ($sortMethod) {
-			case 'name':
-				# tri par prénom, nom des auteurs
+            case 'name':
+                # tri par prénom, nom des auteurs
                 uasort($authors, function ($a, $b) {
                     return strcasecmp($a['name'], $b['name']);
-				});
-				break;
-			case 'lastname':
-				# tri par nom (lastname) des auteurs
+                });
+                break;
+            case 'lastname':
+                # tri par nom (lastname) des auteurs
                 $pattern = '#.*\s+(\w[\w-]*)$#';
                 array_walk(
                     $authors,
                     function ($item) use ($pattern) {
                         $item['lastname'] = preg_replace($pattern, '$1', $item['name']);
-						return $item;
+                        return $item;
                     }
-				);
+                );
 
                 uasort($authors, function ($a, $b) use ($pattern) {
-					return strcasecmp($users[$a]['lastname'], $users[$b]['lastname']);
-				});
-				break;
-			case 'hits':
-				# les auteurs les plus productifs en premiers
+                    return strcasecmp($users[$a]['lastname'], $users[$b]['lastname']);
+                });
+                break;
+            case 'hits':
+                # les auteurs les plus productifs en premiers
                 uasort($authors, function ($b, $a) {
                     return ($a['articles'] - $b['articles']);
                 });
-				break;
-			default:
-				# les auteurs sont triés par date de publication de leur plus récent article
+                break;
+            default:
+                # les auteurs sont triés par date de publication de leur plus récent article
                 uasort($authors, function ($b, $a) {
                     return strcasecmp($a['last_art_published'], $b['last_art_published']);
                 });
-		}
+        }
 
         foreach ($authors as $userId => $v) {
-				$userIdNum = intval($userId);
-				$pattern = '@\b0*' . $userIdNum . '\b@';
-				if (empty($include) or preg_match($pattern, $include)) {
-					if (empty($exclude) || !preg_match($pattern, $exclude)) {
-						# on a des articles pour cet auteur ou on affiche les catégories sans article
-						# On modifie nos motifs
-						$author = $this->plxMotor->aUsers[$userId];
-						$actif = (
-							($this->plxMotor->mode == 'user' and $this->plxMotor->cible == $userId) or
-							($this->plxMotor->mode == 'article' and $this->plxMotor->plxRecord_arts->f('author') == $userId)
-						);
-						echo strtr($format, array(
-							'#user_id'		=> 'user-' . $userIdNum,
-							'#user_url'		=> $this->plxMotor->urlRewrite('?user' . $userIdNum . '/' . md5($author['name'])),
-							'#user_name'	=> plxUtils::strCheck($author['name']),
+            $userIdNum = intval($userId);
+            $pattern = '@\b0*' . $userIdNum . '\b@';
+            if (empty($include) or preg_match($pattern, $include)) {
+                if (empty($exclude) || !preg_match($pattern, $exclude)) {
+                    # on a des articles pour cet auteur ou on affiche les catégories sans article
+                    # On modifie nos motifs
+                    $author = $this->plxMotor->aUsers[$userId];
+                    $actif = (
+                        ($this->plxMotor->mode == 'user' and $this->plxMotor->cible == $userId) or
+                            ($this->plxMotor->mode == 'article' and $this->plxMotor->plxRecord_arts->f('author') == $userId)
+                    );
+                    echo strtr($format, array(
+                            '#user_id'		=> 'user-' . $userIdNum,
+                            '#user_url'		=> $this->plxMotor->urlRewrite('?user' . $userIdNum . '/' . md5($author['name'])),
+                            '#user_name'	=> plxUtils::strCheck($author['name']),
                         '#user_status'	=> $actif ? 'active' : 'inactive',
                         '#user_infos'	=> plxUtils::strCheck($author['infos']),
                         '#art_nb'		=> $author['articles'],
-						));
-					}
-				}
-			}
-		}
+                        ));
+                }
+            }
+        }
+    }
 
-	/**
+    /**
      * Méthode qui affiche la liste des archives
      *
      * @param format    format du texte pour l'affichage (variable : #archives_id, #archives_status, #archives_selected, #archives_nbart, #archives_url, #archives_name, #archives_month, #archives_year)
@@ -2399,7 +2399,7 @@ class plxShow
                 case 'article': $page_actuelle = $this->plxMotor->plxRecord_arts->f('date'); break;
                 case 'archives': $page_actuelle = $this->plxMotor->cible; break;
                 default: $page_actuelle = '';
-			}
+            }
             # mb_internal_encoding('utf-8');
             $id = 0;
             foreach ($cumuls_mois as $m => $nbarts) {
@@ -2485,7 +2485,7 @@ class plxShow
             );
             if ($echo) {
                 echo strtr($format, $replaces);
-                } else {
+            } else {
                 return strtr($format, $replaces);
             }
         }
@@ -2622,19 +2622,19 @@ class plxShow
             case 'categorie':
                 $id = $this->catId();
                 $idNum = intval($id);
-				return $this->urlRewrite('feed.php?rss/categorie' . $idNum . '/' . $this->plxMotor->aCats[$id]['url']);
-				break;
-			case 'user':
-				$id = $this->plxMotor->cible;
-				$idNum = intval($id);
+                return $this->urlRewrite('feed.php?rss/categorie' . $idNum . '/' . $this->plxMotor->aCats[$id]['url']);
+                break;
+            case 'user':
+                $id = $this->plxMotor->cible;
+                $idNum = intval($id);
                 return $this->urlRewrite('feed.php?rss/user' . $idNum . '/' . md5($this->plxMotor->aUsers[$id]['name']));
                 break;
             case 'tags':
                 $tag = plxUtils::strCheck($this->plxMotor->cible);
-				return $this->urlRewrite('feed.php?rss/tag/' . plxUtils::strCheck($tag));
+                return $this->urlRewrite('feed.php?rss/tag/' . plxUtils::strCheck($tag));
                 break;
             default:
-		return $this->urlRewrite('feed.php?rss');
+        return $this->urlRewrite('feed.php?rss');
         }
     }
 }
