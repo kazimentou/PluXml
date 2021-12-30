@@ -1390,10 +1390,10 @@ class plxMotor
                 $artId = $tag['number'];
                 unset($tag['number']);
                 $tag['tags'] = trim($values[$k]['value']);
-            }
             $this->aTags[$artId] = $tag;
 		}
 	}
+    }
 
 	/**
 	 * Méthode qui alimente le tableau aTemplate

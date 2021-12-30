@@ -138,10 +138,10 @@ class plxGlob
             return preg_match($motif, $item);
         });
 
-        if (empty($type) or $tri == 'random') {
+        if (empty($type) or $tri == 'random' or count($resp) <= 1) {
             # Pas de tri
             $this->count = count($resp);
-            return $resp;
+            return ($this->count > 0) ? array_values($resp) : false;
         }
 
         # Il faut créer un tableau associatif pour trier

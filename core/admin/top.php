@@ -165,7 +165,7 @@ if (isset($_GET["del"]) and $_GET["del"]=="install") {
             is_file(PLX_ROOT . 'install.php') and
 			preg_match('#^(?:parametres_|index)#', basename($_SERVER['SCRIPT_NAME'], '.php'))
 		) {
-            ?>
+            $url = 'index.php?del=install'; ?>
 		<p class="alert red"><?= sprintf(L_WARNING_INSTALLATION_FILE, $url) ?></p>
 <?php
         }
