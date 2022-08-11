@@ -4,7 +4,7 @@
  * Classe plxMedias regroupant les fonctions pour gérer la librairie des medias
  *
  * @package PLX
- * @author	Stephane F, Pedro "P3ter" CADETE
+ * @author  Stephane F, Pedro "P3ter" CADETE
  **/
 class plxMedias
 {
@@ -15,23 +15,24 @@ class plxMedias
     public $maxUpload = array(); # valeur upload_max_filesize
     public $maxPost = array(); # valeur post_max_size
 
-    public $img_supported = array('.png', '.gif', '.jpg', '.jpeg', '.bmp', '.webp'); # images formats supported
-    public $img_exts = '/\.(jpe?g|png|gif|bmp|webp)$/i';
-    public $doc_exts = '/\.(7z|aiff|asf|avi|csv|docx?|epub|fla|flv|gpx|gz|gzip|m4a|m4v|mid|mov|mp3|mp4|mpc|mpe?g|ods|odt|odp|ogg|pdf|pptx?|ppt|pxd|qt|ram|rar|rm|rmi|rmvb|rtf|svg|swf|sxc|sxw|tar|tgz|txt|vtt|wav|webm|wma|wmv|xcf|xlsx?|zip)$/i';
+    const IMG_SUPPORTED = array('.png', '.gif', '.jpg', '.jpeg', '.bmp', '.webp'); # images formats supported
+    const IMG_EXTS = '/\.(jpe?g|png|gif|bmp|webp)$/i';
+    const DOC_EXTS = '/\.(7z|aiff|asf|avi|csv|docx?|epub|fla|flv|gpx|gz|gzip|m4a|m4v|mid|mov|mp3|mp4|mpc|mpe?g|ods|odt|odp|ogg|pdf|pptx?|ppt|pxd|qt|ram|rar|rm|rmi|rmvb|rtf|svg|swf|sxc|sxw|tar|tgz|txt|vtt|wav|webm|wma|wmv|xcf|xlsx?|zip)$/i';
 
     /**
      * Constructeur qui initialise la variable de classe
      *
-     * @param	path	répertoire racine des médias
-     * @param	dir		dossier de recherche
-     * @return	null
-     * @author	Stephane F
+     * @param   path    répertoire racine des médias
+     * @param   dir     dossier de recherche
+     * @return  null
+     * @author  Stephane F
      **/
     public function __construct($path, $dir)
     {
 
         # Initialisation
         $this->path = $path;
+        $this->pathLength = strlen($path);
         $this->dir = $dir;
 
         # Création du dossier réservé à l'utilisateur connecté s'il n'existe pas
@@ -80,8 +81,8 @@ class plxMedias
     /**
      * Méthode récursive qui retourne un tableau de tous les dossiers et sous dossiers dans un répertoire
      *
-     * @return	array tableau contenant la liste de tous les dossiers et sous dossiers
-     * @author	Stephane F, J.P. "bazooka07" Pourrez
+     * @return  array tableau contenant la liste de tous les dossiers et sous dossiers
+     * @author  Stephane F, J.P. "bazooka07" Pourrez
      **/
     private function _getAllDirs()
     {
@@ -97,7 +98,7 @@ class plxMedias
                 $path = substr($d, $offset);
                 $result[] = array(
                     'level' => $i,
-                    'path'	=> $path
+                    'path'  => $path
                 );
             }
         }
@@ -110,9 +111,9 @@ class plxMedias
     /**
      * Méthode qui retourne la liste des fichiers d'un répertoire
      *
-     * @param	dir		répertoire de lecture
-     * @return	array	tableau contenant la liste de tous les fichiers d'un dossier
-     * @author	Stephane F
+     * @param   dir     répertoire de lecture
+     * @return  array   tableau contenant la liste de tous les fichiers d'un dossier
+     * @author  Stephane F
      **/
     private function _getDirFiles($dir)
     {
@@ -137,12 +138,12 @@ class plxMedias
             }
 
             $thumbInfos = false;
-            if (preg_match($this->img_exts, $filename, $matches)) {
+            if (preg_match(self::IMG_EXTS, $filename, $matches)) {
                 $thumbName = plxUtils::thumbName($filename);
                 if (file_exists($thumbName)) {
                     $thumbInfos = array(
-                            'infos' 	=> getimagesize($thumbName),
-                            'filesize'	=> filesize($thumbName)
+                            'infos'     => getimagesize($thumbName),
+                            'filesize'  => filesize($thumbName)
                         );
                 }
                 $sample = $this->path . '.thumbs/' . substr($filename, $offset);
@@ -163,14 +164,14 @@ class plxMedias
                 $defaultSample = $filename;
             }
             $files[basename($filename)] = array(
-                    '.thumb'	=> (!empty($sampleOk)) ? $sample : $defaultSample,
-                    'name' 		=> basename($filename),
-                    'path' 		=> $filename,
-                    'date' 		=> $stats['mtime'],
-                    'filesize' 	=> $stats['size'],
-                    'extension'	=> $extension,
-                    'infos' 	=> $imgSize,
-                    'thumb' 	=> $thumbInfos
+                    '.thumb'    => (!empty($sampleOk)) ? $sample : $defaultSample,
+                    'name'      => basename($filename),
+                    'path'      => $filename,
+                    'date'      => $stats['mtime'],
+                    'filesize'  => $stats['size'],
+                    'extension' => $extension,
+                    'infos'     => $imgSize,
+                    'thumb'     => $thumbInfos
                 );
             $sample = '';
             $sampleOk = "";
@@ -183,8 +184,8 @@ class plxMedias
     /**
      * Méthode qui affiche la liste déroulante des dossiers
      *
-     * @return	void
-     * @author	Stephane F, Danielsan, J.P. "bazooka07" Pourrez
+     * @return  void
+     * @author  Stephane F, Danielsan, J.P. "bazooka07" Pourrez
      **/
     public function contentFolder()
     {
@@ -192,11 +193,77 @@ class plxMedias
     }
 
     /**
+     * Display medias folders tree
+     *
+     * @return string
+     */
+    public function displayTreeView()
+    {
+        $tree = $this->getTree(new DirectoryIterator($this->path));
+        return $this->getTreeView($tree);
+    }
+
+    /**
+     * Construct recursively a sorted array from medias folders hierarchy
+     *
+     * @param DirectoryIterator $dir
+     * @return array
+     */
+    private function getTree(DirectoryIterator $dir)
+    {
+        $data = array();
+        foreach ($dir as $node) {
+            if ($node->isDir() && !$node->isDot() && $node->getFilename() != '.thumbs') {
+                $data[$node->getPathname()] = $this->getTree(new DirectoryIterator($node->getPathname()));
+            }
+        }
+        ksort($data);
+        return $data;
+    }
+
+    /**
+     * Convert the medias tree array in an HTML list
+     *
+     * @param array $array
+     * @return string
+     */
+    private function getTreeView(Array $array) {
+        $entries = array();
+        foreach($array as $key => $items) {
+            $path = substr($key, $this->pathLength) . '/';
+            $hasChildren = !empty($items);
+            $classList = array();
+            if($hasChildren) {
+                $classList[] = 'has-children';
+            }
+            if(!empty($_SESSION['folder'])) {
+                if($_SESSION['folder'] == $path) {
+                    $classList[] = 'active';
+                } elseif(strpos($_SESSION['folder'], $path) === 0) {
+                    $classList[] = 'is-path';
+                }
+            }
+            $className = !empty($classList) ? ' class="' . implode(' ', $classList) . '"' : '';
+            $entry = '<a href="?path=' . $path . '">' . basename($key) . '</a>';
+            if ($hasChildren) {
+                $entry .= PHP_EOL . $this->getTreeView($items);
+            }
+            $entries[] = '<li' . $className . '>' . $entry . '</li>';
+        }
+
+        return implode(PHP_EOL, array(
+            '<ul>',
+            implode(PHP_EOL, $entries),
+            '</ul>'
+        )) . PHP_EOL;
+    }
+
+    /**
      * Méthode qui supprime un fichier (et sa vignette si elle existe dans le cas d'une image)
      *
-     * @param	files	liste des fichier à supprimer
-     * @return  boolean	faux si erreur sinon vrai
-     * @author	Stephane F
+     * @param   files   liste des fichier à supprimer
+     * @return  boolean faux si erreur sinon vrai
+     * @author  Stephane F
      **/
     public function deleteFiles($files)
     {
@@ -238,9 +305,9 @@ class plxMedias
     /**
      * Méthode récursive qui supprimes tous les dossiers et les fichiers d'un répertoire
      *
-     * @param	deldir	répertoire de suppression
-     * @return	boolean	résultat de la suppression
-     * @author	Stephane F
+     * @param   deldir  répertoire de suppression
+     * @return  boolean résultat de la suppression
+     * @author  Stephane F
      **/
     private function _deleteDir($deldir)
     { #fonction récursive
@@ -262,9 +329,9 @@ class plxMedias
     /**
      * Méthode qui supprime un dossier et son contenu
      *
-     * @param	deleteDir	répertoire à supprimer
-     * @return  boolean	faux si erreur sinon vrai
-     * @author	Stephane F
+     * @param   deleteDir   répertoire à supprimer
+     * @return  boolean faux si erreur sinon vrai
+     * @author  Stephane F
      **/
     public function deleteDir($deldir)
     {
@@ -283,9 +350,9 @@ class plxMedias
     /**
      * Méthode qui crée un nouveau dossier
      *
-     * @param	newdir	nom du répertoire à créer
-     * @return  boolean	faux si erreur sinon vrai
-     * @author	Stephane F, J.P. Pourrez (bazooka07)
+     * @param   newdir  nom du répertoire à créer
+     * @return  boolean faux si erreur sinon vrai
+     * @author  Stephane F, J.P. Pourrez (bazooka07)
      **/
     public function newDir($newdir)
     {
@@ -308,11 +375,11 @@ class plxMedias
     /**
      * Méthode qui envoie un fichier sur le serveur
      *
-     * @param	file	fichier à uploader
-     * @param	resize	taille du fichier à redimensionner si renseigné
-     * @param	thumb	taille de la miniature à créer si renseigné
-     * @return  string	message contenant le résultat de l'envoi du fichier
-     * @author	Stephane F, Pedro "P3ter" CADETE
+     * @param   file    fichier à uploader
+     * @param   resize  taille du fichier à redimensionner si renseigné
+     * @param   thumb   taille de la miniature à créer si renseigné
+     * @return  string  message contenant le résultat de l'envoi du fichier
+     * @author  Stephane F, Pedro "P3ter" CADETE
      **/
     private function _uploadFile($file, $resize, $thumb)
     {
@@ -358,10 +425,10 @@ class plxMedias
     /**
      * Méthode qui envoie une liste de fichiers sur le serveur
      *
-     * @param	usrfiles 	fichiers utilisateur à uploader
-     * @param	post		paramètres
-     * @return  string		résultat de l'envoi des fichiers
-     * @author	Stephane F
+     * @param   usrfiles    fichiers utilisateur à uploader
+     * @param   post        paramètres
+     * @return  string      résultat de l'envoi des fichiers
+     * @author  Stephane F
      **/
     public function uploadFiles($usrfiles, $post)
     {
@@ -370,9 +437,9 @@ class plxMedias
             foreach ($post['myfiles'] as $key => $val) {
                 list($selnum, $selval) = explode('_', $val);
                 $files[] = array(
-                    'name'		=> $usrfiles['selector_' . $selnum]['name'][$selval],
-                    'size'		=> $usrfiles['selector_' . $selnum]['size'][$selval],
-                    'tmp_name'	=> $usrfiles['selector_' . $selnum]['tmp_name'][$selval]
+                    'name'      => $usrfiles['selector_' . $selnum]['name'][$selval],
+                    'size'      => $usrfiles['selector_' . $selnum]['size'][$selval],
+                    'tmp_name'  => $usrfiles['selector_' . $selnum]['tmp_name'][$selval]
                 );
             }
         }
@@ -425,11 +492,11 @@ class plxMedias
     /**
      * Méthode qui déplace une ou plusieurs fichiers
      *
-     * @param   files		liste des fichier à déplacer
-     * @param	src_dir		répertoire source
-     * @param	dst_dir		répertoire destination
-     * @return  boolean		faux si erreur sinon vrai
-     * @author	Stephane F
+     * @param   files       liste des fichier à déplacer
+     * @param   src_dir     répertoire source
+     * @param   dst_dir     répertoire destination
+     * @return  boolean     faux si erreur sinon vrai
+     * @author  Stephane F
      **/
     public function moveFiles($files, $src_dir, $dst_dir)
     {
@@ -476,11 +543,11 @@ class plxMedias
     /**
      * Méthode qui recréer les miniatures
      *
-     * @param   files		liste des fichier à déplacer
-     * @param	width		largeur des miniatures
-     * @param	height		hauteur des miniatures
-     * @return  boolean		faux si erreur sinon vrai
-     * @author	Stephane F
+     * @param   files       liste des fichier à déplacer
+     * @param   width       largeur des miniatures
+     * @param   height      hauteur des miniatures
+     * @return  boolean     faux si erreur sinon vrai
+     * @author  Stephane F
      **/
     public function makeThumbs($files, $width, $height)
     {
@@ -516,10 +583,10 @@ class plxMedias
     /**
      * Méthode qui renomme un fichier
      *
-     * @param   oldname		ancien nom
-     * @param	newname		nouveau nom
-     * @return  boolean		faux si erreur sinon vrai
-     * @author	Stephane F, J.P. "bazooka07" Pourrez, Pedro "P3ter" CADETE
+     * @param   oldname     ancien nom
+     * @param   newname     nouveau nom
+     * @return  boolean     faux si erreur sinon vrai
+     * @author  Stephane F, J.P. "bazooka07" Pourrez, Pedro "P3ter" CADETE
      **/
     public function renameFile($oldname, $newname)
     {
