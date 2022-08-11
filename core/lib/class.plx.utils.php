@@ -57,11 +57,11 @@ class plxUtils
      * Renvoie la valeur de la variable ou la valeur par défaut passée en paramètre.
      *
      * Utilisé pour l'analyse des fichiers xml avec xml_parder.
-     * @param	values		array	tableau à tester
-     * @param	tag		    array   index dans le tableau ci-dessus
+     * @param   values      array   tableau à tester
+     * @param   tag         array   index dans le tableau ci-dessus
      * @param   index       integer index dans le tableau tag
-     * @param   string	    default valeur par défaut si le tableau ou la cellule n'existent pas
-     * @return	string		valeur de la cellule par défaut
+     * @param   string      default valeur par défaut si le tableau ou la cellule n'existent pas
+     * @return  string      valeur de la cellule par défaut
      * @author  Jean-Pierre Pourrez "bazooka07"
     */
     public static function getTagIndexValue(&$tag, &$values, $index, $default='')
@@ -85,7 +85,7 @@ class plxUtils
     /**
      * Méthode qui retourne un tableau contenu les paramètres passés dans l'url de la page courante
      *
-     * @return	array	tableau avec les paramètres passés dans l'url de la page courante
+     * @return  array   tableau avec les paramètres passés dans l'url de la page courante
      **/
     public static function getGets()
     {
@@ -169,8 +169,8 @@ class plxUtils
     /**
      * Méthode qui vérifie le format d'une adresse ip
      *
-     * @param	ip			adresse ip à vérifier
-     * @return	boolean		vrai si format valide
+     * @param   ip          adresse ip à vérifier
+     * @return  boolean     vrai si format valide
      **/
     public static function isValidIp($ip)
     {
@@ -185,7 +185,7 @@ class plxUtils
     /**
      * Méthode qui retourne l'adresse ip d'un visiteur
      *
-     * @return	string		adresse ip d'un visiteur
+     * @return  string      adresse ip d'un visiteur
      **/
     public static function getIp()
     {
@@ -209,13 +209,13 @@ class plxUtils
     /**
      * Méthode qui affiche une liste de sélection
      *
-     * @param	name		nom de la liste
-     * @param	array		valeurs de la liste sous forme de tableau (nom, valeur)
-     * @param	selected	valeur par défaut
-     * @param	readonly	vrai si la liste est en lecture seule (par défaut à faux)
-     * @param	class		class css à utiliser pour formater l'affichage
-     * @param	id			si vrai génère un id à partir du nom du champ, sinon génère l'id à partir du paramètre
-     * @return	self
+     * @param   name        nom de la liste
+     * @param   array       valeurs de la liste sous forme de tableau (nom, valeur)
+     * @param   selected    valeur par défaut
+     * @param   readonly    vrai si la liste est en lecture seule (par défaut à faux)
+     * @param   class       class css à utiliser pour formater l'affichage
+     * @param   id          si vrai génère un id à partir du nom du champ, sinon génère l'id à partir du paramètre
+     * @return  self
      **/
     public static function printSelect($name, $array, $selected='', $readonly=false, $class='', $id=true)
     {
@@ -242,14 +242,14 @@ class plxUtils
         foreach ($array as $a => $b) {
             if (is_array($b)) {
                 ?>
-			<optgroup label="<?= $a ?>">
+            <optgroup label="<?= $a ?>">
 <?php
                 foreach ($b as $c=>$d) {
                     ?>
                 <option value="<?= $c ?>" <?= ($c == $selected) ? 'selected="selected"' : '' ?>><?= $d ?></option>
 <?php
                 } ?>
-			</optgroup>
+            </optgroup>
 <?php
             } else {
                 ?>
@@ -264,17 +264,17 @@ class plxUtils
     /**
      * Méthode qui affiche une zone de saisie
      *
-     * @param	name		nom de la zone de saisie
-     * @param	value		valeur contenue dans la zone de saisie
-     * @param	type		type du champ (text, password, hidden)
-     * @param	size		longueur du champ - nombre maximal de caractères pouvant être saisis (par défaut 50-255)
-     * @param	readonly	vrai si le champ est en lecture seule (par défaut à faux)
-     * @param	class		class css à utiliser pour formater l'affichage
-     * @param	placeholder valeur du placeholder du champ (html5)
-     * @param	extra		extra paramètre pour du javascript par exemple (onclick)
-     * @param	required	permet de rendre le champ obligatoire
-     * @return	self
-     * @author	unknow, Pedro "P3ter" CADETE
+     * @param   name        nom de la zone de saisie
+     * @param   value       valeur contenue dans la zone de saisie
+     * @param   type        type du champ (text, password, hidden)
+     * @param   size        longueur du champ - nombre maximal de caractères pouvant être saisis (par défaut 50-255)
+     * @param   readonly    vrai si le champ est en lecture seule (par défaut à faux)
+     * @param   class       class css à utiliser pour formater l'affichage
+     * @param   placeholder valeur du placeholder du champ (html5)
+     * @param   extra       extra paramètre pour du javascript par exemple (onclick)
+     * @param   required    permet de rendre le champ obligatoire
+     * @return  self
+     * @author  unknow, Pedro "P3ter" CADETE
      **/
     public static function printInput($name, $value='', $type='text', $sizes='50-255', $readonly=false, $className='', $placeholder='', $extra='', $required=false)
     {
@@ -318,12 +318,12 @@ class plxUtils
     /**
      * Méthode qui affiche des boutons radio
      *
-     * @param	string $name		 nom des radio boutons
-     * @param	string $value		valeur correspond au radio bouton
-     * @param	string $className	class css à utiliser pour formater l'affichage
+     * @param   string $name         nom des radio boutons
+     * @param   string $value       valeur correspond au radio bouton
+     * @param   string $className   class css à utiliser pour formater l'affichage
      * @param   string $value       valeur à cocher
-     * @param	boolean $required	permet de rendre le champ obligatoire
-     * @return	self
+     * @param   boolean $required   permet de rendre le champ obligatoire
+     * @return  self
      * @author  Pedro "P3ter" CADETE, J.P. Pourrez "bazooka07"
      **/
     public static function printInputRadio($name, $array, $value='', $className='', $extra='')
@@ -349,14 +349,14 @@ class plxUtils
     /**
      * Méthode qui affiche une zone de texte
      *
-     * @param	string	name		nom de la zone de texte
-     * @param	string	value		valeur contenue dans la zone de texte
-     * @param	string	cols		nombre de caractères affichés par colonne
-     * @param	string	rows		nombre de caractères affichés par ligne
-     * @param	boolean	readonly	vrai si le champ est en lecture seule (par défaut à faux)
-     * @param	string	class		class css à utiliser pour formater l'affichage
-     * @param	boolean	extra		extra permet d'ajouter un élément HTML (exemple : un "onclick" en javascript)
-     * @return	self
+     * @param   string  name        nom de la zone de texte
+     * @param   string  value       valeur contenue dans la zone de texte
+     * @param   string  cols        nombre de caractères affichés par colonne
+     * @param   string  rows        nombre de caractères affichés par ligne
+     * @param   boolean readonly    vrai si le champ est en lecture seule (par défaut à faux)
+     * @param   string  class       class css à utiliser pour formater l'affichage
+     * @param   boolean extra       extra permet d'ajouter un élément HTML (exemple : un "onclick" en javascript)
+     * @return  self
      */
     public static function printArea($name, $value='', $cols='', $rows='', $readonly=false, $className='full-width', $extra='')
     {
@@ -386,25 +386,78 @@ class plxUtils
         echo '<textarea ' . implode(' ', $attrs) . '>' . $value . '</textarea>';
     }
 
+     /**
+     * Méthode qui affiche des boutons pour la pagination.
+     * S'il n'y a pas assez d'éléments à afficher pour 2 pages, la pagination n'est pas affichée.
+     *
+     * @param integer $itemsCount Nombre total d'éléments à afficher dans toutes les pages
+     * @param integer $itemsPerPage Nombre d'éléments à afficher par page
+     * @param integer $currentPage numéro de la page courante affichée
+     * @param string $urlTemplate modèle pour calculer la valeur de href dans les balises <a>. Doit avoir une position numérique
+     *
+     * @return    void
+     * @author    Jean-Pierre Pourrez (bazooka07)
+     **/
+    public static function printPagination($itemsCount, $itemsPerPage, $currentPage, $urlTemplate)
+    {
+        if ($itemsCount > $itemsPerPage) { # if there is articles
+            //Pagination preparation
+            $last_page = ceil($itemsCount / $itemsPerPage);
+            // URL generation
+            $artTitle = !empty($_GET['artTitle']) ? '&artTitle=' . urlencode($_GET['artTitle']) : '';
+            // Display pagination links
+?>
+                <a href="<?php printf($urlTemplate, 1) ?>" title="<?= L_PAGINATION_FIRST_TITLE ?>"<?= ($currentPage > 2) ? '' : ' disabled' ?>><span class="btn"><i class="icon-angle-double-left"></i></span></a>
+                <a href="<?php printf($urlTemplate, $currentPage - 1) ?>" title="<?= L_PAGINATION_PREVIOUS_TITLE ?>"<?= ($currentPage > 1) ? '' : ' disabled' ?>><span class="btn"><i class="icon-angle-left"></i></span></a>
+<?php
+            # On boucle sur les pages
+            if($last_page <= 2 * self::DELTA_PAGINATION  + 1) {
+                $iMin = 1; $iMax = $last_page;
+            } else {
+                if($currentPage > self::DELTA_PAGINATION + 1) {
+                    $iMin = ($last_page - $currentPage > self::DELTA_PAGINATION) ? $currentPage - self::DELTA_PAGINATION : $last_page - 2 * self::DELTA_PAGINATION;
+                } else {
+                    $iMin = 1;
+                }
+                $iMax =  $iMin + 2 * self::DELTA_PAGINATION;
+            }
+            for ($i = $iMin; $i <= $iMax; $i++) {
+                if($i != $currentPage) {
+?>
+                <a href="<?php printf($urlTemplate, $i); ?>"><span class="btn"><?= $i ?></span></a>
+<?php
+                } else {
+?>
+                <span class="current btn"><?= $i ?></span>
+<?php
+                }
+            }
+?>
+                <a href="<?php printf($urlTemplate, $currentPage + 1); ?>" title="<?= L_PAGINATION_NEXT_TITLE ?>"<?= ($currentPage < $last_page) ? '' : ' disabled' ?>><span class="btn"><i class="icon-angle-right"></i></span></a>
+                <a href="<?php printf($urlTemplate, $last_page); ?>" title="<?= L_PAGINATION_LAST_TITLE ?>"><span class="btn"<?= ($currentPage < $last_page - 1) ? '' : ' disabled' ?>><i class="icon-angle-double-right"></i></span></a>
+<?php
+        }
+    }
+
     /**
      * Méthode qui teste si un fichier est accessible en écriture
      *
-     * @param	file		emplacement et nom du fichier à tester
-     * @param	format		format d'affichage
+     * @param   file        emplacement et nom du fichier à tester
+     * @param   format      format d'affichage
      **/
     public static function testWrite($file, $format='<li><span style="color:#color">#symbol #message</span></li>' . PHP_EOL)
     {
         if (is_writable($file)) {
             $replaces = array(
-                '#color'	=> 'green',
-                '#symbol'	=> '&#10004;',
-                '#message'	=> sprintf(L_WRITE_ACCESS, $file),
+                '#color'    => 'green',
+                '#symbol'   => '&#10004;',
+                '#message'  => sprintf(L_WRITE_ACCESS, $file),
             );
         } else {
             $replaces = array(
-                '#color'	=> 'red',
-                '#symbol'	=> '&#10007;',
-                '#message'	=> sprintf(L_WRITE_NOT_ACCESS, $file),
+                '#color'    => 'red',
+                '#symbol'   => '&#10007;',
+                '#message'  => sprintf(L_WRITE_NOT_ACCESS, $file),
             );
         }
         echo strtr($format, $replaces);
@@ -413,10 +466,10 @@ class plxUtils
     /**
      * Méthode qui teste si le module apache mod_rewrite est disponible
      *
-     * @param	io			affiche à l'écran le résultat du test si à VRAI
-     * @param	format		format d'affichage
-     * @return	boolean		retourne vrai si le module apache mod_rewrite est disponible
-     * @author	Stephane F
+     * @param   io          affiche à l'écran le résultat du test si à VRAI
+     * @param   format      format d'affichage
+     * @return  boolean     retourne vrai si le module apache mod_rewrite est disponible
+     * @author  Stephane F
      **/
     public static function testModRewrite($io=true, $format='<li><span style="color:#color">#symbol #message</span></li>' . PHP_EOL)
     {
@@ -425,15 +478,15 @@ class plxUtils
             if ($io==true) {
                 if ($test) {
                     $replaces = array(
-                        '#color'	=> 'green',
-                        '#symbol'	=> '&#10004;',
-                        '#message'	=> L_MODREWRITE_AVAILABLE,
+                        '#color'    => 'green',
+                        '#symbol'   => '&#10004;',
+                        '#message'  => L_MODREWRITE_AVAILABLE,
                     );
                 } else {
                     $replaces = array(
-                        '#color'	=> 'red',
-                        '#symbol'	=> '&#10007;',
-                        '#message'	=> L_MODREWRITE_NOT_AVAILABLE,
+                        '#color'    => 'red',
+                        '#symbol'   => '&#10007;',
+                        '#message'  => L_MODREWRITE_NOT_AVAILABLE,
                     );
                 }
                 echo strtr($format, $replaces);
@@ -447,10 +500,10 @@ class plxUtils
     /**
      * Méthode qui teste si la fonction php mail est disponible
      *
-     * @param	io			affiche à l'écran le résultat du test si à VRAI
-     * @param	format		format d'affichage
-     * @return	boolean		retourne vrai si la fonction php mail est disponible
-     * @author	Stephane F
+     * @param   io          affiche à l'écran le résultat du test si à VRAI
+     * @param   format      format d'affichage
+     * @return  boolean     retourne vrai si la fonction php mail est disponible
+     * @author  Stephane F
      **/
     public static function testMail($io=true, $format="<li><span style=\"color:#color\">#symbol #message</span></li>\n")
     {
@@ -459,9 +512,9 @@ class plxUtils
                 echo strtr(
                     $format,
                     array(
-                        '#color'	=> 'green',
-                        '#symbol'	=> '&#10004;',
-                        '#message'	=> L_MAIL_AVAILABLE
+                        '#color'    => 'green',
+                        '#symbol'   => '&#10004;',
+                        '#message'  => L_MAIL_AVAILABLE
                     )
                 );
             }
@@ -470,9 +523,9 @@ class plxUtils
                 echo strtr(
                     $format,
                     array(
-                        '#color'	=> 'red',
-                        '#symbol'	=> '&#10007;',
-                        '#message'	=> L_MAIL_NOT_AVAILABLE
+                        '#color'    => 'red',
+                        '#symbol'   => '&#10007;',
+                        '#message'  => L_MAIL_NOT_AVAILABLE
                     )
                 );
             }
@@ -484,8 +537,8 @@ class plxUtils
     /**
      * Méthode qui teste si la bibliothèque GD est installé
      *
-     * @param	format		format d'affichage
-     * @author	Stephane F
+     * @param   format      format d'affichage
+     * @author  Stephane F
      **/
     public static function testLibGD($format="<li><span style=\"color:#color\">#symbol #message</span></li>\n")
     {
@@ -505,7 +558,7 @@ class plxUtils
     /**
      * Méthode qui teste si la bibliothèque XML est installée
      *
-     * @param	format		format d'affichage
+     * @param   format      format d'affichage
      *
      **/
     public static function testLibXml($format="<li><span style=\"color:#color\">#symbol #message</span></li>\n")
@@ -526,9 +579,9 @@ class plxUtils
     /**
      * Méthode qui formate une chaine de caractères en supprimant des caractères non valides
      *
-     * @param	str			chaine de caractères à formater
-     * @param	charset		charset à utiliser dans le formatage de la chaine (par défaut utf-8)
-     * @return	string		chaine formatée
+     * @param   str         chaine de caractères à formater
+     * @param   charset     charset à utiliser dans le formatage de la chaine (par défaut utf-8)
+     * @return  string      chaine formatée
      **/
     public static function removeAccents($str, $charset=PLX_CHARSET)
     {
@@ -545,9 +598,9 @@ class plxUtils
     /**
      * Method to translitterate (transform a string with only ASCII characters)
      * Inspired by https://github.com/jbroadway/urlify/blob/master/URLify.php
-     * @param	string		$str	the string to translitterate
-     * @param	boolean		$reverse
-     * @return	string
+     * @param   string      $str    the string to translitterate
+     * @param   boolean     $reverse
+     * @return  string
      * @author J.P. Pourrez (bazooka07)
      */
     public static function translitterate($str, $reverse=false)
@@ -601,12 +654,12 @@ class plxUtils
     /**
      * Transform a string in a valid URL using transliteration
      *
-     * @param	string	$url		characters string to clean
-     * @param	boolean	$remove		set true to remove non-semantic word
-     * @param	string	$replace	the character used to clean the URL
-     * @param	boolean	$lower		set true to lower characters
-     * @return	string	valid URL
-     * @author	J.P. Pourrez (bazooka07), Pedro (P3ter) CADETE
+     * @param   string  $url        characters string to clean
+     * @param   boolean $remove     set true to remove non-semantic word
+     * @param   string  $replace    the character used to clean the URL
+     * @param   boolean $lower      set true to lower characters
+     * @return  string  valid URL
+     * @author  J.P. Pourrez (bazooka07), Pedro (P3ter) CADETE
      * */
     public static function urlify($url, $remove=false, $replace='-', $lower=true)
     {
@@ -639,8 +692,8 @@ class plxUtils
     /**
      * Méthode qui convertit une chaine de caractères au format valide pour une url
      *
-     * @param	str			chaine de caractères à formater
-     * @return	string		nom d'url valide
+     * @param   str         chaine de caractères à formater
+     * @return  string      nom d'url valide
      **/
     public static function title2url($str)
     {
@@ -652,8 +705,8 @@ class plxUtils
     /**
      * Méthode qui convertit une chaine de caractères au format valide pour un nom de fichier
      *
-     * @param	str			chaine de caractères à formater
-     * @return	string		nom de fichier valide
+     * @param   str         chaine de caractères à formater
+     * @return  string      nom de fichier valide
      **/
     public static function title2filename($str)
     {
@@ -667,9 +720,9 @@ class plxUtils
     /**
      * Méthode qui convertit un chiffre en chaine de caractères sur une longueur de n caractères, completée par des 0 à gauche
      *
-     * @param	num					chiffre à convertir
-     * @param	length				longueur de la chaine à retourner
-     * @return	string				chaine formatée
+     * @param   num                 chiffre à convertir
+     * @param   length              longueur de la chaine à retourner
+     * @return  string              chaine formatée
      **/
     public static function formatRelatif($num, $lenght)
     {
@@ -685,9 +738,9 @@ class plxUtils
      * Méthode qui écrit dans un fichier
      * Mode écriture seule; place le pointeur de fichier au début du fichier et réduit la taille du fichier à 0. Si le fichier n'existe pas, on tente de le créer.
      *
-     * @param	xml					contenu du fichier
-     * @param	filename			emplacement et nom du fichier
-     * @return	boolean				retourne vrai si l'écriture s'est bien déroulée
+     * @param   xml                 contenu du fichier
+     * @param   filename            emplacement et nom du fichier
+     * @return  boolean             retourne vrai si l'écriture s'est bien déroulée
      **/
     public static function write($xml, $filename)
     {
@@ -715,8 +768,8 @@ class plxUtils
     /**
      * Méthode qui formate l'affichage de la taille d'un fichier
      *
-     * @param	filsize				taille en octets d'un fichier
-     * @return	string				chaine d'affichage formatée
+     * @param   filsize             taille en octets d'un fichier
+     * @return  string              chaine d'affichage formatée
      **/
     public static function formatFilesize($bytes)
     {
@@ -732,13 +785,13 @@ class plxUtils
     /**
      * Méthode qui crée la miniature d'une image
      *
-     * @param	src_image		emplacement et nom du fichier source
-     * @param	dest_image		emplacement et nom de la miniature créée
-     * @param	thumb_width		largeur de la miniature
-     * @param	thumb_height	hauteur de la miniature
-     * @param	quality			qualité de l'image
-     * @return	boolean			vrai si image créée
-     * @author	unknown, Pedro "P3ter" CADETE
+     * @param   src_image       emplacement et nom du fichier source
+     * @param   dest_image      emplacement et nom de la miniature créée
+     * @param   thumb_width     largeur de la miniature
+     * @param   thumb_height    hauteur de la miniature
+     * @param   quality         qualité de l'image
+     * @return  boolean         vrai si image créée
+     * @author  unknown, Pedro "P3ter" CADETE
      **/
     public static function makeThumb($src_image, $dest_image, $thumb_width = 48, $thumb_height = 48, $jpg_quality = 90)
     {
@@ -877,10 +930,10 @@ class plxUtils
     /**
      * Méthode qui affiche un message
      *
-     * @param	string	message à afficher
-     * @param	string	classe css à utiliser pour formater l'affichage du message
-     * @param	string	format des balises avant le message
-     * @param	string	format des balises après le message
+     * @param   string  message à afficher
+     * @param   string  classe css à utiliser pour formater l'affichage du message
+     * @param   string  format des balises avant le message
+     * @param   string  format des balises après le message
      **/
     public static function showMsg($msg, $class='', $format_start='<p class="#CLASS">', $format_end='</p>')
     {
@@ -891,7 +944,7 @@ class plxUtils
     /**
      * Méthode qui retourne l'url de base du site
      *
-     * @return	string	url de base du site
+     * @return  string  url de base du site
      **/
     public static function getRacine()
     {
@@ -911,8 +964,8 @@ class plxUtils
     /**
      * Méthode qui retourne une chaine de caractères au hasard
      *
-     * @param	taille	nombre de caractère de la chaine à retourner (par défaut sur 10 caractères)
-     * @return	string	chaine de caractères au hasard
+     * @param   taille  nombre de caractère de la chaine à retourner (par défaut sur 10 caractères)
+     * @return  string  chaine de caractères au hasard
      **/
     public static function charAleatoire($taille='10')
     {
@@ -928,11 +981,11 @@ class plxUtils
     /**
      * Méthode qui coupe une chaine de caractères sur n caractères ou sur n mots
      *
-     * @param	str			chaine de caractères à couper
-     * @param	length		nombre de caractères ou nombre de mots à garder (par défaut 25)
-     * @param	type		à renseigner avec la valeur 'word' pour couper en nombre de mots. Par défaut la césure se fait en nombre de caractères
-     * @param	add_text	texte à ajouter après la chaine coupée (par défaut '...' est ajouté)
-     * @return	string		chaine de caractères coupée
+     * @param   str         chaine de caractères à couper
+     * @param   length      nombre de caractères ou nombre de mots à garder (par défaut 25)
+     * @param   type        à renseigner avec la valeur 'word' pour couper en nombre de mots. Par défaut la césure se fait en nombre de caractères
+     * @param   add_text    texte à ajouter après la chaine coupée (par défaut '...' est ajouté)
+     * @return  string      chaine de caractères coupée
      **/
     public static function strCut($str='', $length=25, $type='', $add_text='...')
     {
@@ -948,8 +1001,8 @@ class plxUtils
     /**
      * Méthode qui retourne une chaine de caractères formatée en fonction du charset
      *
-     * @param	str		chaine de caractères
-     * @return	string	chaine de caractères tenant compte du charset
+     * @param   str     chaine de caractères
+     * @return  string  chaine de caractères tenant compte du charset
      **/
     public static function strCheck($str)
     {
@@ -959,9 +1012,9 @@ class plxUtils
     /**
      * Méthode qui retourne une chaine de caractères nettoyée des cdata
      *
-     * @param	str		chaine de caractères à nettoyer
-     * @return	string	chaine de caractères nettoyée
-     * @author	Stephane F
+     * @param   str     chaine de caractères à nettoyer
+     * @return  string  chaine de caractères nettoyée
+     * @author  Stephane F
      **/
     public static function cdataCheck($str)
     {
@@ -972,8 +1025,8 @@ class plxUtils
     /**
      * Méthode qui retourne une chaine de caractères HTML en fonction du charset
      *
-     * @param	str		chaine de caractères
-     * @return	string	chaine de caractères tenant compte du charset
+     * @param   str     chaine de caractères
+     * @return  string  chaine de caractères tenant compte du charset
      **/
     public static function strRevCheck($str)
     {
@@ -983,8 +1036,8 @@ class plxUtils
     /**
      * Méthode qui retourne le type de compression disponible
      *
-     * @return	string or boolean
-     * @author	Stephane F., Amaury Graillat
+     * @return  string or boolean
+     * @author  Stephane F., Amaury Graillat
      **/
     public static function httpEncoding()
     {
@@ -1001,10 +1054,10 @@ class plxUtils
     /**
      * Méthode qui converti les liens relatifs en liens absolus
      *
-     * @param	base	url du site qui sera rajoutée devant les liens relatifs
-     * @param	html	chaine de caractères à convertir
-     * @return	string	chaine de caractères modifiée
-     * @author	Stephane F., Amaury Graillat, J.P. Pourrez
+     * @param   base    url du site qui sera rajoutée devant les liens relatifs
+     * @param   html    chaine de caractères à convertir
+     * @return  string  chaine de caractères modifiée
+     * @author  Stephane F., Amaury Graillat, J.P. Pourrez
      **/
     public static function rel2abs($base, $html)
     {
@@ -1033,8 +1086,8 @@ class plxUtils
     /**
      * Méthode qui retourne la liste des langues disponibles dans un tableau
      *
-     * @return	array
-     * @author	J.P. Pourrez, Stephane F.
+     * @return  array
+     * @author  J.P. Pourrez, Stephane F.
      **/
     public static function getLangs()
     {
@@ -1055,10 +1108,10 @@ class plxUtils
     /**
      * Méthode qui empeche de mettre en cache une page
      *
-     * @param	type	string 		type de source
-     * @param	charset	string 		type d'encodage
-     * @return	void
-     * @author	Stephane F., Thomas Ingles
+     * @param   type    string      type de source
+     * @param   charset string      type d'encodage
+     * @return  void
+     * @author  Stephane F., Thomas Ingles
      **/
     public static function cleanHeaders($type='text/html', $charset=PLX_CHARSET)
     {
@@ -1074,13 +1127,13 @@ class plxUtils
     /**
     * Méthode d'envoi de mail
     *
-    * @param	name	string 			Nom de l'expéditeur
-    * @param	from	string 			Email de l'expéditeur
-    * @param	to		array/string	Adresse(s) du(des) destinataires(s)
-    * @param	subject	string			Objet du mail
-    * @param	body	string			contenu du mail
-    * @return	boolean	renvoie FAUX en cas d'erreur d'envoi
-    * @author	J.P. Pourrez (aka bazooka07), Amaury Graillat
+    * @param    name    string          Nom de l'expéditeur
+    * @param    from    string          Email de l'expéditeur
+    * @param    to      array/string    Adresse(s) du(des) destinataires(s)
+    * @param    subject string          Objet du mail
+    * @param    body    string          contenu du mail
+    * @return   boolean renvoie FAUX en cas d'erreur d'envoi
+    * @author   J.P. Pourrez (aka bazooka07), Amaury Graillat
     **/
     public static function sendMail($name, $from, $to, $subject, $body, $contentType="text", $cc=false, $bcc=false)
     {
@@ -1089,11 +1142,11 @@ class plxUtils
         }
 
         $headers = array(
-            'MIME-Version'				=> '1.0',
-            'Content-Type'				=> (($contentType === 'html') ? 'text/html' : 'text/plain') . ';charset=' . PLX_CHARSET,
-            'Content-Transfer-Encoding'	=> '8bit',
-            'Date'						=> date('D, j M Y G:i:s O'), # Sat, 7 Jun 2001 12:35:58 -0700
-            'X-Mailer'					=> 'PHP/' . phpversion()
+            'MIME-Version'              => '1.0',
+            'Content-Type'              => (($contentType === 'html') ? 'text/html' : 'text/plain') . ';charset=' . PLX_CHARSET,
+            'Content-Transfer-Encoding' => '8bit',
+            'Date'                      => date('D, j M Y G:i:s O'), # Sat, 7 Jun 2001 12:35:58 -0700
+            'X-Mailer'                  => 'PHP/' . phpversion()
         );
 
         if (!empty($from)) {
@@ -1216,14 +1269,14 @@ class plxUtils
     /**
     * Méthode qui formate un lien pour la barre des menus
     *
-    * @param	name	string	titre du menu
-    * @param	href	string	lien du menu
-    * @param	title	string	contenu de la balise title
-    * @param	class	string	contenu de la balise class
-    * @param	onclick	string	contenu de la balise onclick
-    * @param	extra	string	extra texte à afficher
-    * @return	string	balise <a> formatée
-    * @author	Stephane F., Thomas Ingles
+    * @param    name    string  titre du menu
+    * @param    href    string  lien du menu
+    * @param    title   string  contenu de la balise title
+    * @param    class   string  contenu de la balise class
+    * @param    onclick string  contenu de la balise onclick
+    * @param    extra   string  extra texte à afficher
+    * @return   string  balise <a> formatée
+    * @author   Stephane F., Thomas Ingles
     **/
     public static function formatMenu($name, $href, $title=false, $class=false, $onclick=false, $extra='', $highlight=true)
     {
@@ -1247,12 +1300,12 @@ class plxUtils
      * Cuts a string to the length of $length and replaces the last characters
      * with the ending if the text is longer than length.
      *
-     * @param	string	$text String to truncate.
-     * @param	integer	$length Length of returned string, including ellipsis.
-     * @param	string	$ending Ending to be appended to the trimmed string.
-     * @param	boolean	$exact If false, $text will not be cut mid-word
-     * @param	boolean	$considerHtml If true, HTML tags would be handled correctly
-     * @return	string	Trimmed string.
+     * @param   string  $text String to truncate.
+     * @param   integer $length Length of returned string, including ellipsis.
+     * @param   string  $ending Ending to be appended to the trimmed string.
+     * @param   boolean $exact If false, $text will not be cut mid-word
+     * @param   boolean $considerHtml If true, HTML tags would be handled correctly
+     * @return  string  Trimmed string.
     */
     public static function truncate($text, $length = 100, $ending = '...', $exact = true, $considerHtml = false)
     {
@@ -1360,8 +1413,8 @@ class plxUtils
     /**
      * Protège une chaine contre un null byte
      *
-     * @param	string	chaine à nettoyer
-     * @return	string	chaine nettoyée
+     * @param   string  chaine à nettoyer
+     * @return  string  chaine nettoyée
     */
     public static function nullbyteRemove($string)
     {
@@ -1371,8 +1424,8 @@ class plxUtils
     /**
      * Contrôle le nom d'un fichier ou d'un dossier
      *
-     * @param	string  nom d'un fichier
-     * @return	boolean validité du nom du fichier ou du dossier
+     * @param   string  nom d'un fichier
+     * @return  boolean validité du nom du fichier ou du dossier
     */
     public static function checkSource($src, $type='dir')
     {
@@ -1395,8 +1448,8 @@ class plxUtils
     /**
      * Formate le nom d'une miniature à partir d'un nom de fichier
      *
-     * @param	string	nom d'un fichier
-     * @return	string	nom de la miniature au format fichier.tb.ext
+     * @param   string  nom d'un fichier
+     * @return  string  nom de la miniature au format fichier.tb.ext
     */
     public static function thumbName($filename)
     {
@@ -1411,9 +1464,9 @@ class plxUtils
     /**
      * Méthode qui minifie un buffer
      *
-     * @param	string	chaine de caractères à minifier
-     * @return	string	chaine de caractères minifiée
-     * @author	Frédéric Kaplon
+     * @param   string  chaine de caractères à minifier
+     * @return  string  chaine de caractères minifiée
+     * @author  Frédéric Kaplon
      **/
     public static function minify($buffer)
     {
@@ -1427,18 +1480,18 @@ class plxUtils
     /**
      * Méthode qui converti les urls contenus dans une chaine en liens cliquables.
      *
-     * @param	string	chaîne d'entrée
-     * @param	string	Optionnel. Si spécifié, ce paramètre doit être un tableau associatif de format $arr['attribute'] = $value.
-     * @return	string	Retourne une copie de la chaîne str dont les urls ont été encapsulées dans des balises <a>.
-     * @author	http://code.seebz.net/p/autolink-php/
-     *	Exemple 1:
-     *		$str = 'A link : http://example.com/?param=value#anchor.';
-     *		$str = autolink($str);
-     *		echo $str; # A link : <a href="http://example.com/?param=value#anchor">http://example.com/?param=value#anchor</a>.
-     *	Exemple 2:
-     *		$str = 'http://example.com/';
-     *		$str = autolink($str, array("target"=>"_blank","rel"=>"nofollow"));
-     *		echo $str; # <a href="http://example.com/" target="_blank" rel="nofollow">http://example.com/</a>
+     * @param   string  chaîne d'entrée
+     * @param   string  Optionnel. Si spécifié, ce paramètre doit être un tableau associatif de format $arr['attribute'] = $value.
+     * @return  string  Retourne une copie de la chaîne str dont les urls ont été encapsulées dans des balises <a>.
+     * @author  http://code.seebz.net/p/autolink-php/
+     *  Exemple 1:
+     *      $str = 'A link : http://example.com/?param=value#anchor.';
+     *      $str = autolink($str);
+     *      echo $str; # A link : <a href="http://example.com/?param=value#anchor">http://example.com/?param=value#anchor</a>.
+     *  Exemple 2:
+     *      $str = 'http://example.com/';
+     *      $str = autolink($str, array("target"=>"_blank","rel"=>"nofollow"));
+     *      echo $str; # <a href="http://example.com/" target="_blank" rel="nofollow">http://example.com/</a>
      **/
     public static function autolink($str, $attributes=array())
     {
@@ -1465,8 +1518,8 @@ class plxUtils
 
     /**
      * Envoie un message vers la console javascript pour aider au déboggage.
-     * @author	J.P. Pourrez alias bazooka07
-     * @version	2017-06-09
+     * @author  J.P. Pourrez alias bazooka07
+     * @version 2017-06-09
      * */
     public static function debugJS($obj, $msg='')
     {
@@ -1475,21 +1528,21 @@ class plxUtils
         }
         $msg .= (is_array($obj) or is_object($obj)) ? print_r($obj, true) : ((is_string($obj)) ? "\"$obj\"" : $obj);
         echo <<< EOT
-			<script type="text/javascript">
-				console.log(`$msg`);
-			</script>
+            <script type="text/javascript">
+                console.log(`$msg`);
+            </script>
 EOT;
     }
 
     /**
      * Fonction privée statique recursive qui imprime les options d'une arborescence de fichiers ou dossiers.
-     * @param	string	$root nom du dossier
-     * @param	integer	$level			niveau de profondeur dans l'arborescence des dossiers
-     * @param	string	$prefixParent	prefixe pour l'affichage de la valeur de l'option
-     * @param	string	$choice1		sélection initiale de l'utilisateur. Utilisé seulement au niveau 0
-     * @param	boolean	$modeDir1		mode pour afficher uniquement les dossiers
-     * @return	void					on envoie directemenr le code HTML en sortie
-     * @author	J.P. Pourrez alias bazooka07
+     * @param   string  $root nom du dossier
+     * @param   integer $level          niveau de profondeur dans l'arborescence des dossiers
+     * @param   string  $prefixParent   prefixe pour l'affichage de la valeur de l'option
+     * @param   string  $choice1        sélection initiale de l'utilisateur. Utilisé seulement au niveau 0
+     * @param   boolean $modeDir1       mode pour afficher uniquement les dossiers
+     * @return  void                    on envoie directemenr le code HTML en sortie
+     * @author  J.P. Pourrez alias bazooka07
      * */
     private static function _printSelectDir($root, $level, $prefixParent, $choice1='', $modeDir1=true, $textOnly= true)
     {
@@ -1556,19 +1609,19 @@ EOT;
                 if ($dirOk) { # pour un dossier
                     if ($modeDir) {
                         echo <<<EOT
-							<option value="$value/"$classAttr data-level="$dataLevel" $selected>$prefix$caption/</option>
+                            <option value="$value/"$classAttr data-level="$dataLevel" $selected>$prefix$caption/</option>
 
 EOT;
                     } else {
                         echo <<<EOT
-							<option disabled value=""$classAttr data-level="$dataLevel">$prefix${caption}/</option>
+                            <option disabled value=""$classAttr data-level="$dataLevel">$prefix${caption}/</option>
 
 EOT;
                     }
                     plxUtils::_printSelectDir($root . $child . '/', $level, $prefixParent . $next);
                 } else { # pour un fichier
                     echo <<<EOT
-						<option value="$value"$classAttr data-level="$dataLevel"$selected>$prefix$caption</option>
+                        <option value="$value"$classAttr data-level="$dataLevel"$selected>$prefix$caption</option>
 
 EOT;
                 }
@@ -1579,16 +1632,16 @@ EOT;
     /**
      * Function publique pour afficher l'arborescence de dossiers et fichiers dans un tag <select..>.
      * Since 5.8
-     * @param	string $name nom de l'input dans le formulaire
-     * @param	string $currentValue sélection initiale de l'utilisateur
-     * @param	string $root dossier initial dans l'arborescence
-     * @param	string $class Classe css a appliquer au sélecteur #sudwebdesign
-     * @param	boolean $modeDir évite l'affichage des fichiers (dans la gestion des médias, par Ex., à la différence d'un thème)
-     * @param	str|bool id : si vrai génère un id à partir du nom du champ, sinon génère l'id à partir du paramètre name
-     * @return	void
-     * @author	J.P. Pourrez alias bazooka07, T. Ingles @sudwebdesign
-     * $modeDir=true	pour ne choisir que les dossiers : voir plxMedias contentFolder()
-     * $modeDir=false	pour ne choisir que les fichiers du thème
+     * @param   string $name nom de l'input dans le formulaire
+     * @param   string $currentValue sélection initiale de l'utilisateur
+     * @param   string $root dossier initial dans l'arborescence
+     * @param   string $class Classe css a appliquer au sélecteur #sudwebdesign
+     * @param   boolean $modeDir évite l'affichage des fichiers (dans la gestion des médias, par Ex., à la différence d'un thème)
+     * @param   str|bool id : si vrai génère un id à partir du nom du champ, sinon génère l'id à partir du paramètre name
+     * @return  void
+     * @author  J.P. Pourrez alias bazooka07, T. Ingles @sudwebdesign
+     * $modeDir=true    pour ne choisir que les dossiers : voir plxMedias contentFolder()
+     * $modeDir=false   pour ne choisir que les fichiers du thème
      * */
     public static function printSelectDir($name, $currentValue, $root, $class='', $modeDir=true, $id=true)
     {
@@ -1608,20 +1661,20 @@ EOT;
         $disabled = (!$modeDir) ? ' disabled' : '';
         $class = ($class ? $class . ' ' : '') . 'scan-folders fold' . $data_files;
         echo <<< EOT
-		<select $id name="$name" class="$class">
-			<option$disabled value="$value"$selected>$caption/</option>
+        <select $id name="$name" class="$class">
+            <option$disabled value="$value"$selected>$caption/</option>
 EOT;
         plxUtils::_printSelectDir($root, 0, str_repeat(' ', 3), $currentValue, $modeDir);
         echo <<< EOT
-		</select>
+        </select>
 EOT;
     }
 
     /**
      * Méthode qui affiche la balise <link> partir d'un nom de fichier
-     * @param	string	file	nom d'un fichier
-     * @param	boolean	admin	false == Public & urlrwrite(), true == admin
-     * @return	void
+     * @param   string  file    nom d'un fichier
+     * @param   boolean admin   false == Public & urlrwrite(), true == admin
+     * @return  void
      * @author J.P. Pourrez alias bazooka07, T. Ingles @sudwebdesign
      */
     public static function printLinkCss($file, $admin=false)
@@ -1635,7 +1688,7 @@ EOT;
             }
             $href .= '?d=' . base_convert(filemtime(PLX_ROOT . $file) & 4194303, 10, 36); # 4194303 === 2 puissance 22 - 1; base_convert(4194303, 10, 16) -> 3fffff; => 48,54 jours
 ?>
-	<link rel="stylesheet" type="text/css" href="<?= $href ?>" media="screen" />
+    <link rel="stylesheet" type="text/css" href="<?= $href ?>" media="screen" />
 <?php
         }
     }
