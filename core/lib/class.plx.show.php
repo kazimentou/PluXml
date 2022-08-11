@@ -264,7 +264,7 @@ class plxShow
             $format = '#title - #subtitle';
         }
         echo plxUtils::strCheck(trim(
-            strtr($fmt, array(
+            strtr($format, array(
                 '#title'			=> trim($title),
                 '#subtitle'			=> trim($subtitle),
                 '#title_htmltag'	=> trim($title_htmltag),
@@ -1929,7 +1929,7 @@ class plxShow
                 ?>
 	> <strong><?= $backLabel ?></strong> : <a href="<?= $this->plxMotor->urlRewrite($backQuery) ?>"><?= $backTitle ?></a>
 <?php
-            } ?>	
+            } ?>
 </div>
 <ul>
 <?php

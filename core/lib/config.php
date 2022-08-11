@@ -14,18 +14,20 @@ const PLX_RESSOURCES_LINK = '<a href="' . PLX_URL_RESSOURCES . '" target="_blank
 const PLX_URL_VERSION = PLX_URL_REPO . '/download/latest-version.txt';
 const PLX_CONFIG_FILE = PLX_ROOT . 'config.php';
 const PLX_SCRIPT_INSTALL = PLX_ROOT . 'install.php';
+const LANG = 'lang6/'; # must ends with '/'
 
-# On vérifie que PHP installé est une version récente                                         
-if (version_compare(PHP_VERSION, PHP_VERSION_MIN, '<')) {                                     
-    header('Content-Type: text/plain charset=UTF-8');                                         
-    printf(L_WRONG_PHP_VERSION, PHP_VERSION_MIN);                                             
-    exit;                                                                                     
-} 
+# On vérifie que PHP installé est une version récente
+if (version_compare(PHP_VERSION, PHP_VERSION_MIN, '<')) {
+    header('Content-Type: text/plain charset=UTF-8');
+    printf(L_WRONG_PHP_VERSION, PHP_VERSION_MIN);
+    exit;
+}
 
 # Chargement de PLX_CONFIG_PATH
 if (!file_exists(PLX_CONFIG_FILE)) {
     die('Internal error');
 }
+
 include PLX_CONFIG_FILE;
 
 const PLX_CORE = PLX_ROOT . 'core/';

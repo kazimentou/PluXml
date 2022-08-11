@@ -610,7 +610,6 @@ class plxMotor
 				}
 			}
 		}
-        }
 
 		# détermination automatique de la racine du site
 		$this->aConf['racine'] = plxUtils::getRacine();
