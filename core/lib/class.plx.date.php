@@ -5,21 +5,23 @@
  * concernant la manipulation des dates
  *
  * @package PLX
- * @author	Stephane F., Amauray Graillat
+ * @author  Stephane F., Amauray Graillat
  **/
 
 class plxDate
 {
+
     /**
      * Méthode qui retourne le libellé du mois ou du jour passé en paramètre
      *
-     * @param	key		constante: 'day', 'month' ou 'short_month'
-     * @param	value	numero du mois ou du jour
-     * @return	string	libellé du mois (long ou court) ou du jour
-     * @author	Stephane F., Pedro "P3ter" CADETE
+     * @param   key     constante: 'day', 'month' ou 'short_month'
+     * @param   value   numero du mois ou du jour
+     * @return  string  libellé du mois (long ou court) ou du jour
+     * @author  Stephane F., Pedro "P3ter" CADETE
      **/
     public static function getCalendar($key, $value)
     {
+
         if (!is_numeric($value)) {
             return false;
         }
@@ -52,20 +54,6 @@ class plxDate
                 '11' => L_SHORT_NOVEMBER,
                 '12' => L_SHORT_DECEMBER
             ),
-            'long_month' => array(
-                '01' => L_LONG_JANUARY,
-                '02' => L_LONG_FEBRUARY,
-                '03' => L_LONG_MARCH,
-                '04' => L_LONG_APRIL,
-                '05' => L_LONG_MAY,
-                '06' => L_LONG_JUNE,
-                '07' => L_LONG_JULY,
-                '08' => L_LONG_AUGUST,
-                '09' => L_LONG_SEPTEMBER,
-                '10' => L_LONG_OCTOBER,
-                '11' => L_LONG_NOVEMBER,
-                '12' => L_LONG_DECEMBER
-            ),
             'day' => array(
                 '1' => L_MONDAY,
                 '2' => L_TUESDAY,
@@ -77,9 +65,15 @@ class plxDate
             )
         );
 
-        if (array_key_exists($key, $names) and array_key_exists($value, $names[$key])) {
-            return $names[$key][$value];
-        } else {
+        if($key == 'long_month') {
+            # pour rétro-compatibilité
+            $key = 'month';
+            $longFormat = true;
+        }
+        if(array_key_exists($key, $names) and array_key_exists($value, $names[$key])) {
+            return empty($longFormat) ? $names[$key][$value] : str_pad($names[$key][$value], 9);
+        }
+        else {
             return false;
         }
     }
@@ -87,10 +81,10 @@ class plxDate
     /**
      * Méthode qui formate l'affichage d'une date
      *
-     * @param	date	date/heure au format YYYYMMDDHHMM
-     * @param	format	format d'affichage
-     * @return	string	date/heure formatée
-     * @author	Stephane F.
+     * @param   date    date/heure au format YYYYMMDDHHMM
+     * @param   format  format d'affichage
+     * @return  string  date/heure formatée
+     * @author  Stephane F.
      **/
     public static function formatDate($date, $format='#num_day/#num_month/#num_year(4)')
     {
@@ -105,7 +99,7 @@ class plxDate
         $minute = substr($date, 10, 2);
 
         # On retourne notre date au format humain
-        $format = str_replace('#time', $hour . ':' . $minute, $format);
+        $format = str_replace('#time', $hour. $minute, $format);
         $format = str_replace('#minute', $minute, $format);
         $format = str_replace('#hour', $hour, $format);
         $format = str_replace('#day', plxDate::getCalendar('day', $day_num), $format);
@@ -123,9 +117,9 @@ class plxDate
     /**
      * Méthode qui convertis un timestamp en date/time
      *
-     * @param	timestamp	timstamp au format unix
-     * @return	string		date au format YYYYMMDDHHMM
-     * @author	Stephane F.
+     * @param   timestamp   timstamp au format unix
+     * @return  string      date au format YYYYMMDDHHMM
+     * @author  Stephane F.
      **/
     public static function timestamp2Date($timestamp)
     {
@@ -135,33 +129,33 @@ class plxDate
     /**
      * Méthode qui éclate une date au format YYYYMMDDHHMM dans un tableau
      *
-     * @param	date		date au format YYYYMMDDHHMM
-     * @return	array		tableau contenant le détail de la date
-     * @author	Stephane F.
+     * @param   date        date au format YYYYMMDDHHMM
+     * @return  array       tableau contenant le détail de la date
+     * @author  Stephane F.
      **/
     public static function date2Array($date)
     {
         $capture = '';
         preg_match('/([0-9]{4})([0-9]{2})([0-9]{2})([0-9:]{2})([0-9:]{2})/', $date, $capture);
         return array(
-            'year' 	=> $capture[1],
+            'year'  => $capture[1],
             'month' => $capture[2],
-            'day' 	=> $capture[3],
-            'hour'	=> $capture[4],
+            'day'   => $capture[3],
+            'hour'  => $capture[4],
             'minute'=> $capture[5],
-            'time' 	=> $capture[4] . ':' . $capture[5]
+            'time'  => $capture[4] . ':' . $capture[5]
         );
     }
 
     /**
      * Méthode qui vérifie la validité de la date et de l'heure
      *
-     * @param	int		mois
-     * @param	int		jour
-     * @param	int		année
-     * @param	int		heure:minute
-     * @return	boolean	vrai si la date est valide
-     * @author	Amaury Graillat
+     * @param   int     mois
+     * @param   int     jour
+     * @param   int     année
+     * @param   int     heure:minute
+     * @return  boolean vrai si la date est valide
+     * @author  Amaury Graillat
      **/
     public static function checkDate($day, $month, $year, $time)
     {
@@ -172,9 +166,9 @@ class plxDate
     /**
      * Fonction de conversion de date ISO en format RFC822
      *
-     * @param	date	date à convertir
-     * @return	string	date au format iso.
-     * @author	Amaury GRAILLAT
+     * @param   date    date à convertir
+     * @return  string  date au format iso.
+     * @author  Amaury GRAILLAT
      **/
     public static function dateIso2rfc822($date)
     {
