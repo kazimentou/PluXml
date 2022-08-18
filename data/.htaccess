@@ -1,4 +1,8 @@
-options -indexes
-<Files "*">
-	SetHandler default-handler
-</Files>
+Options -Indexes
+
+<IfDefine !Free>
+        <Files "*">
+                SetHandler default-handler
+        </Files>
+</IfDefine>
+
