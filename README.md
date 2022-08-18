@@ -53,6 +53,13 @@ Procédure d'installation
 * Récuperez l'archive téléchargeable [sur cette page](https://www.pluxml.org/) et dézippez la à la racine de votre site
 * Connectez-vous à votre site et suivez la procédure d'installation affichée à l'écran
 
+Installation de PHPMailer
+-------------------------
+
+* Cette version de PluXml est livré sans PHPMailer.
+* Si vous souhaitez l'utiliser, vérifiez sur votre serveur que la version installée de PHP est égale ou supérieure à 7.2.5
+* Puis, dans une fenêtre de terminal, placez-vous dans le dossier core et exécutez la commande "composer update".
+
 Mise à jour d'une version existante de PluXml
 ---------------------------------------------
 

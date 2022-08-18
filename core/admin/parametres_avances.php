@@ -168,7 +168,7 @@ include __DIR__ .'/top.php';
 			</div>
 		</div>
 <?php
-if(class_exists('PHPMailer')) {
+if(class_exists('PHPMailer\PHPMailer\PHPMailer')) {
 ?>
 		<div>
 			<h2><?php echo L_CONFIG_ADVANCED_EMAIL_SENDING_TITLE ?>&nbsp;:</h2>
@@ -273,7 +273,29 @@ if(class_exists('PHPMailer')) {
 			</div>
 		</div>
 <?php
-	} # if(class_exists('PHPMailer'))
+		# Fin de if(class_exists('PHPMailer'))
+	} else {
+		# Rétro-compatibilité si PHPMailer renaît de ses cendres
+		if(!isset($plxAdmin->aConf['smtp_port'])) {
+			$plxAdmin->aConf['smtp_port'] = '465';
+		}
+		foreach(array(
+			'smtp_server',
+			'smtp_username',
+			'smtp_password',
+			'smtp_port',
+			'smtp_security',
+			'smtpOauth2_emailAdress',
+			'smtpOauth2_clientId',
+			'smtpOauth2_clientSecret',
+			'smtpOauth2_refreshToken',
+			'smtpOauth2_emailAdress',
+		) as $k) {
+?>
+		<input type="hidden" name="<?= $k ?>" value="<?= isset($plxAdmin->aConf[$k]) ? $plxAdmin->aConf[$k] : '' ?>" />
+<?php
+		}
+	}
 ?>
 	</fieldset>
 	<?php eval($plxAdmin->plxPlugins->callHook('AdminSettingsAdvanced')) # Hook Plugins ?>
