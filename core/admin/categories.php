@@ -60,6 +60,7 @@ include 'top.php';
 					<th><?php echo L_ID ?></th>
 					<th><?php echo L_CAT_LIST_NAME ?></th>
 					<th><?php echo L_CAT_LIST_URL ?></th>
+					<th><?= L_EDITCAT_TEMPLATE ?></th>
 					<th><?php echo L_CAT_LIST_ACTIVE ?></th>
 					<th><?php echo L_CAT_LIST_SORT ?></th>
 					<th><?php echo L_CAT_LIST_BYPAGE ?></th>
@@ -81,6 +82,8 @@ include 'top.php';
 					plxUtils::printInput($k.'_name', plxUtils::strCheck($v['name']), 'text', '-50');
 					echo '</td><td>';
 					plxUtils::printInput($k.'_url', $v['url'], 'text', '-50');
+					echo '</td><td>';
+					plxUtils::printSelect($k.'_template', $plxAdmin->getTemplatesTheme('categorie'), $v['template']);
 					echo '</td><td>';
 					plxUtils::printSelect($k.'_active', array('1'=>L_YES,'0'=>L_NO), $v['active']);
 					echo '</td><td>';
@@ -113,6 +116,8 @@ include 'top.php';
 						plxUtils::printInput($new_catid.'_name', '', 'text', '-50');
 						echo '</td><td>';
 						plxUtils::printInput($new_catid.'_url', '', 'text', '-50');
+						echo '</td><td>';
+						plxUtils::printSelect($new_catid.'_template', $plxAdmin->getTemplatesTheme('categorie'), '');
 						echo '</td><td>';
 						plxUtils::printSelect($new_catid.'_active', array('1'=>L_YES,'0'=>L_NO), '1');
 						echo '</td><td>';
