@@ -1,8 +1,4 @@
 <?php
-if (!defined('PLX_ROOT')) {
-	exit;
-}
-
 const THEME_SLIDESHOW = true;
 include 'header.php';
 ?>
@@ -22,7 +18,7 @@ $content = ob_get_clean();
 
 $pattern = '@data-gallery="([^"]+)"[^>]*?>@';
 if (preg_match($pattern, $content, $matches)) {
-	$imgsList = glob(PLX_ROOT . $plxMotor->aConf['medias'] . rtrim($matches[1], '/') .  '/*.tb.{jpg,jpeg,png,gif}', GLOB_BRACE);
+	$imgsList = glob(PLX_ROOT . $plxMotor->aConf['medias'] . rtrim($matches[1], '/') .  '/*.tb\.{jpg,jpeg,png,gif,webp}', GLOB_BRACE);
 	if (!empty($imgsList)) {
 		ob_start(); ?>
  <!-- Auto-generation by <?= basename(__FILE__) ?> -->
@@ -31,7 +27,7 @@ if (preg_match($pattern, $content, $matches)) {
 		foreach ($imgsList as $filename) {
 			$src = substr($filename, $offset);
 			$imgSize = getimagesize($filename);
-			$title = ucfirst(preg_replace('@(?:\.tb)?\.(?:jpe?g|png|gif)$@', '', basename($filename))); ?>
+			$title = ucfirst(preg_replace('@(?:\.tb)?\.(?:jpe?g|png|gif|webp)$@', '', basename($filename))); ?>
 					<figure>
 						<a href="<?= preg_replace("@\.tb\.(jpe?g|png|gif)$@", ".$1", $src) ?>" target="_blank"><img src="<?= $src ?>" <?= !empty($imgSize) ? $imgSize[3] : '' ?> alt="<?= $title ?>" /></a>
 						<figcaption><?= $title ?></figcaption>
@@ -56,7 +52,6 @@ if (preg_match($pattern, $content, $matches)) {
 	echo $content;
 }
 ?>
-<!-- end of static-gallery.php -->
 					</article>
 				</div>
 <?php

@@ -1,3 +1,3 @@
 <?php
 const FULL_WIDTH = true;
-include 'categorie.php';
+include preg_replace('@-full-width\.php$@', '.php', basename(__FILE__));
