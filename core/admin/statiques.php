@@ -149,11 +149,10 @@ function checkBox(cb) {
 						<?php plxUtils::printInput($new_staticid.'_group', '', 'text', '-100'); ?>
 					</td><td>
 						<?php plxUtils::printInput($new_staticid.'_name', '', 'text', '-255'); ?>
-						<?php plxUtils::printInput($new_staticid.'_template', 'static.php', 'hidden'); ?>
 					</td><td>
 						<?php plxUtils::printInput($new_staticid.'_url', '', 'text', '-255'); ?>
 					</td><td>
-						<?php plxUtils::printSelect($new_staticid.'template', $aTemplates); ?>
+						<?php plxUtils::printSelect($new_staticid.'_template', $aTemplates); ?>
 					</td><td>
 						<?php plxUtils::printSelect($new_staticid.'_active', array('1'=>L_YES,'0'=>L_NO), '0'); ?>
 					</td><td>
