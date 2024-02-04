@@ -104,7 +104,7 @@ if($plxShow->articleAllowComs()) {
 ?>
 			<div class="grid">
 				<div class="col sml-12">
-					<label for="id_rep"><strong><?= $plxShow->lang('ANTISPAM_WARNING') ?></strong>*</label>
+					<label for="id_rep"><strong><?php $plxShow->lang('ANTISPAM_WARNING'); ?></strong>*</label>
 					<?php $plxShow->capchaQ(); ?>
 					<input id="id_rep" name="rep" type="text" size="2" maxlength="1" style="width: auto; display: inline;" required="required" />
 				</div>

@@ -69,20 +69,20 @@ function processContact(&$plxShow)
 	.mail-content { border: 1px solid #444; margin: 1rem 0; padding: 0.5rem 1rem; border-radius: 0.5rem; }
 </style>
 </head><body>
-	<p><strong><em>Site :</em> <?= $_SERVER['REQUEST_SCHEME'] ?>://<?= $_SERVER['HTTP_HOST'] ?></strong></p>
-	<?php
+	<p><strong><em><?php $plxShow->lang('CONTACT_WEBSITE'); ?>&nbsp;:</em> <?= $_SERVER['REQUEST_SCHEME'] ?>://<?= $_SERVER['HTTP_HOST'] ?></strong></p>
+<?php
 	foreach ($params as $field => $value) {
 		if (!empty($value) and $field != 'capcha') {
 			if (in_array($field, array('content'))) {
 				// <textarea>
-				?>
-	<p><em><?= $plxShow->getLang('MAIL_' . strtoupper($field)) ?> :</em></p>
+?>
+	<p><em><?php $plxShow->lang('MAIL_' . strtoupper($field)); ?>&nbsp;:</em></p>
 	<div class="mail-content"><?= nl2br($value) ?></div>
-				<?php
+<?php
 			} else {
-				?>
-	<p><em><?= $plxShow->getLang('MAIL_' . strtoupper($field)) ?> :</em> <?= $value ?></p>
-				<?php
+?>
+	<p><em><?php $plxShow->lang('MAIL_' . strtoupper($field)); ?>&nbsp;:</em> <?= $value ?></p>
+<?php
 			}
 		}
 	}
@@ -93,12 +93,13 @@ function processContact(&$plxShow)
 		'Accept-Language'   => 'HTTP_ACCEPT_LANGUAGE',
 		) as $k => $value
 	) {
-		?>
+?>
 	<p><em><?= $k ?> :</em> <?= $_SERVER[$value] ?></p>
-		<?php
-	} ?>
+<?php
+	}
+?>
 </body></html>
-	<?php
+<?php
 // fin du corps du message
 	if (
 		!mail(
@@ -131,14 +132,14 @@ function processContact(&$plxShow)
 $result = processContact($plxShow);
 if ($result === true) {
 ?>
-							<p class="contact success"><?= nl2br($plxShow->getLang('MAIL_SUCCESS')) ?></p>
-							<p><a href="index.php" class="button green"><?= $plxShow->getLang('BACKTO_HOME') ?></a></p>
+							<p class="contact success"><?= nl2br($plxShow->getLang('MAIL_SUCCESS')); ?></p>
+							<p><a href="index.php" class="button green"><?php $plxShow->lang('BACKTO_HOME'); ?></a></p>
 <?php
 } else {
 	if (!empty($result)) {
 		// Il y a eu une erreur
 ?>
-							<p class="contact error"><?= $plxShow->getLang($result) ?></p>
+							<p class="contact error"><?php $plxShow->lang($result); ?></p>
 <?php
 	}
 
@@ -152,20 +153,20 @@ if ($result === true) {
 ?>
 								<div class="grid">
 									<div class="col">
-										<input type="text" name="name" value="<?= plxUtils::getValue($param['name']) ?>" placeholder="<?= $plxShow->getLang('CONTACT_NAME') ?>" required />
+										<input type="text" name="name" value="<?= plxUtils::getValue($param['name']) ?>" placeholder="<?php $plxShow->lang('CONTACT_NAME'); ?>" required />
 									</div>
 								</div>
 								<div class="grid infos">
 									<div class="col lrg-6">
-										<input type="tel" name="phone" class="phone" value="<?= plxUtils::getValue($param['phone']) ?>" placeholder="<?= $plxShow->getLang('CONTACT_PHONE') ?>" />
+										<input type="tel" name="phone" class="phone" value="<?= plxUtils::getValue($param['phone']) ?>" placeholder="<?php $plxShow->lang('CONTACT_PHONE'); ?>" />
 									</div>
 									<div class="col lrg-6">
-										<input type="email" name="mail" value="<?= plxUtils::getValue($param['mail']) ?>" placeholder="<?= $plxShow->getLang('CONTACT_MAIL') ?>" required />
+										<input type="email" name="mail" value="<?= plxUtils::getValue($param['mail']) ?>" placeholder="<?php $plxShow->lang('CONTACT_MAIL'); ?>" required />
 									</div>
 								</div>
 								<div class="grid">
 									<div class="col sml-12">
-										<textarea name="content" placeholder="<?= $plxShow->getLang('CONTACT_CONTENT') ?>" rows="10" required><?= plxUtils::getValue($param['name']) ?></textarea>
+										<textarea name="content" placeholder="<?php $plxShow->lang('CONTACT_CONTENT'); ?>" rows="10" required><?= plxUtils::getValue($param['name']) ?></textarea>
 									</div>
 								</div>
 <?php
@@ -175,7 +176,7 @@ if ($result === true) {
 ?>
 								<div class="grid">
 									<div class="col sml-12">
-										<label for="id_rep"><strong><?= $plxShow->lang('ANTISPAM_WARNING') ?></strong>*</label>
+										<label for="id_rep"><strong><?php $plxShow->lang('ANTISPAM_WARNING'); ?></strong>*</label>
 										<?php $plxShow->capchaQ(); ?>
 										<input id="id_rep" name="rep" type="text" size="2" maxlength="1" style="width: auto; display: inline;" required="required" />
 									</div>
