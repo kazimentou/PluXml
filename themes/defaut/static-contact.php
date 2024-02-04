@@ -1,7 +1,5 @@
 <?php
-if (!defined('PLX_ROOT')) {
-	exit;
-}
+include 'header.php';
 
 /*
  * Pour afficher une page de contact sur votre site, créer une page statique
@@ -119,11 +117,11 @@ function processContact(&$plxShow)
 	}
 	return true;
 }
-
-/* ---------- Génération de la page HTML à afficher ------------- */
-include 'header.php';
 ?>
-<!-- begin of static-contact.php -->
+	<main class="main">
+		<div class="container">
+			<div class="grid">
+				<div class="<?= $contentClass ?>">
 					<article class="static" id="static-page-<?= $plxShow->staticId(); ?>">
 						<header class="static-header">
 							<h2><?php $plxShow->staticTitle(); ?></h2>
@@ -166,13 +164,27 @@ if ($result === true) {
 									</div>
 								</div>
 								<div class="grid">
-									<div class="col">
+									<div class="col sml-12">
 										<textarea name="content" placeholder="<?= $plxShow->getLang('CONTACT_CONTENT') ?>" rows="10" required><?= plxUtils::getValue($param['name']) ?></textarea>
 									</div>
 								</div>
-	<?php printCapcha(); ?>
+<?php
+	if($plxShow->plxMotor->aConf['capcha']) {
+		$plxShow->plxMotor->plxCapcha = new plxCapcha(); # Création objet captcha
+		# contrôle anti-spam
+?>
 								<div class="grid">
-									<div class="col">
+									<div class="col sml-12">
+										<label for="id_rep"><strong><?= $plxShow->lang('ANTISPAM_WARNING') ?></strong>*</label>
+										<?php $plxShow->capchaQ(); ?>
+										<input id="id_rep" name="rep" type="text" size="2" maxlength="1" style="width: auto; display: inline;" required="required" />
+									</div>
+								</div>
+<?php
+	}
+?>
+								<div class="grid">
+									<div class="col sml-12">
 									<?= plxToken::getTokenPostMethod();
 									echo PHP_EOL; ?>
 									<input class="blue" type="submit" value="<?php $plxShow->lang('SEND') ?>" />
@@ -185,6 +197,14 @@ if ($result === true) {
 ?>
 						</div>
 					</article>
-<!-- end of static-contact.php -->
+				</div>
+<?php
+if(!defined('FULL_WIDTH')) {
+	include 'sidebar.php';
+}
+?>
+			</div>
+		</div>
+	</main>
 <?php
 include 'footer.php';

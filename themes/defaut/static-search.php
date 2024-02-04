@@ -1,7 +1,5 @@
 <?php
-if (!defined('PLX_ROOT')) {
-	exit;
-}
+include 'header.php';
 
 /*
  * Pour afficher une page de contact sur votre site, créer une page statique
@@ -123,8 +121,6 @@ if (is_string($query) and !empty($query)) {
 	$plxMotor->bypage = $plxMotor->aConf['bypage'];
 	$plxMotor->getArticles(); // Les articles seront triés par la fonction
 }
-
-include 'header.php';
 ?>
 	<main class="main">
 		<div class="container">

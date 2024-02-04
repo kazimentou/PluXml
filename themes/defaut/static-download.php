@@ -1,7 +1,5 @@
 <?php
-if (!defined('PLX_ROOT')) {
-	exit;
-}
+include 'header.php';
 
 function byteConvert($bytes)
 {
@@ -12,9 +10,7 @@ function byteConvert($bytes)
 	$e = floor(log($bytes, 1024));
 	return round($bytes / pow(1024, $e), 2) . $s[$e];
 }
-include 'header.php';
 ?>
-<!-- begin of static-download.php -->
 	<main class="main">
 		<div class="container">
 			<div class="grid">
@@ -103,6 +99,5 @@ if(!defined('FULL_WIDTH')) {
 ?>
 		</div>
 	</main>
-<!-- end of static-download.php -->
 <?php
 include 'footer.php';
