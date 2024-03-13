@@ -1431,7 +1431,17 @@ class plxMotor {
 				'feed.php' => 'feed/',
 			)) : '';
 			if(!empty($args['query'])) {
-				$new_url .= $args['query'];
+				# modifie $args['query'] pour simplifier l'url
+				# $new_url .= $args['query'];
+				$new_url .= preg_replace_callback('#^(' . implode('|', array(L_ARTICLE_URL, L_STATIC_URL, L_CATEGORY_URL, L_USER_URL)) . ')\d{1,4}/#',
+					function($matches) {
+						if(in_array($matches[1], array(L_ARTICLE_URL,L_CATEGORY_URL, L_USER_URL))) {
+							return $matches[1] . '/';
+						}
+						return '';
+					},
+					$args['query']
+				);
 			}
 			if(empty($new_url))	{
 				$new_url = $this->path_url;
