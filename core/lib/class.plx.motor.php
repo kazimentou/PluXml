@@ -195,14 +195,22 @@ class plxMotor {
 			}
 			# $this->get not empty !
 		} elseif(
-			preg_match('#^(' . implode('|', array(L_CATEGORY_URL, L_USER_URL)) . ')(\d{1,3})(?:/([^&]*))?/' . L_PAGE_URL . '\d+#', $this->get, $matches) or # avec pagination
-			preg_match('#^(' . implode('|', array(L_ARTICLE_URL, L_STATIC_URL, L_CATEGORY_URL, L_USER_URL)) .  ')(\d{1,4})(?:/([^&]*))?#', $this->get, $matches) # sans pagination
+			preg_match('#^(' . implode('|', array(L_CATEGORY_URL, L_USER_URL)) . ')(\d{1,3})?(?:/([^&]*))?/' . L_PAGE_URL . '\d+#', $this->get, $matches) or # avec pagination
+			preg_match('#^(' . implode('|', array(L_ARTICLE_URL, L_STATIC_URL, L_CATEGORY_URL, L_USER_URL)) .  ')(\d{1,4})?(?:/([^&]*))?#', $this->get, $matches) # sans pagination
 		) {
-			$this->cible = str_pad($matches[2], ($matches[1] == L_ARTICLE_URL) ? 4 : 3, '0', STR_PAD_LEFT); # On complète sur 3 ou 4 caractères
+			$this->cible = !empty($matches[2]) ? str_pad($matches[2], ($matches[1] == L_ARTICLE_URL) ? 4 : 3, '0', STR_PAD_LEFT) : ''; # On complète sur 3 ou 4 caractères
+			$url =  (!empty($this->cible) or !isset($matches[3])) ? '[\w-]+' : $matches[3];
 			switch($matches[1]) {
 				case L_ARTICLE_URL:
-					$this->motif = '#^'.$this->cible.'\.(?:pin,|\d{3},)*(?:'.$this->activeCats.')(?:,\d{3})*\.\d{3}\.\d{12}\.[\w-]+\.xml$#'; # Motif de recherche
+					$artId = !empty($this->cible) ? $this->cible : '\d{4}';
+					$this->motif = '#^'.$artId.'\.(?:pin,|\d{3},)*(?:'.$this->activeCats.')(?:,\d{3})*\.\d{3}\.\d{12}\.'.$url.'\.xml$#'; # Motif de recherche
 					if($this->getArticles()) {
+						if(empty($this->cible)) {
+							# On a retrouvé l'article par son url
+							$this->cible = $this->plxRecord_arts->f('numero');
+							# On rétablit le motif original de recherche por rétro-compatibilité
+							$this->motif = '#^'.$this->cible.'\.(?:pin,|\d{3},)*(?:'.$this->activeCats.')(?:,\d{3})*\.\d{3}\.\d{12}\.[\w-]+\.xml$#';
+						}
 						# Redirection 301
 						if(!isset($matches[3]) OR $this->plxRecord_arts->f('url') != $matches[3]) {
 							$this->redir301($this->urlRewrite('?' . L_ARTICLE_URL . intval($this->cible) . '/' . $this->plxRecord_arts->f('url')));
@@ -215,6 +223,20 @@ class plxMotor {
 					}
 					break;
 				case L_STATIC_URL:
+					if(empty($this->cible)) {
+						# On recherche la page statique par son url
+						$itemsByUrl = array_filter(
+							$this->aStats,
+							function($value) use($url) {
+								return ($value['active'] and $value['url'] == $url);
+							}
+						);
+						if(count($itemsByUrl) > 0) {
+							$this->cible = array_keys($itemsByUrl)[0]; # or array_first_key from PHP 7.3
+						} else {
+							$this->error404(L_UNKNOWN_STATIC);
+						}
+					}
 					if(isset($this->aStats[$this->cible]) and $this->aStats[$this->cible]['active']) {
 						$this->mode = 'static';
 						if(!empty($this->aConf['homestatic']) AND $this->aConf['homestatic'] == $this->cible){
@@ -233,6 +255,20 @@ class plxMotor {
 					}
 					break;
 				case L_CATEGORY_URL:
+					if(empty($this->cible)) {
+						# On recherche la catégorie par son url
+						$itemsByUrl = array_filter(
+							$this->aCats,
+							function($value) use($url) {
+								return ($value['active'] and $value['url'] == $url);
+							}
+						);
+						if(count($itemsByUrl) > 0) {
+							$this->cible = array_keys($itemsByUrl)[0]; # or array_first_key from PHP 7.3
+						} else {
+							$this->error404(L_UNKNOWN_CATEGORY);
+						}
+					}
 					if(isset($this->aCats[$this->cible]) and $this->aCats[$this->cible]['active']) {
 						if(isset($matches[3]) AND $this->aCats[$this->cible]['url'] == $matches[3]) {
 							$this->mode = 'categorie';
@@ -322,6 +358,40 @@ class plxMotor {
 				$this->cible = $matches[1];
 			} else {
 				$this->error404(L_DOCUMENT_NOT_FOUND);
+			}
+		} elseif(preg_match('#^([\w-]+)#', $this->get, $matches)) {
+			$url = $matches[1];
+			# On recherche une page statique avec cette url
+			$itemsByUrl = array_filter(
+				$this->aStats,
+				function($value) use($url) {
+					return ($value['active'] and $value['url'] == $url);
+				}
+			);
+			if(count($itemsByUrl) > 0) {
+				$this->cible = array_keys($itemsByUrl)[0]; # or array_first_key from PHP 7.3
+				$this->mode = 'static';
+				$this->template = $this->aStats[$this->cible]['template'];
+			} else {
+				# On recherche une catégorie avec cette url
+				$itemsByUrl = array_filter(
+					$this->aCats,
+					function($value) use($url) {
+						return ($value['active'] and $value['url'] == $url);
+					}
+				);
+				if(count($itemsByUrl) > 0) {
+					$this->cible = array_keys($itemsByUrl)[0]; # or array_first_key from PHP 7.3
+					$this->mode = 'categorie';
+					$this->template = $this->aCats[$this->cible]['template'];
+					$this->motif = '#^\d{4}\.(?:pin,|home,|\d{3},)*' . $this->cible . '(?:,\d{3})*\.\d{3}\.\d{12}\.[\w-]+\.xml$#'; # Motif de recherche
+					$this->tri = $this->aCats[$this->cible]['tri']; # Recuperation du tri des articles
+					if($this->aCats[$this->cible]['bypage'] > 0) {
+						$this->bypage = $this->aCats[$this->cible]['bypage'];
+					}
+				} else {
+					$this->error404(L_ERR_PAGE_NOT_FOUND);
+				}
 			}
 		} else {
 			$this->error404(L_ERR_PAGE_NOT_FOUND);
