@@ -286,6 +286,20 @@ class plxMotor {
 					}
 					break;
 				case L_USER_URL:
+					if(empty($this->cible)) {
+						# On recherche l'auteur par son nom "urlify"
+						$itemsByUrl = array_filter(
+							$this->aUsers,
+							function($value) use($url) {
+								return ($value['active'] and plxUtils::urlify($value['name']) == $url);
+							}
+						);
+						if(count($itemsByUrl) > 0) {
+							$this->cible = array_keys($itemsByUrl)[0]; # or array_first_key from PHP 7.3
+						} else {
+							$this->error404(L_UNKNOWN_AUTHOR);
+						}
+					}
 					if(isset($this->aUsers[$this->cible]) and $this->aUsers[$this->cible]['active']) {
 						$urlName = plxUtils::urlify($this->aUsers[$this->cible]['name']);
 						if(isset($matches[3]) AND $urlName == $matches[3]) {
@@ -301,7 +315,7 @@ class plxMotor {
 					break;
 				default:
 					# Jamais atteint
-					$this->error404(L_UNKNOWN_AUTHOR);
+					$this->error404(L_ERR_PAGE_NOT_FOUND);
 			}
 		} elseif(preg_match('#^' . L_TAG_URL . '/([\w-]+)#', $this->get, $matches)) {
 			$datetime = date('YmdHi');
