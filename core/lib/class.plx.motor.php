@@ -82,11 +82,11 @@ class plxMotor {
 
 		# On vérifie s'il faut faire une mise à jour
 		if(
+			!defined('PLX_UPDATER') AND
 			(
 				!isset($this->aConf['version']) OR
 				version_compare($this->aConf['version'], PLX_VERSION_DATA, '<')
-			) AND
-			!defined('PLX_UPDATER')
+			)
 		) {
 			if(defined('PLX_FEED')) {
 				header('Content-Type: Text/Plain; charset=utf-8');

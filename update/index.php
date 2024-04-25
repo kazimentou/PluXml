@@ -13,7 +13,6 @@ if(!file_exists(path('XMLFILE_PARAMETERS'))) {
 const PLX_UPDATER = true;
 
 # On inclut les librairies nécessaires pour la MAJ
-include PLX_ROOT.'update/versions.php';
 include PLX_ROOT.'update/class.plx.updater.php';
 
 # Chargement des langues
@@ -40,6 +39,13 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 	$_POST = plxUtils::unSlash($_POST);
 }
 
+$versions = array_map(
+	function ($value) {
+		return preg_replace('#.*/update_(.*).php$#', '$1', $value);
+	},
+	glob('./update_*.php')
+);
+
 # Création de l'objet principal et lancement du traitement
 $plxUpdater = new plxUpdater($versions);
 
@@ -57,7 +63,7 @@ plxToken::validateFormToken($_POST);
 	<title><?= L_UPDATE_TITLE.' '.plxUtils::strCheck($plxUpdater->newVersion) ?></title>
 	<link rel="stylesheet" type="text/css" href="<?= PLX_CORE ?>admin/theme/plucss.css" media="screen" />
 	<link rel="stylesheet" type="text/css" href="<?= PLX_CORE ?>admin/theme/theme.css" media="screen" />
-	<link rel="icon" href="<?= PLX_CORE ?>admin/theme/images/pluxml.gif" />
+	<link rel="icon" href="<?= PLX_CORE ?>admin/theme/images/pluxml.png" />
 	<style>
 		p.alert { width: fit-content; }
 	</style>
@@ -72,7 +78,7 @@ plxToken::validateFormToken($_POST);
 			</header>
 <?php
 if(empty($_POST['submit'])) {
-	if(version_compare($plxUpdater->oldVersion, $plxUpdater->newVersion, '>=')) {
+	if(!empty($plxUpdater->oldVersion) and version_compare($plxUpdater->oldVersion, $plxUpdater->newVersion, '>=')) {
 ?>
 				<p><strong><?= L_UPDATE_UPTODATE ?></strong></p>
 				<p><?= L_UPDATE_NOT_AVAILABLE ?></p>
