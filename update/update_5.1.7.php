@@ -6,9 +6,8 @@
  * @author	Stephane F
  **/
 
-define('PLX_CONF', PLX_ROOT.'data/configuration/parametres.xml');
-
 class update_5_1_7 extends plxUpdate{
+	const PLX_CONF = PLX_ROOT . 'data/configuration/parametres.xml';
 
 	# mise à jour dossier de configuration
 	public function step1() {
@@ -24,10 +23,10 @@ class update_5_1_7 extends plxUpdate{
 		}
 
 		# Protection du dossier de configuration
-		plxUtils::write("<Files *>\n\tOrder allow,deny\n\tDeny from all\n</Files>", PLX_ROOT.PLX_CONFIG_PATH.".htaccess");
-		plxUtils::write("", PLX_ROOT.PLX_CONFIG_PATH."index.html");
+		plxUtils::write("<Files *>\n\tOrder allow,deny\n\tDeny from all\n</Files>", PLX_ROOT . PLX_CONFIG_PATH . '.htaccess');
+		plxUtils::write('', PLX_ROOT . PLX_CONFIG_PATH. 'index.html');
 		# Relocalisation des fichiers de configuration si besoin
-		if(!plxUtils::write(file_get_contents(PLX_CONF), path('XMLFILE_PARAMETERS'))) {
+		if(!plxUtils::write(file_get_contents(self::PLX_CONF), path('XMLFILE_PARAMETERS'))) {
 			echo '<p class="error">'.L_UPDATE_ERR_FILE.' : '.path('XMLFILE_PARAMETERS').'</p>';
 			return false;
 		}

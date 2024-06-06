@@ -32,11 +32,11 @@ class update_5_0 extends plxUpdate{
 ?>
 		<li><?= L_UPDATE_CREATE_TAGS_FILE ?></li>
 <?php
-		$xml = '<?xml version="1.0" encoding="'.PLX_CHARSET.'"?>';
-		$xml .= '<document>'."\n";
-		$xml .= '</document>';
+		$xml = XML_HEADER . '<document>'. PHP_EOL . '</document>';
 		if(!plxUtils::write($xml,PLX_ROOT.$this->plxAdmin->aConf['tags'])) {
-			echo '<p class="error">'.L_UPDATE_ERR_CREATE_TAGS_FILE.'</p>';
+?>
+	<p class="error"><?= L_UPDATE_ERR_CREATE_TAGS_FILE ?></p>
+<?php
 			return false;
 		}
 		return true;
@@ -51,7 +51,9 @@ class update_5_0 extends plxUpdate{
 		<li><?= L_UPDATE_CREATE_THEME_FILE ?>: themes/ <?= $this->plxAdmin->aConf['style'] ?>/tags.php</li>
 <?php
 			if(!copy($srcfile, $dstfile)) {
-				echo '<p class="error">'.L_UPDATE_ERR_CREATE_THEME_FILE.' themes/style/tags.php</p>';
+?>
+		<p class="error"><?= L_UPDATE_ERR_CREATE_THEME_FILE ?> themes/style/tags.php</p>
+<?php
 				return false;
 			}
 		}
@@ -67,7 +69,9 @@ class update_5_0 extends plxUpdate{
 		<li><?= L_UPDATE_CREATE_THEME_FILE ?> themes/<?= $this->plxAdmin->aConf['style'] ?>/archives.php</li>
 <?php
 			if(!copy($srcfile, $dstfile)) {
-				echo '<p class="error">'.L_UPDATE_ERR_CREATE_THEME_FILE.' themes/style/archives.php</p>';
+?>
+		<p class="error"><?= L_UPDATE_ERR_CREATE_THEME_FILE ?> themes/style/archives.php</p>
+<?php
 				return false;
 			}
 		}
@@ -84,11 +88,14 @@ class update_5_0 extends plxUpdate{
 			foreach($files as $id => $filename){
 				$art = $this->parseArticle(PLX_ROOT.$this->plxAdmin->aConf['racine_articles'].$filename);
 				if(!$this->plxAdmin->editArticle($art, $art['numero'])) {
-					echo '<p class="error">'.L_UPDATE_ERR_FILE_PROCESSING.' : '.$filename.'</p>';
+?>
+		<p class="error"><?= L_UPDATE_ERR_FILE_PROCESSING ?> : <?= $filename ?></p>
+<?php
 					return false;
 				}
 			}
 		}
+
 		return true;
 	}
 
@@ -100,13 +107,22 @@ class update_5_0 extends plxUpdate{
 		if($statics = $this->getStatiques(PLX_ROOT.$this->plxAdmin->aConf['statiques'])) {
 			# On génère le fichier XML
 			$xml = "<?xml version=\"1.0\" encoding=\"".PLX_CHARSET."\"?>\n";
-			$xml .= "<document>\n";
+			ob_start();
+?>
+<document>
+<?php
 			foreach($statics as $static_id => $static) {
-				$xml .= "\t<statique number=\"".$static_id."\" active=\"".$static['active']."\" menu=\"".$static['menu']."\" url=\"".$static['url']."\" template=\"static.php\"><group><![CDATA[]]></group><name><![CDATA[".$static['name']."]]></name></statique>\n";
+?>
+	<statique number="<?= $static_id ?>" active="<?= $static['active'] ?>" menu="<?= $static['menu'] ?>" url="<?= $static['url'] ?>" template="static.php"><group></group><name><![CDATA[" <?= $static['name'] ?>"]]></name></statique>
+<?php
 			}
-			$xml .= "</document>";
-			if(!plxUtils::write($xml,PLX_ROOT.$this->plxAdmin->aConf['statiques'])) {
-				echo '<p class="error">'.L_UPDATE_ERR_STATICS_MIGRATION.' (data/configuration/statiques.xml)</p>';
+?>
+</document>
+<?php
+			if(!plxUtils::write(XML_HEADER . ob_get_clean(), PLX_ROOT . $this->plxAdmin->aConf['statiques'])) {
+?>
+		<p class="error"><?= L_UPDATE_ERR_STATICS_MIGRATION ?> (<em>data/configuration/statiques.xml</em>)</p>
+<?php
 				return false;
 			}
 		}
@@ -119,25 +135,35 @@ class update_5_0 extends plxUpdate{
 		<li><?= L_UPDATE_CREATE_USERS_FILE ?></li>
 <?php
 		if($users = $this->getUsers(PLX_ROOT.$this->plxAdmin->aConf['passwords'])) {
-			$xml = '<?xml version="1.0" encoding="'.PLX_CHARSET.'"?>'."\n";
-			$xml .= '<document>'."\n";
+			ob_start();
+?>
+<document>
+<?php
 			$num_user = 1;
 			foreach($users as $login => $password) {
-				$xml .= "\t".'<user number="'.str_pad($num_user++, 3, "0", STR_PAD_LEFT).'" active="1" profil="0" delete="0">'."\n";
-				$xml .= "\t\t".'<login><![CDATA['.$login.']]></login>'."\n";
-				$xml .= "\t\t".'<name><![CDATA['.$login.']]></name>'."\n";
-				$xml .= "\t\t".'<infos><![CDATA[]]></infos>'."\n";
-				$xml .= "\t\t".'<password><![CDATA['.$password.']]></password>'."\n";
-				$xml .= "\t</user>\n";
+?>
+	<user number="<?= str_pad($num_user++, 3, '0', STR_PAD_LEFT) ?>" active="1" profil="0" delete="0">
+		<login><![CDATA[<?= $login ?>]]></login>
+		<name><![CDATA[<?= $login ?>]]></name>
+		<infos></infos>
+		<password><![CDATA[<?= $password ?>]]></password>
+	</user>
+<?php
 			}
-			$xml .= '</document>';
-			if(!plxUtils::write($xml,PLX_ROOT.$this->plxAdmin->aConf['users'])) {
-				echo '<p class="error">'.L_UPDATE_ERR_CREATE_USERS_FILE.' (data/configuration/users.xml)</p>';
+?>
+</document>
+<?php
+			if(!plxUtils::write(XML_HEADER. ob_get_clean(), PLX_ROOT . $this->plxAdmin->aConf['users'])) {
+?>
+		<p class="error"><?= L_UPDATE_ERR_CREATE_USERS_FILE ?> (<em>data/configuration/users.xml</em>)</p>
+<?php
 				return false;
 			}
 		}
 		else {
-			echo '<p class="error">'.L_UPDATE_ERR_NO_USERS.' data/configuration/passwords.xml</p>';
+?>
+		<p class="error"><?= L_UPDATE_ERR_NO_USERS ?> data/configuration/passwords.xml</p>
+<?php
 			return false;
 		}
 		return true;
@@ -146,9 +172,17 @@ class update_5_0 extends plxUpdate{
 	/* Suppression des données obsolètes */
 	public function step8() {
 		# suppression du fichier data/configuration/passwords.xml
-		unlink(PLX_ROOT.$this->plxAdmin->aConf['passwords']);
 		# suppression du fichier d'installation
-		unlink(PLX_ROOT.'install.php');
+		foreach(
+			array(
+				PLX_ROOT . $this->plxAdmin->aConf['passwords'],
+				PLX_ROOT . 'install.php',
+			) as $filename) {
+			if(is_file($filename)) {
+				unlink($filename);
+			}
+		}
+
 		# suppression des clés obsolètes dans le fichier data/configuration/parametres.xml
 		unset($this->plxAdmin->aConf['password']);
 		$this->plxAdmin->editConfiguration($this->plxAdmin->aConf, $this->plxAdmin->aConf);
@@ -161,12 +195,16 @@ class update_5_0 extends plxUpdate{
 ?>
 		<li><?= L_UPDATE_CREATE_HTACCESS_FILE ?></li>
 <?php
-			$txt = '<Files "version">
+			$txt = <<< EOT
+<Files "version">
     Order allow,deny
     Deny from all
-</Files>';
-			if(!plxUtils::write($txt,PLX_ROOT.'.htaccess')) {
-				echo '<p class="error">'.L_UPDATE_ERR_CREATE_HTACCESS_FILE.'</p>';
+</Files>
+EOT;
+			if(!plxUtils::write($txt, PLX_ROOT.'.htaccess')) {
+?>
+		<p class="error"><?= L_UPDATE_ERR_CREATE_HTACCESS_FILE ?></p>
+<?php
 				return false;
 			}
 		}
@@ -178,12 +216,16 @@ class update_5_0 extends plxUpdate{
 	private	function artInfoFromFilename($filename) {
 
 		# On effectue notre capture d'informations
-		preg_match('/([0-9]{4}).([0-9]{3}|home|draft).([0-9]{12}).([a-z0-9-]+).xml$/',$filename,$capture);
-		return array('artId'=>$capture[1],'catId'=>$capture[2],'artDate'=>$capture[3],'artUrl'=>$capture[4]);
+		preg_match('#(\d{4})\.(\d{3}|home|draft)\.(\d{12})\.([\w-]+)\.xml$#',$filename,$capture);
+		return array(
+			'artId'		=> $capture[1],
+			'catId'		=> $capture[2],
+			'artDate'	=> $capture[3],
+			'artUrl'	=> $capture[4]
+		);
 	}
 
 	private function parseArticle($filename) {
-		$art = array();
 		# Mise en place du parseur XML
 		$data = implode('',file($filename));
 		$parser = xml_parser_create(PLX_CHARSET);
@@ -191,28 +233,35 @@ class update_5_0 extends plxUpdate{
 		xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,0);
 		xml_parse_into_struct($parser,$data,$values,$iTags);
 		xml_parser_free($parser);
-		# Recuperation des valeurs de nos champs XML
-		$art['title'] = trim($values[ $iTags['title'][0] ]['value']);
-		$art['author'] = '001';
-		$art['allow_com'] = trim($values[ $iTags['allow_com'][0] ]['value']);
-		$art['chapo'] = (isset($values[ $iTags['chapo'][0] ]['value']))?trim($values[ $iTags['chapo'][0] ]['value']):'';
-		$art['content'] = (isset($values[ $iTags['content'][0] ]['value']))?trim($values[ $iTags['content'][0] ]['value']):'';
-		# Informations obtenues en analysant le nom du fichier
-		$art['filename'] = $filename;
 		$tmp = $this->artInfoFromFilename($filename);
-		$art['numero'] = $tmp['artId'];
-		$art['artId'] = $art['numero'];
-		$art['catId'] = array($tmp['catId']);
-		$art['url'] = $tmp['artUrl'];
-		preg_match('/([0-9]{4})([0-9]{2})([0-9]{2})([0-9]{4})/',$tmp['artDate'],$capture);
-		$art['date'] = array ('year' => $capture[1],'month' => $capture[2],'day' => $capture[3],'time' => $capture[4]);
-		$art['day'] = $art['date']['day'];
-		$art['month'] =$art['date']['month'];
-		$art['year'] = $art['date']['year'];
-		$art['time'] = $art['date']['time'];
-		#nouveau champs
-		$art['template'] = 'article.php';
-		$art['tags'] = '';
+		preg_match('#^(\d{4})(\d{2})(\d{2})(\d{4})$#', $tmp['artDate'], $capture);
+		# Recuperation des valeurs de nos champs XML
+		$art= array(
+			'title'		=> trim($values[ $iTags['title'][0] ]['value']),
+			'author'	=> '001',
+			'allow_com'	=> trim($values[ $iTags['allow_com'][0] ]['value']),
+			'chapo'		=> isset($values[ $iTags['chapo'][0] ]['value']) ? trim($values[ $iTags['chapo'][0] ]['value']) : '',
+			'content'	=> isset($values[ $iTags['content'][0] ]['value']) ? trim($values[ $iTags['content'][0] ]['value']) : '',
+			# Informations obtenues en analysant le nom du fichier
+			'filename'	=> $filename,
+			'numero'	=> $tmp['artId'],
+			'artId'		=> 'numero',
+			'catId'		=> array($tmp['catId']),
+			'url'		=> $tmp['artUrl'],
+			'date'		=> array (
+				'year'	=> $capture[1],
+				'month'	=> $capture[2],
+				'day'	=> $capture[3],
+				'time'	=> $capture[4]
+			),
+			'day'		=> 'date'['day'],
+			'month'		=> 'date'['month'],
+			'year'		=> 'date'['year'],
+			'time'		=> 'date'['time'],
+			#nouveaux champs
+			'template'	=> 'article.php',
+			'tags'		=> '',
+		);
 		# On retourne le tableau
 		return $art;
 	}

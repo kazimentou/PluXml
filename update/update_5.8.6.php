@@ -4,7 +4,7 @@
  * Classe de mise a jour pour PluXml version 5.8
  *
  * @package PLX
- * @author Pedro "P3ter" CADETE
+ * @author Pedro "P3ter" CADETE, Jean-Pierre Pourrez @bazooka07
  **/
 class update_5_8_6 extends plxUpdate
 {
@@ -15,10 +15,9 @@ class update_5_8_6 extends plxUpdate
 ?>
 		<li><?= L_UPDATE_UPDATE_PARAMETERS_FILE ?></li>
 <?php
-
-		$new_parameters = array();
-		$new_parameters['enable_rss_comment'] = '1';
-		$this->updateParameters($new_parameters);
+		$this->updateParameters(array(
+			'enable_rss_comment' => 1,
+		));
 
 		return true;
 	}

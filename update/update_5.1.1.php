@@ -3,7 +3,7 @@
  * Classe de mise a jour pour PluXml version 5.1.1
  *
  * @package PLX
- * @author	Stephane F
+ * @author	Stephane F, Jean-Pierre Pourrez @bazooka07
  **/
 class update_5_1_1 extends plxUpdate{
 
@@ -13,25 +13,33 @@ class update_5_1_1 extends plxUpdate{
 		<li><?= L_UPDATE_USERS_MIGRATION ?></li>
 <?php
 		# On génère le fichier XML
-		$xml = "<?xml version=\"1.0\" encoding=\"".PLX_CHARSET."\"?>\n";
-		$xml .= "<document>\n";
+		ob_start();
+?>
+<document>
+<?php
 		foreach($this->plxAdmin->aUsers as $user_id => $user) {
 			$salt = plxUtils::charAleatoire(10);
 			$password = sha1($salt.$user['password']);
-			$xml .= "\t".'<user number="'.$user_id.'" active="'.$user['active'].'" profil="'.$user['profil'].'" delete="'.$user['delete'].'">'."\n";
-			$xml .= "\t\t".'<login><![CDATA['.plxUtils::cdataCheck($user['login']).']]></login>'."\n";
-			$xml .= "\t\t".'<name><![CDATA['.plxUtils::cdataCheck($user['name']).']]></name>'."\n";
-			$xml .= "\t\t".'<infos><![CDATA['.plxUtils::cdataCheck($user['infos']).']]></infos>'."\n";
-			$xml .= "\t\t".'<password><![CDATA['.$password.']]></password>'."\n";
-			$xml .= "\t\t".'<salt><![CDATA['.$salt.']]></salt>'."\n";
-			$xml .= "\t\t".'<email><![CDATA['.$user['email'].']]></email>'."\n";
-			$xml .= "\t\t".'<lang><![CDATA['.$user['lang'].']]></lang>'."\n";
-			$xml .= "\t</user>\n";
+?>
+	<user number="<?= $user_id ?>" active="<?= $user['active'] ?>" profil="<?= $user['profil'] ?>" delete="<?= $user['delete'] ?>">
+		<login><![CDATA[<?= plxUtils::cdataCheck($user['login']) ?>]]></login>
+		<name><![CDATA[<?= plxUtils::cdataCheck($user['name']) ?>]]></name>
+		<infos><![CDATA[<?= plxUtils::cdataCheck($user['infos']) ?>]]></infos>
+		<password><![CDATA[<?= $password ?>]]></password>
+		<salt><![CDATA[<?= $salt ?>]]></salt>
+		<email><![CDATA[<?= $user['email'] ?>]]></email>
+		<lang><![CDATA[<?= $user['lang'] ?>]]></lang>
+	</user>
+<?php
 		}
-		$xml .= "</document>";
+?>
+</document>
+<?php
 
-		if(!plxUtils::write($xml,PLX_ROOT.$this->plxAdmin->aConf['users'])) {
-			echo '<p class="error">'.L_UPDATE_ERR_USERS_MIGRATION.' ('.$this->plxAdmin->aConf['users'].')</p>';
+		if(!plxUtils::write(XML_HEADER . ob_get_clean() , PLX_ROOT . $this->plxAdmin->aConf['users'])) {
+?>
+		<p class="error"><?= L_UPDATE_ERR_USERS_MIGRATION ?> (<?= $this->plxAdmin->aConf['users'] ?>)</p>
+<?php
 			return false;
 		}
 

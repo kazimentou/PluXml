@@ -66,6 +66,13 @@ plxToken::validateFormToken($_POST);
 	<link rel="icon" href="<?= PLX_CORE ?>admin/theme/images/pluxml.png" />
 	<style>
 		p.alert { width: fit-content; }
+		.section > ul {
+			max-height: calc(100vh - 25rem);
+			overflow-y: auto;
+			border: solid 1px #888;
+			border-radius: 0.75rem;
+			background-color: #fafafa;
+		}
 	</style>
 </head>
 <body>
@@ -122,7 +129,7 @@ if(empty($_POST['submit'])) {
 	$version = isset($_POST['version']) ? $_POST['version'] : $plxUpdater->oldVersion;
 	$plxUpdater->startUpdate($version);
 ?>
-			<p><a href="<?= PLX_ROOT; ?>" title="<?= L_UPDATE_BACK ?>"><?= L_UPDATE_BACK ?></a></p>
+			<p><a class="button" href="<?= PLX_ROOT; ?>" title="<?= L_UPDATE_BACK ?>"><?= L_UPDATE_BACK ?></a></p>
 <?php
 }
 ?>
