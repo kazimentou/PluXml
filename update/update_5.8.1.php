@@ -40,7 +40,7 @@ class update_5_8_1 extends plxUpdate{
 	 */
 	public function step2() {
 ?>
-			<li><?= L_UPDATE_FILE ?> (<?= path('XMLFILE_USERS') ?>)</li>
+			<li><?= L_UPDATE_FILE ?> (<?= path('XMLFILE_USERS') ?>)"</li>
 <?php
 		$data = file_get_contents(path('XMLFILE_USERS'));
 		$tag = 'user';

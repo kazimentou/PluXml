@@ -3,7 +3,7 @@
  * Classe de mise a jour pour PluXml version 5.1
  *
  * @package PLX
- * @author	Stephane F, Jean-Pierre Pourrez @bazooka07
+ * @author	Stephane F
  **/
 class update_5_1 extends plxUpdate{
 
@@ -12,20 +12,20 @@ class update_5_1 extends plxUpdate{
 ?>
 		<li><?= L_UPDATE_UPDATE_PARAMETERS_FILE ?></li>
 <?php
+		# nouveaux parametres
+		$new_parameters = array(
+			'bypage_archives' => 5,
+			'userfolders' => 1,
+			'meta_description'=>'',
+			'meta_keywords'=>'',
+			'plugins'=>'data/configuration/plugins.xml',
+			'default_lang'=>(isset($_POST['default_lang'])?$_POST['default_lang']:DEFAULT_LANG),
+		);
 		# on supprime les parametres obsoletes
 		unset($this->plxAdmin->aConf['editor']);
 		unset($this->plxAdmin->aConf['style_mobile']);
-
 		# mise à jour du fichier des parametres
-		# nouveaux parametres
-		$this->updateParameters(array(
-			'bypage_archives'	=> 5,
-			'userfolders'		=> 1,
-			'meta_description'	=> '',
-			'meta_keywords'		=> '',
-			'plugins'			=> 'data/configuration/plugins.xml',
-			'default_lang'		=> isset($_POST['default_lang']) ? $_POST['default_lang'] : DEFAULT_LANG,
-		));
+		$this->updateParameters($new_parameters);
 		return true; # pas d'erreurs
 	}
 
@@ -35,9 +35,7 @@ class update_5_1 extends plxUpdate{
 		<li><?= L_UPDATE_CREATE_HTACCESS_FILE ?> <?= PLX_ROOT ?>data/.htaccess<</li>
 <?php
 		if(!plxUtils::write('options -indexes', PLX_ROOT.'data/.htaccess')) {
-?>
-		<p class="error"><?= L_UPDATE_CREATE_HTACCESS_FILE . ' ' . PLX_ROOT ?>data/.htaccess</p>
-<?php
+			echo '<p class="error">'.L_UPDATE_CREATE_HTACCESS_FILE.' '.PLX_ROOT.'data/.htaccess</p>';
 			return false;
 		}
 		return true; # pas d'erreurs
@@ -50,27 +48,19 @@ class update_5_1 extends plxUpdate{
 <?php
 		if($categories = $this->_getCategories(PLX_ROOT.$this->plxAdmin->aConf['categories'])) {
 			# On génère le fichier XML
-			ob_start();
-?>
-<document>
-<?php
+			$xml = "<?xml version=\"1.0\" encoding=\"".PLX_CHARSET."\"?>\n";
+			$xml .= "<document>\n";
 			foreach($categories as $cat_id => $cat) {
-?>
-	<categorie number="<?= $cat_id ?>" tri="<?= $cat['tri'] ?>" bypage="<?= $cat['bypage'] ?>" menu="<?= $cat['menu'] ?>" url="<?= $cat['url'] ?>" template="<?= $cat['template'] ?>">
-		<name><![CDATA[<?= plxUtils::cdataCheck($cat['name']) ?>]]></name>
-		<description></description>
-		<meta_description></meta_description>
-		<meta_keywords></meta_keywords>
-	</categorie>
-<?php
+				$xml .= "\t<categorie number=\"".$cat_id."\" tri=\"".$cat['tri']."\" bypage=\"".$cat['bypage']."\" menu=\"".$cat['menu']."\" url=\"".$cat['url']."\" template=\"".$cat['template']."\">";
+				$xml .= "<name><![CDATA[".plxUtils::cdataCheck($cat['name'])."]]></name>";
+				$xml .= "<description><![CDATA[]]></description>";
+				$xml .= "<meta_description><![CDATA[]]></meta_description>";
+				$xml .= "<meta_keywords><![CDATA[]]></meta_keywords>";
+				$xml .= "</categorie>\n";
 			}
-?>
-</document>
-<?php
-			if(!plxUtils::write(XML_HEADER . ob_get_clean(), PLX_ROOT.$this->plxAdmin->aConf['categories'])) {
-?>
-		<p class="error"><?= L_UPDATE_ERR_CATEGORIES_MIGRATION ?> (<?= $this->plxAdmin->aConf['categories'] ?>)</p>
-<?php
+			$xml .= "</document>";
+			if(!plxUtils::write($xml,PLX_ROOT.$this->plxAdmin->aConf['categories'])) {
+				echo '<p class="error">'.L_UPDATE_ERR_CATEGORIES_MIGRATION.' ('.$this->plxAdmin->aConf['categories'].')</p>';
 				return false;
 			}
 		}
@@ -111,31 +101,21 @@ class update_5_1 extends plxUpdate{
 <?php
 		if($users = $this->_getUsers(PLX_ROOT.$this->plxAdmin->aConf['users'])) {
 			# On génère le fichier XML
-			ob_start();
-?>
-<document>
-<?php
+			$xml = "<?xml version=\"1.0\" encoding=\"".PLX_CHARSET."\"?>\n";
+			$xml .= "<document>\n";
 			foreach($users as $user_id => $user) {
-				if(intval($user['profil'] == 2)) {
-					$user['profil'] = 4;
-				}
-?>
-	<user number="<?= $user_id ?>" active="<?= $user['active'] ?>" profil="<?= $user['profil'] ?>" delete="<?= $user['delete'] ?>">
-		<login><![CDATA[<?= plxUtils::cdataCheck(trim($user['login'])) ?>]]></login>
-		<name><![CDATA[<?= plxUtils::cdataCheck(trim($user['name'])) ?>]]></name>
-		<infos><![CDATA[<?= plxUtils::cdataCheck(trim($user['infos'])) ?>]]></infos>
-		<password><![CDATA[<?= $user['password'] ?>]]></password>
-		<email></email>
-	</user>
-<?php
+				if(intval($user['profil']=='2')) $user['profil']='4';
+				$xml .= "\t".'<user number="'.$user_id.'" active="'.$user['active'].'" profil="'.$user['profil'].'" delete="'.$user['delete'].'">'."\n";
+				$xml .= "\t\t".'<login><![CDATA['.plxUtils::cdataCheck(trim($user['login'])).']]></login>'."\n";
+				$xml .= "\t\t".'<name><![CDATA['.plxUtils::cdataCheck(trim($user['name'])).']]></name>'."\n";
+				$xml .= "\t\t".'<infos><![CDATA['.plxUtils::cdataCheck(trim($user['infos'])).']]></infos>'."\n";
+				$xml .= "\t\t".'<password><![CDATA['.$user['password'].']]></password>'."\n";
+				$xml .= "\t\t".'<email><![CDATA[]]></email>'."\n";
+				$xml .= "\t</user>\n";
 			}
-?>
-</document>
-<?php
-			if(!plxUtils::write(XML_HEADER . ob_get_clean(), PLX_ROOT . $this->plxAdmin->aConf['users'])) {
-?>
-		<p class="error"><?= L_UPDATE_ERR_USERS_MIGRATION ?> (<?= $this->plxAdmin->aConf['users'] ?>)</p>
-<?php
+			$xml .= "</document>";
+			if(!plxUtils::write($xml,PLX_ROOT.$this->plxAdmin->aConf['users'])) {
+				echo '<p class="error">'.L_UPDATE_ERR_USERS_MIGRATION.' ('.$this->plxAdmin->aConf['users'].')</p>';
 				return false;
 			}
 		}
@@ -147,15 +127,11 @@ class update_5_1 extends plxUpdate{
 ?>
 		<li><?= L_UPDATE_CREATE_PLUGINS_FILE ?></li>
 <?php
-		ob_start();
-?>
-<document>
-</document>
-<?php
-		if(!plxUtils::write(XML_HEADER . ob_get_clean(), PLX_ROOT . $this->plxAdmin->aConf['plugins'])) {
-?>
-		<p class="error">><?= L_UPDATE_ERR_CREATE_PLUGINS_FILE ?></p>
-<?php
+		$xml = '<?xml version="1.0" encoding="'.PLX_CHARSET.'"?>'."\n";
+		$xml .= '<document>'."\n";
+		$xml .= '</document>';
+		if(!plxUtils::write($xml,PLX_ROOT.$this->plxAdmin->aConf['plugins'])) {
+			echo '<p class="error">'.L_UPDATE_ERR_CREATE_PLUGINS_FILE.'</p>';
 			return false;
 		}
 		return true;
@@ -163,16 +139,12 @@ class update_5_1 extends plxUpdate{
 
 	# suppression du fichier core/admin/fullscreen.php
 	public function step7() {
-		$filename = PLX_ROOT.'core/admin/fullscreen.php';
-		if(file_exists($filename)) {
+		if(file_exists(PLX_ROOT.'core/admin/fullscreen.php')) {
 ?>
 		<li><?= L_UPDATE_DELETE_FULLSCREEN_FILE ?></li>
 <?php
-
-			if(!unlink($filename)) {
-?>
-		<p class="error"><?= L_UPDATE_ERR_DELETE_FULLSCREEN_FILE ?></p>
-<?php
+			if(!unlink(PLX_ROOT.'core/admin/fullscreen.php')) {
+				echo '<p class="error">'.L_UPDATE_ERR_DELETE_FULLSCREEN_FILE.'</p>';
 			}
 		}
 		return true;
@@ -180,15 +152,12 @@ class update_5_1 extends plxUpdate{
 
 	# suppression du dossier de la plxtoolar
 	public function step8() {
-		$filename = PLX_ROOT . 'core/plxtoolbar';
-		if(is_dir($filename)) {
+		if(is_dir(PLX_ROOT.'core/plxtoolbar')) {
 ?>
 		<li><?= L_UPDATE_DELETE_PLXTOOLBAR_FOLDER ?></li>
 <?php
-			if(!$this->deleteDir($filename)) {
-?>
-		<p class="error"><?= L_UPDATE_ERR_DELETE_PLXTOOLBAR_FOLDER ?></p>
-<?php
+			if(!$this->deleteDir(PLX_ROOT.'core/plxtoolbar/')) {
+				echo '<p class="error">'.L_UPDATE_ERR_DELETE_PLXTOOLBAR_FOLDER.'</p>';
 			}
 		}
 		return true;
@@ -206,24 +175,48 @@ class update_5_1 extends plxUpdate{
 			xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,0);
 			xml_parse_into_struct($parser,$data,$values,$iTags);
 			xml_parser_free($parser);
-
 			# On verifie qu'il existe des tags "categorie"
 			if(isset($iTags['categorie'])) {
-				foreach($iTags['categorie'] as $idx) {
-					$attrs = $values[$idx]['attributes'];
-					$id = $attrs['number'];
-					$aCats[$id] = array(
-						'name' => $values[$idx]['value'], # nom de la categorie
-						'url' => strtolower($attrs['url']), # url de la categorie
-						'tri' => isset($attrs['tri']) ? $attrs['tri'] : $this->aConf['tri'], # tri de la categorie si besoin
-						'bypage' => isset($attrs['bypage']) ? $attrs['bypage'] : $this->bypage, # nb d'articles par page de la categorie si besoin
-						'template' => isset($attrs['template']) ? $attrs['template'] : 'categorie.php',
-						'menu' => isset($attrs['menu']) ? $attrs['menu'] :'oui', # afficher la categorie dans le menu ?
-					);
+				# On compte le nombre de tags "categorie"
+				$nb = sizeof($iTags['categorie']);
+				# On boucle sur $nb
+				for($i = 0; $i < $nb; $i++) {
+					# Recuperation du nom de la categorie
+					$aCats[ $values[ $iTags['categorie'][$i] ]['attributes']['number'] ]['name']
+					= $values[ $iTags['categorie'][$i] ]['value'];
+					# Recuperation de l'url de la categorie
+					$aCats[ $values[ $iTags['categorie'][$i] ]['attributes']['number'] ]['url']
+					= strtolower($values[ $iTags['categorie'][$i] ]['attributes']['url']);
+					# Recuperation du tri de la categorie si besoin est
+					if(isset($values[ $iTags['categorie'][$i] ]['attributes']['tri']))
+						$aCats[ $values[ $iTags['categorie'][$i] ]['attributes']['number'] ]['tri']
+						= $values[ $iTags['categorie'][$i] ]['attributes']['tri'];
+					else # Tri par defaut
+						$aCats[ $values[ $iTags['categorie'][$i] ]['attributes']['number'] ]['tri']
+						= $this->aConf['tri'];
+					# Recuperation du nb d'articles par page de la categorie si besoin est
+					if(isset($values[ $iTags['categorie'][$i] ]['attributes']['bypage']))
+						$aCats[ $values[ $iTags['categorie'][$i] ]['attributes']['number'] ]['bypage']
+						= $values[ $iTags['categorie'][$i] ]['attributes']['bypage'];
+					else # Nb d'articles par page par defaut
+						$aCats[ $values[ $iTags['categorie'][$i] ]['attributes']['number'] ]['bypage']
+						= $this->bypage;
+					# recuperation du fichier template
+					if(isset($values[ $iTags['categorie'][$i] ]['attributes']['template']))
+						$aCats[ $values[ $iTags['categorie'][$i] ]['attributes']['number'] ]['template']
+						= $values[ $iTags['categorie'][$i] ]['attributes']['template'];
+					else
+						$aCats[ $values[ $iTags['categorie'][$i] ]['attributes']['number'] ]['template'] = 'categorie.php';
+					# On affiche la categorie dans le menu ?
+					if(isset($values[ $iTags['categorie'][$i] ]['attributes']['menu']))
+						$aCats[ $values[ $iTags['categorie'][$i] ]['attributes']['number'] ]['menu']
+						= $values[ $iTags['categorie'][$i] ]['attributes']['menu'];
+					else
+						$aCats[ $values[ $iTags['categorie'][$i] ]['attributes']['number'] ]['menu'] = 'oui';
+
 				}
 			}
 		}
-
 		return $aCats;
 	}
 
@@ -237,29 +230,31 @@ class update_5_1 extends plxUpdate{
 			xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,0);
 			xml_parse_into_struct($parser,$data,$values,$iTags);
 			xml_parser_free($parser);
-
 			# On verifie qu'il existe des tags "statique"
 			if(isset($iTags['statique']) AND isset($iTags['name'])) {
-				$i = 0;
-				foreach($iTags['statique'] as $idx) {
-					if(
-						!isset($values[$idx]['attributes']) or
-						empty($values[$iTags['name'][$i]])
-					) {
-						continue;
-					}
-
-					$attrs = $values[$idx]['attributes'];
-					$id = $attrs['number'];
-					$aStats[$id] = array(
-						'group' => isset($values[$iTags['group'][$i]]) ? $values[$iTags['group'][$i]]['value'] : '',
-						'name' => $values[$iTags['name'][$i]]['value'],
-						'url' => $attrs['url'],
-						'active' => intval($attrs['active']),
-						'menu' => isset($attrs['menu']) ? $attrs['menu'] : 'oui',
-						'template'=> isset($attrs['template']) ? $attrs['template'] : 'static.php',
-					);
-					$i++;
+				# On compte le nombre de tags "statique"
+				$nb = sizeof($iTags['name']);
+				# On boucle sur $nb
+				for($i = 0; $i < $nb; $i++) {
+					$number = $values[ $iTags['statique'][$i*2] ]['attributes']['number'];
+					# Recuperation du groupe de la page statique
+					$aStats[$number]['group'] = isset($values[ $iTags['statique'][$i] ])?$values[ $iTags['group'][$i] ]['value']:'';
+					# Recuperation du nom de la page statique
+					$aStats[$number]['name'] = isset($values[ $iTags['statique'][$i] ])?$values[ $iTags['name'][$i] ]['value']:'';
+					# Recuperation de l'url de la page statique
+					$aStats[$number]['url'] = strtolower($values[ $iTags['statique'][$i*2] ]['attributes']['url']);
+					# Recuperation de l'etat de la page
+					$aStats[$number]['active'] = intval($values[ $iTags['statique'][$i*2] ]['attributes']['active']);
+					# On affiche la page statique dans le menu ?
+					if(isset($values[ $iTags['statique'][$i*2] ]['attributes']['menu']))
+						$aStats[$number]['menu'] = $values[ $iTags['statique'][$i*2] ]['attributes']['menu'];
+					else
+						$aStats[$number]['menu'] = 'oui';
+					# recuperation du fichier template
+					if(isset($values[ $iTags['statique'][$i*2] ]['attributes']['template']))
+						$aStats[$number]['template'] = $values[ $iTags['statique'][$i*2] ]['attributes']['template'];
+					else
+						$aStats[$number]['template'] = 'static.php';
 				}
 			}
 		}
@@ -276,30 +271,20 @@ class update_5_1 extends plxUpdate{
 			xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,0);
 			xml_parse_into_struct($parser,$data,$values,$iTags);
 			xml_parser_free($parser);
-
 			# On verifie qu'il existe des tags "user"
 			if(isset($iTags['user']) AND isset($iTags['login'])) {
-				$i = 0;
-				foreach($iTags['user'] as $idx) {
-					if(
-						!isset($values[$idx]['attributes']) or
-						empty($values[$iTags['login'][$i]])
-					) {
-						continue;
-					}
-
-					$attrs = $values[$idx]['attributes'];
-					$id = $attrs['number'];
-					$aUsers[$id] = array(
-						'active' => $attrs['active'],
-						'profil' => $attrs['profil'],
-						'delete' => $attrs['delete'],
-						'login' => $values[$iTags['login'][$i]]['value'],
-						'name' => isset($values[$iTags['name'][$i]]) ? $values[$iTags['name'][$i]]['value'] : '',
-						'infos' => isset($values[$iTags['infos'][$i]]) ? $values[$iTags['infos'][$i]]['value'] : '',
-						'password' => isset($values[$iTags['password'][$i]]) ? $values[$iTags['password'][$i]]['value'] : '',
-					);
-					$i++;
+				# On compte le nombre d'utilisateur
+				$nb = sizeof($iTags['login']);
+				# On boucle sur $nb
+				for($i = 0; $i < $nb; $i++) {
+					$number = $values[$iTags['user'][$i*6] ]['attributes']['number'];
+					$aUsers[$number]['active'] = $values[ $iTags['user'][$i*6] ]['attributes']['active'];
+					$aUsers[$number]['delete'] = $values[ $iTags['user'][$i*6] ]['attributes']['delete'];
+					$aUsers[$number]['profil'] = $values[ $iTags['user'][$i*6] ]['attributes']['profil'];
+					$aUsers[$number]['login'] = isset($values[ $iTags['login'][$i] ])?$values[ $iTags['login'][$i] ]['value']:'';
+					$aUsers[$number]['name'] = isset($values[ $iTags['name'][$i] ])?$values[ $iTags['name'][$i] ]['value']:'';
+					$aUsers[$number]['password'] = isset($values[ $iTags['password'][$i] ])?$values[ $iTags['password'][$i] ]['value']:'';
+					$aUsers[$number]['infos'] = isset($values[ $iTags['infos'][$i] ])?$values[ $iTags['infos'][$i] ]['value']:'';
 				}
 			}
 		}

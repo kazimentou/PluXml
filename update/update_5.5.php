@@ -18,26 +18,21 @@ class update_5_5 extends plxUpdate{
 		$dir_bkp  = $dir_coms.'backup-5.4/';
 
 		# création d'un dossier de sauvegarde
-		if(!is_dir($dir_bkp) and !@mkdir($dir_bkp,0755,true)) {
-?>
-<p class="error"><?= L_UPDATE_ERR_COMMENTS_MIGRATION ?></p>
-<?php
+		@mkdir($dir_bkp,0755,true);
+		if(!is_dir($dir_bkp)) {
+			echo '<p class="error">'.L_UPDATE_ERR_COMMENTS_MIGRATION.'</p>';
 			return false;
 		}
-
 		# réindexation
 		if($hd = opendir($dir_coms)) {
 			$coms = array();
 			while (false !== ($file = readdir($hd))) {
-				if(preg_match('/([[:punct:]]?)(\d{4}).(\d{10})-(\d+)\.xml$/',$file,$capture)) {
+				if(preg_match('/([[:punct:]]?)([0-9]{4}).([0-9]{10})-([0-9]+).xml$/',$file,$capture)) {
 					$coms[$capture[2]][] = $file;
-					$src = $dir_coms . $file;
-					if(copy($src, $dir_bkp . $file)) { #sauvegarde
-						unlink($src); # suppression fichier original
+					if(copy($dir_coms.$file, $dir_coms.'backup-5.4/'.$file)) { #sauvegarde
+						unlink($dir_coms.$file); # suppression fichier original
 					} else {
-?>
-<p class="error"><?= L_UPDATE_ERR_COMMENTS_MIGRATION ?></p>
-<?php
+						echo '<p class="error">'.L_UPDATE_ERR_COMMENTS_MIGRATION.'</p>';
 						return false;
 					}
 				}
@@ -64,11 +59,11 @@ class update_5_5 extends plxUpdate{
 	# suppression des fichiers obsolètes
 	public function step2() {
 		# fichier version
-		if(is_writeable(PLX_ROOT.'version')) {
+		if(is_readable(PLX_ROOT.'version')) {
 			unlink(PLX_ROOT.'version');
 		}
 		# fichier parametres_pluginhelp.php
-		if(is_writeable(PLX_CORE.'admin/parametres_pluginhelp.php')) {
+		if(is_readable(PLX_CORE.'admin/parametres_pluginhelp.php')) {
 			unlink(PLX_CORE.'admin/parametres_pluginhelp.php');
 		}
 		return true;
