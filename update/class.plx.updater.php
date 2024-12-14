@@ -14,6 +14,7 @@ class plxUpdater {
 	public $newVersion = '';
 	public $oldVersion = '' ;
 	public $allVersions = null;
+	public $updatedVersions = null;
 
 	public $plxAdmin; # objet plxAdmin
 
@@ -37,13 +38,7 @@ class plxUpdater {
 	 * @return	null
 	 * @author	Stéphane F
 	 **/
-	public function startUpdate($version='') {
-
-		# suppression des versions qui ont déjà été mises à jour
-		$offset = array_search($version, array_keys($this->allVersions));
-		if($offset!='') {
-			$this->allVersions = array_slice($this->allVersions, $offset+1, null, true);
-		}
+	public function startUpdate() {
 
 		# démarrage des mises à jour
 		if($this->doUpdate()) {
@@ -61,10 +56,19 @@ class plxUpdater {
 	public function getVersions() {
 
 		# Récupère l'ancien n° de version de Pluxml
-		if(isset($this->plxAdmin->aConf['version']))
-			$this->oldVersion = $this->plxAdmin->aConf['version'];
-		if(!isset($this->allVersions[$this->oldVersion]))
-			$this->oldVersion='';
+		if(isset($this->plxAdmin->aConf['version'])) {
+			$oldVersion = $this->plxAdmin->aConf['version'];
+			$this->oldVersion = $oldVersion;
+			$this->updatedVersions = array_filter(
+				$this->allVersions,
+				function($key) use($oldVersion) {
+					return version_compare($key, $oldVersion, '>=');
+				},
+				ARRAY_FILTER_USE_KEY
+			);
+		} else {
+			$this->oldVersion = '';
+		}
 
 		# Récupère le nouveau n° de version de PluXml
 		if(defined('PLX_VERSION')) { # PluXml à partir de la version 5.5
@@ -107,41 +111,37 @@ class plxUpdater {
 ?>
 			<ul>
 <?php
-		foreach($this->allVersions as $num_version => $upd_filename) {
-
-			if($upd_filename!='') {
+		foreach($this->updatedVersions as $num_version => $upd_filename) {
 ?>
 				<li>
 					<p><strong><?= L_UPDATE_INPROGRESS .' '. $num_version ?></strong></p>
 					<ul>
 <?php
-				# inclusion du fichier de mise à jour
-				include(PLX_UPDATE.$upd_filename);
+			# inclusion du fichier de mise à jour
+			include(PLX_UPDATE.$upd_filename);
 
-				# création d'un instance de l'objet de mise à jour
-				$class_name = 'update_'.str_replace('.', '_', $num_version);
-				$class_update = new $class_name();
+			# création d'un instance de l'objet de mise à jour
+			$class_name = 'update_'.str_replace('.', '_', $num_version);
+			$class_update = new $class_name();
 
-				# appel des différentes étapes de mise à jour
-				$next = true;
-				$step = 1;
-				while($next AND !$errors) {
-					$method_name = 'step'.$step;
-					if(method_exists($class_name, $method_name)) {
-						if(!$class_update->$method_name()) {
-							$errors = true; # erreur détectée
-						} else {
-							$step++; # étape suivante
-						}
+			# appel des différentes étapes de mise à jour
+			$next = true;
+			$step = 1;
+			while($next AND !$errors) {
+				$method_name = 'step'.$step;
+				if(method_exists($class_name, $method_name)) {
+					if(!$class_update->$method_name()) {
+						$errors = true; # erreur détectée
+					} else {
+						$step++; # étape suivante
 					}
-					else $next = false;
 				}
+				else $next = false;
+			}
 ?>
 					</ul>
 				</li>
 <?php
-			}
-
 		}
 ?>
 			</ul>
@@ -155,7 +155,7 @@ class plxUpdater {
 				<p class="alert success"><?= L_UPDATE_SUCCESSFUL ?></p>
 <?php
 		}
-		return !$errors;
+		return empty($errors);
 	}
 
 }

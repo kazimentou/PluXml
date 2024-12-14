@@ -13,8 +13,7 @@ if(!file_exists(path('XMLFILE_PARAMETERS'))) {
 const PLX_UPDATER = true;
 
 # On inclut les librairies nécessaires pour la MAJ
-include PLX_ROOT.'update/versions.php';
-include PLX_ROOT.'update/class.plx.updater.php';
+include 'class.plx.updater.php';
 
 # Chargement des langues
 $lang = (!empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) ? substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2) : DEFAULT_LANG;
@@ -41,6 +40,17 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 # Création de l'objet principal et lancement du traitement
+$versions = array();
+foreach(glob('update_*.php') as $filename) {
+	if(preg_match('#^update_(\d+(?:\.\d+)*)\.php$#', $filename, $matches)) {
+		$versions[$matches[1]] = $filename;
+	}
+}
+if(!empty($versions)) {
+	uksort($versions, function($a, $b) {
+		return version_compare($a, $b);
+	});
+}
 $plxUpdater = new plxUpdater($versions);
 
 plxUtils::cleanHeaders();
@@ -57,7 +67,7 @@ plxToken::validateFormToken($_POST);
 	<title><?= L_UPDATE_TITLE.' '.plxUtils::strCheck($plxUpdater->newVersion) ?></title>
 	<link rel="stylesheet" type="text/css" href="<?= PLX_CORE ?>admin/theme/plucss.css" media="screen" />
 	<link rel="stylesheet" type="text/css" href="<?= PLX_CORE ?>admin/theme/theme.css" media="screen" />
-	<link rel="icon" href="<?= PLX_CORE ?>admin/theme/images/pluxml.gif" />
+	<link rel="icon" href="<?= PLX_CORE ?>admin/theme/images/favicon.png" />
 	<style>
 		p.alert { width: fit-content; }
 	</style>
@@ -72,7 +82,7 @@ plxToken::validateFormToken($_POST);
 			</header>
 <?php
 if(empty($_POST['submit'])) {
-	if(version_compare($plxUpdater->oldVersion, $plxUpdater->newVersion, '>=')) {
+	if(empty($plxUpdater->updatedVersions)) {
 ?>
 				<p><strong><?= L_UPDATE_UPTODATE ?></strong></p>
 				<p><?= L_UPDATE_NOT_AVAILABLE ?></p>
@@ -81,6 +91,7 @@ if(empty($_POST['submit'])) {
 	} else {
 ?>
 				<form method="post">
+					<?= plxToken::getTokenPostMethod() ?>
 					<fieldset>
 						<div class="grid">
 							<div class="col sml-9 med-7 label-centered">
@@ -91,21 +102,11 @@ if(empty($_POST['submit'])) {
 							</div>
 							<div class="col med-3">
 								<input type="submit" name="select_lang" value="<?= L_INPUT_CHANGE ?>" />
-								<?= plxToken::getTokenPostMethod() ?>
 							</div>
 						</div>
 					</fieldset>
 					<fieldset>
 						<p><strong><?= L_UPDATE_WARNING1.' '.$plxUpdater->oldVersion ?></strong></p>
-<?php
-		if(empty($plxUpdater->oldVersion)) {
-?>
-						<p><?= L_UPDATE_SELECT_VERSION ?></p>
-						<p><?php plxUtils::printSelect('version',array_keys($versions),''); ?></p>
-						<p><?= L_UPDATE_WARNING2 ?></p>
-<?php
-		}
-?>
 						<p><?php printf(L_UPDATE_WARNING3, preg_replace('@^([^/]+).*@', '$1', $plxUpdater->plxAdmin->aConf['racine_articles'])); ?></p>
 						<p><input type="submit" name="submit" value="<?= L_UPDATE_START ?>" /></p>
 					</fieldset>
@@ -113,8 +114,7 @@ if(empty($_POST['submit'])) {
 <?php
 	}
 } else {
-	$version = isset($_POST['version']) ? $_POST['version'] : $plxUpdater->oldVersion;
-	$plxUpdater->startUpdate($version);
+	$plxUpdater->startUpdate();
 ?>
 			<p><a href="<?= PLX_ROOT; ?>" title="<?= L_UPDATE_BACK ?>"><?= L_UPDATE_BACK ?></a></p>
 <?php
