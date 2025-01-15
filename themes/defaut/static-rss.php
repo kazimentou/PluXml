@@ -3,7 +3,7 @@ if (!defined('PLX_ROOT')) {
 	exit;
 }
 
-include 'header.php';
+include 'inc/header.php';
 const DEBUG_RSS = false;
 ?>
 	<main class="main">
@@ -119,11 +119,11 @@ if (preg_match($pattern, $content, $matches)) {
 				</div>
 <?php
 if(!defined('FULL_WIDTH')) {
-	include 'sidebar.php';
+	include 'inc/sidebar.php';
 }
 ?>
 			</div>
 		</div>
 	</main>
 <?php
-include 'footer.php';
+include 'inc/footer.php';

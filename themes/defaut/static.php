@@ -3,7 +3,7 @@ if (!defined('PLX_ROOT')) {
 	exit;
 }
 
-include 'header.php';
+include 'inc/header.php';
 ?>
 	<main class="main">
 		<div class="container">
@@ -18,11 +18,11 @@ include 'header.php';
 				</div>
 <?php
 if(!defined('FULL_WIDTH')) {
-	include 'sidebar.php';
+	include 'inc/sidebar.php';
 }
 ?>
 			</div>
 		</div>
 	</main>
 <?php
-include 'footer.php';
+include 'inc/footer.php';
