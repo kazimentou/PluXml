@@ -1,4 +1,4 @@
-<?php include 'header.php'; ?>
+<?php include 'inc/header.php'; ?>
 	<main class="main">
 		<div class="container">
 			<div class="grid">
@@ -9,16 +9,16 @@
 					</ul>
 					<p><?php $plxShow->catDescription('#cat_description'); ?></p>
 					<p><?php $plxShow->catThumbnail(); ?></p>
-<?php include 'posts.php'; ?>
+<?php include 'inc/posts.php'; ?>
 					<?php $plxShow->artFeed(false,$plxShow->catId(), plxShow::RSS_FORMAT, 'p'); ?>
 				</div>
 <?php
 if (!defined('FULL_WIDTH')) {
-	include 'sidebar.php';
+	include 'inc/sidebar.php';
 }
 ?>
 			</div>
 		</div>
 	</main>
 <?php
-include 'footer.php';
+include 'inc/footer.php';

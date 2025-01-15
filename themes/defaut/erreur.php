@@ -1,4 +1,4 @@
-<?php include 'header.php'; ?>
+<?php include 'inc/header.php'; ?>
 	<main class="main">
 		<div class="container">
 			<div class="grid">
@@ -12,11 +12,11 @@
 				</div>
 <?php
 if (!defined('FULL_WIDTH')) {
-	include 'sidebar.php';
+	include 'inc/sidebar.php';
 }
 ?>
 			</div>
 		</div>
 	</main>
 <?php
-include 'footer.php';
+include 'inc/footer.php';

@@ -123,7 +123,7 @@ function processContact(&$plxShow)
 }
 
 /* ---------- Génération de la page HTML à afficher ------------- */
-include 'header.php';
+include 'inc/header.php';
 ?>
 <!-- begin of static-contact.php -->
 	<main class="main">
@@ -206,7 +206,7 @@ if ($result === true) {
 				</div>
 <?php
 if(!defined('FULL_WIDTH')) {
-	include 'sidebar.php';
+	include 'inc/sidebar.php';
 }
 ?>
 			</div>
@@ -214,4 +214,4 @@ if(!defined('FULL_WIDTH')) {
 	</main>
 <!-- end of static-contact.php -->
 <?php
-include 'footer.php';
+include 'inc/footer.php';

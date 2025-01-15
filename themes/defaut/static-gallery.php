@@ -5,7 +5,7 @@ if(!defined('PLX_ROOT')) {
 
 const THEME_SLIDESHOW = true;
 
-include 'header.php';
+include 'inc/header.php';
 ?>
 	<main class="main">
 		<div class="container">
@@ -64,7 +64,7 @@ if(preg_match($pattern, $content, $matches)) {
 				</div>
 <?php
 if(!defined('FULL_WIDTH')) {
-	include 'sidebar.php';
+	include 'inc/sidebar.php';
 }
 ?>
 			</div>
@@ -87,4 +87,4 @@ if(!defined('FULL_WIDTH')) {
 		</div>
 	</div>
 <?php
-include 'footer.php';
+include 'inc/footer.php';

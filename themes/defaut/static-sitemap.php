@@ -26,7 +26,7 @@ uasort($stats, function ($a, $b) {
 	return strcmp($a['group'], $b['group']);
 });
 
-include 'header.php';
+include 'inc/header.php';
 ?>
 <!-- begin of static-sitemap.php -->
 	<main class="main">
@@ -138,7 +138,7 @@ foreach ($cats as $catId => $catInfos) {
 				</div>
 <?php
 if(!defined('FULL_WIDTH')) {
-	include 'sidebar.php';
+	include 'inc/sidebar.php';
 }
 ?>
 			</div>
@@ -146,4 +146,4 @@ if(!defined('FULL_WIDTH')) {
 	</main>
 <!-- end of static-sitemap.php -->
 <?php
-include 'footer.php';
+include 'inc/footer.php';
