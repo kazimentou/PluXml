@@ -22,7 +22,7 @@ function byteConvert($bytes) {
 	return round($bytes / pow(1024, $e), 2) . $s[$e];
 }
 
-include 'header.php';
+include 'inc/header.php';
 ?>
 <!-- begin of static-download.php -->
 	<main class="main">
@@ -110,11 +110,11 @@ if (preg_match(PATTERN_STATIC_DOWNLOAD, $output, $matches)) {
 			</div>
 <?php
 if(!defined('FULL_WIDTH')) {
-	include 'sidebar.php';
+	include 'inc/sidebar.php';
 }
 ?>
 		</div>
 	</main>
 <!-- end of static-download.php -->
 <?php
-include 'footer.php';
+include 'inc/footer.php';
