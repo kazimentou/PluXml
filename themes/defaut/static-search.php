@@ -124,7 +124,7 @@ if (is_string($query) and !empty($query)) {
 	$plxMotor->getArticles(); // Les articles seront triés par la fonction
 }
 
-include 'header.php';
+include 'inc/header.php';
 ?>
 	<main class="main">
 		<div class="container">
@@ -364,7 +364,7 @@ if (!empty($plxMotor->plxRecord_arts) and $plxMotor->plxRecord_arts->size > 0) {
 		$_SESSION['search']['motif'] = $plxMotor->motif;
 	}
 	$found = true;
-	include 'posts.php';
+	include 'inc/posts.php';
 	/*
 	?>
 	<pre><?= $_SESSION['search']['motif'] ?></pre>
@@ -394,11 +394,11 @@ if (empty($found)) {
 				</div>
 <?php
 if(!defined('FULL_WIDTH')) {
-	include 'sidebar.php';
+	include 'inc/sidebar.php';
 }
 ?>
 			</div>
 		</div>
 	</main>
 <?php
-include 'footer.php';
+include 'inc/footer.php';
