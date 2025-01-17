@@ -248,34 +248,28 @@ article:after {
 	text-decoration: none;
 }
 
+.article header > div {
+	overflow-x: auto;
+}
+
 .article header small,
 .comment small {
-	color: #9EABB3;
+	white-space: nowrap;
+	color: #3A4044;
 }
 
-.article header span:before,
-.article header time:before,
-.article footer span:before {
+.article header span::before,
+.article header time::before,
+.article footer span::before {
 	padding-left: 1.5rem;
 	padding-right: .3rem;
-}
-
-.article .art-date {
-	font-size: 1.5rem;
-	font-weight: bold;
-	color: #9EABB3;
 }
 
 .article .written-by {
 	font-weight: bold;
 }
 
-.article .written-by:after {
-	content: '|';
-	padding-left: 0;
-}
-
-.article .classified-in:after {
+.article > header > div span:not(:first-of-type)::before {
 	content: '|';
 	padding-left: 0;
 }
@@ -290,6 +284,14 @@ article:after {
 	border-bottom: 1px solid #dedede;
 }
 
+.more {
+	text-align: end;
+}
+
+.more a::after {
+	content: '➤'; /* '➜'; */
+	margin-left: 0.5rem;
+}
 /* ------- Comments ------- */
 
 #form {
