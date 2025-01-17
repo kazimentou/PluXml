@@ -4,7 +4,7 @@
 			<div class="grid">
 				<div class="<?= $contentClass ?>">
 					<ul class="repertory menu breadcrumb">
-						<li><a href="<?php $plxShow->racine() ?>"><?php $plxShow->lang('HOME'); ?></a></li>
+						<?php $plxShow->pageBlog(BLOG_PATTERN) ?>
 						<li><?php $plxShow->catName(); ?></li>
 					</ul>
 					<p><?php $plxShow->catDescription('#cat_description'); ?></p>

@@ -7,11 +7,6 @@ if(!defined('PLX_ROOT')) {
 <?php while($plxShow->plxMotor->plxRecord_arts->loop()): ?>
 						<article class="article <?= $plxShow->artPinClass() ?>" id="post-<?= $plxShow->artId(); ?>">
 							<header>
-								<span class="art-date">
-									<time datetime="<?php $plxShow->artDate('#num_year(4)-#num_month-#num_day'); ?>">
-										<?php $plxShow->artDate('#num_day #month #num_year(4)'); ?>
-									</time>
-								</span>
 								<h2>
 									<?php $plxShow->artTitle('link'); ?>
 								</h2>
@@ -19,6 +14,11 @@ if(!defined('PLX_ROOT')) {
 									<small>
 										<span class="written-by">
 											<?php $plxShow->lang('WRITTEN_BY'); ?> <?php $plxShow->artAuthor() ?>
+										</span>
+										<span class="art-date">
+											<time datetime="<?php $plxShow->artDate('#num_year(4)-#num_month-#num_day'); ?>">
+												<?php $plxShow->artDate('#num_day #month #num_year(4)'); ?>
+											</time>
 										</span>
 										<span class="art-nb-com">
 											<?php $plxShow->artNbCom(); ?>
