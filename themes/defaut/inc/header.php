@@ -3,6 +3,8 @@ if (!defined('PLX_ROOT')) {
 	exit;
 }
 
+const BLOG_PATTERN = '<li><a href="#page_url" title="#page_name">#page_name</a></li>';
+
 if(method_exists($plxShow, 'authorList')) {
 	$users = array_filter(
 		$plxShow->plxMotor->aUsers,
@@ -38,7 +40,7 @@ $themeRoot = $plxShow->template(false);
 	<link rel="apple-touch-icon" sizes="96x96" href="<?= $themeRoot ?>/img/pluxml-logo-bleu-96x96.png" />
 	<link rel="apple-touch-icon" sizes="114x114" href="<?= $themeRoot ?>/img/pluxml-logo-bleu-114x114.png" />
 	<link rel="stylesheet" href="<?= $themeRoot ?>/css/plucss.min.css?v=1.3.1" media="screen,print"/>
-	<link rel="stylesheet" href="<?= $themeRoot ?>/css/theme.min.css?v=<?= PLX_VERSION ?>" media="screen"/>
+	<link rel="stylesheet" href="<?= $themeRoot ?>/css/theme.css?v=<?= PLX_VERSION ?>" media="screen"/>
 <?php
 	$plxShow->templateCss();
 	$plxShow->pluginsCss();

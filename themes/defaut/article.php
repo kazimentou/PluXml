@@ -5,16 +5,16 @@
 				<div class="<?= $contentClass ?>">
 					<article class="article" id="post-<?= $plxShow->artId(); ?>">
 						<header>
-							<span class="art-date">
-								<time datetime="<?php $plxShow->artDate('#num_year(4)-#num_month-#num_day'); ?>">
-									<?php $plxShow->artDate('#num_day #month #num_year(4)'); ?>
-								</time>
-							</span>
 							<h2><?php $plxShow->artTitle(); ?></h2>
 							<div>
 								<small>
 									<span class="written-by">
 										<?php $plxShow->lang('WRITTEN_BY'); ?> <?php $plxShow->artAuthor() ?>
+									</span>
+									<span class="art-date">
+										<time datetime="<?php $plxShow->artDate('#num_year(4)-#num_month-#num_day'); ?>">
+											<?php $plxShow->artDate('#num_day #month #num_year(4)'); ?>
+										</time>
 									</span>
 									<span class="art-nb-com">
 										<?php $plxShow->artNbCom(); ?>

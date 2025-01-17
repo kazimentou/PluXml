@@ -4,8 +4,8 @@
 			<div class="grid">
 				<div class="<?= $contentClass ?>">
 					<ul class="repertory menu breadcrumb">
-						<li><a href="<?php $plxShow->racine() ?>"><?php $plxShow->lang('HOME'); ?></a></li>
-						<li><?= plxDate::formatDate($plxShow->plxMotor->cible, $plxShow->lang('ARCHIVES').' #month #num_year(4)') ?></li>
+						<?php $plxShow->pageBlog(BLOG_PATTERN) ?>
+						<li><?php $plxShow->pageTitle('#title '); ?></li>
 					</ul>
 <?php include 'inc/posts.php'; ?>
 					<?php $plxShow->artFeed(); ?>
