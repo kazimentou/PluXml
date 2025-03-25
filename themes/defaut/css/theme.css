@@ -164,6 +164,13 @@ ul.menu a.noactive{
 
 }
 
+.cat-list a,
+.classified-in a,
+.tags a,
+.author-list a {
+	padding: 0 0.5rem;
+}
+
 .cat-list .active,
 .classified-in .active,
 .tags .active,
@@ -418,6 +425,17 @@ article:after {
 
 .aside ul.spacer > li:hover {
 	background-color: #eee;
+}
+
+.aside details:not(:first-of-type) {
+	margin-top: 2rem;
+}
+
+.aside summary {
+	display: list-item;
+	font-size: 1.75rem;
+	font-weight: bold;
+	text-transform: uppercase;
 }
 
 /* --------- tags ---------- */

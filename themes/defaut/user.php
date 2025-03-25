@@ -5,7 +5,7 @@
 				<div class="<?= $contentClass ?>">
 					<ul class="repertory menu breadcrumb">
 						<?php $plxShow->pageBlog(BLOG_PATTERN) ?>
-						<li><?php $plxShow->authorName(); ?></li>
+						<li><?php $plxShow->lang('WRITTEN_BY'); ?> <?php $plxShow->authorName(); ?></li>
 					</ul>
 					<?php $plxShow->authorInfos() ?>
 <?php include 'inc/posts.php'; ?>

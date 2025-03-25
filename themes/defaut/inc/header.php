@@ -19,7 +19,6 @@ $auths = glob(PLX_ROOT . '*/*/auth.php');
 $admin = !empty($auths) ? preg_replace('#.*/([^\/]+/\w[\w-]+/)auth\.php$#', '$1', $auths[0]) : 'core/admin/';
 
 $contentClass = 'content';
->>>>>>> 395e0693 (Add icons for defaut theme)
 if(!defined('FULL_WIDTH')) {
 	$contentClass .= ' col med-9';
 }
